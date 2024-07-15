@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #ff6347;
+        }
+        .joke-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        .joke-card:hover {
+            transform: scale(1.05);
+        }
+        button {
+            background-color: #ff6347;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ff4500;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>lol</h1>
+    <div class="joke-card" id="joke-card">
+        <p id="joke-text">Why did the large language model become a comedian? Because it always knew how to "generate" laughter!</p>
+    </div>
+    <button onclick="showNextJoke()">Next Joke</button>
+
+    <script>
+        const jokes = [
+            'Why did the AI go to school? To improve its "algor-rhythm"!',
+            'Why did the large language model become a comedian? Because it always knew how to "generate" laughter!',
+            'Why did the large language model get a promotion? Because it had all the right answers!',
+            'Why did the large language model go to therapy? To stop "hallucinating" its own jokes!'
+        ];
+
+        function showNextJoke() {
+            const jokeText = document.getElementById('joke-text');
+            const currentJoke = jokeText.innerText;
+            let nextJoke = jokes[Math.floor(Math.random() * jokes.length)];
+
+            while (nextJoke === currentJoke) {
+                nextJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            }
+
+            jokeText.innerText = nextJoke;
+        }
+    </script>
+
+</body>
+</html>
