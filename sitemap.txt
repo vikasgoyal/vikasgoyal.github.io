@@ -1,5 +1,6 @@
 https://vikasgoyal.github.io/
 https://vikasgoyal.github.io/genai/
+https://vikasgoyal.github.io/genai/tasktypes.html
 https://vikasgoyal.github.io/genai/AdoptionMaturityModel.html
 https://vikasgoyal.github.io/genai/agenticthinking.html
 https://vikasgoyal.github.io/genai/agenticsystems.html
