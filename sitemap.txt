@@ -8,3 +8,4 @@ https://vikasgoyal.github.io/genai/languageagenticsystems.html
 https://vikasgoyal.github.io/genai/agenticness.html
 https://vikasgoyal.github.io/genai/cocreating.html
 https://vikasgoyal.github.io/agentic/whynowagentic.html
+https://vikasgoyal.github.io/agentic/mas.html
