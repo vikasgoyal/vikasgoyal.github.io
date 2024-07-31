@@ -13,3 +13,4 @@ https://vikasgoyal.github.io/agentic/refarchagentic.html
 https://vikasgoyal.github.io/agentic/refarchmas.html
 https://vikasgoyal.github.io/agentic/reactivedeliberativeagents.html
 https://vikasgoyal.github.io/agentic/masterslavepattern.html
+https://vikasgoyal.github.io/agentic/index.html
