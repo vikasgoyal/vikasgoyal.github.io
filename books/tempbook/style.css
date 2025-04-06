@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #5aae59;
+}
+
+header, footer {
+  background-color: #5aae59;
+  color: white;
+  text-align: center;
+  padding: 1em;
+  font-size: 1.5em;
+}
+
+.container {
+  display: flex;
+  background-color: white;
+  min-height: 60vh;
+}
+
+.sidebar {
+  background-color: #f0f0f0;
+  padding: 1em;
+  width: 15%;
+}
+
+.content {
+  flex: 1;
+  padding: 2em;
+  background-color: white;
+}
+
+.ads {
+  background-color: #f0f0f0;
+  padding: 1em;
+  width: 15%;
+  text-align: center;
+  font-weight: bold;
+}
+
+footer {
+  padding: 1em;
+}
+
+button {
+  padding: 0.5em 1em;
+  margin: 0 0.5em;
+}
