@@ -5,6 +5,12 @@ function loadPartial(id, url) {
     .then(html => {
       document.getElementById(id).innerHTML = html;
     });
+
+    refreshAds();
+}
+
+function refreshAds() {
+  (adsbygoogle = window.adsbygoogle || []).push({});
 }
 
 document.addEventListener("DOMContentLoaded", () => {
