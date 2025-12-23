@@ -318,17 +318,25 @@ main {
     gap: 1em;
 }
 
-/* Only center-align sections on home page, not in articles */
-body:not(:has(article)) main section,
+/* Only center-align category sections on home page, not articles list */
 main section#agenticai,
 main section#startups,
-main section#ecp,
-main section#popular {
+main section#ecp {
     padding: 1em;
     margin: 0 1em;
     border-radius: 8px;
     flex: 1;
     text-align: center;
+    min-width: 200px;
+}
+
+/* Popular articles section - left aligned */
+main section#popular {
+    padding: 1em;
+    margin: 0 1em;
+    border-radius: 8px;
+    flex: 1;
+    text-align: left;
     min-width: 200px;
 }
 
