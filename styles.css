@@ -150,19 +150,17 @@ nav ul li a:hover {
 /* Article Styles */
 article {
     text-align: left;
-    max-width: 900px;
+    max-width: 750px;
     margin: 0 auto;
     padding: 2em 1em;
 }
 
 .article-content {
-    max-width: 750px;
-    margin: 0 auto;
+    margin: 0;
 }
 
 article header {
-    max-width: 750px;
-    margin: 0 auto 2em auto;
+    margin-bottom: 2em;
 }
 
 .article-meta {
