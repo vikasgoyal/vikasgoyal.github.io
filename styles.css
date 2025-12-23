@@ -32,6 +32,21 @@ body {
     padding: 20px 0;
 }
 
+/* Home page layout - override body styles */
+body:has(.sidebar) {
+    display: flex;
+    width: 100%;
+    margin: 10px 30px 30px;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: var(--background-color);
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);

@@ -1,0 +1,22 @@
+{
+  "posts": [
+    {
+      "title": "MCP as a foundational layer of the AI-native internet",
+      "url": "/agentic/mcpfoundation.html",
+      "date": "2025-12-20",
+      "category": "Agentic AI"
+    },
+    {
+      "title": "The Evolution of Machine Learning Models: From LLMs to Action Models",
+      "url": "/agentic/actionmodels.html",
+      "date": "2025-12-18",
+      "category": "Agentic AI"
+    },
+    {
+      "title": "The Role of Learning in Agentic AI",
+      "url": "/agentic/learning.html",
+      "date": "2025-12-15",
+      "category": "Agentic AI"
+    }
+  ]
+}

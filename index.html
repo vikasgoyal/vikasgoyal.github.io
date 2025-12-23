@@ -1,169 +1,280 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-ZBXY60BLWE');
     </script>
     <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+    <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vikas Goyal</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Vikas Goyal - Agentic AI, Startups, and Technology Leadership</title>
+    <meta name="description" content="Explore insights on Agentic AI, conversational AI systems, startup advice, and technology leadership. Learn more, laugh more.">
+    <meta name="keywords" content="Vikas Goyal, agentic AI, multi-agent systems, conversational AI, startups, technology leadership, AI architecture, LLMs, generative AI">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Vikas Goyal - Agentic AI, Startups, and Technology Leadership">
+    <meta property="og:description" content="Explore insights on Agentic AI, conversational AI systems, startup advice, and technology leadership. Learn more, laugh more.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vikasgoyal.github.io/">
+    <meta property="og:site_name" content="Vikas Goyal">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Vikas Goyal - Agentic AI, Startups, and Technology Leadership">
+    <meta name="twitter:description" content="Explore insights on Agentic AI, conversational AI systems, startup advice, and technology leadership.">
+    
+    <!-- Structured Data for Search Engines (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Vikas Goyal",
+      "url": "https://vikasgoyal.github.io/",
+      "sameAs": [
+        "https://www.linkedin.com/in/vikasgoyal/"
+      ],
+      "jobTitle": "Technology Leader",
+      "description": "Technology leader specializing in Agentic AI, multi-agent systems, and enterprise software development"
+    }
+    </script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/latest-posts.js"></script>
     <style>
-        main {
-            display: flex;
-            justify-content: space-around;
-            padding: 2em;
-        }
-        section {
-            padding: 1em;
-            margin: 0 1em;
-            border-radius: 8px;
-            flex: 1;
-            text-align: center;
-            
-        }
-        #agenticai {
-            background-color: black; 
-            color: #fff;
-        }
-        #startups {
-            background-color: black; 
-            color: #fff;
-        }
-        #ecp {
-            background-color: black; 
-            color: #fff;
-        }
-        #popular {
-            color: #fff;
-            text-align: left;
-            color: #000000;
-        }
-        #popular a {
-            color: #000000;
-        }
-        section a {
-            color: #fff;
-            text-decoration: none;
-        }
+        /* Home page specific styles */
         body {
-            font-family: Arial, sans-serif;
-            margin: 10px 30px 30px ;
+            display: flex;
+            width: 100%;
+            margin: 10px 30px 30px;
             padding: 0;
-            display: flex;
             min-height: 100vh;
-            background-color: #ffffff;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #000000;
-            color: #fff;
-            padding: 20px;
-            height: 100vh; /* Full height */
-            box-sizing: border-box; /* Include padding in total width and height */
-        }
-        .sidebar img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 50%; /* Circular image */
-        }
-        .sidebar h2, .sidebar p {
-            text-align: center;
-        }
-        .links {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        .links a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px;
-            text-align: center;
-        }
-        .links a:hover {
-            background-color: #0d6233;
+            align-items: flex-start; /* Top align sidebar and content */
         }
         .content {
             flex-grow: 1;
             padding: 20px;
-            background-color: #ffffff;
+            padding-top: 0; /* Align with sidebar top */
         }
-        .content a:hover {
+        /* Sidebar fixes for visibility and alignment */
+        .sidebar {
+            background-color: #000000;
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            align-self: flex-start;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h2 {
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 0.5em;
+            font-size: 1.5em;
+        }
+        .sidebar p {
+            color: #cccccc;
+            font-size: 0.95em;
+            font-style: italic;
+        }
+        .sidebar .links a {
+            color: #ffffff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .sidebar .links a:hover {
+            border-color: #0d6233;
             background-color: #0d6233;
         }
-        .custom-color {
+        /* Make the category boxes smaller and better aligned */
+        main {
+            padding: 0;
+            margin-top: 0;
+            justify-content: flex-start;
+        }
+        main:first-child {
+            margin-bottom: 2em; /* Space between category boxes and popular section */
+        }
+        main section#agenticai,
+        main section#startups,
+        main section#ecp {
+            padding: 1em 1.5em;
+            margin: 0 0.5em 0 0;
+            min-width: 140px;
+            max-width: 200px;
+            text-align: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        main section#agenticai:hover,
+        main section#startups:hover,
+        main section#ecp:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        main section#agenticai h2::before {
+            content: "🤖 ";
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 0.3em;
+        }
+        main section#startups h2::before {
+            content: "🚀 ";
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 0.3em;
+        }
+        main section#ecp h2::before {
+            content: "🎓 ";
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 0.3em;
+        }
+        main section#agenticai h2,
+        main section#startups h2,
+        main section#ecp h2 {
+            font-size: 1.1em;
+            margin: 0;
+            font-weight: 600;
+        }
+        main section#agenticai a,
+        main section#startups a,
+        main section#ecp a {
+            font-size: 1em;
+        }
+        main section#popular {
+            text-align: left;
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+        }
+        main section#popular h2 {
             color: #000000;
+            font-size: 1.8em;
+            margin-bottom: 1em;
+            border-bottom: 2px solid #0d6233;
+            padding-bottom: 0.5em;
+        }
+        main section#popular p {
+            margin-bottom: 0.8em;
+            line-height: 1.6;
+            position: relative;
+            padding-left: 0;
+        }
+        /* Featured and Hot article badges */
+        main section#popular p.featured::before {
+            content: "⭐ Featured";
+            display: inline-block;
+            background: linear-gradient(135deg, #0d6233 0%, #0f8448 100%);
+            color: white;
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-right: 8px;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+        main section#popular p.hot::before {
+            content: "🔥 Hot";
+            display: inline-block;
+            background: linear-gradient(135deg, #f51414 0%, #ff4444 100%);
+            color: white;
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-right: 8px;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+        main section#popular a {
+            color: #2f1aba;
+            transition: color 0.3s ease;
+        }
+        main section#popular a:hover {
+            color: #0d6233;
+            background-color: transparent;
         }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <!-- <img src="path_to_your_image.jpg" alt="Your Name"> -->
         <h2>Vikas Goyal</h2>
-        <p> <i> learn more. laugh more. </i></p>
+        <p><em>learn more. laugh more.</em></p>
+        
         <div class="links">
-            <!-- <a href="https://vikasgoyal.github.io/">Home</a> -->
             <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank">LinkedIn</a>
-         <!--   <a href="https://tanishkagoyal.substack.com/?r=44x3mj" target="_blank">Subscribe</a>
-            <a href="https://forms.gle/3D1FonrRGXt8oh4L8" target="_blank">Contact me</a> -->
         </div>
 
-        <div>
-            <p>
-                <h6 align="center">This site has been co-created with GitHub copilot and other LLMs</h6>
-            </p>
-            <br>
-            <br>
-            <p>
-                Disclaimer (Ctrl + A)
-                <br> <style; class="custom-color">These views are mine alone and not those of my employer. If you're upset, blame me, not the folks who sign my checks !!</style>
-                <br>
-            </p>
+        <!-- Latest Posts Section -->
+        <div id="latest-posts" style="margin-top: 2em; padding-top: 1.5em; border-top: 1px solid #333;">
+            <!-- Posts will be loaded here by JavaScript -->
+            <p style="color: #888; font-size: 0.8em;">Loading latest posts...</p>
         </div>
 
+        <div style="margin-top: 3em;">
+            <h6 style="text-align: center; font-size: 0.75em; line-height: 1.4;">This site has been co-created with GitHub Copilot and other LLMs</h6>
+            
+            <p style="margin-top: 2em; font-size: 0.8em; line-height: 1.4;">
+                <strong>Disclaimer</strong><br>
+                These views are mine alone and not those of my employer. If you're upset, blame me, not the folks who sign my checks!!
+            </p>
+        </div>
     </div>
-    <div class="content">
 
+    <div class="content">
         <main>
             <section id="agenticai">
-                <h2><a href="https://vikasgoyal.github.io/agentic/">Agentic AI</a></h2>
+                <h2><a href="/agentic/">Agentic AI</a></h2>
             </section>
             <section id="startups">
-                <h2><a href="./startups/">Startups</a></h2>
+                <h2><a href="/startups/">Startups</a></h2>
             </section>
             <section id="ecp">
-                <h2><a href="https://vikasgoyal.github.io/ecp/">Early Career Professionals (ECP) & Students</a></h2>
+                <h2><a href="/ecp/">Early Career Professionals (ECP) & Students</a></h2>
             </section>
         </main>
+        
         <main>
             <section id="popular">
-                <h2>Most Popular</h2>
-                <p><a href="./general/hownottochange.html">Why Change Management Often Fails – And How to Get It Right.</a></p>
-                <p><a href="https://vikasgoyal.github.io/genai/agenticthinking.html">What is Agentic Thinking?</a></p>
-                <p><a href="https://vikasgoyal.github.io/genai/agenticsystems.html">What are Agentic Systems in context of LLMs and Generative AI?</a></p>
-                <p><a href="https://vikasgoyal.github.io/agentic/whynowagentic.html">Agentic Systems - Why now?</a></p>
-                <p><a href="https://vikasgoyal.github.io/genai/languageagenticsystems.html">How are earlier generations of agentic AI systems differ from those that reason through language?</a></p>
-                <p><a href="https://vikasgoyal.github.io/genai/agenticness.html">Agenticness of AI systems</a></p>
-                <p><a href="https://vikasgoyal.github.io/agentic/mas.html">What are Multi-Agent Systems (MAS)?</a></p>
-                <p><a href="https://vikasgoyal.github.io/genai/timeline.html">Timeline of Significant Shifts in Software Design to Decrease Cognitive Load</a></p>
-                <p><a href="https://vikasgoyal.github.io/agentic/refarchagentic.html">Agentic Systems - Reference Architecture</a></p>
-                <p><a href="https://vikasgoyal.github.io/agentic/refarchmas.html">Multi-Agent Systems - Reference Architecture</a></p>
-                <p><a href="https://vikasgoyal.github.io/agentic/chatbotquerytypes.html">Designing a Robust Chatbot: Handling a Variety of Query Types</a></p>
-                <p><a href="https://vikasgoyal.github.io/general/developermindset.html">The Evolution of a Software Developer's Mindset</a></p>
-                <p><a href="https://vikasgoyal.github.io/general/futureofwork.html">The Importance of Adaptability and Resilience in the Future of Work</a></p>
+                <h2>🌟 Most Popular Articles</h2>
+                
+                <h3 style="color: #0d6233; font-size: 1.3em; margin-top: 1.5em; margin-bottom: 0.8em;">Agentic AI & Systems</h3>
+                <p class="hot"><a href="/general/hownottochange.html">Why Change Management Often Fails – And How to Get It Right</a></p>
+                <p class="featured"><a href="/genai/agenticthinking.html">What is Agentic Thinking?</a></p>
+                <p class="featured"><a href="/genai/agenticsystems.html">What are Agentic Systems in context of LLMs and Generative AI?</a></p>
+                <p><a href="/agentic/whynowagentic.html">Agentic Systems - Why now?</a></p>
+                <p><a href="/genai/languageagenticsystems.html">How are earlier generations of agentic AI systems differ from those that reason through language?</a></p>
+                <p><a href="/genai/agenticness.html">Agenticness of AI systems</a></p>
+                <p><a href="/agentic/mas.html">What are Multi-Agent Systems (MAS)?</a></p>
+                
+                <h3 style="color: #0d6233; font-size: 1.3em; margin-top: 1.5em; margin-bottom: 0.8em;">Software Design & Architecture</h3>
+                <p><a href="/genai/timeline.html">Timeline of Significant Shifts in Software Design to Decrease Cognitive Load</a></p>
+                <p><a href="/agentic/refarchagentic.html">Agentic Systems - Reference Architecture</a></p>
+                <p><a href="/agentic/refarchmas.html">Multi-Agent Systems - Reference Architecture</a></p>
+                <p><a href="/agentic/chatbotquerytypes.html">Designing a Robust Chatbot: Handling a Variety of Query Types</a></p>
+                
+                <h3 style="color: #0d6233; font-size: 1.3em; margin-top: 1.5em; margin-bottom: 0.8em;">Career & Leadership</h3>
+                <p><a href="/general/developermindset.html">The Evolution of a Software Developer's Mindset</a></p>
+                <p><a href="/general/futureofwork.html">The Importance of Adaptability and Resilience in the Future of Work</a></p>
             </section>
         </main>
     </div>
-
 
 </body>
 </html>
