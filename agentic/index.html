@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
@@ -12,63 +11,216 @@
     </script>
     <meta name="google-adsense-account" content="ca-pub-8607681845167073">
 
+    <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Agentic AI - Thinking, Behaviors and Systems | Vikas Goyal</title>
+    <meta name="description" content="Comprehensive resource on Agentic AI systems, multi-agent architectures, LLM-based agents, and enterprise software development. Explore frameworks, patterns, and reference architectures.">
+    <meta name="keywords" content="agentic AI, multi-agent systems, LLMs, AI agents, conversational AI, AI architecture, AutoGen, MCP, action models">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Agentic AI - Thinking, Behaviors and Systems">
+    <meta property="og:description" content="Comprehensive resource on Agentic AI systems, multi-agent architectures, and enterprise software development.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/">
+    <meta property="og:site_name" content="Vikas Goyal">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Agentic AI - Thinking, Behaviors and Systems">
+    <meta name="twitter:description" content="Comprehensive resource on Agentic AI systems, multi-agent architectures, and enterprise software development.">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Agentic AI - Thinking, Behaviors and Systems",
+      "description": "Comprehensive resource on Agentic AI systems, multi-agent architectures, and enterprise software development",
+      "author": {
+        "@type": "Person",
+        "name": "Vikas Goyal",
+        "url": "https://www.linkedin.com/in/vikasgoyal/"
+      },
+      "url": "https://vikasgoyal.github.io/agentic/"
+    }
+    </script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../latest-posts.js"></script>
     <style>
-      body {
-          width: 70%; 
-          margin: 0 auto; /* Center align the body */
-      }
+/* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #000000;
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            color: white;
+            margin-bottom: 0.5em;
+        }
+        
+        .sidebar p {
+            text-align: center;
+            color: #ccc;
+        }
+        
+        .sidebar .links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar .links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar .links a:hover {
+            background-color: #0d6233;
+        }
+        
+        #latest-posts h3 {
+            color: white;
+            font-size: 1em;
+            margin-bottom: 0.5em;
+        }
+        
+        #latest-posts a {
+            color: #81b1ff;
+        }
+        
+        #latest-posts a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+        
+        /* Page-specific styles for index page with sidebar */
+        body {
+            display: flex;
+            width: 100%;
+            margin: 10px 30px 30px;
+            padding: 0;
+            min-height: 100vh;
+            align-items: flex-start;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            padding-top: 0;
+        }
+        .container-lg {
+            padding: 0;
+        }
     </style>
-    <title>Agentic AI - Thinking, Behaviors and Systems</title>
   </head>
 
   <body>
-    <div id="header"></div>
-    <div class="container-lg px-3 my-5 markdown-body">
-      
-        <p style="color: rgb(245, 20, 20);">Agents augment and not just automate.</p>
-        <h1>Agentic Thinking, Behaviors and Systems</h1> 
-
-        <h3><mark><a href="/agentic/mcpfoundation.html">MCP as a foundational layer of the AI-native internet</a></mark></h3>
-        <h3><mark><a href="/agentic/actionmodels.html">The Evolution of Machine Learning Models: From LLMs to Action Models</a></mark></h3>
-
-        <p><a href="/genai/agenticthinking.html">What is Agentic Thinking?</a></p>
-        <p><a href="/genai/agenticsystems.html">What are Agentic Systems in context of LLMs and Generative AI?</a></p>
-        <p><a href="/agentic/whynowagentic.html">Agentic Systems - Why now?</a></p>
-        <p><a href="/genai/languageagenticsystems.html">How are earlier generations of agentic AI systems differ from those that reason through language?</a></p>
-        <p><a href="/genai/agenticness.html">Agenticness of AI systems</a></p>
-        <p><a href="/agentic/mas.html">What are Multi-Agent Systems (MAS)?</a></p>
-        <p><a href="/genai/timeline.html">Timeline of Significant Shifts in Software Design to Decrease Cognitive Load</a></p>
-        <p><a href="/agentic/refarchagentic.html">Agentic Systems - Reference Architecture</a></p>
-        <p><a href="/agentic/refarchmas.html">Multi-Agent Systems - Reference Architecture</a></p>
-        <p><a href="/agentic/reactivedeliberativeagents.html">Reactive and Deliberative AI agents</a></p>
-        <p><a href="/agentic/chatbotquerytypes.html">Designing a Robust Chatbot: Handling a Variety of Query Types</a></p>
-        <p><a href="/agentic/agenticsystems.html">Embracing Agentic Systems: Revolutionizing Enterprise Software Development</a></p>
-        <p><a href="/agentic/learning.html">The Role of Learning in Agentic AI</a></p>
-        <p><a href="/agentic/personalization.html">Personalization Maturity Model for Agentic Conversational AI</a></p>
-        <p><a href="/agentic/teachableagents.html">Teachable AI Agents: Revolutionizing the Development and Adaptability of AI Systems</a></p>
-        <p><a href="/genai/cognitive.html">The software design is about to change ... forever.</a></p>
-        <br> 
-        <h1>Multi-Agent System Interaction Patterns</h1> 
-        <p><a href="/agentic/masterslavepattern.html">Master Slave Pattern</a></p>
-
-
-        <h2>Frameworks & Products</h2>
-        <p><a href="https://microsoft.github.io/autogen/" target="_blank">AutoGen</a></p>
-        <p><a href="https://microsoft.github.io/autogen-for-net/index.html" target="_blank">AutoGen for .NET</a></p>
+    <div class="sidebar">
+        <h2>Vikas Goyal</h2>
+        <p><em>learn more. laugh more.</em></p>
         
-        <br>
-        <h2>Papers & other reading</h2>
-        <p><a href="https://arxiv.org/html/2404.11584v1" target="_blank">The Landscape of Emerging AI Agent Architectures for Reasoning, Planning, and Tool Calling: A Survey</a></p>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+        <div class="links">
+            <a href="/" style="border: 1px solid #333; border-radius: 6px; transition: all 0.3s ease;">Home</a>
+            <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank">LinkedIn</a>
+        </div>
 
-    <div id="footer"></div> 
-    <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+        <!-- Latest Posts Section -->
+        <div id="latest-posts" style="margin-top: 2em; padding-top: 1.5em; border-top: 1px solid #333;">
+            <p style="color: #888; font-size: 0.8em;">Loading latest posts...</p>
+        </div>
+
+        <div style="margin-top: 3em;">
+            <h6 style="text-align: center; font-size: 0.75em; line-height: 1.4;">This site has been co-created with GitHub Copilot and other LLMs</h6>
+            
+            <p style="margin-top: 2em; font-size: 0.8em; line-height: 1.4;">
+                <strong>Disclaimer</strong><br>
+                These views are mine alone and not those of my employer. If you're upset, blame me, not the folks who sign my checks!!
+            </p>
+        </div>
+    </div>
+
+    <div class="content">
+      <div class="container-lg px-3 my-5 markdown-body">
+        
+        <p class="accent-text">Agents augment and not just automate.</p>
+        <h1>🤖 Agentic AI: Thinking, Behaviors and Systems</h1> 
+
+        <section id="featured">
+          <h2>🌟 Featured Articles</h2>
+          <p><a href="/agentic/mcpfoundation.html"><mark>MCP as a foundational layer of the AI-native internet</mark></a></p>
+          <p><a href="/agentic/actionmodels.html"><mark>The Evolution of Machine Learning Models: From LLMs to Action Models</mark></a></p>
+        </section>
+
+        <section id="core-concepts">
+          <h2>Core Concepts</h2>
+          <p><a href="/genai/agenticthinking.html">What is Agentic Thinking?</a></p>
+          <p><a href="/genai/agenticsystems.html">What are Agentic Systems in context of LLMs and Generative AI?</a></p>
+          <p><a href="/agentic/whynowagentic.html">Agentic Systems - Why now?</a></p>
+          <p><a href="/genai/languageagenticsystems.html">How are earlier generations of agentic AI systems differ from those that reason through language?</a></p>
+          <p><a href="/genai/agenticness.html">Agenticness of AI systems</a></p>
+        </section>
+
+        <section id="multi-agent-systems">
+          <h2>Multi-Agent Systems</h2>
+          <p><a href="/agentic/mas.html">What are Multi-Agent Systems (MAS)?</a></p>
+          <p><a href="/agentic/refarchmas.html">Multi-Agent Systems - Reference Architecture</a></p>
+          <p><a href="/agentic/masterslavepattern.html">Master Slave Pattern</a></p>
+        </section>
+
+        <section id="architectures">
+          <h2>Architecture & Design</h2>
+          <p><a href="/genai/timeline.html">Timeline of Significant Shifts in Software Design to Decrease Cognitive Load</a></p>
+          <p><a href="/agentic/refarchagentic.html">Agentic Systems - Reference Architecture</a></p>
+          <p><a href="/agentic/reactivedeliberativeagents.html">Reactive and Deliberative AI agents</a></p>
+          <p><a href="/genai/cognitive.html">The software design is about to change ... forever.</a></p>
+        </section>
+
+        <section id="applications">
+          <h2>Applications & Use Cases</h2>
+          <p><a href="/agentic/chatbotquerytypes.html">Designing a Robust Chatbot: Handling a Variety of Query Types</a></p>
+          <p><a href="/agentic/agenticsystems.html">Embracing Agentic Systems: Revolutionizing Enterprise Software Development</a></p>
+          <p><a href="/agentic/personalization.html">Personalization Maturity Model for Agentic Conversational AI</a></p>
+        </section>
+
+        <section id="advanced-topics">
+          <h2>Advanced Topics</h2>
+          <p><a href="/agentic/learning.html">The Role of Learning in Agentic AI</a></p>
+          <p><a href="/agentic/teachableagents.html">Teachable AI Agents: Revolutionizing the Development and Adaptability of AI Systems</a></p>
+        </section>
+
+        <section id="frameworks">
+          <h2>Frameworks & Products</h2>
+          <p><a href="https://microsoft.github.io/autogen/" target="_blank">AutoGen</a></p>
+          <p><a href="https://microsoft.github.io/autogen-for-net/index.html" target="_blank">AutoGen for .NET</a></p>
+        </section>
+        
+        <section id="research">
+          <h2>Papers & Research</h2>
+          <p><a href="https://arxiv.org/html/2404.11584v1" target="_blank">The Landscape of Emerging AI Agent Architectures for Reasoning, Planning, and Tool Calling: A Survey</a></p>
+        </section>
+
+      </div>
+    </div>
+
   </body>
 </html>
