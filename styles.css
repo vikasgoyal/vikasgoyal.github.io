@@ -21,6 +21,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-main);
     font-size: 16px;
@@ -84,7 +88,7 @@ h6 {
 }
 
 p {
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 }
 
 /* Links */
@@ -148,6 +152,11 @@ article {
     text-align: left;
 }
 
+.article-content {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
 article header {
     margin-bottom: 2em;
 }
@@ -164,6 +173,12 @@ article section {
     text-align: left;
 }
 
+/* Subtle separators between article sections */
+article section + section {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 2em;
+}
+
 /* Lists */
 ul, ol {
     margin-left: 1.5em;
@@ -172,6 +187,12 @@ ul, ol {
 
 li {
     margin-bottom: 0.5em;
+}
+
+/* Better spacing for article lists */
+article ul li,
+article ol li {
+    margin-bottom: 0.75em;
 }
 
 /* Mark/Highlight */
