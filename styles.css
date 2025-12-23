@@ -146,6 +146,7 @@ article header {
 
 article section {
     margin-bottom: 2.5em;
+    text-align: left;
 }
 
 /* Lists */
@@ -280,13 +281,26 @@ main {
     gap: 1em;
 }
 
-main section {
+/* Only center-align sections on home page, not in articles */
+body:not(:has(article)) main section,
+main section#agenticai,
+main section#startups,
+main section#ecp,
+main section#popular {
     padding: 1em;
     margin: 0 1em;
     border-radius: 8px;
     flex: 1;
     text-align: center;
     min-width: 200px;
+}
+
+/* Article sections should be left-aligned */
+article section {
+    text-align: left;
+    padding: 0;
+    margin: 2.5em 0;
+    border-radius: 0;
 }
 
 #agenticai,
