@@ -158,7 +158,8 @@ article {
 }
 
 article header {
-    margin-bottom: 2em;
+    max-width: 750px;
+    margin: 0 auto 2em auto;
 }
 
 .article-meta {
