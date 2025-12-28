@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en-US">
+    <head>
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
         <script>
@@ -10,85 +10,156 @@
         gtag('config', 'G-ZBXY60BLWE');
         </script>
         <meta name="google-adsense-account" content="ca-pub-8607681845167073">
-        <style>
-            body {
-                width: 70%; /* Set the width to 80% of the viewport */
-                margin: 0 auto; /* Center align the body */
-            }
-          </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LLM structured outputs : Anti-Patterns
-    </title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            
+
+        <!-- Basic Meta Tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+        <!-- SEO Meta Tags -->
+        <title>LLM Structured Outputs: Anti-Patterns | Vikas Goyal</title>
+        <meta name="description" content="Avoid brittle GenAI implementations by recognizing seven structured-output anti-patterns and adopting resilient design habits.">
+        <meta name="keywords" content="structured output, GenAI, anti-patterns, LLM design, agentic systems">
+        <meta name="author" content="Vikas Goyal">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="https://vikasgoyal.github.io/genai/structuredoutput.html">
+    
+        <!-- Open Graph Meta Tags for Social Media -->
+        <meta property="og:title" content="LLM Structured Outputs: Anti-Patterns">
+        <meta property="og:description" content="Seven traps to avoid when relying on structured outputs plus a quick mitigation checklist.">
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="https://vikasgoyal.github.io/genai/structuredoutput.html">
+        <meta property="og:site_name" content="Vikas Goyal">
+        <meta property="og:image" content="https://vikasgoyal.github.io/assets/logo.png">
+    
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="LLM Structured Outputs: Anti-Patterns">
+        <meta name="twitter:description" content="Seven traps to avoid when relying on structured outputs plus a quick mitigation checklist.">
+        <meta name="twitter:image" content="https://vikasgoyal.github.io/assets/logo.png">
+    
+        <!-- Structured Data for Search Engines (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "LLM Structured Outputs: Anti-Patterns",
+            "description": "Avoid brittle GenAI implementations by recognizing seven structured-output anti-patterns and adopting resilient design habits.",
+            "author": {
+                "@type": "Person",
+                "name": "Vikas Goyal",
+                "url": "https://www.linkedin.com/in/vikasgoyal/"
+            },
+            "datePublished": "2025-12-27",
+            "dateModified": "2025-12-27",
+            "publisher": {
+                "@type": "Person",
+                "name": "Vikas Goyal"
+            },
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://vikasgoyal.github.io/genai/structuredoutput.html"
+            },
+            "keywords": "structured output, GenAI, anti-patterns, LLM design, agentic systems"
         }
-        h1, h2 {
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        ul {
-            margin-left: 20px;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-<div id="header"></div>
-<div class="container">
-    <h1>LLM structured outputs : Anti-Patterns</h1>
+        </script>
+    
+        <!-- Stylesheet -->
+        <link rel="stylesheet" href="https://vikasgoyal.github.io/styles.css">
+    </head>
 
-    <p>When designing GenAI solutions that leverage structured outputs (like those now supported by OpenAI), it's crucial to avoid certain anti-patterns that could hinder flexibility, scalability, and maintainability. Here are some to consider:</p>
+    <body>
+        <!-- Dynamic Header Navigation -->
+        <div id="header"></div>
+    
+        <!-- Main Content Container -->
+        <main class="container-lg px-3 my-5 markdown-body">
+      
+            <!-- Article Header Section -->
+            <article>
+                <header>
+                    <h1>LLM Structured Outputs: Anti-Patterns</h1>
+                    <div class="article-meta">
+                        <time datetime="2025-12-27">December 27, 2025</time>
+                    </div>
+                    <p class="accent-text">Structured outputs accelerate downstream integration, but assuming they are perfect, permanent, or complete is how otherwise solid GenAI programs become brittle.</p>
+                </header>
+        
+                <section id="introduction">
+                    <h2>Why Structured Outputs Still Need Guardrails</h2>
+                    <p>When designing GenAI solutions that leverage structured outputs (like those supported by OpenAI or the schema tools inside <a href="/agentic/mcpfoundation.html">Model Context Protocol foundations</a>), it is crucial to avoid anti-patterns that hinder flexibility, scalability, and maintainability. The guidance below preserves the original wording while placing it inside the latest site template.</p>
+                    <p>Use this page as a quick reference for product, platform, and governance teams who want practical reminders before shipping a new <mark>schema-dependent workflow</mark>.</p>
+                </section>
+        
+                <section id="main-content">
+                    <h2>Seven Anti-Patterns to Avoid</h2>
+                    <p>The core pitfalls remain unchanged; the layout simply groups them for faster scanning and adds helpful internal links.</p>
+                    <h3>1. Over-reliance on Structured Outputs</h3>
+                    <p><strong>Problem:</strong> Tightly coupling your system to structured outputs can limit adaptability, as the GenAI model's structure may evolve or vary depending on new use cases.</p>
+                    <p><strong>Example:</strong> A system built solely around structured responses could break if the model’s API changes or introduces variability in the output format.</p>
+                    <p><strong>Solution:</strong> Build mechanisms that allow for graceful handling of unstructured data or different output formats. Keep integrations modular and adaptable to varying structures.</p>
+                    <h3>2. Hard-Coding Output Handling</h3>
+                    <p><strong>Problem:</strong> Hard-coding logic to process specific keys or fields in structured output tightly couples your system to a particular version of the model.</p>
+                    <p><strong>Example:</strong> If a model’s structured output format evolves (for example, changes in field names or nesting), hardcoded logic will fail.</p>
+                    <p><strong>Solution:</strong> Use dynamic parsing and validation methods to handle different versions of the output gracefully. Ensure backward compatibility where possible.</p>
+                    <h3>3. Neglecting Contextual Flexibility</h3>
+                    <p><strong>Problem:</strong> Structured outputs often reduce the richness of nuanced, context-dependent responses that natural language outputs provide.</p>
+                    <p><strong>Example:</strong> Relying solely on structured data may overlook subtleties in conversational AI (for example, emotions or intent), leading to less effective or rigid interactions.</p>
+                    <p><strong>Solution:</strong> Maintain a balance between structured data for specific tasks and unstructured data for flexible, nuanced communication. Ensure the system can switch between them when necessary.</p>
+                    <h3>4. Tight Coupling Between Agents and Structure</h3>
+                    <p><strong>Problem:</strong> In agentic systems, having agents rely heavily on specific structured outputs can make it harder to add or modify agents without cascading changes.</p>
+                    <p><strong>Solution:</strong> Design agents to communicate in an abstract, schema-agnostic way, allowing the system to integrate diverse models with minimal changes.</p>
+                    <h3>5. Ignoring Long-term Maintainability</h3>
+                    <p><strong>Problem:</strong> Frequent updates to structured output formats might require constant rework of the system’s integration layer.</p>
+                    <p><strong>Example:</strong> If a downstream service consumes only structured output and the format frequently changes, it introduces high maintenance overhead.</p>
+                    <p><strong>Solution:</strong> Abstract the integration layer and implement automated testing for different versions of the output so the system can adapt to changes with minimal manual intervention.</p>
+                    <h3>6. Underutilizing Hybrid Approaches</h3>
+                    <p><strong>Problem:</strong> Over-emphasizing structured output could overlook scenarios where both structured and unstructured responses are useful.</p>
+                    <p><strong>Solution:</strong> Consider hybrid approaches that utilize structured data where necessary (for accuracy or downstream integration) but allow unstructured, human-like responses in other contexts (such as customer support or creative tasks). Tie this to the broader patterns outlined in <a href="/genai/agenticthinking.html">Agentic Thinking</a>.</p>
+                    <h3>7. Assuming Output Completeness</h3>
+                    <p><strong>Problem:</strong> Assuming that structured outputs will always cover all use cases leads to fragile systems.</p>
+                    <p><strong>Solution:</strong> Design systems with fallbacks for cases where the output is incomplete or where edge cases occur, to avoid unexpected failures in production.</p>
+                </section>
+        
+                <section id="additional-content">
+                    <h2>Quick Reference Checklist</h2>
+                    <p>The original text is preserved above; this checklist simply summarizes the key behaviors.</p>
+                    <ul>
+                        <li><strong>Stay adaptable:</strong> Treat schemas as interfaces, not contracts set in stone.</li>
+                        <li><strong>Validate dynamically:</strong> Version parsers and keep automated tests for every schema change.</li>
+                        <li><strong>Blend modes:</strong> Pair structured outputs with free-form reasoning so agents can explain why actions were taken.</li>
+                        <li><strong>Decouple agents:</strong> Use capability and role abstractions instead of direct schema bindings.</li>
+                        <li><strong>Plan for drift:</strong> Instrument the integration layer so regressions surface before customers notice.</li>
+                    </ul>
+                    <p>Need a deeper reference? Compare these practices with the orchestration strategies in <a href="/agentic/agenticsystems.html">Reference Architectures for Agentic Systems</a>.</p>
+                </section>
+        
+                <section id="conclusion">
+                    <h2>Keep Formats Flexible</h2>
+                    <p>Structured outputs remain essential for automation, analytics, and compliance, but usefulness falls apart when teams assume the shape of the data is permanent. Combine the anti-patterns above with continuous validation and human-in-the-loop review so every schema change becomes an evolution, not an outage.</p>
+                    <p>By keeping these anti-patterns in mind, you can design GenAI solutions that are more flexible, maintainable, and capable of evolving with the technology.</p>
+                </section>
+        
+                <section id="related-content">
+                    <h3>Related Articles</h3>
+                    <ul>
+                        <li><a href="/genai/agenticthinking.html">Foundations of Agentic Thinking</a></li>
+                        <li><a href="/agentic/actionmodels.html">Action Models for Agentic Systems</a></li>
+                        <li><a href="/general/smarthumans.html">Intelligent Agents Need Smart Humans</a></li>
+                    </ul>
+                </section>
+        
+            </article>
+      
+        </main>
+    
+        <!-- Spacing before footer -->
+        <br><br><br><br><br>
 
-    <h2>1. Over-reliance on Structured Outputs</h2>
-    <p><strong>Problem:</strong> Tightly coupling your system to structured outputs can limit adaptability, as the GenAI model's structure may evolve or vary depending on new use cases.</p>
-    <p><strong>Example:</strong> A system built solely around structured responses could break if the model’s API changes or introduces variability in the output format.</p>
-    <p><strong>Solution:</strong> Build mechanisms that allow for graceful handling of unstructured data or different output formats. Keep integrations modular and adaptable to varying structures.</p>
-
-    <h2>2. Hard-Coding Output Handling</h2>
-    <p><strong>Problem:</strong> Hard-coding logic to process specific keys or fields in structured output tightly couples your system to a particular version of the model.</p>
-    <p><strong>Example:</strong> If a model’s structured output format evolves (e.g., changes in field names or nesting), hardcoded logic will fail.</p>
-    <p><strong>Solution:</strong> Use dynamic parsing and validation methods to handle different versions of the output gracefully. Ensure backward compatibility where possible.</p>
-
-    <h2>3. Neglecting Contextual Flexibility</h2>
-    <p><strong>Problem:</strong> Structured outputs often reduce the richness of nuanced, context-dependent responses that natural language outputs provide.</p>
-    <p><strong>Example:</strong> Relying solely on structured data may overlook subtleties in conversational AI (e.g., emotions, intent), leading to less effective or rigid interactions.</p>
-    <p><strong>Solution:</strong> Maintain a balance between structured data for specific tasks and unstructured data for flexible, nuanced communication. Ensure the system can switch between them when necessary.</p>
-
-    <h2>4. Tight Coupling Between Agents and Structure</h2>
-    <p><strong>Problem:</strong> In agentic systems, having agents rely heavily on specific structured outputs can make it harder to add or modify agents without cascading changes.</p>
-    <p><strong>Solution:</strong> Design agents to communicate in an abstract, schema-agnostic way, allowing the system to integrate diverse models with minimal changes.</p>
-
-    <h2>5. Ignoring Long-term Maintainability</h2>
-    <p><strong>Problem:</strong> Frequent updates to structured output formats might require constant rework of the system’s integration layer.</p>
-    <p><strong>Example:</strong> If a downstream service consumes only structured output and the format frequently changes, it introduces high maintenance overhead.</p>
-    <p><strong>Solution:</strong> Abstract the integration layer and implement automated testing for different versions of the output, so that the system can adapt to changes with minimal manual intervention.</p>
-
-    <h2>6. Underutilizing Hybrid Approaches</h2>
-    <p><strong>Problem:</strong> Over-emphasizing structured output could overlook scenarios where both structured and unstructured responses are useful.</p>
-    <p><strong>Solution:</strong> Consider hybrid approaches that utilize structured data where necessary (for accuracy or downstream integration) but allow unstructured, human-like responses in other contexts (like customer support or creative tasks).</p>
-
-    <h2>7. Assuming Output Completeness</h2>
-    <p><strong>Problem:</strong> Assuming that structured outputs will always cover all use cases leads to fragile systems.</p>
-    <p><strong>Solution:</strong> Design systems with fallbacks for cases where the output is incomplete or where edge cases occur, to avoid unexpected failures in production.</p>
-
-    <p>By keeping these anti-patterns in mind, you can design GenAI solutions that are more flexible, maintainable, and capable of evolving with the technology.</p>
-</div>
-<div id="footer"></div> 
-<script src="https://vikasgoyal.github.io/headerfooter.js"></script>
-</body>
+        <!-- Dynamic Footer -->
+        <div id="footer"></div> 
+    
+        <!-- Load Header/Footer Script -->
+        <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+    </body>
 </html>
