@@ -442,7 +442,8 @@ article section {
 .mb-4 { margin-bottom: 2em; }
 
 .accent-text {
-    color: var(--accent-color);
+    color: var(--secondary-color);
+    font-weight: 600;
 }
 
 .custom-color {
