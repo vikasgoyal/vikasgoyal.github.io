@@ -25,18 +25,99 @@
         list-style-type: none;
         padding: 0;
         margin: 0;
-        display: flex;
-    }
-    nav ul li {
-        margin-right: 20px; /* Adjust the space between links as needed */
-    }
-    nav ul li a {
-        text-decoration: none;
-        color: rgb(47, 26, 186); /* Adjust the color as needed */
-        font-size: large;
-    }
-    nav ul li a:hover {
-        text-decoration: underline;
-    }
-</style>
+        <footer class="site-footer">
+            <section class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/agentic">Agentic AI</a></li>
+                    <li><a href="/genai">Generative AI</a></li>
+                    <li><a href="/startups/">Startups</a></li>
+                    <li><a href="/ecp/">Enterprise Change Playbook</a></li>
+                </ul>
+            </section>
+        </footer>
+
+        <div class="footer-legal">
+            <nav class="footer-nav">
+                <a href="https://vikasgoyal.github.io">Home</a>
+                <a href="/privacy.html">Privacy</a>
+                <a href="/sitemap.txt">Sitemap</a>
+            </nav>
+            <p>© <span id="footer-year"></span> Vikas Goyal. All rights reserved.</p>
+        </div>
+
+        <style>
+            .site-footer {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2rem;
+                padding: 2rem 1rem;
+                background: #0b0c10;
+                color: #f5f5f5;
+            }
+            .site-footer a {
+                color: #cde3ff;
+                text-decoration: none;
+            }
+            .site-footer a:hover {
+                text-decoration: underline;
+            }
+            .site-footer h3 {
+                margin-top: 0;
+                font-size: 1.1rem;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+            .site-footer ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            .site-footer li {
+                margin-bottom: 0.35rem;
+            }
+            .footer-note {
+                font-size: 0.85rem;
+                color: #a0a0b0;
+                margin-top: 0.4rem;
+            }
+            .footer-column {
+                flex: 1 1 220px;
+            }
+            .footer-legal {
+                background: #050608;
+                color: #a0a0b0;
+                padding: 1rem;
+                text-align: center;
+                font-size: 0.9rem;
+            }
+            .footer-nav {
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+            .footer-nav a {
+                color: #cde3ff;
+                font-size: 0.9rem;
+            }
+            @media (max-width: 640px) {
+                .site-footer {
+                    flex-direction: column;
+                }
+                .footer-nav {
+                    flex-wrap: wrap;
+                    gap: 0.75rem;
+                }
+            }
+        </style>
+
+        <script>
+            (function updateFooterYear() {
+                var el = document.getElementById('footer-year');
+                if (el) {
+                    el.textContent = new Date().getFullYear();
+                }
+            })();
+        </script>
 
