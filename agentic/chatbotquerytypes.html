@@ -1,652 +1,328 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
 
-<head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-ZBXY60BLWE');
-        </script>
-        <meta name="google-adsense-account" content="ca-pub-8607681845167073">
-        <style>
-            body {
-                width: 70%; 
-                margin: 0 auto; /* Center align the body */
-            }
-          </style>
-              <title>Designing a Robust Chatbot: Handling a Variety of Query Types</title>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<meta name=Generator content="Microsoft Word 15 (filtered)">
-<style>
-<!--
- /* Font Definitions */
- @font-face
-	{font-family:Wingdings;
-	panose-1:5 0 0 0 0 0 0 0 0 0;}
-@font-face
-	{font-family:Mangal;
-	panose-1:2 4 5 3 5 2 3 3 2 2;}
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Aptos;}
- /* Style Definitions */
- p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin-top:0in;
-	margin-right:0in;
-	margin-bottom:8.0pt;
-	margin-left:0in;
-	line-height:107%;
-	font-size:11.0pt;
-	font-family:"Aptos",sans-serif;}
-.MsoChpDefault
-	{font-size:11.0pt;}
-.MsoPapDefault
-	{margin-bottom:8.0pt;
-	line-height:107%;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
- /* List Definitions */
- ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
--->
-</style>
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Designing a Robust Chatbot: Handling 17 Types of Query Variations - Vikas Goyal</title>
+    <meta name="description" content="A comprehensive guide to designing chatbots that handle diverse query types including small talk, gibberish, follow-ups, spelling mistakes, multi-intent queries, and emergency situations.">
+    <meta name="keywords" content="chatbot design, conversational AI, NLP, query types, HR chatbot, chatbot patterns, intent detection, chatbot UX, AI assistant">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/chatbotquerytypes.html">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Designing a Robust Chatbot: Handling 17 Types of Query Variations">
+    <meta property="og:description" content="A comprehensive guide to designing chatbots that handle diverse query types from small talk to emergency situations.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/chatbotquerytypes.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Designing a Robust Chatbot: Handling 17 Types of Query Variations">
+    <meta name="twitter:description" content="A comprehensive guide to designing robust chatbots for diverse query scenarios.">
+    
+    <!-- Structured Data for Search Engines (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Designing a Robust Chatbot: Handling a Variety of Query Types",
+      "description": "A comprehensive guide to designing chatbots that handle diverse query types including small talk, gibberish, follow-ups, spelling mistakes, multi-intent queries, and emergency situations.",
+      "author": {
+        "@type": "Person",
+        "name": "Vikas Goyal",
+        "url": "https://www.linkedin.com/in/vikasgoyal/"
+      },
+      "datePublished": "2024-08-20",
+      "publisher": {
+        "@type": "Person",
+        "name": "Vikas Goyal"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://vikasgoyal.github.io/agentic/chatbotquerytypes.html"
+      },
+      "keywords": "chatbot design, conversational AI, NLP, query types, HR chatbot"
+    }
+    </script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="https://vikasgoyal.github.io/styles.css">
+  </head>
 
-</head>
-
-<body lang=EN-US style='word-wrap:break-word'>
+  <body>
+    <!-- Dynamic Header Navigation -->
     <div id="header"></div>
-<div class=WordSection1>
-
-<p class=MsoNormal><b><span style='font-size:26.0pt;line-height:107%'>Designing
-a Robust Chatbot: Handling a Variety of Query Types</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>When
-designing a chatbot, it's crucial to prepare for more than just
-subject-specific questions. </span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>A
-well-rounded chatbot should be equipped to handle diverse types of user
-queries. </span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Below, we
-explore each type of query with examples, ensuring that your chatbot is
-versatile, user-friendly, and resilient.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>The domain
-used for sample queries is primarily HR Chatbot.</span></p>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>1. Small
-Talk: Greetings &amp; Farewells</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Chatbots
-should be personable and able to engage in basic social interactions. This
-helps create a welcoming user experience.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Good
-     morning! How are you?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Hello,
-     are you there?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Thanks
-     for your help, goodbye!&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Have
-     a nice day!&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;See
-     you later!&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>2. Gibberish</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users may
-input nonsense or random characters. The chatbot should gracefully handle such
-inputs without getting confused.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;asdflkjweroi&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;blah
-     blah blah&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;12345abcde&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;!!!###@@@&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;wqeoipouqewp&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>3. Follow-Up
-Queries Within Context</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users often
-ask follow-up questions that directly relate to the previous conversation.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     is my remaining leave balance?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-      I carry over the unused leaves?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I reset my password?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-      long will it take?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     is the process for claiming medical reimbursement?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-      I claim for last year?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I apply for parental leave?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Do
-      I need manager approval?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     is our holiday schedule?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Is
-      it different for remote employees?&quot;</span></li>
- </ul>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>4. Follow-Up
-Queries Outside Context</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users might
-ask follow-up questions that are unrelated to the current conversation.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     are my benefits?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What's
-      the weather like today?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I submit a timesheet?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What's
-      the CEO's name?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I update my emergency contact?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;When
-      is the next company event?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     are the health insurance options?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-      I see the company's stock price?&quot;</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I update my address?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What's
-      the time in New York?&quot;</span></li>
- </ul>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>5. Queries
-with Spelling Mistakes</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users may
-make typographical errors, and the chatbot should still understand and respond
-correctly.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Whar
-     is my leav balnce?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I aply for medcal insurence?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Wen
-     is the next company evnt?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Plase
-     help with my passwrd.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I clame travel reimbusment?&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>6. Form-Filling
-Guided Flows</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Some
-interactions require collecting multiple pieces of information. The chatbot
-should guide the user through this process smoothly.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I
-     need to update my address.&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>[Guided
-      flow: asks for current address, new address, and effective date]</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I
-     want to apply for leave.&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>[Guided
-      flow: asks for leave type, dates, and reason]</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I submit an expense report?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>[Guided
-      flow: asks for expense type, amount, and date]</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I
-     need to add a dependent to my insurance.&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>[Guided
-      flow: asks for dependent's name, relation, and date of birth]</span></li>
- </ul>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I register for the training program?&quot;</span></li>
- <ul style='margin-top:0in' type=circle>
-  <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>[Guided
-      flow: asks for program name, date, and location]</span></li>
- </ul>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>7. Out of
-Scope Queries</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Not all
-queries will fall within the chatbot's scope. It should handle such situations
-gracefully.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you tell me who won the football game last night?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What's
-     the best place to buy a laptop?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I cook lasagna?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     is the meaning of life?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you book me a flight to Paris?&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>8. Queries
-with Multiple Intents (Dependent)</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Sometimes
-users ask questions that have multiple, dependent parts that must be resolved
-in sequence.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you check my leave balance and then help me apply for leave?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Tell
-     me my health benefits and then explain how to claim them.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What's
-     my current salary, and can you show me my last payslip?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Check
-     my tax information and then help me update it.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     are my perks, and how can I redeem them?&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>9. Queries
-with Multiple Intents (Independent)</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users may
-combine multiple, unrelated queries that can be addressed simultaneously.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What's
-     my leave balance and who is my HR manager?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Show
-     me my payslip and update my contact information.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I apply for a promotion and what are the insurance options?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Tell
-     me the company holidays and show me my last performance review.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     are my benefits and when is the next team meeting?&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>10. Inappropriate
-or Offensive Content</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>The chatbot
-should identify and respond appropriately to any inappropriate or offensive
-content.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;You're
-     useless, just like this company!&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you help me with something illegal?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;This
-     job sucks, and so do you.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Why
-     are you so dumb?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Get
-     lost, you piece of junk!&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>11. Queries
-with Incomplete Information</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Sometimes
-users provide incomplete data, and the chatbot needs to ask for clarification
-or additional details.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I
-     need to update my address.&quot; (Missing new address)</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Help
-     me apply for leave.&quot; (Missing leave dates)</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I claim reimbursement?&quot; (Missing expense type)</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Show
-     me my payslip.&quot; (Missing month)</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Register
-     me for the training.&quot; (Missing program name)</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>12. Escalation
-Queries</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users may
-request to speak with a human or escalate an issue that the chatbot cannot
-resolve.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I
-     need to speak with HR.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you connect me to a manager?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;This
-     isn't helping, can I talk to a person?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I
-     need to escalate this issue.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Please
-     transfer me to someone in payroll.&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>13. Queries
-About the Bot's Capabilities</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users might
-ask what the chatbot can or cannot do.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     can you help me with?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Are
-     you able to book meetings?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you explain company policies?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do you handle personal data?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you connect me to a live agent?&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>14. Feedback
-Queries</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users might
-want to provide feedback on their experience with the chatbot.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;You're
-     doing a great job!&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;This
-     wasn't helpful at all.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     I leave feedback?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     do I rate this conversation?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I'd
-     like to suggest an improvement.&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>15. Prompts
-Containing PII (Personal Identifiable Information)</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users may
-inadvertently share sensitive information. The chatbot should handle this with
-care.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;My
-     Social Security Number is 123-45-6789.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Here's
-     my credit card number: 4111 1111 1111 1111.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;My
-     address is 123 Main St, Springfield.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;My
-     employee ID is 98765.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I'll
-     give you my passport number for verification.&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>16. Clarification
-Queries</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Users might
-ask for clarification on information provided by the chatbot. The chatbot
-should be able to restate or elaborate on its responses to clear up any
-confusion.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What
-     do you mean by 'pro-rata basis'?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you explain what 'carryover leave' is?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;How
-     does the reimbursement process work again?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;What's
-     the difference between sick leave and personal leave?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Can
-     you give me an example of how to fill out the expense form?&quot;</span></li>
-</ul>
-
-<div class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt;line-height:107%'>
-
-<hr size=2 width="100%" align=center>
-
-</span></div>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>17. Emergency
-Queries</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>In rare
-cases, users might need urgent help. The chatbot should be prepared to respond
-appropriately and escalate as needed.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Examples:</span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;There's
-     been an accident at work, what do I do?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I
-     need to report an emergency.&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;Who
-     do I contact in case of a workplace incident?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;I'm
-     feeling unwell, can you help?&quot;</span></li>
- <li class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&quot;There's
-     a fire alarm, what's the procedure?&quot;</span></li>
-</ul>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&nbsp;</span></p>
-
-<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:107%'>Conclusion</span></b></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Equipping
-your chatbot to handle these diverse types of queries ensures it can engage
-effectively with users, handle various scenarios, and maintain a high level of
-service. </span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Each query
-type requires thoughtful design and development to ensure the chatbot responds
-appropriately and maintains user trust.</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&nbsp;</span></p>
-
-</div>
-
-<div id="footer"></div> 
-<script src="https://vikasgoyal.github.io/headerfooter.js"></script>
-</body>
-
+    
+    <!-- Main Content Container -->
+    <main class="container-lg px-3 my-5 markdown-body">
+      
+      <!-- Article Header Section -->
+      <article>
+        <header>
+          <h1>Designing a Robust Chatbot: Handling a Variety of Query Types</h1>
+          <p class="accent-text">When designing a chatbot, it's crucial to prepare for more than just subject-specific questions. A well-rounded chatbot should be equipped to handle diverse types of user queries. The domain used for sample queries is primarily HR Chatbot.</p>
+        </header>
+        
+        <section id="small-talk">
+          <h2>1. Small Talk: Greetings &amp; Farewells</h2>
+          <p>Chatbots should be personable and able to engage in basic social interactions. This helps create a welcoming user experience.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"Good morning! How are you?"</li>
+            <li>"Hello, are you there?"</li>
+            <li>"Thanks for your help, goodbye!"</li>
+            <li>"Have a nice day!"</li>
+            <li>"See you later!"</li>
+          </ul>
+        </section>
+        
+        <section id="gibberish">
+          <h2>2. Gibberish</h2>
+          <p>Users may input nonsense or random characters. The chatbot should gracefully handle such inputs without getting confused.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"asdflkjweroi"</li>
+            <li>"blah blah blah"</li>
+            <li>"12345abcde"</li>
+            <li>"!!!###@@@"</li>
+            <li>"wqeoipouqewp"</li>
+          </ul>
+        </section>
+        
+        <section id="follow-up-within">
+          <h2>3. Follow-Up Queries Within Context</h2>
+          <p>Users often ask follow-up questions that directly relate to the previous conversation.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"What is my remaining leave balance?"
+              <ul>
+                <li>"Can I carry over the unused leaves?"</li>
+              </ul>
+            </li>
+            <li>"How do I reset my password?"
+              <ul>
+                <li>"How long will it take?"</li>
+              </ul>
+            </li>
+            <li>"What is the process for claiming medical reimbursement?"
+              <ul>
+                <li>"Can I claim for last year?"</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        
+        <section id="follow-up-outside">
+          <h2>4. Follow-Up Queries Outside Context</h2>
+          <p>Users might ask follow-up questions that are unrelated to the current conversation.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"What are my benefits?"
+              <ul>
+                <li>"What's the weather like today?"</li>
+              </ul>
+            </li>
+            <li>"How do I submit a timesheet?"
+              <ul>
+                <li>"What's the CEO's name?"</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        
+        <section id="spelling-mistakes">
+          <h2>5. Queries with Spelling Mistakes</h2>
+          <p>Users may make typographical errors, and the chatbot should still understand and respond correctly.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"Whar is my leav balnce?"</li>
+            <li>"How do I aply for medcal insurence?"</li>
+            <li>"Wen is the next company evnt?"</li>
+            <li>"Plase help with my passwrd."</li>
+            <li>"How do I clame travel reimbusment?"</li>
+          </ul>
+        </section>
+        
+        <section id="form-filling">
+          <h2>6. Form-Filling Guided Flows</h2>
+          <p>Some interactions require collecting multiple pieces of information. The chatbot should guide the user through this process smoothly.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"I need to update my address." → [Guided flow: asks for current address, new address, and effective date]</li>
+            <li>"I want to apply for leave." → [Guided flow: asks for leave type, dates, and reason]</li>
+            <li>"How do I submit an expense report?" → [Guided flow: asks for expense type, amount, and date]</li>
+          </ul>
+        </section>
+        
+        <section id="out-of-scope">
+          <h2>7. Out of Scope Queries</h2>
+          <p>Not all queries will fall within the chatbot's scope. It should handle such situations gracefully.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"Can you tell me who won the football game last night?"</li>
+            <li>"What's the best place to buy a laptop?"</li>
+            <li>"How do I cook lasagna?"</li>
+            <li>"What is the meaning of life?"</li>
+            <li>"Can you book me a flight to Paris?"</li>
+          </ul>
+        </section>
+        
+        <section id="multiple-intents-dependent">
+          <h2>8. Queries with Multiple Intents (Dependent)</h2>
+          <p>Sometimes users ask questions that have multiple, dependent parts that must be resolved in sequence.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"Can you check my leave balance and then help me apply for leave?"</li>
+            <li>"Tell me my health benefits and then explain how to claim them."</li>
+            <li>"What's my current salary, and can you show me my last payslip?"</li>
+          </ul>
+        </section>
+        
+        <section id="multiple-intents-independent">
+          <h2>9. Queries with Multiple Intents (Independent)</h2>
+          <p>Users may combine multiple, unrelated queries that can be addressed simultaneously.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"What's my leave balance and who is my HR manager?"</li>
+            <li>"Show me my payslip and update my contact information."</li>
+            <li>"How do I apply for a promotion and what are the insurance options?"</li>
+          </ul>
+        </section>
+        
+        <section id="inappropriate-content">
+          <h2>10. Inappropriate or Offensive Content</h2>
+          <p>The chatbot should identify and respond appropriately to any inappropriate or offensive content.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"You're useless, just like this company!"</li>
+            <li>"Can you help me with something illegal?"</li>
+            <li>"This job sucks, and so do you."</li>
+          </ul>
+        </section>
+        
+        <section id="incomplete-information">
+          <h2>11. Queries with Incomplete Information</h2>
+          <p>Sometimes users provide incomplete data, and the chatbot needs to ask for clarification or additional details.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"I need to update my address." (Missing new address)</li>
+            <li>"Help me apply for leave." (Missing leave dates)</li>
+            <li>"Show me my payslip." (Missing month)</li>
+          </ul>
+        </section>
+        
+        <section id="escalation">
+          <h2>12. Escalation Queries</h2>
+          <p>Users may request to speak with a human or escalate an issue that the chatbot cannot resolve.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"I need to speak with HR."</li>
+            <li>"Can you connect me to a manager?"</li>
+            <li>"This isn't helping, can I talk to a person?"</li>
+            <li>"I need to escalate this issue."</li>
+          </ul>
+        </section>
+        
+        <section id="bot-capabilities">
+          <h2>13. Queries About the Bot's Capabilities</h2>
+          <p>Users might ask what the chatbot can or cannot do.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"What can you help me with?"</li>
+            <li>"Are you able to book meetings?"</li>
+            <li>"Can you explain company policies?"</li>
+            <li>"How do you handle personal data?"</li>
+          </ul>
+        </section>
+        
+        <section id="feedback">
+          <h2>14. Feedback Queries</h2>
+          <p>Users might want to provide feedback on their experience with the chatbot.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"You're doing a great job!"</li>
+            <li>"This wasn't helpful at all."</li>
+            <li>"Can I leave feedback?"</li>
+            <li>"I'd like to suggest an improvement."</li>
+          </ul>
+        </section>
+        
+        <section id="pii">
+          <h2>15. Prompts Containing PII (Personal Identifiable Information)</h2>
+          <p>Users may inadvertently share sensitive information. The chatbot should handle this with care.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"My Social Security Number is 123-45-6789."</li>
+            <li>"Here's my credit card number: 4111 1111 1111 1111."</li>
+            <li>"My address is 123 Main St, Springfield."</li>
+          </ul>
+        </section>
+        
+        <section id="clarification">
+          <h2>16. Clarification Queries</h2>
+          <p>Users might ask for clarification on information provided by the chatbot. The chatbot should be able to restate or elaborate on its responses.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"What do you mean by 'pro-rata basis'?"</li>
+            <li>"Can you explain what 'carryover leave' is?"</li>
+            <li>"How does the reimbursement process work again?"</li>
+            <li>"Can you give me an example of how to fill out the expense form?"</li>
+          </ul>
+        </section>
+        
+        <section id="emergency">
+          <h2>17. Emergency Queries</h2>
+          <p>In rare cases, users might need urgent help. The chatbot should be prepared to respond appropriately and escalate as needed.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>"There's been an accident at work, what do I do?"</li>
+            <li>"I need to report an emergency."</li>
+            <li>"Who do I contact in case of a workplace incident?"</li>
+            <li>"There's a fire alarm, what's the procedure?"</li>
+          </ul>
+        </section>
+        
+        <section id="conclusion">
+          <h2>Conclusion</h2>
+          <p>Equipping your chatbot to handle these diverse types of queries ensures it can engage effectively with users, handle various scenarios, and maintain a high level of service. Each query type requires thoughtful design and development to ensure the chatbot responds appropriately and maintains user trust.</p>
+        </section>
+        
+        <section id="related-content">
+          <h3>Related Articles</h3>
+          <ul>
+            <li><a href="agenticsystems.html">Agentic Systems Overview</a></li>
+            <li><a href="reactivedeliberativeagents.html">Reactive vs Deliberative Agents</a></li>
+            <li><a href="../genai/aitech.html">Understanding AI Technologies</a></li>
+          </ul>
+        </section>
+        
+      </article>
+      
+    </main>
+    
+    <!-- Spacing before footer -->
+    <br><br><br><br><br>
+
+    <!-- Dynamic Footer -->
+    <div id="footer"></div> 
+    
+    <!-- Load Header/Footer Script -->
+    <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+  </body>
 </html>
