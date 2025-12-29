@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Blog - Vikas Goyal</title>
+    <meta name="description" content="Latest articles and insights on Agentic AI, startups, technology leadership, and career development.">
+    <meta name="keywords" content="blog, agentic AI, startups, technology, career, software development">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/blog/">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/blog/blog.js"></script>
+    <style>
+        body {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .breadcrumb {
+            margin-bottom: 1.5em;
+            padding: 10px 0;
+        }
+        .breadcrumb a {
+            color: #0d6233;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+        }
+        .breadcrumb a:hover {
+            color: #0f8448;
+            text-decoration: underline;
+        }
+        .breadcrumb span {
+            color: #999;
+            margin: 0 8px;
+        }
+        .blog-header {
+            text-align: center;
+            margin-bottom: 3em;
+            padding-bottom: 1.5em;
+            border-bottom: 3px solid #0d6233;
+        }
+        .blog-header h1 {
+            font-size: 2.5em;
+            color: #000;
+            margin-bottom: 0.3em;
+        }
+        .blog-header p {
+            font-size: 1.1em;
+            color: #666;
+            font-style: italic;
+        }
+        .post-count {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 2em;
+        }
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #0d6233;
+            background: white;
+            color: #0d6233;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #0d6233;
+            color: white;
+        }
+        .blog-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 2em;
+        }
+        .blog-post {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .blog-post:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        .blog-post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8em;
+            gap: 15px;
+        }
+        .blog-post-header > div {
+            flex: 1;
+            min-width: 0;
+        }
+        .blog-post-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85em;
+            color: #666;
+            flex-wrap: wrap;
+        }
+        .blog-post-category {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #0d6233;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .blog-post h2 {
+            margin: 0 0 0.5em 0;
+            font-size: 1.8em;
+        }
+        .blog-post h2 a {
+            color: #000;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .blog-post h2 a:hover {
+            color: #0d6233;
+        }
+        .blog-post-excerpt {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 1em;
+        }
+        .blog-post-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .tag {
+            padding: 4px 10px;
+            background: #f0f0f0;
+            color: #333;
+            border-radius: 8px;
+            font-size: 0.8em;
+        }
+        .read-more {
+            color: #0d6233;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .read-more:hover {
+            color: #0f8448;
+        }
+        .no-posts {
+            text-align: center;
+            padding: 3em;
+            color: #666;
+            font-size: 1.1em;
+        }
+        .loading {
+            text-align: center;
+            padding: 3em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+    <script src="/headerfooter.js"></script>
+
+    <nav class="breadcrumb">
+        <a href="/">🏠 Home</a>
+        <span>/</span>
+        <span style="color: #333;">Blog</span>
+    </nav>
+
+    <div class="blog-header">
+        <h1>📝 Blog</h1>
+        <p>Thoughts on AI, startups, technology, and career development</p>
+    </div>
+
+    <div id="post-count" class="post-count"></div>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" data-category="all">All Posts</button>
+        <button class="filter-btn" data-category="Agentic AI">Agentic AI</button>
+        <button class="filter-btn" data-category="Startups">Startups</button>
+        <button class="filter-btn" data-category="Career">Career</button>
+        <button class="filter-btn" data-category="Technology">Technology</button>
+    </div>
+
+    <div id="blog-posts" class="blog-posts">
+        <div class="loading">Loading blog posts...</div>
+    </div>
+
+    <div id="footer-container"></div>
+
+</body>
+</html>

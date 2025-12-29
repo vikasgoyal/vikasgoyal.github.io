@@ -108,6 +108,7 @@
         main:first-child {
             margin-bottom: 2em; /* Space between category boxes and popular section */
         }
+        main section#blog,
         main section#agenticai,
         main section#startups,
         main section#ecp {
@@ -121,11 +122,18 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        main section#blog:hover,
         main section#agenticai:hover,
         main section#startups:hover,
         main section#ecp:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        main section#blog h2::before {
+            content: "📝 ";
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 0.3em;
         }
         main section#agenticai h2::before {
             content: "🤖 ";
@@ -145,6 +153,7 @@
             display: block;
             margin-bottom: 0.3em;
         }
+        main section#blog h2,
         main section#agenticai h2,
         main section#startups h2,
         main section#ecp h2 {
@@ -152,10 +161,19 @@
             margin: 0;
             font-weight: 600;
         }
+        main section#blog a,
         main section#agenticai a,
         main section#startups a,
         main section#ecp a {
             font-size: 1em;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        main section#blog a:hover,
+        main section#agenticai a:hover,
+        main section#startups a:hover,
+        main section#ecp a:hover {
+            color: #ffffff;
         }
         main section#popular {
             text-align: left;
@@ -239,6 +257,9 @@
 
     <div class="content">
         <main>
+            <section id="blog">
+                <h2><a href="/blog/">Blog</a></h2>
+            </section>
             <section id="agenticai">
                 <h2><a href="/agentic/">Agentic AI</a></h2>
             </section>
