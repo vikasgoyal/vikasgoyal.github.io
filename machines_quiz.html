@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.8em;
+        }
+        
+        .progress-container {
+            margin: 10px 0 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 8px;
+        }
+        
+        .stat {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .quiz-card {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .question-number {
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .question-topic {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #fff3cd;
+            color: #856404;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .question-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e7e9fc;
+            color: #667eea;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        
+        .question-text {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .option {
+            padding: 10px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            font-size: 1.05em;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+        
+        .option-letter {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+        }
+        
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .feedback {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+        
+        .feedback-title {
+            font-size: 1.05em;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        
+        .feedback.correct .feedback-title {
+            color: #28a745;
+        }
+        
+        .feedback.incorrect .feedback-title {
+            color: #dc3545;
+        }
+        
+        .feedback-text {
+            color: #333;
+            line-height: 1.4;
+            font-size: 0.95em;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .results h2 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .score {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .results-message {
+            font-size: 1.3em;
+            color: #666;
+            margin: 20px 0;
+        }
+        
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .result-stat {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .result-stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .result-stat-value.correct { color: #28a745; }
+        .result-stat-value.incorrect { color: #dc3545; }
+        .result-stat-value.unanswered { color: #ffc107; }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .results-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Interactive Quiz</h1>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="currentQuestion">1</div>
+                    <div class="stat-label">Current Question</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="incorrectCount">0</div>
+                    <div class="stat-label">Incorrect</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="quizContainer"></div>
+        
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>← Previous</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+        </div>
+    </div>
+    
+    <script type="application/json" id="questionsData">
+[
+  {
+    "topic": "Written Test Overview",
+    "question": "What is the minimum required duration for the written test?",
+    "type": "conceptual",
+    "options": {
+      "A": "15 minutes",
+      "B": "20 minutes",
+      "C": "25 minutes",
+      "D": "30 minutes"
+    },
+    "correct_answer": "C",
+    "explanation": "The written test overview specifies that the minimum duration is 25 minutes. Options A and B are shorter than the required minimum, while option D exceeds the minimum but is not the stated requirement."
+  },
+  {
+    "topic": "Written Test Overview",
+    "question": "A student measures a length as 2.456 meters and needs to record it to three significant figures. What value should be written on the test?",
+    "type": "numerical",
+    "options": {
+      "A": "2.45 m",
+      "B": "2.46 m",
+      "C": "2.456 m",
+      "D": "2.460 m"
+    },
+    "correct_answer": "B",
+    "explanation": "To round 2.456 to three significant figures, you look at the fourth digit (6), which causes the third digit (5) to round up to 6, giving 2.46 m. Option A rounds incorrectly, option C has too many significant figures, and option D has four significant figures."
+  },
+  {
+    "topic": "Written Test Overview",
+    "question": "True or False: Answers on the written test may be given in any unit system, such as metric or imperial, as long as the math is correct.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "B",
+    "explanation": "This statement is false because the written test requires the use of metric units only. Using imperial or other unit systems would not meet the test requirements, even if the calculations are correct."
+  },
+  {
+    "topic": "Written Test Overview",
+    "question": "Which of the following is the BEST reason for requiring metric units on the written test?",
+    "type": "conceptual",
+    "options": {
+      "A": "Metric units are easier to memorize",
+      "B": "Metric units avoid the need for calculators",
+      "C": "Metric units provide a consistent and internationally accepted system",
+      "D": "Metric units always give whole-number answers"
+    },
+    "correct_answer": "C",
+    "explanation": "Metric units are required because they are standardized and used internationally, ensuring consistency in measurements. Option A is subjective, option B is incorrect because calculations may still be needed, and option D is false because metric measurements often include decimals."
+  },
+  {
+    "topic": "Written Test Overview",
+    "question": "A student plans to spend equal time on each of 5 sections of the written test, which lasts the minimum allowed time. How much time should the student spend on each section?",
+    "type": "application",
+    "options": {
+      "A": "4 minutes",
+      "B": "5 minutes",
+      "C": "6 minutes",
+      "D": "7 minutes"
+    },
+    "correct_answer": "B",
+    "explanation": "The minimum test duration is 25 minutes. Dividing 25 minutes by 5 sections gives 5 minutes per section. Option A is too short, while options C and D would require more than the total available time."
+  },
+  {
+    "topic": "Mechanical Advantage",
+    "question": "What is the ideal mechanical advantage (IMA) of a ramp that is 6 meters long and raises an object 2 meters vertically?",
+    "type": "numerical",
+    "options": {
+      "A": "2",
+      "B": "3",
+      "C": "4",
+      "D": "12"
+    },
+    "correct_answer": "B",
+    "explanation": "Ideal mechanical advantage is calculated as the distance over which the input force is applied divided by the distance the load is moved. For the ramp, IMA = 6 m / 2 m = 3. The other options result from incorrect calculations."
+  },
+  {
+    "topic": "Mechanical Advantage",
+    "question": "True or False: Actual mechanical advantage considers friction and other real-world losses in a machine.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "Actual mechanical advantage (AMA) is based on measured forces and includes the effects of friction and other inefficiencies. Ideal mechanical advantage does not consider these losses."
+  },
+  {
+    "topic": "Mechanical Advantage",
+    "question": "Which equation correctly represents the actual mechanical advantage (AMA) of a simple machine?",
+    "type": "conceptual",
+    "options": {
+      "A": "AMA = input distance ÷ output distance",
+      "B": "AMA = output force ÷ input force",
+      "C": "AMA = input force ÷ output force",
+      "D": "AMA = output distance ÷ input distance"
+    },
+    "correct_answer": "B",
+    "explanation": "Actual mechanical advantage is defined as the ratio of output force to input force. Option A and D describe ideal mechanical advantage, and option C is the inverse of the correct relationship."
+  },
+  {
+    "topic": "Mechanical Advantage",
+    "question": "A lever requires an input force of 50 N to lift a load of 200 N. What is the actual mechanical advantage of the lever?",
+    "type": "numerical",
+    "options": {
+      "A": "0.25",
+      "B": "2",
+      "C": "4",
+      "D": "250"
+    },
+    "correct_answer": "C",
+    "explanation": "Actual mechanical advantage is calculated as output force divided by input force. AMA = 200 N ÷ 50 N = 4. The other options result from incorrect calculations or reversed ratios."
+  },
+  {
+    "topic": "Mechanical Advantage",
+    "question": "An ideal pulley system has a mechanical advantage of 4, but its actual mechanical advantage is measured as 3. What is the main reason for this difference?",
+    "type": "application",
+    "options": {
+      "A": "The load is too heavy",
+      "B": "The pulley system is used incorrectly",
+      "C": "Energy is lost due to friction in the system",
+      "D": "Ideal mechanical advantage changes with force"
+    },
+    "correct_answer": "C",
+    "explanation": "The difference between ideal and actual mechanical advantage is mainly due to energy losses such as friction. Ideal mechanical advantage assumes no losses, while actual mechanical advantage reflects real-world conditions."
+  },
+  {
+    "topic": "Efficiency, Load, and Effort",
+    "question": "What is the correct definition of efficiency in the context of machines?",
+    "type": "conceptual",
+    "options": {
+      "A": "The ratio of input energy to output energy",
+      "B": "The ratio of output energy to input energy",
+      "C": "The amount of effort applied by a machine",
+      "D": "The load a machine can lift"
+    },
+    "correct_answer": "B",
+    "explanation": "Efficiency describes how well a machine converts input energy into useful output energy. It is calculated as output energy divided by input energy. Option A describes the inverse, while C and D describe different concepts related to machines, not efficiency."
+  },
+  {
+    "topic": "Efficiency, Load, and Effort",
+    "question": "If a simple machine has an input work of 200 J and an output work of 150 J, what is its efficiency?",
+    "type": "numerical",
+    "options": {
+      "A": "50%",
+      "B": "65%",
+      "C": "75%",
+      "D": "85%"
+    },
+    "correct_answer": "C",
+    "explanation": "Efficiency is calculated using the formula: efficiency = (output work ÷ input work) × 100. Here, (150 ÷ 200) × 100 = 75%. The other options result from incorrect calculations."
+  },
+  {
+    "topic": "Efficiency, Load, and Effort",
+    "question": "Increasing the load on a machine generally requires an increase in effort.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "In most machines, a heavier load requires more effort to move or lift it. While machines reduce the amount of effort compared to lifting directly, increasing the load still requires more input effort."
+  },
+  {
+    "topic": "Efficiency, Load, and Effort",
+    "question": "Which of the following is a common reason why real machines are never 100% efficient?",
+    "type": "conceptual",
+    "options": {
+      "A": "They always increase speed",
+      "B": "They reduce the load too much",
+      "C": "Some energy is lost due to friction",
+      "D": "They use simple parts"
+    },
+    "correct_answer": "C",
+    "explanation": "Real machines lose some input energy due to factors like friction, heat, and sound. These energy losses reduce efficiency, preventing machines from being 100% efficient. The other options do not explain energy loss."
+  },
+  {
+    "topic": "Efficiency, Load, and Effort",
+    "question": "A student uses a pulley system to lift a box. The effort applied is small, but the rope has to be pulled a long distance. This is an example of:",
+    "type": "application",
+    "options": {
+      "A": "Reducing energy losses",
+      "B": "Increasing efficiency above 100%",
+      "C": "Trading distance for force",
+      "D": "Eliminating effort completely"
+    },
+    "correct_answer": "C",
+    "explanation": "Simple machines like pulleys often reduce the force (effort) needed by increasing the distance over which the force is applied. This is known as trading distance for force. The machine does not eliminate effort or exceed 100% efficiency."
+  },
+  {
+    "topic": "Energy Concepts",
+    "question": "A 2 kg book is lifted and placed on a shelf 5 m above the ground. What is the gravitational potential energy gained by the book? (Take g = 9.8 m/s²)",
+    "type": "numerical",
+    "options": {
+      "A": "19.6 J",
+      "B": "49 J",
+      "C": "98 J",
+      "D": "196 J"
+    },
+    "correct_answer": "C",
+    "explanation": "Gravitational potential energy is calculated using PE = mgh. Substituting the values gives PE = 2 kg × 9.8 m/s² × 5 m = 98 J. The other options result from incorrect substitution or calculation."
+  },
+  {
+    "topic": "Energy Concepts",
+    "question": "A ball of mass 1 kg is moving at a speed of 10 m/s. What is its kinetic energy?",
+    "type": "numerical",
+    "options": {
+      "A": "5 J",
+      "B": "10 J",
+      "C": "50 J",
+      "D": "100 J"
+    },
+    "correct_answer": "C",
+    "explanation": "Kinetic energy is given by KE = 1/2 mv². Using the values, KE = 0.5 × 1 kg × (10 m/s)² = 50 J. The other values come from missing the square of velocity or incorrect multiplication."
+  },
+  {
+    "topic": "Energy Concepts",
+    "question": "In an ideal simple machine with no friction, energy is conserved, meaning the output work equals the input work.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "In an ideal simple machine, there are no energy losses due to friction, so the work put into the machine equals the work coming out. This demonstrates the law of conservation of energy."
+  },
+  {
+    "topic": "Energy Concepts",
+    "question": "A student pushes a box across a rough floor using a constant force. Which statement best describes the energy transfer that occurs?",
+    "type": "application",
+    "options": {
+      "A": "All the work done is converted into gravitational potential energy",
+      "B": "The work done is converted entirely into kinetic energy",
+      "C": "The work done is partly converted into thermal energy due to friction",
+      "D": "No energy transfer occurs because the box moves at constant speed"
+    },
+    "correct_answer": "C",
+    "explanation": "When a force is applied over a distance on a rough surface, some of the work done is converted into thermal energy due to friction. If the box moves at constant speed, kinetic energy does not increase, but energy is still transferred as heat."
+  },
+  {
+    "topic": "Energy Concepts",
+    "question": "Using a simple pulley system allows a worker to lift a heavy load with less force. Why does this not violate the conservation of energy?",
+    "type": "conceptual",
+    "options": {
+      "A": "Because the pulley creates energy",
+      "B": "Because the load gains less potential energy",
+      "C": "Because the force is reduced but the distance over which it is applied increases",
+      "D": "Because friction adds extra energy to the system"
+    },
+    "correct_answer": "C",
+    "explanation": "In a simple machine like a pulley, reducing the required force means the force must be applied over a greater distance. This keeps the total work done the same, so energy is conserved. The other options incorrectly suggest energy creation, loss, or gain."
+  },
+  {
+    "topic": "Friction in Simple Machines",
+    "question": "A 10 kg box rests on a horizontal surface. The coefficient of kinetic friction between the box and the surface is 0.3. What is the frictional force acting on the box when it is sliding? (Take g = 10 m/s²)",
+    "type": "numerical",
+    "options": {
+      "A": "3 N",
+      "B": "30 N",
+      "C": "10 N",
+      "D": "100 N"
+    },
+    "correct_answer": "B",
+    "explanation": "The normal force is equal to the weight: N = mg = 10 × 10 = 100 N. The kinetic friction force is f = μk × N = 0.3 × 100 = 30 N. The other options result from incorrect use of the formula or the values."
+  },
+  {
+    "topic": "Friction in Simple Machines",
+    "question": "True or False: Static friction is usually greater than kinetic friction for the same pair of surfaces.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "Static friction must be overcome to start motion and is generally greater than kinetic friction, which acts when objects are already moving. This is why it is harder to start pushing an object than to keep it moving."
+  },
+  {
+    "topic": "Friction in Simple Machines",
+    "question": "How does friction affect the efficiency of simple machines such as pulleys and inclined planes?",
+    "type": "conceptual",
+    "options": {
+      "A": "It increases efficiency by providing extra force",
+      "B": "It has no effect on efficiency",
+      "C": "It decreases efficiency by converting useful energy into heat",
+      "D": "It completely stops the machine from working"
+    },
+    "correct_answer": "C",
+    "explanation": "Friction converts some of the input energy into heat, reducing the amount of useful work done by the machine. This lowers the efficiency but does not usually stop the machine entirely."
+  },
+  {
+    "topic": "Friction in Simple Machines",
+    "question": "Which method is most effective for reducing friction in the moving parts of machines?",
+    "type": "application",
+    "options": {
+      "A": "Increasing the roughness of surfaces",
+      "B": "Adding lubricants like oil or grease",
+      "C": "Increasing the load on the machine",
+      "D": "Using softer materials for contact surfaces"
+    },
+    "correct_answer": "B",
+    "explanation": "Lubricants create a thin layer between surfaces, reducing direct contact and therefore lowering friction. Increasing roughness or load generally increases friction, while softer materials may not effectively reduce friction."
+  },
+  {
+    "topic": "Friction in Simple Machines",
+    "question": "An inclined plane requires more effort to lift an object than what is predicted by ideal calculations. What is the main reason for this difference?",
+    "type": "conceptual",
+    "options": {
+      "A": "The mass of the inclined plane",
+      "B": "Air resistance only",
+      "C": "Friction between the object and the plane",
+      "D": "Gravity acting downward"
+    },
+    "correct_answer": "C",
+    "explanation": "Ideal calculations assume no friction. In real situations, friction between the object and the inclined plane opposes motion, requiring additional force. Gravity is already accounted for in calculations, and air resistance is usually negligible."
+  },
+  {
+    "topic": "Advanced Scope - Compound Machines",
+    "question": "A compound machine consists of two simple machines connected in series. The first has an efficiency of 80% and the second has an efficiency of 75%. What is the overall efficiency of the compound machine?",
+    "type": "numerical",
+    "options": {
+      "A": "55%",
+      "B": "60%",
+      "C": "155%",
+      "D": "95%"
+    },
+    "correct_answer": "B",
+    "explanation": "For compound machines working in series, the overall efficiency is the product of the individual efficiencies. Converting to decimals: 0.80 × 0.75 = 0.60, which is 60%. The other options either add efficiencies incorrectly, exceed 100% (which is impossible for efficiency), or miscalculate the product."
+  },
+  {
+    "topic": "Advanced Scope - Compound Machines",
+    "question": "True or False: In an ideal compound machine made of two simple machines, the overall mechanical advantage is equal to the product of the mechanical advantages of the individual machines.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "In an ideal situation with no energy losses, mechanical advantages combine multiplicatively in compound machines. Therefore, the overall mechanical advantage equals the product of the individual mechanical advantages, making the statement true."
+  },
+  {
+    "topic": "Advanced Scope - Compound Machines",
+    "question": "Which statement best explains why the efficiency of a compound machine is usually lower than that of its individual simple machines?",
+    "type": "conceptual",
+    "options": {
+      "A": "Compound machines always reduce the applied force",
+      "B": "Energy losses such as friction occur at each simple machine",
+      "C": "Simple machines cannot work together effectively",
+      "D": "More input force always increases energy loss"
+    },
+    "correct_answer": "B",
+    "explanation": "Each simple machine in a compound system introduces energy losses, mainly due to friction. When multiple machines work together, these losses add up, reducing the overall efficiency. The other options either misunderstand the role of force or incorrectly describe how machines interact."
+  },
+  {
+    "topic": "Advanced Scope - Compound Machines",
+    "question": "A construction worker uses a compound machine made of a fixed pulley and an inclined plane to lift materials to a higher level. What is the main advantage of combining these two simple machines?",
+    "type": "application",
+    "options": {
+      "A": "It completely eliminates friction",
+      "B": "It allows the load to be lifted with less input force over a longer distance",
+      "C": "It increases the weight of the load that can be lifted without effort",
+      "D": "It makes the machine 100% efficient"
+    },
+    "correct_answer": "B",
+    "explanation": "Combining a pulley and an inclined plane reduces the amount of input force needed by increasing the distance over which the force is applied. This is a key advantage of compound machines. Friction is not eliminated, efficiency cannot reach 100%, and effort is still required."
+  },
+  {
+    "topic": "Advanced Scope - Compound Machines",
+    "question": "When analyzing multiple simple machines working together in a compound system, which factor is most important for determining the system’s overall performance?",
+    "type": "conceptual",
+    "options": {
+      "A": "The color and shape of the machines",
+      "B": "The total number of simple machines used",
+      "C": "How input force, distance, and energy transfer through each machine",
+      "D": "Whether the machines are used indoors or outdoors"
+    },
+    "correct_answer": "C",
+    "explanation": "Overall performance depends on how force and distance change through each simple machine and how energy is transferred and lost. These factors determine mechanical advantage and efficiency. The other options are irrelevant to the physical operation of compound machines."
+  },
+  {
+    "topic": "Types of Simple Machines",
+    "question": "Which option correctly matches each example with its correct type of lever?",
+    "type": "conceptual",
+    "options": {
+      "A": "Seesaw – First-class, Wheelbarrow – Second-class, Tweezers – Third-class",
+      "B": "Seesaw – Second-class, Wheelbarrow – Third-class, Tweezers – First-class",
+      "C": "Seesaw – Third-class, Wheelbarrow – First-class, Tweezers – Second-class",
+      "D": "All listed levers are first-class levers"
+    },
+    "correct_answer": "A",
+    "explanation": "A first-class lever has the fulcrum between the effort and load, like a seesaw. A second-class lever places the load between the fulcrum and effort, as in a wheelbarrow. A third-class lever has the effort between the fulcrum and the load, such as tweezers. The other options incorrectly assign lever classes."
+  },
+  {
+    "topic": "Types of Simple Machines",
+    "question": "A pulley system has 4 rope segments supporting the load. If the load weighs 400 N, what is the ideal force needed to lift it (ignore friction)?",
+    "type": "numerical",
+    "options": {
+      "A": "50 N",
+      "B": "100 N",
+      "C": "200 N",
+      "D": "400 N"
+    },
+    "correct_answer": "B",
+    "explanation": "The mechanical advantage of an ideal pulley system equals the number of rope segments supporting the load. With 4 supporting segments, MA = 4. The required effort is 400 N ÷ 4 = 100 N. The other values do not correctly apply the mechanical advantage."
+  },
+  {
+    "topic": "Types of Simple Machines",
+    "question": "True or False: Both a wedge and a screw are applications of an inclined plane.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "A wedge is made of two inclined planes placed back-to-back, and a screw is an inclined plane wrapped around a cylinder. Because both reduce the force needed by increasing the distance over which it is applied, the statement is true."
+  },
+  {
+    "topic": "Types of Simple Machines",
+    "question": "An inclined plane is 5 m long and raises a box to a height of 1 m. If the box weighs 250 N and friction is ignored, what force is needed to push the box up the plane?",
+    "type": "numerical",
+    "options": {
+      "A": "50 N",
+      "B": "125 N",
+      "C": "200 N",
+      "D": "250 N"
+    },
+    "correct_answer": "A",
+    "explanation": "The ideal mechanical advantage of an inclined plane is length ÷ height = 5 ÷ 1 = 5. The required force is load ÷ MA = 250 N ÷ 5 = 50 N. Higher force options ignore the mechanical advantage of the inclined plane."
+  },
+  {
+    "topic": "Types of Simple Machines",
+    "question": "A bicycle uses large front gears connected to smaller rear gears. What is the main advantage of this wheel-and-axle system when pedaling?",
+    "type": "application",
+    "options": {
+      "A": "It increases speed by trading force for distance",
+      "B": "It eliminates friction completely",
+      "C": "It changes the direction of the applied force",
+      "D": "It always multiplies force regardless of gear size"
+    },
+    "correct_answer": "A",
+    "explanation": "Using a large gear driving a smaller gear increases speed at the expense of force, which is a key advantage of wheel-and-axle systems with gears. Friction is not eliminated, force direction is not the main function here, and gears do not always multiply force—gear size determines the trade-off."
+  },
+  {
+    "topic": "Newtonian Mechanics Fundamentals",
+    "question": "A 2 kg object initially at rest is pushed with a constant net force of 6 N on a frictionless surface. What is the acceleration of the object?",
+    "type": "numerical",
+    "options": {
+      "A": "1 m/s²",
+      "B": "3 m/s²",
+      "C": "6 m/s²",
+      "D": "12 m/s²"
+    },
+    "correct_answer": "B",
+    "explanation": "According to Newton's Second Law, F = ma. Rearranging gives a = F/m = 6 N / 2 kg = 3 m/s². The other options result from incorrect calculations or misunderstanding the relationship between force, mass, and acceleration."
+  },
+  {
+    "topic": "Newtonian Mechanics Fundamentals",
+    "question": "True or False: An object moving at a constant velocity has zero acceleration even though its speed is not zero.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "Acceleration is the rate of change of velocity. If velocity is constant (both speed and direction do not change), the acceleration is zero even though the object is moving at a non-zero speed."
+  },
+  {
+    "topic": "Newtonian Mechanics Fundamentals",
+    "question": "Which statement best explains Newton's Third Law of Motion?",
+    "type": "conceptual",
+    "options": {
+      "A": "For every action force, there is an equal and opposite reaction force acting on the same object.",
+      "B": "For every action force, there is an equal and opposite reaction force acting on a different object.",
+      "C": "A force is only produced when an object is moving.",
+      "D": "The acceleration of an object depends only on its mass."
+    },
+    "correct_answer": "B",
+    "explanation": "Newton's Third Law states that forces come in pairs acting on different objects. Option A is incorrect because the forces do not act on the same object. Options C and D describe incorrect or unrelated ideas."
+  },
+  {
+    "topic": "Newtonian Mechanics Fundamentals",
+    "question": "A 1 kg ball moving at 4 m/s collides with a wall and comes to rest. What was the ball's momentum just before the collision?",
+    "type": "numerical",
+    "options": {
+      "A": "0 kg·m/s",
+      "B": "2 kg·m/s",
+      "C": "4 kg·m/s",
+      "D": "8 kg·m/s"
+    },
+    "correct_answer": "C",
+    "explanation": "Momentum is calculated using p = mv. Substituting the values gives p = 1 kg × 4 m/s = 4 kg·m/s. The other answers result from incorrect calculations."
+  },
+  {
+    "topic": "Newtonian Mechanics Fundamentals",
+    "question": "A roller coaster car at the top of a hill begins to move downward. Which energy transformation best describes this motion, assuming no energy is lost?",
+    "type": "application",
+    "options": {
+      "A": "Kinetic energy is converted into potential energy",
+      "B": "Potential energy is converted into kinetic energy",
+      "C": "Thermal energy is converted into kinetic energy",
+      "D": "Mechanical energy is not conserved"
+    },
+    "correct_answer": "B",
+    "explanation": "At the top of the hill, the car has maximum gravitational potential energy. As it moves downward, this potential energy is converted into kinetic energy while total mechanical energy is conserved. The other options describe incorrect energy changes."
+  },
+  {
+    "topic": "Arithmetic Skills",
+    "question": "What is the value of the expression 3(8 + 4) ÷ 6 − 2?",
+    "type": "numerical",
+    "options": {
+      "A": "2",
+      "B": "4",
+      "C": "6",
+      "D": "10"
+    },
+    "correct_answer": "B",
+    "explanation": "First apply parentheses: 8 + 4 = 12. Then multiply: 3 × 12 = 36. Next divide: 36 ÷ 6 = 6. Finally subtract: 6 − 2 = 4. The other options result from incorrect order of operations."
+  },
+  {
+    "topic": "Arithmetic Skills",
+    "question": "The ratio 18:24 can be simplified to which of the following?",
+    "type": "conceptual",
+    "options": {
+      "A": "3:4",
+      "B": "6:8",
+      "C": "9:12",
+      "D": "12:18"
+    },
+    "correct_answer": "A",
+    "explanation": "Both 18 and 24 are divisible by 6. Dividing each by 6 gives 3:4. The other options represent equivalent ratios but are not fully simplified."
+  },
+  {
+    "topic": "Arithmetic Skills",
+    "question": "If 5 notebooks cost $12.50, how much will 8 notebooks cost at the same rate?",
+    "type": "application",
+    "options": {
+      "A": "$18.00",
+      "B": "$19.50",
+      "C": "$20.00",
+      "D": "$22.50"
+    },
+    "correct_answer": "C",
+    "explanation": "First find the unit rate: $12.50 ÷ 5 = $2.50 per notebook. Then multiply by 8: 8 × $2.50 = $20.00. The other choices result from incorrect unit rates or multiplication errors."
+  },
+  {
+    "topic": "Arithmetic Skills",
+    "question": "How many centimeters are there in 2.5 meters?",
+    "type": "numerical",
+    "options": {
+      "A": "25 cm",
+      "B": "100 cm",
+      "C": "250 cm",
+      "D": "2,500 cm"
+    },
+    "correct_answer": "C",
+    "explanation": "There are 100 centimeters in 1 meter. Therefore, 2.5 meters × 100 = 250 centimeters. The other options come from misplaced decimal conversion."
+  },
+  {
+    "topic": "Arithmetic Skills",
+    "question": "True or False: If two quantities form a proportion, then their cross products are equal.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "In a proportion a/b = c/d, cross multiplying gives ad = bc. This is a defining property of proportions, so the statement is true."
+  },
+  {
+    "topic": "Algebra Skills",
+    "question": "Solve for x: 3x + 5 = 20",
+    "type": "numerical",
+    "options": {
+      "A": "x = 3",
+      "B": "x = 5",
+      "C": "x = 10",
+      "D": "x = 15"
+    },
+    "correct_answer": "B",
+    "explanation": "Subtract 5 from both sides to get 3x = 15, then divide both sides by 3. This gives x = 5. The other options result from common arithmetic mistakes, such as not dividing correctly or skipping a step."
+  },
+  {
+    "topic": "Algebra Skills",
+    "question": "True or False: Given the formula y = mx + b, solving for m gives m = (y − b) / x, assuming x ≠ 0.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "To solve for m, subtract b from both sides to get y − b = mx, then divide both sides by x. This results in m = (y − b) / x. The statement is true as long as x is not zero."
+  },
+  {
+    "topic": "Algebra Skills",
+    "question": "Which expression is equivalent to 2a + 3b − a + 5b?",
+    "type": "conceptual",
+    "options": {
+      "A": "a + 8b",
+      "B": "a + 2b",
+      "C": "2a + 8b",
+      "D": "a + 15b"
+    },
+    "correct_answer": "A",
+    "explanation": "Combine like terms: 2a − a = a, and 3b + 5b = 8b. This simplifies the expression to a + 8b. The other options incorrectly combine or count the terms."
+  },
+  {
+    "topic": "Algebra Skills",
+    "question": "The perimeter P of a rectangle is given by the formula P = 2l + 2w. If the perimeter is 36 units and the width w is 8 units, what is the length l?",
+    "type": "application",
+    "options": {
+      "A": "10 units",
+      "B": "12 units",
+      "C": "14 units",
+      "D": "20 units"
+    },
+    "correct_answer": "A",
+    "explanation": "Substitute P = 36 and w = 8 into the formula: 36 = 2l + 2(8) = 2l + 16. Subtract 16 from both sides to get 20 = 2l, then divide by 2 to find l = 10 units."
+  },
+  {
+    "topic": "Algebra Skills",
+    "question": "Rearrange the formula V = (4/3)πr³ to solve for r.",
+    "type": "conceptual",
+    "options": {
+      "A": "r = (3V / 4π)^(1/3)",
+      "B": "r = 3V / 4π",
+      "C": "r = (4π / 3V)^(1/3)",
+      "D": "r = (V / π)^(1/3)"
+    },
+    "correct_answer": "A",
+    "explanation": "Start by multiplying both sides by 3/(4π) to get r³ = 3V / 4π. Then take the cube root of both sides. This gives r = (3V / 4π)^(1/3). The other options either miss the cube root or rearrange the constants incorrectly."
+  },
+  {
+    "topic": "Geometry and Vectors",
+    "question": "Two lines have slopes m1 = 2 and m2 = -1/2. These lines are perpendicular.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "A",
+    "explanation": "For two non-vertical lines, they are perpendicular if the product of their slopes is -1. Here, 2 × (-1/2) = -1, so the lines are perpendicular. Therefore, the statement is true."
+  },
+  {
+    "topic": "Geometry and Vectors",
+    "question": "A right triangle has two sides of length 6 cm and 8 cm. What is the length of the hypotenuse?",
+    "type": "numerical",
+    "options": {
+      "A": "10 cm",
+      "B": "12 cm",
+      "C": "14 cm",
+      "D": "16 cm"
+    },
+    "correct_answer": "A",
+    "explanation": "In a right triangle, the Pythagorean theorem applies: c² = a² + b². Substituting the given values: c² = 6² + 8² = 36 + 64 = 100, so c = √100 = 10 cm. The other options do not satisfy the Pythagorean relationship."
+  },
+  {
+    "topic": "Geometry and Vectors",
+    "question": "Which of the following quantities is a vector?",
+    "type": "conceptual",
+    "options": {
+      "A": "Speed",
+      "B": "Distance",
+      "C": "Force",
+      "D": "Mass"
+    },
+    "correct_answer": "C",
+    "explanation": "A vector quantity has both magnitude and direction. Force includes both how strong it is and the direction in which it acts, making it a vector. Speed, distance, and mass have magnitude only and are scalars."
+  },
+  {
+    "topic": "Geometry and Vectors",
+    "question": "A force of 10 N acts horizontally to the right. What is the vertical component of this force?",
+    "type": "numerical",
+    "options": {
+      "A": "0 N",
+      "B": "5 N",
+      "C": "10 N",
+      "D": "15 N"
+    },
+    "correct_answer": "A",
+    "explanation": "A purely horizontal force has no vertical component because it acts entirely along the horizontal axis. Therefore, the vertical component is 0 N. Non-zero options would only apply if the force were applied at an angle."
+  },
+  {
+    "topic": "Geometry and Vectors",
+    "question": "A student walks 3 m east and then 4 m north. What is the magnitude of the resultant displacement?",
+    "type": "application",
+    "options": {
+      "A": "5 m",
+      "B": "7 m",
+      "C": "12 m",
+      "D": "1 m"
+    },
+    "correct_answer": "A",
+    "explanation": "The two displacements are perpendicular, so they form a right triangle. Using the Pythagorean theorem: magnitude = √(3² + 4²) = √(9 + 16) = √25 = 5 m. This represents the straight-line displacement from the starting point."
+  },
+  {
+    "topic": "Trigonometry Skills",
+    "question": "A right-angled triangle has a hypotenuse of 10 cm and an angle of 30°. What is the length of the side opposite the 30° angle?",
+    "type": "numerical",
+    "options": {
+      "A": "5 cm",
+      "B": "8.7 cm",
+      "C": "10 cm",
+      "D": "3 cm"
+    },
+    "correct_answer": "A",
+    "explanation": "The sine function relates the opposite side to the hypotenuse: sin(30°) = opposite / hypotenuse. Since sin(30°) = 0.5, the opposite side is 0.5 × 10 = 5 cm. The other options use incorrect trigonometric values or relationships."
+  },
+  {
+    "topic": "Trigonometry Skills",
+    "question": "Which trigonometric function is used to calculate the angle when the opposite side and adjacent side of a right-angled triangle are known?",
+    "type": "conceptual",
+    "options": {
+      "A": "Sine",
+      "B": "Cosine",
+      "C": "Tangent",
+      "D": "Pythagorean theorem"
+    },
+    "correct_answer": "C",
+    "explanation": "The tangent function is defined as opposite ÷ adjacent. Therefore, when these two sides are known, tangent is used to find the angle. Sine and cosine involve the hypotenuse, and the Pythagorean theorem is used to find side lengths, not angles."
+  },
+  {
+    "topic": "Trigonometry Skills",
+    "question": "A force of 50 N acts at an angle of 30° above the horizontal. What is the horizontal component of this force?",
+    "type": "application",
+    "options": {
+      "A": "25 N",
+      "B": "43.3 N",
+      "C": "50 N",
+      "D": "86.6 N"
+    },
+    "correct_answer": "B",
+    "explanation": "The horizontal component of a force is given by F × cos(θ). Here, 50 × cos(30°) = 50 × 0.866 ≈ 43.3 N. The other options result from using the wrong trigonometric function or incorrect calculations."
+  },
+  {
+    "topic": "Trigonometry Skills",
+    "question": "True or False: Resolving a force into horizontal and vertical components changes the magnitude of the original force.",
+    "type": "true-false",
+    "options": {
+      "A": "True",
+      "B": "False"
+    },
+    "correct_answer": "B",
+    "explanation": "Resolving a force into components does not change its magnitude; it only breaks the force into perpendicular parts that combine to give the original force. Therefore, the statement is false."
+  },
+  {
+    "topic": "Trigonometry Skills",
+    "question": "A ladder makes an angle of 60° with the ground. Which expression correctly represents the height the ladder reaches on the wall if the ladder’s length is L?",
+    "type": "application",
+    "options": {
+      "A": "L × cos(60°)",
+      "B": "L × tan(60°)",
+      "C": "L × sin(60°)",
+      "D": "L ÷ sin(60°)"
+    },
+    "correct_answer": "C",
+    "explanation": "The height reached on the wall is the side opposite the 60° angle, while the ladder length is the hypotenuse. The sine function relates opposite to hypotenuse, so height = L × sin(60°). The other options use incorrect trigonometric relationships."
+  }
+]
+    </script>
+    
+    <script>
+        const questions = JSON.parse(document.getElementById('questionsData').textContent);
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        
+        function renderQuestion() {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quizContainer');
+            const userAnswer = userAnswers[currentQuestionIndex];
+            
+            let optionsHtml = '';
+            for (const [letter, text] of Object.entries(question.options)) {
+                let optionClass = 'option';
+                if (userAnswer) {
+                    optionClass += ' disabled';
+                    if (letter === question.correct_answer) {
+                        optionClass += ' correct';
+                    } else if (letter === userAnswer) {
+                        optionClass += ' incorrect';
+                    }
+                } else if (letter === userAnswer) {
+                    optionClass += ' selected';
+                }
+                
+                optionsHtml += `
+                    <div class="${optionClass}" onclick="selectAnswer('${letter}')">
+                        <span class="option-letter">${letter}</span>
+                        <span>${text}</span>
+                    </div>
+                `;
+            }
+            
+            let feedbackHtml = '';
+            if (userAnswer) {
+                const isCorrect = userAnswer === question.correct_answer;
+                feedbackHtml = `
+                    <div class="feedback show ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="feedback-title">
+                            ${isCorrect ? '✓ Excellent! That\'s correct!' : '✗ Not quite right'}
+                        </div>
+                        <div class="feedback-text">
+                            ${isCorrect ? 
+                                question.explanation : 
+                                `The correct answer is <strong>${question.correct_answer}</strong>. ${question.explanation}`
+                            }
+                        </div>
+                    </div>
+                `;
+            }
+            
+            quizContainer.innerHTML = `
+                <div class="quiz-card">
+                    <div class="question-header">
+                        <span class="question-number">Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        ${question.topic ? `<span class="question-topic">${question.topic}</span>` : ''}
+                        <span class="question-type">${question.type}</span>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+                        ${optionsHtml}
+                    </div>
+                    ${feedbackHtml}
+                </div>
+            `;
+            
+            updateProgress();
+            updateNavigation();
+        }
+        
+        function selectAnswer(letter) {
+            if (userAnswers[currentQuestionIndex]) {
+                return; // Already answered
+            }
+            
+            userAnswers[currentQuestionIndex] = letter;
+            const question = questions[currentQuestionIndex];
+            
+            if (letter === question.correct_answer) {
+                correctAnswers++;
+            } else {
+                incorrectAnswers++;
+            }
+            
+            renderQuestion();
+        }
+        
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            const percentage = Math.round((answeredCount / questions.length) * 100);
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = percentage + '%';
+            progressFill.textContent = percentage + '%';
+            
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+        }
+        
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === questions.length - 1) {
+                const answeredCount = userAnswers.filter(a => a !== null).length;
+                if (answeredCount === questions.length) {
+                    nextBtn.textContent = 'View Results →';
+                    nextBtn.onclick = showResults;
+                } else {
+                    nextBtn.textContent = 'Finish Quiz →';
+                    nextBtn.onclick = showResults;
+                }
+            } else {
+                nextBtn.textContent = 'Next →';
+                nextBtn.onclick = nextQuestion;
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
+        
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+        
+        function showResults() {
+            const unanswered = userAnswers.filter(a => a === null).length;
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🎉 Outstanding! You have excellent knowledge!';
+            } else if (percentage >= 75) {
+                message = '👏 Great job! You did very well!';
+            } else if (percentage >= 60) {
+                message = '👍 Good effort! Keep learning!';
+            } else {
+                message = '📚 Keep studying! You can do better!';
+            }
+            
+            document.querySelector('.container').innerHTML = `
+                <div class="results">
+                    <h2>Quiz Complete!</h2>
+                    <div class="score">${percentage}%</div>
+                    <div class="results-message">${message}</div>
+                    <div class="results-stats">
+                        <div class="result-stat">
+                            <div class="result-stat-value correct">${correctAnswers}</div>
+                            <div class="stat-label">Correct</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value incorrect">${incorrectAnswers}</div>
+                            <div class="stat-label">Incorrect</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value unanswered">${unanswered}</div>
+                            <div class="stat-label">Unanswered</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="location.reload()">Retake Quiz</button>
+                </div>
+            `;
+        }
+        
+        // Initialize quiz when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderQuestion);
+        } else {
+            renderQuestion();
+        }
+    </script>
+</body>
+</html>
