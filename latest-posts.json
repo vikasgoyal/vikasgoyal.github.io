@@ -1,6 +1,22 @@
 ﻿{
     "posts":  [
                   {
+                      "url":  "/blog/2026/01/agentic-advantage-new-leverage.html",
+                      "readTime":  5,
+                      "excerpt":  "Just as machines multiplied physical effort, agentic AI systems create leverage in knowledge work by absorbing cognitive load and enabling humans to focus on judgment, intent, and oversight.",
+                      "category":  "Agentic AI",
+                      "tags":  [
+                                   "agentic AI",
+                                   "AI agents",
+                                   "knowledge work",
+                                   "cognitive load",
+                                   "enterprise AI",
+                                   "leverage"
+                               ],
+                      "date":  "2026-01-02",
+                      "title":  "The Agentic Advantage: A New Form of Leverage"
+                  },
+                  {
                       "url":  "/blog/2025/12/cofounder-intention-intuition-intelligence.html",
                       "readTime":  7,
                       "excerpt":  "Choosing the right co-founder is critical for startup success. Learn which qualities matter most - intention, intuition, or intelligence - and how to prioritize them.",
