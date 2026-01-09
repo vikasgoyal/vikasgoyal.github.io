@@ -145,23 +145,28 @@
             const contentDiv = document.getElementById('content');
             
             try {
-                // Use CORS proxy to fetch data
-                const apiUrl = 'https://aair.azurewebsites.net/json';
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(apiUrl);
+                // Try to load from API first, fallback to local if CORS fails
+                let response;
+                let data;
                 
-                const response = await fetch(proxyUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                    },
-                    cache: 'default'
-                });
+                try {
+                    // Try direct API call first
+                    response = await fetch('https://aair.azurewebsites.net/json', {
+                        mode: 'cors',
+                        cache: 'no-cache'
+                    });
+                    data = await response.json();
+                } catch (corsError) {
+                    console.log('Direct API failed, trying CORS proxy...', corsError);
+                    // Try with CORS proxy
+                    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://aair.azurewebsites.net/json');
+                    response = await fetch(proxyUrl);
+                    data = await response.json();
+                }
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
-                const data = await response.json();
                 
                 // Build the HTML content
                 let html = '<article>';
@@ -308,17 +313,22 @@
         function formatDate(dateString) {
             if (!dateString) return 'Unknown';
             
-            const date = new Date(dateString);
+            // Ensure the date string is treated as UTC by adding 'Z' if not present
+            const isoString = dateString.includes('Z') ? dateString : dateString + 'Z';
+            const date = new Date(isoString);
+            
             const options = { 
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
-                timeZone: 'UTC'
+                hour12: true,
+                timeZone: 'UTC',
+                timeZoneName: 'short'
             };
             
-            return date.toLocaleDateString('en-US', options) + ' UTC';
+            return date.toLocaleString('en-US', options);
         }
         
         // Load the report when the page loads
