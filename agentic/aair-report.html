@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Agentic AI Intelligence Report - Vikas Goyal</title>
+    <meta name="description" content="Real-time intelligence report on the Agentic AI landscape, covering market trends, research insights, and industry news.">
+    <meta name="keywords" content="agentic AI, AI report, market intelligence, AI trends, AI research">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/aair-report.html">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Agentic AI Intelligence Report">
+    <meta property="og:description" content="Real-time intelligence report on the Agentic AI landscape.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/aair-report.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Agentic AI Intelligence Report">
+    <meta name="twitter:description" content="Real-time intelligence report on the Agentic AI landscape.">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .error {
+            background-color: #fee;
+            border: 1px solid #fcc;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #c33;
+        }
+        
+        .report-header {
+            border-bottom: 2px solid #0366d6;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .last-updated {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .executive-summary {
+            background-color: #f6f8fa;
+            border-left: 4px solid #0366d6;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .takeaway {
+            margin: 10px 0;
+            padding-left: 10px;
+        }
+        
+        .news-item, .paper-item, .quote-item {
+            border-left: 3px solid #e1e4e8;
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+        
+        .provider-section {
+            margin: 30px 0;
+        }
+        
+        .provider-logo {
+            max-height: 40px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        .news-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .quote-box {
+            background-color: #f6f8fa;
+            border-left: 4px solid #0366d6;
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .quote-author {
+            font-weight: bold;
+            margin-top: 10px;
+            font-style: normal;
+        }
+        
+        .generation-info {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e4e8;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header"></div>
+    <main class="container-lg px-3 my-5 markdown-body">
+        <div id="content">
+            <div class="loading">
+                <p>Loading Agentic AI Intelligence Report...</p>
+            </div>
+        </div>
+    </main>
+    
+    <br><br><br><br><br>
+    <div id="footer"></div>
+    <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+    
+    <script>
+        // Fetch and display the report data
+        async function loadReport() {
+            const contentDiv = document.getElementById('content');
+            
+            try {
+                const response = await fetch('https://aair.azurewebsites.net/json', {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                    cache: 'default'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Build the HTML content
+                let html = '<article>';
+                
+                // Header
+                html += `
+                    <div class="report-header">
+                        <h1>${data.report_title || 'Agentic AI Intelligence Report'}</h1>
+                        <p class="last-updated">Last Updated: ${formatDate(data.generation_date)}</p>
+                    </div>
+                `;
+                
+                // Executive Summary
+                if (data.executive_summary) {
+                    html += '<section id="executive-summary">';
+                    html += '<h2>Executive Summary</h2>';
+                    
+                    if (data.executive_summary.landscape) {
+                        html += '<h3>Market Landscape</h3>';
+                        html += `<div class="executive-summary">${data.executive_summary.landscape}</div>`;
+                    }
+                    
+                    if (data.executive_summary.trends) {
+                        html += '<h3>Key Trends</h3>';
+                        html += `<div class="executive-summary">${data.executive_summary.trends}</div>`;
+                    }
+                    
+                    if (data.executive_summary.research) {
+                        html += '<h3>Research Insights</h3>';
+                        html += `<div class="executive-summary">${data.executive_summary.research}</div>`;
+                    }
+                    
+                    if (data.executive_summary.strategy) {
+                        html += '<h3>Strategic Implications</h3>';
+                        html += `<div class="executive-summary">${data.executive_summary.strategy}</div>`;
+                    }
+                    
+                    if (data.executive_summary.takeaways && data.executive_summary.takeaways.length > 0) {
+                        html += '<h3>Key Takeaways</h3>';
+                        html += '<div class="executive-summary">';
+                        data.executive_summary.takeaways.forEach((takeaway, index) => {
+                            html += `<div class="takeaway">${index + 1}. ${takeaway}</div>`;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    html += '</section>';
+                }
+                
+                // Provider News
+                if (data.provider_news && data.provider_news.length > 0) {
+                    html += '<section id="provider-news">';
+                    html += '<h2>Latest News from Agentic AI Platform Providers</h2>';
+                    
+                    // Group news by provider
+                    const newsByProvider = {};
+                    data.provider_news.forEach(news => {
+                        if (!newsByProvider[news.provider]) {
+                            newsByProvider[news.provider] = [];
+                        }
+                        newsByProvider[news.provider].push(news);
+                    });
+                    
+                    // Display grouped news
+                    Object.keys(newsByProvider).forEach(provider => {
+                        html += `<div class="provider-section">`;
+                        html += `<h3>${provider}</h3>`;
+                        
+                        newsByProvider[provider].forEach(news => {
+                            html += `<div class="news-item">`;
+                            html += `<h4>▸ <a href="${news.url}" target="_blank">${news.title}</a></h4>`;
+                            html += `<p class="news-date">Published: ${news.published_date}</p>`;
+                            html += `<p>${news.description}</p>`;
+                            html += `</div>`;
+                        });
+                        
+                        html += `</div>`;
+                    });
+                    
+                    html += '</section>';
+                }
+                
+                // Research Papers
+                if (data.research_papers && data.research_papers.length > 0) {
+                    html += '<section id="research-papers">';
+                    html += '<h2>Top Research Papers on Agentic AI</h2>';
+                    
+                    data.research_papers.forEach(paper => {
+                        html += `<div class="paper-item">`;
+                        html += `<h3><a href="${paper.url}" target="_blank">${paper.title}</a></h3>`;
+                        html += `<p class="news-date">Published: ${paper.published_date}</p>`;
+                        html += `<p>${paper.description}</p>`;
+                        html += `</div>`;
+                    });
+                    
+                    html += '</section>';
+                }
+                
+                // Industry Quotes
+                if (data.industry_quotes && data.industry_quotes.length > 0) {
+                    html += '<section id="industry-quotes">';
+                    html += '<h2>💬 Industry Voices on AI Agents</h2>';
+                    
+                    data.industry_quotes.forEach(quote => {
+                        html += `<div class="quote-box">`;
+                        html += `<p>❝ ${quote.quote}</p>`;
+                        html += `<div class="quote-author">${quote.author}, ${quote.title} at ${quote.company}`;
+                        if (quote.source_url) {
+                            html += ` • <a href="${quote.source_url}" target="_blank">Source</a>`;
+                        }
+                        html += `</div>`;
+                        html += `</div>`;
+                    });
+                    
+                    html += '</section>';
+                }
+                
+                // Generation Info
+                html += `<div class="generation-info">`;
+                html += `<p>AI-generated content may be incorrect | Powered by Microsoft Agentic AI Platform<br>`;
+                html += `Created by <a href="https://vikasgoyal.github.io/">Vikas Goyal</a> | `;
+                html += `Generated in ${data.generation_time} seconds`;
+                html += `</p>`;
+                html += `</div>`;
+                
+                html += '</article>';
+                
+                // Update the content
+                contentDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading report:', error);
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h2>Error Loading Report</h2>
+                        <p>Failed to load the Agentic AI Intelligence Report. Please try again later.</p>
+                        <p><small>Error: ${error.message}</small></p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Format date to readable format
+        function formatDate(dateString) {
+            if (!dateString) return 'Unknown';
+            
+            const date = new Date(dateString);
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'UTC'
+            };
+            
+            return date.toLocaleDateString('en-US', options) + ' UTC';
+        }
+        
+        // Load the report when the page loads
+        window.addEventListener('DOMContentLoaded', loadReport);
+    </script>
+</body>
+</html>
