@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>uv in 30 Minutes: The Definitive Guide | Vikas Goyal</title>
+    <meta name="description" content="Master uv, the all-in-one Python project manager written in Rust. Learn how uv replaces pyenv, pip, and venv with unreasonably fast performance.">
+    <meta name="keywords" content="uv, Python, Rust, package manager, virtual environments, pyproject.toml, uv.lock, Python tutorial">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/general/uv-tutorial.html">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="uv in 30 Minutes: The Definitive Guide">
+    <meta property="og:description" content="From Tool Soup to a Unified Python Engine. Learn how uv revolutionizes Python project management with Rust-powered speed.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/general/uv-tutorial.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+    <meta property="og:image" content="https://vikasgoyal.github.io/assets/logo.png">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="uv in 30 Minutes: The Definitive Guide">
+    <meta name="twitter:description" content="From Tool Soup to a Unified Python Engine. Learn how uv revolutionizes Python project management.">
+    <meta name="twitter:image" content="https://vikasgoyal.github.io/assets/logo.png">
+    
+    <!-- Structured Data for Search Engines (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "uv in 30 Minutes: The Definitive Guide",
+        "description": "Master uv, the all-in-one Python project manager written in Rust. Learn how uv replaces pyenv, pip, and venv with unreasonably fast performance.",
+        "author": {
+            "@type": "Person",
+            "name": "Vikas Goyal",
+            "url": "https://www.linkedin.com/in/vikasgoyal/"
+        },
+        "datePublished": "2026-01-25",
+        "dateModified": "2026-01-25",
+        "publisher": {
+            "@type": "Person",
+            "name": "Vikas Goyal"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://vikasgoyal.github.io/general/uv-tutorial.html"
+        },
+        "keywords": "uv, Python, Rust, package manager, virtual environments, pyproject.toml, uv.lock, Python tutorial"
+    }
+    </script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="https://vikasgoyal.github.io/styles.css">
+</head>
+
+<body>
+    <!-- Dynamic Header Navigation -->
+    <div id="header"></div>
+    
+    <!-- Main Content Container -->
+    <main class="container-lg px-3 my-5 markdown-body">
+      
+        <!-- Article Header Section -->
+        <article>
+            <header>
+                <!-- Main Headline (H1 - only one per page) -->
+                <h1>uv in 30 Minutes: The Definitive Guide</h1>
+          
+                <!-- Optional: Publication Date and Author Info -->
+                <div class="article-meta">
+                    <time datetime="2026-01-25">January 25, 2026</time>
+                </div>
+          
+                <!-- Optional: Highlight/Lead Paragraph -->
+                <p class="accent-text">From Tool Soup to a Unified Python Engine. Learn how uv replaces pyenv, pip, and venv with Rust-powered speed.</p>
+            </header>
+
+            <!-- Main Content Sections -->
+            <section id="intro">
+                <h2>1. The Philosophy</h2>
+                <p><strong>uv</strong> is an all-in-one Python project manager written in Rust. It is designed to be "unreasonably fast"—often 10–100× faster than standard tools.</p>
+                <p>In the past, you needed a "tool soup": <code>pyenv</code> for versions, <code>pip</code> for packages, and <code>venv</code> for environments. <strong>uv replaces them all.</strong></p>
+            </section>
+
+            <section id="diff">
+                <h2>2. Why is it different?</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Standard (pip/venv)</th>
+                            <th>Modern (uv)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Speed</strong></td>
+                            <td>Slow/Sequential</td>
+                            <td>Parallel Rust Engine</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Disk Space</strong></td>
+                            <td>Duplicates files</td>
+                            <td>Global Cache (Hardlinks)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Locking</strong></td>
+                            <td>Manual/Third-party</td>
+                            <td>Native <code>uv.lock</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Python Installation</strong></td>
+                            <td>Manual</td>
+                            <td>Automatic Management</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="install">
+                <h2>3. Installation</h2>
+                <pre><code># macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"</code></pre>
+            </section>
+
+            <section id="workflow">
+                <h2>4. The Project Workflow</h2>
+                <h3>Step 1: Initialization</h3>
+                <pre><code>uv init my-app
+cd my-app</code></pre>
+                <h3>Step 2: Adding Packages</h3>
+                <pre><code>uv add requests pandas
+uv add --dev pytest</code></pre>
+                <h3>Step 3: Running Code</h3>
+                <pre><code>uv run main.py</code></pre>
+                <p><mark>The Magic:</mark> You never have to "activate" a virtual environment. <code>uv run</code> ensures your environment is synced perfectly before it starts.</p>
+            </section>
+
+            <section id="files">
+                <h2>5. The Anatomy of a Project</h2>
+                <p>Every <code>uv</code> project centers around four key files:</p>
+                <ul>
+                    <li><strong><code>pyproject.toml</code></strong>: The Project Brain. You edit this to declare your dependencies.</li>
+                    <li><strong><code>uv.lock</code></strong>: The Source of Truth. An auto-generated map of every exact version used. <strong>Do not edit manually.</strong></li>
+                    <li><strong><code>.python-version</code></strong>: Tells <code>uv</code> exactly which version of Python to download and use.</li>
+                    <li><strong><code>.venv/</code></strong>: The local sandbox where your links live. It's disposable and fast to recreate.</li>
+                </ul>
+            </section>
+
+            <section id="magic">
+                <h2>6. Advanced "Goodness"</h2>
+                <h3>Single-File Scripts (PEP 723)</h3>
+                <p>Add metadata directly to a script to make it portable:</p>
+                <pre><code># /// script
+# dependencies = ["httpx"]
+# ///
+import httpx
+print(httpx.get("https://google.com").status_code)</code></pre>
+                <p>Run it with <code>uv run script.py</code> and uv handles the dependencies automatically.</p>
+                
+                <h3>Global Tool Runner</h3>
+                <p>Run tools without installing them into your project:</p>
+                <pre><code>uvx ruff check .</code></pre>
+            </section>
+
+            <!-- Optional: Related Articles -->
+            <section id="related-content">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="/general/developermindset.html">Developer Mindset</a></li>
+                    <li><a href="/general/futureofwork.html">How Smart Humans Shape the Future of Work</a></li>
+                    <li><a href="/genai/agenticsystems.html">Designing Responsible Agentic Systems</a></li>
+                </ul>
+            </section>
+        
+        </article>
+      
+    </main>
+    
+    <!-- Spacing before footer -->
+    <br><br><br><br><br>
+
+    <!-- Dynamic Footer -->
+    <div id="footer"></div> 
+    
+    <!-- Load Header/Footer Script -->
+    <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+</body>
+</html>
