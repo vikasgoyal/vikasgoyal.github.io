@@ -231,6 +231,98 @@ body {
   font-size: 16px;
 }
 
+.latest-news-section {
+  background: linear-gradient(135deg, rgba(0,120,212,0.03), rgba(139,92,246,0.03));
+  border: 2px solid var(--primary);
+  padding: 0;
+  margin-bottom: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
+
+.latest-news-header {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: white;
+  padding: 20px 30px;
+  border-bottom: 3px solid rgba(255,255,255,0.2);
+}
+
+.latest-news-header h2 {
+  font-size: 24px;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.news-tagline {
+  font-size: 13px;
+  opacity: 0.95;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.news-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.25);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+}
+
+.latest-news-content {
+  padding: 20px 30px;
+  background: var(--card-light);
+}
+
+.latest-news-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.latest-news-section li {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: rgba(139,92,246,0.05);
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.latest-news-section li:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(139,92,246,0.15);
+  background: rgba(139,92,246,0.08);
+}
+
+.latest-news-section li:last-child {
+  margin-bottom: 0;
+}
+
+.news-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 15px;
+  margin-bottom: 6px;
+}
+
+.news-title-row .news-link {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+}
+
+.news-title-row .news-meta {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
 .section-title {
   font-size: 30px;
   margin: 40px 0 25px 0;
@@ -508,14 +600,19 @@ body {
 }
 
 .news-meta, .paper-meta {
-  display: block;
   color: #666;
   font-size: 13px;
   font-style: italic;
-  margin-top: 4px;
 }
 
-.news-description, .paper-description {
+.news-description {
+  color: #555;
+  font-size: 13px;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.paper-description {
   color: #555;
   font-size: 14px;
   margin-top: 8px;
@@ -589,6 +686,98 @@ body {
 
 <div class="main-layout">
   <div class="content">
+
+    <div class="latest-news-section">
+        <div class="latest-news-header">
+            <h2>Trending</h2>
+            <div class="news-tagline">Breaking updates from the Agentic AI ecosystem</div>
+          </div>
+        <div class="latest-news-content">
+            <ul>
+            <li>
+                <div class="news-title-row">
+                    <a href="https://www.customerexperiencedive.com/news/upselling-boost-sales-customer-regret-distrust/811131/" target="_blank" class="news-link">Does upselling boost sales or lead to customer regret and distrust? | CX Dive</a>
+                    <span class="news-meta">February 03, 2026 • customerexperiencedive.com</span>
+                </div>
+                <p class="news-description">agentic AI commerce AI retailers digital shopping online retail ... agentic AI commerce AI retailers digital shopping online retail · Does ...</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://www.nojitter.com/digital-workplace/zoom-spaces-now-includes-agentic-space-management-features" target="_blank" class="news-link">Zoom Spaces now includes agentic, space management features - No Jitter</a>
+                    <span class="news-meta">February 03, 2026 • nojitter.com</span>
+                </div>
+                <p class="news-description">Its AI Companion will reduce friction around finding and reserving meeting rooms, while also meeting need for space management with Zoom for Cisco ...</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://techcrunch.com/2026/02/03/agentic-coding-comes-to-apples-xcode-26-3-with-agents-from-anthropic-and-openai/" target="_blank" class="news-link">Agentic coding comes to Apple's Xcode with agents from Anthropic and OpenAI</a>
+                    <span class="news-meta">February 03, 2026 • techcrunch.com</span>
+                </div>
+                <p class="news-description">They can also connect their accounts with the AI providers by signing in or adding their API key. A drop-down menu within the app allows developers to ...</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://finance.yahoo.com/news/innodata-bets-agentic-ai-next-162600236.html" target="_blank" class="news-link">Innodata Bets on Agentic AI: Is it the Next Revenue Wave? - Yahoo Finance</a>
+                    <span class="news-meta">February 03, 2026 • yahoo.com</span>
+                </div>
+                <p class="news-description">INOD rides on the Agentic AI wave with "judge" systems fueling recurring revenue and 45% growth outlook for 2025.</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://www.forrester.com/blogs/machines-are-your-contents-new-audience/" target="_blank" class="news-link">Machines Are Your Content's New Audience - Forrester Research</a>
+                    <span class="news-meta">February 03, 2026 • forrester.com</span>
+                </div>
+                <p class="news-description">As AI accelerates and agentic systems begin to orchestrate more ... Generated with existing content technology and agentic AI. Existing ...</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://www.computerworld.com/article/4126485/openai-drops-codex-agentic-ai-as-a-macos-app.html" target="_blank" class="news-link">OpenAI drops Codex 'agentic AI' as a macOS app - Computerworld</a>
+                    <span class="news-meta">February 03, 2026 • computerworld.com</span>
+                </div>
+                <p class="news-description">AI wants to make your code. Agentic tools for coding seem to be the emerging challenger field in AI. Anthropic's Claude Code has been generating a lot ...</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://aws.amazon.com/blogs/machine-learning/agentic-ai-for-healthcare-data-analysis-with-amazon-sagemaker-data-agent/" target="_blank" class="news-link">Agentic AI for healthcare data analysis with Amazon SageMaker Data Agent - AWS</a>
+                    <span class="news-meta">February 03, 2026 • amazon.com</span>
+                </div>
+                <p class="news-description">Artificial Intelligence. Agentic AI for healthcare data analysis with Amazon SageMaker Data Agent. by Siddharth Gupta, Ishneet Kaur, Mohan Gandhi ...</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://www.googlecloudpresscorner.com/2026-02-03-Humana-Redefines-the-Member-Experience-with-Agent-Assist-Built-with-Google-Cloud" target="_blank" class="news-link">Humana Redefines the Member Experience with Agent Assist Built with Google Cloud - Feb 3, 2026</a>
+                    <span class="news-meta">February 03, 2026 • googlecloudpresscorner.com</span>
+                </div>
+                <p class="news-description">... AI to support Humana's member advocates to deliver more ... Built on Humana's agentic AI platform, Agent Assist uses Google Cloud's Vertex AI ...</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://www.itweb.co.za/videos/raYAyqorJlyMJ38N" target="_blank" class="news-link">Video: ITWeb OTR: Getting to grips with Agentic AI</a>
+                    <span class="news-meta">February 03, 2026 • co.za</span>
+                </div>
+                <p class="news-description">... Vice President for Cloud & AI Platforms, about the realities of AI adoption enterprises and the rise of agentic AI. #AI #AgenticAI #Microsoft.</p>
+            </li>
+            
+            <li>
+                <div class="news-title-row">
+                    <a href="https://finance.yahoo.com/news/darwinium-tackles-agentic-ai-fraud-160000045.html" target="_blank" class="news-link">Darwinium Tackles the Agentic AI Fraud Era With Strategic Go-To-Market Acceleration</a>
+                    <span class="news-meta">February 03, 2026 • yahoo.com</span>
+                </div>
+                <p class="news-description">... agentic AI transforms how customers and automated agents interact with online services. “Businesses are dealing with a whole new fraud economy. AI ...</p>
+            </li>
+            </ul>
+        </div>
+    </div>
+
+
     <div class="executive-summary">
       
 <div class="executive-summary-header">
@@ -962,16 +1151,16 @@ body {
     </div>
 
 
-    <h1 class="section-title">Real-World AI Agent Success Stories</h1>
+    <h1 class="section-title">Real-World Agentic AI Success Stories</h1>
     <div class="impact-section">
       
             <div class="impact-card">
                 <div class="impact-header">
-                    <div class="impact-company">Fisher & Paykel</div>
-                    <div class="impact-industry">Consumer Appliances</div>
+                    <div class="impact-company">AAA Washington</div>
+                    <div class="impact-industry">Automotive & Membership Services</div>
                 </div>
-                <div class="impact-use-case">Autonomous customer self-service for appliance support</div>
-                <div class="impact-story">Fisher & Paykel deployed Salesforce Agentforce to power AI agents that guide customers through appliance troubleshooting and support using thousands of knowledge articles. Within months, the company increased customer self-service rates from approximately 40% to 70%, significantly reducing service center volume and lowering support costs while improving customer satisfaction.</div>
+                <div class="impact-use-case">Autonomous customer service agents handling member support and proactive updates</div>
+                <div class="impact-story">AAA Washington deployed Salesforce Agentforce to run always-on autonomous agents that handle routine roadside assistance inquiries, proactively notify members about travel updates, and recommend relevant services. As of August 2025, AI agents were resolving a significant share of inbound requests without human escalation, allowing human agents to focus on complex, high-empathy interactions and improving response times during peak demand. </div>
             </div>
             
             <div class="impact-card">
@@ -979,44 +1168,17 @@ body {
                     <div class="impact-company">ENGIE</div>
                     <div class="impact-industry">Energy & Utilities</div>
                 </div>
-                <div class="impact-use-case">AI agents for energy customer inquiries and billing support</div>
-                <div class="impact-story">ENGIE implemented Salesforce Agentforce to handle common customer questions related to billing and clean energy programs. The agentic system now successfully assists 83% of users autonomously, reducing call center load and enabling faster, more consistent customer responses across digital channels.</div>
+                <div class="impact-use-case">AI agents for energy customer self-service and billing inquiries</div>
+                <div class="impact-story">ENGIE implemented Salesforce Agentforce to autonomously answer common billing and clean-energy questions across digital channels. By August 2025, Agentforce was successfully assisting 83% of users end-to-end without human involvement, reducing call-center load while maintaining consistent brand messaging and improving customer satisfaction. </div>
             </div>
             
             <div class="impact-card">
                 <div class="impact-header">
-                    <div class="impact-company">H&M</div>
-                    <div class="impact-industry">Retail & E-commerce</div>
+                    <div class="impact-company">Fisher & Paykel</div>
+                    <div class="impact-industry">Consumer Appliances</div>
                 </div>
-                <div class="impact-use-case">Virtual shopping assistant for e-commerce conversion optimization</div>
-                <div class="impact-story">H&M launched an agentic AI virtual shopping assistant capable of personalized product recommendations and end-to-end shopping guidance. The AI agent autonomously resolved 70% of customer queries, increased conversion rates by 25% during interactions, and delivered response times three times faster than human-only support.</div>
-            </div>
-            
-            <div class="impact-card">
-                <div class="impact-header">
-                    <div class="impact-company">IBM</div>
-                    <div class="impact-industry">Information Technology</div>
-                </div>
-                <div class="impact-use-case">Agentic AIOps for IT incident management</div>
-                <div class="impact-story">IBM deployed agentic AI within its AIOps platform to autonomously correlate alerts, identify root causes, and trigger remediation workflows. The system significantly reduced false-positive alerts and accelerated incident resolution, improving system reliability and lowering operational IT costs.</div>
-            </div>
-            
-            <div class="impact-card">
-                <div class="impact-header">
-                    <div class="impact-company">KPMG UK</div>
-                    <div class="impact-industry">Professional Services</div>
-                </div>
-                <div class="impact-use-case">Agentic IT service management with rapid ROI</div>
-                <div class="impact-story">KPMG UK implemented ServiceNow AI agents across IT service management, moving from pilot to production in under 90 days. The agentic system automated ticket triage and resolution workflows, delivering a reported 5% ROI within three months while improving service quality and response times.</div>
-            </div>
-            
-            <div class="impact-card">
-                <div class="impact-header">
-                    <div class="impact-company">AAA Washington</div>
-                    <div class="impact-industry">Automotive & Member Services</div>
-                </div>
-                <div class="impact-use-case">Always-on roadside assistance and member support</div>
-                <div class="impact-story">AAA Washington deployed Salesforce Agentforce to provide autonomous, always-on member support. AI agents handle routine service requests and proactively notify members about roadside updates, enabling human agents to focus on high-value interactions and improving overall service efficiency during peak demand.</div>
+                <div class="impact-use-case">Self-service appliance support using autonomous AI agents</div>
+                <div class="impact-story">Fisher & Paykel rolled out Agentforce-powered agents grounded in thousands of knowledge articles to guide customers through appliance troubleshooting and support. Within 2025, self-service resolution rates increased from roughly 40% to 70%, materially lowering service costs while improving first-contact resolution. </div>
             </div>
             
             <div class="impact-card">
@@ -1024,26 +1186,26 @@ body {
                     <div class="impact-company">Jacuzzi</div>
                     <div class="impact-industry">Manufacturing & Consumer Goods</div>
                 </div>
-                <div class="impact-use-case">Lead qualification and automated quote intake</div>
-                <div class="impact-story">Jacuzzi implemented Salesforce Agentforce to replace a manual lead intake process with autonomous AI agents that qualify prospects, route leads intelligently, and guide customers through quote requests. The deployment improved lead quality, increased conversion rates, and reduced operational costs associated with manual processing.</div>
+                <div class="impact-use-case">Automated lead qualification and routing with agentic AI</div>
+                <div class="impact-story">Jacuzzi replaced a manual hot-tub quote intake process with autonomous Agentforce agents that guide prospects through qualifying questions and automatically route high-quality leads. By mid–to–late 2025, the company reported improved lead quality, faster response times, and reduced operational costs from automation. </div>
             </div>
             
             <div class="impact-card">
                 <div class="impact-header">
-                    <div class="impact-company">IBM (Internal IT)</div>
-                    <div class="impact-industry">Enterprise IT Operations</div>
+                    <div class="impact-company">Kawasaki Engines</div>
+                    <div class="impact-industry">Manufacturing</div>
                 </div>
-                <div class="impact-use-case">AI-driven IT alert reduction and incident resolution</div>
-                <div class="impact-story">An IBM internal IT organization used agentic AI to autonomously manage DevOps alerts, prioritize incidents, and recommend fixes. The system reduced alert noise, shortened mean time to resolution, and improved overall infrastructure uptime with measurable productivity gains for IT teams.</div>
+                <div class="impact-use-case">Dealer and distributor support via AI service agents</div>
+                <div class="impact-story">Kawasaki Engines piloted Agentforce agents to autonomously organize dealer inquiries, summarize calls, and draft service responses. In 2025 deployments, routine task automation freed customer teams to focus on complex dealer issues, reducing response latency and improving partner satisfaction. </div>
             </div>
             
             <div class="impact-card">
                 <div class="impact-header">
-                    <div class="impact-company">LTIMindtree</div>
-                    <div class="impact-industry">Technology & Consulting</div>
+                    <div class="impact-company">Microsoft</div>
+                    <div class="impact-industry">Technology</div>
                 </div>
-                <div class="impact-use-case">Post-merger employee service automation</div>
-                <div class="impact-story">LTIMindtree deployed ServiceNow AI agents to unify IT and HR services for more than 90,000 employees following a major merger. Agentic workflows automated common employee requests, reduced resolution times, and improved employee experience while lowering support overhead.</div>
+                <div class="impact-use-case">Enterprise-wide autonomous agents for employee productivity</div>
+                <div class="impact-story">Microsoft acted as “Customer Zero,” deploying agentic AI across internal workflows using Microsoft 365 Copilot and custom agents. By November 2025, thousands of internal agents were supporting research, IT, and productivity tasks, with Microsoft reporting measurable productivity gains and faster task completion across teams as adoption scaled. </div>
             </div>
             
             <div class="impact-card">
@@ -1051,8 +1213,35 @@ body {
                     <div class="impact-company">Goodyear</div>
                     <div class="impact-industry">Automotive & Manufacturing</div>
                 </div>
-                <div class="impact-use-case">Targeted customer engagement and loyalty optimization</div>
-                <div class="impact-story">Goodyear leveraged Salesforce Agentforce to deploy AI agents that autonomously drive targeted customer communications and personalized offers. The initiative increased engagement frequency, improved marketing effectiveness, and supported higher customer retention and service revenue.</div>
+                <div class="impact-use-case">Autonomous sales and marketing engagement agents</div>
+                <div class="impact-story">Goodyear adopted Salesforce Agentforce to deploy agents that autonomously engage customers with targeted offers and service reminders. By late 2025, early deployments showed increased campaign effectiveness and higher engagement rates, supporting improved customer retention and service revenue growth. </div>
+            </div>
+            
+            <div class="impact-card">
+                <div class="impact-header">
+                    <div class="impact-company">Precina Health</div>
+                    <div class="impact-industry">Healthcare</div>
+                </div>
+                <div class="impact-use-case">Healthcare provider outreach using agentic sales agents</div>
+                <div class="impact-story">Precina Health leveraged Salesforce Agentforce-based autonomous sales agents to proactively contact providers, explain referral programs, and book meetings automatically. In 2025, this reduced manual sales effort and accelerated provider onboarding, contributing to faster growth in patient referrals. </div>
+            </div>
+            
+            <div class="impact-card">
+                <div class="impact-header">
+                    <div class="impact-company">ServiceNow</div>
+                    <div class="impact-industry">Enterprise Software / IT Services</div>
+                </div>
+                <div class="impact-use-case">IT incident management with multi-agent AI coordination</div>
+                <div class="impact-story">ServiceNow implemented a multi-agent architecture combining Now Assist and Microsoft Copilot to autonomously manage P1 IT incidents. In enterprise deployments described in late 2025, coordinated agents reduced incident resolution time by automating transcription, context-sharing, and follow-up actions across systems. </div>
+            </div>
+            
+            <div class="impact-card">
+                <div class="impact-header">
+                    <div class="impact-company">Multiple Enterprises (Salesforce Customers)</div>
+                    <div class="impact-industry">Cross-Industry</div>
+                </div>
+                <div class="impact-use-case">Large-scale deployment of customer-facing AI agents</div>
+                <div class="impact-story">Across multiple enterprises tracked in Salesforce’s Agentic Enterprise Index, companies deploying Agentforce agents in 2025 saw agent creation grow 119% in the first half of the year and customer service conversations handled by agents increase more than 22×, demonstrating measurable productivity and cost-efficiency gains from agentic AI at scale. </div>
             </div>
             
       
@@ -1062,27 +1251,27 @@ body {
                     
                 <li>
                     <span class="citation-number">1.</span>
-                    <a href="https://devblogs.microsoft.com/semantic-kernel/customer-case-study-pushing-the-boundaries-of-multi-agent-ai-collaboration-with-servicenow-and-microsoft-semantic-kernel/" target="_blank" class="citation-link">Customer Case Study: Pushing the Boundaries of Multi-Agent AI ...</a>
+                    <a href="https://www.servicenow.com/ai/use-cases.html" target="_blank" class="citation-link">AI Use Cases - ServiceNow</a>
                 </li>
                 
                 <li>
                     <span class="citation-number">2.</span>
-                    <a href="https://www.servicenow.com/community/ceg-ai-coe-blog/real-results-real-customers-ai-transformation-stories-that/ba-p/3476261" target="_blank" class="citation-link">Real Results, Real Customers: AI Transformation St ... - ServiceNow</a>
+                    <a href="https://devblogs.microsoft.com/semantic-kernel/customer-case-study-pushing-the-boundaries-of-multi-agent-ai-collaboration-with-servicenow-and-microsoft-semantic-kernel/" target="_blank" class="citation-link">Customer Case Study: Pushing the Boundaries of Multi-Agent AI ...</a>
                 </li>
                 
                 <li>
                     <span class="citation-number">3.</span>
-                    <a href="https://www.eesel.ai/blog/servicenow-ai-agent-use-cases" target="_blank" class="citation-link">10 practical ServiceNow AI agent use cases (And how to ... - eesel.ai</a>
+                    <a href="https://www.echelonai.com/blog/how-ai-is-transforming-servicenow-development-2025-guide" target="_blank" class="citation-link">How AI Is Changing ServiceNow Deelopment in 2025</a>
                 </li>
                 
                 <li>
                     <span class="citation-number">4.</span>
-                    <a href="https://www.frox.ch/en/newsroom/blog-articles/servicenow-agentic-ai-use-cases/" target="_blank" class="citation-link">ServiceNow Agentic AI: Use cases and areas of application</a>
+                    <a href="https://www.eesel.ai/blog/servicenow-ai-use-cases" target="_blank" class="citation-link">A complete guide to ServiceNow AI use cases in 2025</a>
                 </li>
                 
                 <li>
                     <span class="citation-number">5.</span>
-                    <a href="https://www.lmteq.com/blogs/servicenow/agentic-ai-use-cases-in-servicenow/" target="_blank" class="citation-link">10+ Real-World Agentic AI Use Cases In ServiceNow CSM</a>
+                    <a href="https://leviathor.com/servicenow-ai-agents-expert-analysis-2025/" target="_blank" class="citation-link">ServiceNow AI Agents: Expert Analysis 2025 - leviathor.com</a>
                 </li>
                 
                 </ul>
@@ -1094,7 +1283,7 @@ body {
 </div>
 
 <div class="footer">
-  Published: February 03, 2026 • 04:29 PM UTC | AI-generated content may be incorrect | Powered by Microsoft Agentic AI Platform | Created by <a href="https://vikasgoyal.github.io/" target="_blank" style="color: #0077B5; text-decoration: none;">Vikas Goyal</a> 
+  Published: February 03, 2026 • 09:29 PM UTC | AI-generated content may be incorrect | Powered by Microsoft Agentic AI Platform | Created by <a href="https://vikasgoyal.github.io/" target="_blank" style="color: #0077B5; text-decoration: none;">Vikas Goyal</a> 
 </div>
 
 </body>
