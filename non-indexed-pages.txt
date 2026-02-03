@@ -1,0 +1,54 @@
+Pages Not Indexed by Google (as of January 25, 2026)
+======================================================
+
+Root Level:
+https://vikasgoyal.github.io/circuit_lab_b_quiz.html
+https://vikasgoyal.github.io/cocreating.html
+https://vikasgoyal.github.io/machines_quiz.html
+https://vikasgoyal.github.io/privacy.html
+
+General Section:
+https://vikasgoyal.github.io/general/uv-tutorial.html r
+https://vikasgoyal.github.io/general/smarthumans.html r
+https://vikasgoyal.github.io/general/modelsandcreativity.html r
+https://vikasgoyal.github.io/general/hownottochange.html r
+
+ECP Section:
+https://vikasgoyal.github.io/ecp/index.html
+https://vikasgoyal.github.io/ecp/closeoutreport.html
+https://vikasgoyal.github.io/ecp/inspiring.html
+https://vikasgoyal.github.io/ecp/sdlc.html
+https://vikasgoyal.github.io/ecp/unexpectedlesson.html
+
+Agentic Section:
+https://vikasgoyal.github.io/agentic/aair-report.html
+https://vikasgoyal.github.io/agentic/agenticai.html r
+https://vikasgoyal.github.io/agentic/agneticadvantage.html r
+https://vikasgoyal.github.io/agentic/learning.html
+https://vikasgoyal.github.io/agentic/mcpfoundation.html
+
+GenAI Section:
+https://vikasgoyal.github.io/genai/cocreating.html
+https://vikasgoyal.github.io/genai/structuredoutput.html
+https://vikasgoyal.github.io/genai/timeline.html
+
+Startups Section:
+https://vikasgoyal.github.io/startups/index.html
+https://vikasgoyal.github.io/startups/youngfounders.html
+
+Blog Section:
+https://vikasgoyal.github.io/blog/index.html
+https://vikasgoyal.github.io/blog/2025/12/cofounder-intention-intuition-intelligence.html
+https://vikasgoyal.github.io/blog/2026/01/agentic-advantage-new-leverage.html
+
+Books Section:
+https://vikasgoyal.github.io/books/index.html
+https://vikasgoyal.github.io/books/tempbook/index.html
+https://vikasgoyal.github.io/books/tempbook/chapter1.html
+https://vikasgoyal.github.io/books/tempbook/chapter2.html
+
+Other:
+https://vikasgoyal.github.io/lol/index.html
+https://vikasgoyal.github.io/test-page-llm.html
+
+Total: 37 pages not yet indexed
