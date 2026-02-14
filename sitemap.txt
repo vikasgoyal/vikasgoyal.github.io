@@ -60,5 +60,6 @@ https://vikasgoyal.github.io/lol/index.html
 https://vikasgoyal.github.io/startups/
 https://vikasgoyal.github.io/startups/index.html
 https://vikasgoyal.github.io/startups/firstmeetingstartups.html
+https://vikasgoyal.github.io/industries/legal/legalai.html
 https://vikasgoyal.github.io/startups/startupfundingstages.html
 https://vikasgoyal.github.io/startups/youngfounders.html
