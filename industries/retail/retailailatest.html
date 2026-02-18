@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail AI Latest Report</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZBXY60BLWE');
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===================================================================
+           BASE TEMPLATE STYLES - Customize for your domain
+           =================================================================== */
+        
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: #f8fafc;
+            padding: 0;
+            margin: 0;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+        
+        .header .timestamp {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Navigation */
+        .nav {
+            background: #1e40af;
+            padding: 15px 40px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        
+        .nav a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        
+        /* Section */
+        .section {
+            padding: 50px 40px;
+        }
+        
+        .section h2 {
+            color: #0f172a;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #1e40af;
+        }
+        
+        .section h3 {
+            color: #1e293b;
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+        }
+        
+        /* Content Card */
+        .card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 6px rgba(30,64,175,0.1);
+            border-color: #1e40af;
+        }
+        
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .card-meta {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+        
+        .card-content {
+            color: #334155;
+            line-height: 1.8;
+        }
+        
+        /* Markdown support */
+        .card-content ul,
+        .card-content ol {
+            margin: 10px 0 10px 25px;
+        }
+        
+        .card-content li {
+            margin-bottom: 5px;
+        }
+        
+        .card-content strong {
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        .card-content code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+        
+        .card-content pre {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card-content a {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        
+        /* Tags */
+        .tags {
+            margin-top: 15px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #374151;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        /* Citations */
+        .citations {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .citations-title {
+            font-weight: 600;
+            color: #64748b;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .citation {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .citation a {
+            color: #1e40af;
+            text-decoration: none;
+        }
+        
+        .citation a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Stats/Summary Box */
+        .summary-box {
+            background: #f8fafc;
+            border-left: 4px solid #1e40af;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .summary-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #f8fafc;
+            padding: 30px 40px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        /* ============================================================
+           RETAIL AI REPORT — PROFESSIONAL THEME
+           ============================================================ */
+
+        /* ── Reset ── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        /* ── Tokens ── */
+        :root {
+            --navy:       #060d1f;
+            --navy-mid:   #0d1a35;
+            --navy-light: #162040;
+            --blue:       #2563eb;
+            --blue-light: #3b82f6;
+            --blue-pale:  #eff6ff;
+            --teal:       #0ea5e9;
+            --slate-900:  #0f172a;
+            --slate-700:  #334155;
+            --slate-500:  #64748b;
+            --slate-300:  #cbd5e1;
+            --slate-100:  #f1f5f9;
+            --slate-50:   #f8fafc;
+            --white:      #ffffff;
+            --amber:      #f59e0b;
+            --amber-pale: #fffbeb;
+            --green:      #16a34a;
+            --green-pale: #f0fdf4;
+            --red:        #dc2626;
+            --red-pale:   #fef2f2;
+            --radius-sm:  6px;
+            --radius:     10px;
+            --radius-lg:  16px;
+            --shadow-sm:  0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+            --shadow:     0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+            --shadow-lg:  0 12px 32px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.06);
+        }
+
+        /* ── Body ── */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: var(--slate-700);
+            background: #eef2f8;
+        }
+
+        /* ── Outer wrapper ── */
+        .page-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 0 60px;
+        }
+
+        /* ================================================================
+           HEADER
+           ================================================================ */
+        .header {
+            background: linear-gradient(140deg, var(--navy) 0%, var(--navy-light) 60%, #1a2f6e 100%);
+            color: var(--white);
+            padding: 64px 56px 52px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 70% -10%, rgba(37,99,235,.35) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 10% 110%, rgba(14,165,233,.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .header-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.14);
+            border-radius: 99px;
+            padding: 5px 14px;
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.7);
+            margin-bottom: 22px;
+        }
+
+        .header h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(1.9rem, 4vw, 2.8rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -.02em;
+            color: var(--white);
+            margin-bottom: 14px;
+        }
+
+        .header h1 span {
+            background: linear-gradient(90deg, #60a5fa, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,.65);
+            margin-bottom: 28px;
+            font-weight: 400;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: .82rem;
+            color: rgba(255,255,255,.55);
+            font-weight: 500;
+        }
+
+        .meta-chip svg { opacity: .6; }
+
+        /* ================================================================
+           STICKY NAV
+           ================================================================ */
+        .nav-wrap {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--navy-mid);
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            box-shadow: 0 2px 16px rgba(0,0,0,.25);
+        }
+
+        /* section nav scroll arrows */
+        .nav-scroll-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-arrow {
+            flex-shrink: 0;
+            display: none;   /* shown by JS when needed */
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 38px;
+            background: var(--navy-mid);
+            border: none;
+            color: rgba(255,255,255,.7);
+            font-size: 1.1rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color .15s;
+            z-index: 1;
+        }
+
+        .nav-arrow:hover { color: #fff; }
+
+        .nav-arrow-left  { box-shadow:  4px 0 8px 0 var(--navy-mid); }
+        .nav-arrow-right { box-shadow: -4px 0 8px 0 var(--navy-mid); }
+
+        .nav-arrow.visible { display: flex; }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex: 1;
+        }
+
+        .nav::-webkit-scrollbar { display: none; }
+
+        .nav a {
+            display: inline-block;
+            white-space: nowrap;
+            color: rgba(255,255,255,.55);
+            text-decoration: none;
+            font-size: .8rem;
+            font-weight: 600;
+            letter-spacing: .03em;
+            padding: 6px 14px;
+            border-radius: 99px;
+            transition: background .18s, color .18s;
+        }
+
+        .nav a:hover {
+            background: rgba(255,255,255,.1);
+            color: var(--white);
+        }
+
+        /* ================================================================
+           SECTIONS
+           ================================================================ */
+        .section {
+            background: var(--white);
+            margin: 28px 0;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 32px 40px 0;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 8px;
+        }
+
+        .section h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            letter-spacing: -.02em;
+            padding-bottom: 18px;
+            border-bottom: 2px solid var(--slate-100);
+            margin-bottom: 0;
+        }
+
+        .section-body {
+            padding: 28px 40px 36px;
+        }
+
+        /* ================================================================
+           CARDS
+           ================================================================ */
+        .card {
+            border: 1px solid var(--slate-100);
+            border-radius: var(--radius);
+            padding: 26px 28px;
+            margin-bottom: 18px;
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow .2s, border-color .2s;
+        }
+
+        .card:last-child { margin-bottom: 0; }
+
+        .card:hover {
+            box-shadow: var(--shadow);
+            border-color: #bfdbfe;
+        }
+
+        /* Ranked card accent */
+        .card-ranked {
+            border-left: 4px solid var(--blue);
+            padding-left: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .rank-badge {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--teal) 100%);
+            color: var(--white);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .85rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(37,99,235,.35);
+            margin-top: 2px;
+        }
+
+        .card-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            line-height: 1.3;
+        }
+
+        .card-subtitle {
+            font-size: .83rem;
+            color: var(--slate-500);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* ================================================================
+           FIELD ROWS
+           ================================================================ */
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 16px 0;
+        }
+
+        @media (max-width: 680px) {
+            .field-grid { grid-template-columns: 1fr; }
+        }
+
+        .field {
+            background: var(--slate-50);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+        }
+
+        .field-full {
+            background: var(--slate-50);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            margin: 14px 0;
+        }
+
+        .field-label {
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 5px;
+        }
+
+        .field-value {
+            font-size: .9rem;
+            color: var(--slate-700);
+            line-height: 1.55;
+        }
+
+        /* ================================================================
+           AUTONOMY BADGE
+           ================================================================ */
+        .autonomy-panel {
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            margin: 14px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .autonomy-assistive    { background: var(--green-pale); border: 1px solid #bbf7d0; }
+        .autonomy-semi         { background: var(--amber-pale); border: 1px solid #fde68a; }
+        .autonomy-full         { background: var(--red-pale);   border: 1px solid #fecaca; }
+
+        .autonomy-badge {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+            padding: 4px 12px;
+            border-radius: 99px;
+            white-space: nowrap;
+        }
+
+        .badge-assistive { background: var(--green);  color: var(--white); }
+        .badge-semi      { background: var(--amber);  color: var(--white); }
+        .badge-full      { background: var(--red);    color: var(--white); }
+        .badge-default   { background: var(--slate-500); color: var(--white); }
+
+        .autonomy-reasoning {
+            font-size: .87rem;
+            color: var(--slate-700);
+            line-height: 1.5;
+        }
+
+        .autonomy-reasoning strong {
+            display: block;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--slate-500);
+            margin-bottom: 4px;
+        }
+
+        /* ================================================================
+           RISK BOX
+           ================================================================ */
+        .risk-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 4px solid var(--amber);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            margin: 14px 0;
+            font-size: .88rem;
+            color: #78350f;
+            line-height: 1.5;
+        }
+
+        .risk-icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ================================================================
+           TAGS / PILLS
+           ================================================================ */
+        .tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 0; }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            background: var(--slate-100);
+            color: var(--slate-700);
+            font-size: .77rem;
+            font-weight: 600;
+            padding: 3px 11px;
+            border-radius: 99px;
+        }
+
+        .tag-blue {
+            background: var(--blue-pale);
+            color: var(--blue);
+        }
+
+        /* ================================================================
+           KPI CHIPS
+           ================================================================ */
+        .kpi-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
+
+        .kpi-chip {
+            font-size: .76rem;
+            font-weight: 600;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 11px;
+            border-radius: 99px;
+        }
+
+        /* ================================================================
+           TREND INSIGHT BOX
+           ================================================================ */
+        .trend-insight {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd;
+            border-left: 4px solid var(--teal);
+            border-radius: var(--radius);
+            padding: 28px 30px;
+            margin: 24px 0;
+        }
+
+        .trend-insight-header {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .95rem;
+            font-weight: 800;
+            color: #0369a1;
+            margin-bottom: 14px;
+        }
+
+        .trend-insight-body {
+            font-size: .92rem;
+            color: var(--slate-700);
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        /* ================================================================
+           SUMMARY BOX
+           ================================================================ */
+        .summary-box {
+            background: var(--blue-pale);
+            border-left: 4px solid var(--blue);
+            border-radius: var(--radius-sm);
+            padding: 18px 20px;
+            margin: 16px 0;
+        }
+
+        .summary-box h4 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .88rem;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 8px;
+            letter-spacing: -.01em;
+        }
+
+        .summary-box p { font-size: .9rem; color: var(--slate-700); margin-bottom: 6px; }
+        .summary-box p:last-child { margin-bottom: 0; }
+
+        /* ================================================================
+           CITATIONS
+           ================================================================ */
+        .citations {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--slate-300);
+        }
+
+        .citations-title {
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--slate-500);
+            margin-bottom: 9px;
+        }
+
+        .citation {
+            font-size: .83rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .citation::before {
+            content: '↗';
+            font-size: .75rem;
+            color: var(--blue-light);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .citation a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .citation a:hover { text-decoration: underline; }
+
+        /* ================================================================
+           CARD CONTENT (markdown output)
+           ================================================================ */
+        .card-content { color: var(--slate-700); line-height: 1.75; font-size: .92rem; }
+        .card-content ul, .card-content ol { margin: 10px 0 10px 22px; }
+        .card-content li { margin-bottom: 4px; }
+        .card-content strong { color: var(--slate-900); font-weight: 600; }
+        .card-content a { color: var(--blue); text-decoration: underline; }
+        .card-content code {
+            background: var(--slate-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: .85em;
+            color: #dc2626;
+        }
+
+        /* ================================================================
+           FOOTER
+           ================================================================ */
+        .footer {
+            text-align: center;
+            padding: 36px 40px;
+            color: var(--slate-500);
+            font-size: .82rem;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-top: 28px;
+        }
+
+        .footer strong { color: var(--slate-700); }
+
+        /* ================================================================
+           SITE TOP BAR
+           ================================================================ */
+        .site-topbar {
+            background: #111111;
+            width: 100%;
+            position: relative;
+        }
+
+        .site-topbar-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 2px;
+        }
+
+        .site-topbar a {
+            display: inline-block;
+            white-space: nowrap;
+            color: rgba(255,255,255,.75);
+            text-decoration: none;
+            font-size: .8rem;
+            font-weight: 500;
+            padding: 9px 13px;
+            letter-spacing: .01em;
+            transition: color .15s;
+        }
+
+        .site-topbar a:hover,
+        .site-topbar a.active {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* hamburger button — hidden on desktop */
+        .topbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px 4px;
+            margin-left: auto;
+        }
+
+        .topbar-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: rgba(255,255,255,.8);
+            margin: 5px 0;
+            border-radius: 2px;
+            transition: all .2s;
+        }
+
+        /* mobile nav links panel */
+        .site-topbar-links {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        @media (max-width: 640px) {
+            .topbar-toggle {
+                display: block;
+            }
+
+            .site-topbar-inner {
+                flex-wrap: wrap;
+                padding: 0 16px;
+            }
+
+            /* push toggle to the far right */
+            .site-topbar-inner > .topbar-brand {
+                padding: 8px 0;
+                color: rgba(255,255,255,.8);
+                font-size: .82rem;
+                font-weight: 600;
+                letter-spacing: .03em;
+            }
+
+            .site-topbar-links {
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                padding-bottom: 8px;
+                gap: 0;
+            }
+
+            .site-topbar-links.open {
+                display: flex;
+            }
+
+            .site-topbar-links a {
+                padding: 8px 4px;
+                width: 100%;
+                border-top: 1px solid rgba(255,255,255,.06);
+            }
+        }
+
+        /* ================================================================
+           PRINT
+           ================================================================ */
+        @media print {
+            body { background: white; }
+            .site-topbar { display: none; }
+            .nav-wrap { display: none; }
+            .card { break-inside: avoid; box-shadow: none; border: 1px solid #e2e8f0; }
+            .section { box-shadow: none; border: 1px solid #e2e8f0; }
+        }
+
+        /* ================================================================
+           RESPONSIVE
+           ================================================================ */
+        @media (max-width: 768px) {
+            .header { padding: 40px 24px 36px; }
+            .section-header { padding: 24px 24px 0; }
+            .section-body { padding: 20px 24px 28px; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Site Top Bar ── -->
+<div class="site-topbar">
+    <div class="site-topbar-inner">
+        <span class="topbar-brand">vikasgoyal.github.io</span>
+        <button class="topbar-toggle" id="topbarToggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="site-topbar-links" id="topbarLinks">
+            <a href="https://vikasgoyal.github.io/">Home</a>
+            <a href="https://vikasgoyal.github.io/blog/">Blog</a>
+            <a href="https://vikasgoyal.github.io/agentic">Agentic AI</a>
+            <a href="https://vikasgoyal.github.io/agentic/agenticailatest.html">AAIR Report</a>
+            <a href="https://vikasgoyal.github.io/startups/">Startups</a>
+            <a href="https://vikasgoyal.github.io/genai">Generative AI</a>
+            <a href="https://vikasgoyal.github.io/ecp/">ECP</a>
+            <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('topbarToggle').addEventListener('click', function() {
+        var links = document.getElementById('topbarLinks');
+        var open = links.classList.toggle('open');
+        this.setAttribute('aria-expanded', open);
+    });
+</script>
+
+<!-- ── Header (full-width) ── -->
+<div class="header">
+    <div class="header-inner">
+        <div class="header-eyebrow">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 3.5v3l2 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Weekly Intelligence Brief
+        </div>
+        <h1>Retail AI <span>Report</span></h1>
+        <div class="subtitle">Demand &amp; Inventory · Store Operations · Pricing · Personalization · Vendor Intelligence</div>
+        <div class="header-meta">
+            <span class="meta-chip">
+                <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 5h12M5 2v3M9 2v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                February 18, 2026 at 01:01 PM UTC
+            </span>
+
+        </div>
+    </div>
+</div>
+
+<!-- ── Sticky Nav (full-width) ── -->
+<div class="nav-wrap">
+    <div style="max-width:1100px;margin:0 auto;">
+        <div class="nav-scroll-container" id="navScrollContainer">
+            <button class="nav-arrow nav-arrow-left" id="navArrowLeft" aria-label="Scroll left">
+                &#8249;
+            </button>
+            <nav class="nav" id="sectionNav">
+<a href="#decision-systems">Decision Systems</a><a href="#vendor-tech">Vendor Landscape</a><a href="#demand-inventory">Demand &amp; Inventory</a><a href="#store-operations">Store Operations</a><a href="#personalization">Personalization</a>            </nav>
+            <button class="nav-arrow nav-arrow-right" id="navArrowRight" aria-label="Scroll right">
+                &#8250;
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    (function() {
+        var nav   = document.getElementById('sectionNav');
+        var left  = document.getElementById('navArrowLeft');
+        var right = document.getElementById('navArrowRight');
+        var step  = 160;
+
+        function update() {
+            if (!nav) return;
+            var atStart = nav.scrollLeft <= 2;
+            var atEnd   = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 2;
+            left.classList.toggle('visible', !atStart);
+            right.classList.toggle('visible', !atEnd);
+        }
+
+        if (nav) {
+            nav.addEventListener('scroll', update);
+            window.addEventListener('resize', update);
+            left.addEventListener('click',  function() { nav.scrollBy({ left: -step, behavior: 'smooth' }); });
+            right.addEventListener('click', function() { nav.scrollBy({ left:  step, behavior: 'smooth' }); });
+            update();
+        }
+    })();
+</script>
+
+<div class="page-wrap">
+
+    <!-- ================================================================
+         EXECUTIVE SUMMARY
+         ================================================================ -->
+
+    <!-- ================================================================
+         LATEST UPDATES
+         ================================================================ -->
+
+    <!-- ================================================================
+         DECISION SYSTEMS
+         ================================================================ -->
+    <div class="section" id="decision-systems">
+        <div class="section-header">
+            <div class="section-label">&#9670; Spotlight</div>
+            <h2>Top 5 Retail Decision Systems</h2>
+        </div>
+        <div class="section-body">
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#1</div>
+                    <div>
+                        <div class="card-title">Agentic Price, Promotion &amp; Markdown Optimization</div>
+                        <div class="card-subtitle">Retailers via Microsoft Retail (Copilot Studio)</div>
+                    </div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Recent Development</div>
+                    <div class="field-value">Microsoft released a new Price, Promotion &amp; Markdown Optimization Agent scenario enabling agent-based pricing decisions with closed-loop execution.</div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Economic Relevance</div>
+                    <div class="field-value">Gross margin and Promo ROI are directly impacted by automating price changes, markdown depth, and promotional timing at scale across assortments.</div>
+                </div>
+
+                <div class="autonomy-panel autonomy-semi">
+                    <div>
+                        <span class="autonomy-badge badge-semi">
+◑                            Semi-Autonomous
+                        </span>
+                    </div>
+                    <div class="autonomy-reasoning">
+                        <strong>Autonomy Reasoning</strong>
+                        The system executes pricing and markdown actions automatically within policy guardrails, with humans retained for oversight and exception handling.
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">KPI Impact</div>
+                    <div class="kpi-list">
+<span class="kpi-chip">Gross margin %</span><span class="kpi-chip">Promo efficiency</span><span class="kpi-chip">Inventory turn</span>                    </div>
+                </div>
+
+                <div class="risk-box">
+                    <span class="risk-icon">⚠</span>
+                    <div><strong>Key Risk: </strong>Margin erosion from over-discounting if guardrails or elasticity assumptions are misconfigured at scale.</div>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://adoption.microsoft.com/en-us/scenario-library/retail/price-promotion-markdown-optimization-agent/" target="_blank">Price, promotion &amp; markdown optimization agent – Microsoft Adoption</a></div>                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#2</div>
+                    <div>
+                        <div class="card-title">Autonomous SKU-Store Replenishment Control</div>
+                        <div class="card-subtitle">Retailers via Invent Analytics (invent.ai)</div>
+                    </div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Recent Development</div>
+                    <div class="field-value">Invent.ai highlighted increased retailer adoption of real-time, AI-driven replenishment that continuously automates reorder decisions at SKU-store level.</div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Economic Relevance</div>
+                    <div class="field-value">Inventory carrying cost and in-stock rate are improved by reducing excess stock while preventing lost sales through continuous reorder automation.</div>
+                </div>
+
+                <div class="autonomy-panel autonomy-full">
+                    <div>
+                        <span class="autonomy-badge badge-full">
+⬤                            Fully Autonomous
+                        </span>
+                    </div>
+                    <div class="autonomy-reasoning">
+                        <strong>Autonomy Reasoning</strong>
+                        The replenishment system is positioned as a continuous control loop executing reorder decisions without planner intervention.
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">KPI Impact</div>
+                    <div class="kpi-list">
+<span class="kpi-chip">Inventory turn</span><span class="kpi-chip">In-stock rate</span>                    </div>
+                </div>
+
+                <div class="risk-box">
+                    <span class="risk-icon">⚠</span>
+                    <div><strong>Key Risk: </strong>Demand signal error can rapidly propagate through automated reorder loops, amplifying stockouts or overstocking.</div>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.invent.ai/replenishment" target="_blank">Replenishment - Invent Analytics</a></div>                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#3</div>
+                    <div>
+                        <div class="card-title">Agentic Fraud and Commerce Decision Orchestration</div>
+                        <div class="card-subtitle">Enterprise merchants via Forter</div>
+                    </div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Recent Development</div>
+                    <div class="field-value">Forter launched Agentic Orchestration enabling secure AI-to-AI commerce with coordinated fraud, loyalty, catalog, and checkout decisions.</div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Economic Relevance</div>
+                    <div class="field-value">Return rate and revenue per visit are impacted by approving more legitimate transactions while blocking fraud in automated agent-driven commerce flows.</div>
+                </div>
+
+                <div class="autonomy-panel autonomy-semi">
+                    <div>
+                        <span class="autonomy-badge badge-semi">
+◑                            Semi-Autonomous
+                        </span>
+                    </div>
+                    <div class="autonomy-reasoning">
+                        <strong>Autonomy Reasoning</strong>
+                        Fraud and transaction decisions are executed automatically by the system, but within merchant-defined risk policies and thresholds.
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">KPI Impact</div>
+                    <div class="kpi-list">
+<span class="kpi-chip">Return rate</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Shrink %</span>                    </div>
+                </div>
+
+                <div class="risk-box">
+                    <span class="risk-icon">⚠</span>
+                    <div><strong>Key Risk: </strong>Regulatory and liability exposure if autonomous agents approve transactions that violate consumer protection or fraud standards.</div>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.forter.com/blog/agentic-orchestration" target="_blank">Unlocking Agentic Commerce for Enterprise Merchants with Forter</a></div>                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#4</div>
+                    <div>
+                        <div class="card-title">Integrated Pricing, Inventory &amp; Merchandise Planning Engine</div>
+                        <div class="card-subtitle">Retailers via Centric Software</div>
+                    </div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Recent Development</div>
+                    <div class="field-value">Centric Software was recognized for materially deeper integration of pricing, inventory, and merchandise planning with scenario-driven automated alignment.</div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Economic Relevance</div>
+                    <div class="field-value">Gross margin and inventory turn improve by synchronizing pricing actions with inventory and assortment constraints rather than operating in silos.</div>
+                </div>
+
+                <div class="autonomy-panel autonomy-semi">
+                    <div>
+                        <span class="autonomy-badge badge-semi">
+◑                            Semi-Autonomous
+                        </span>
+                    </div>
+                    <div class="autonomy-reasoning">
+                        <strong>Autonomy Reasoning</strong>
+                        The platform automates scenario execution across pricing and inventory while still relying on planners to select or adjust scenarios.
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">KPI Impact</div>
+                    <div class="kpi-list">
+<span class="kpi-chip">Gross margin %</span><span class="kpi-chip">Inventory turn</span><span class="kpi-chip">Promo efficiency</span>                    </div>
+                </div>
+
+                <div class="risk-box">
+                    <span class="risk-icon">⚠</span>
+                    <div><strong>Key Risk: </strong>Cascading automation failure if misaligned scenarios propagate incorrect pricing or allocation decisions across categories.</div>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://themachinemaker.com/news/centric-software-recognized-in-gartner-report-on-retail-pricing-and-markdown-optimization/" target="_blank">Centric Software Recognized in Gartner Report on Retail Pricing and ...</a></div>                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#5</div>
+                    <div>
+                        <div class="card-title">Omnichannel Agentic Commerce Orchestration</div>
+                        <div class="card-subtitle">Retailers via Camunda and Microsoft</div>
+                    </div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Recent Development</div>
+                    <div class="field-value">Camunda advanced its retail agentic orchestration positioning while Microsoft framed agentic commerce as the primary front door for retail interactions.</div>
+                </div>
+
+                <div class="field-full">
+                    <div class="field-label">Economic Relevance</div>
+                    <div class="field-value">Labour cost and revenue per visit are affected by reducing human handoffs across order management, fulfillment, and pricing in omnichannel execution.</div>
+                </div>
+
+                <div class="autonomy-panel autonomy-semi">
+                    <div>
+                        <span class="autonomy-badge badge-semi">
+◑                            Semi-Autonomous
+                        </span>
+                    </div>
+                    <div class="autonomy-reasoning">
+                        <strong>Autonomy Reasoning</strong>
+                        Multiple AI agents coordinate execution across systems automatically, with human intervention focused on exceptions and governance.
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">KPI Impact</div>
+                    <div class="kpi-list">
+<span class="kpi-chip">Labour productivity</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Basket size</span>                    </div>
+                </div>
+
+                <div class="risk-box">
+                    <span class="risk-icon">⚠</span>
+                    <div><strong>Key Risk: </strong>Vendor lock-in and architectural rigidity if core commerce orchestration becomes tightly coupled to a single agent platform.</div>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://camunda.com/solutions/industry/retail/" target="_blank">Retail Agentic Orchestration | Camunda</a></div><div class="citation"><a href="https://www.microsoft.com/en-us/industry/blog/retail/2026/02/09/how-agentic-commerce-is-becoming-the-new-front-door-to-retail/" target="_blank">Why agentic commerce is the new front door to retail</a></div>                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         VENDOR & TECHNOLOGY LANDSCAPE
+         ================================================================ -->
+    <div class="section" id="vendor-tech">
+        <div class="section-header">
+            <div class="section-label">&#9670; Market Intelligence</div>
+            <h2>Vendor &amp; Technology Landscape</h2>
+        </div>
+        <div class="section-body">
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#1</div>
+                        <div>
+                            <div class="card-title">Global AI</div>
+                            <div class="card-subtitle">Customer Win / Expansion</div>
+                        </div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">What Happened</div>
+                        <div class="field-value">Global AI signed an enterprise contract with one of the world’s largest supermarket operators to deploy its agentic AI platform in live production.</div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">Agentic AI Capability</div>
+                        <div class="field-value">Autonomous agents continuously process invoices and exceptions end to end, escalating only edge cases to humans.</div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">Competitive Signal</div>
+                            <div class="field-value">This is one of the clearest proofs that fully autonomous agents can run at tier‑1 grocery scale beyond pilots or copilots.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Retailer Implication</div>
+                            <div class="field-value">Retailers should reassess finance and back‑office automation roadmaps toward true agentic execution, not incremental RPA or copilots.</div>
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Retail Practices Covered</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Corporate &amp; Finance</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Supply Chain &amp; Logistics</span>                        </div>
+                    </div>
+
+                    <div class="tags" style="margin-top:12px;">
+                        <span class="tag tag-blue">New category creation</span>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Integration complexity with legacy ERP and finance systems.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://markets.businessinsider.com/news/stocks/global-ai-signs-enterprise-contract-with-one-of-the-world-s-largest-supermarket-operators-to-deploy-the-agentic-ai-platform-1035840167" target="_blank">Global AI Signs Enterprise Contract with One of the World’s Largest Supermarket Operators to Deploy the Agentic AI Platform</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#2</div>
+                        <div>
+                            <div class="card-title">Wesfarmers and Google Cloud</div>
+                            <div class="card-subtitle">Partnership / Integration</div>
+                        </div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">What Happened</div>
+                        <div class="field-value">Wesfarmers signed a multi‑year agreement with Google Cloud to deploy agentic AI across retail operations including customer service and internal productivity.</div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">Agentic AI Capability</div>
+                        <div class="field-value">Agents move beyond chat to support and execute operational decisions across internal retail workflows.</div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">Competitive Signal</div>
+                            <div class="field-value">Large retailers are bypassing traditional retail software vendors by partnering directly with hyperscalers for agentic capability.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Retailer Implication</div>
+                            <div class="field-value">CIOs should evaluate whether hyperscaler‑led agent stacks can outpace traditional retail platforms in speed and autonomy.</div>
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Retail Practices Covered</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Store Operations</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Corporate &amp; Finance</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Personalized Customer Experience</span>                        </div>
+                    </div>
+
+                    <div class="tags" style="margin-top:12px;">
+                        <span class="tag tag-blue">Incumbent disruption</span>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Vendor lock‑in to a single cloud and AI ecosystem.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.computerweekly.com/news/366639137/Wesfarmers-to-deploy-agentic-AI-in-retail-operations" target="_blank">Wesfarmers to deploy agentic AI in retail operations</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#3</div>
+                        <div>
+                            <div class="card-title">Sifted</div>
+                            <div class="card-subtitle">Product Launch</div>
+                        </div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">What Happened</div>
+                        <div class="field-value">Sifted launched SiftedAI Copilot, an agentic AI overlay delivering autonomous logistics and fulfillment intelligence.</div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">Agentic AI Capability</div>
+                        <div class="field-value">Agents reason, plan, and execute multi‑step workflows such as cost leakage detection, invoice analysis, and carrier compliance.</div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">Competitive Signal</div>
+                            <div class="field-value">Execution‑oriented, logistics‑first agents are maturing faster than front‑office retail AI use cases.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Retailer Implication</div>
+                            <div class="field-value">Omnichannel retailers should prioritize agentic supply‑chain use cases where ROI and automation readiness are highest.</div>
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Retail Practices Covered</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Supply Chain &amp; Logistics</span>                        </div>
+                    </div>
+
+                    <div class="tags" style="margin-top:12px;">
+                        <span class="tag tag-blue">Vertical specialisation</span>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Data integration effort across carriers, 3PLs, and internal systems.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.marketwatch.com/press-release/sifted-launches-siftedai-copilot-an-agentic-ai-platform-overlay-delivering-autonomous-logistics-intelligence-2ff89c58" target="_blank">Sifted Launches SiftedAI Copilot, an Agentic AI Platform Overlay Delivering Autonomous Logistics Intelligence</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#4</div>
+                        <div>
+                            <div class="card-title">Blue Yonder, Manhattan Associates, SAP Retail, Oracle Retail</div>
+                            <div class="card-subtitle">Platform Upgrade</div>
+                        </div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">What Happened</div>
+                        <div class="field-value">No new agentic AI product launches or acquisitions were announced by major retail platform vendors during the last 14 days.</div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">Agentic AI Capability</div>
+                        <div class="field-value">Assistive AI only, with no confirmed shift to autonomous agent execution announced in this period.</div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">Competitive Signal</div>
+                            <div class="field-value">Incumbent silence suggests agentic capabilities are being deployed quietly with lighthouse customers rather than marketed broadly.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Retailer Implication</div>
+                            <div class="field-value">Retailers should demand concrete autonomy roadmaps and production references before renewing or expanding platform contracts.</div>
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Retail Practices Covered</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Demand &amp; Inventory Intelligence</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Merchandising</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Supply Chain &amp; Logistics</span>                        </div>
+                    </div>
+
+                    <div class="tags" style="margin-top:12px;">
+                        <span class="tag tag-blue">Platform commoditisation</span>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Over‑hype versus delivered autonomy in existing vendor stacks.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://aifundingtracker.com/" target="_blank">AI Funding Tracker | AI Startup Investment Roundups 2026</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#5</div>
+                        <div>
+                            <div class="card-title">Retail AI Startup Ecosystem</div>
+                            <div class="card-subtitle">Funding Round</div>
+                        </div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">What Happened</div>
+                        <div class="field-value">No major retail‑specific AI startup funding rounds were publicly announced in the last 14 days, indicating capital selectivity.</div>
+                    </div>
+
+                    <div class="field-full">
+                        <div class="field-label">Agentic AI Capability</div>
+                        <div class="field-value">Not applicable, as funding activity is concentrated on horizontal AI infrastructure rather than retail agents.</div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">Competitive Signal</div>
+                            <div class="field-value">Limited funding signals fewer new entrants and greater power for vendors with proven production deployments.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Retailer Implication</div>
+                            <div class="field-value">Retailers should prioritize financially stable vendors with live deployments over early‑stage pilots.</div>
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Retail Practices Covered</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Corporate &amp; Finance</span>                        </div>
+                    </div>
+
+                    <div class="tags" style="margin-top:12px;">
+                        <span class="tag tag-blue">Market consolidation</span>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Reduced innovation diversity as fewer retail‑focused startups reach scale.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://aifundingtracker.com/" target="_blank">AI Funding Tracker | AI Startup Investment Roundups 2026</a></div>                    </div>
+                </div>
+                <div class="trend-insight">
+                    <div class="trend-insight-header">
+                        <span>&#128202;</span> Market Intelligence Synthesis
+                    </div>
+                    <div class="trend-insight-body">The retail AI vendor market is entering a phase of selective consolidation in outcomes, even as the vendor count itself remains fragmented. There is no visible wave of M&amp;A or platform roll‑ups yet, but power is concentrating around a smaller number of vendors that can prove production‑grade autonomy inside real retail operations. The past two weeks show a clear bifurcation: many vendors are still marketing vision, while a few are quietly embedding agents that actually execute work. Consolidation is therefore happening de facto, through retailer adoption and spend concentration, rather than formally through acquisitions.
+
+Established ERP and supply‑chain vendors are not losing relevance, but they are temporarily losing narrative and execution velocity to AI‑native players. SAP, Oracle Retail, Blue Yonder, Manhattan, and their peers have gone conspicuously quiet on net‑new agentic launches, focusing instead on thought leadership and positioning. Meanwhile, AI‑native platforms like Global AI and newer agentic overlays such as SiftedAI are winning lighthouse deployments by solving narrow but painful operational problems end to end. This does not mean incumbents are being displaced; rather, they are being bypassed at the execution layer. Retailers are layering agentic systems alongside core ERP and SCM, not waiting for those systems to evolve.
+
+Agentic AI is clearly moving from buzzword to production, but in a very specific way. Retailers are not starting with customer‑facing agents or merchandising decision engines. They are deploying autonomous agents in internal, operationally bounded domains such as invoice processing, exception management, logistics intelligence, and internal service workflows. The announcements from Global AI and Wesfarmers demonstrate that true autonomy—agents that reason, act, and escalate only edge cases—is now acceptable in tier‑one retail environments, provided the scope is controlled and the ROI is measurable.
+
+The retail AI practice area attracting the most vendor investment right now is operations and supply‑chain execution rather than merchandising, pricing, or personalization. Logistics, finance operations, and fulfillment intelligence are proving to be the fastest path from pilot to production because they combine high data maturity with clear economic leakage.
+
+The single most important strategic shift a CTO or CDO should act on is to stop treating AI as a feature of existing platforms and start architecting for agent orchestration. The winning retailers in 2026 will be those that design governance, integration, and monitoring layers that allow multiple autonomous agents—often from different vendors—to execute safely inside core operations, rather than waiting for any single platform vendor to deliver a fully formed agentic future.</div>
+                </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         DEMAND & INVENTORY INTELLIGENCE
+         ================================================================ -->
+    <div class="section" id="demand-inventory">
+        <div class="section-header">
+            <div class="section-label">&#9670; Supply Chain Intelligence</div>
+            <h2>Demand &amp; Inventory Intelligence</h2>
+        </div>
+        <div class="section-body">
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#1</div>
+                        <div>
+                            <div class="card-title">Centric Software</div>
+                            <div class="card-subtitle">Allocation &amp; Distribution Planning</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Centric Software announced enhancements to its Pricing &amp; Inventory platform, launching a single shared AI demand forecast used across pricing, allocation, replenishment, and markdown planning on Feb 14, 2026.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Inventory Lever</div>
+                            <div class="field-value">Allocation efficiency — by synchronising allocation decisions with pricing and markdown risk, the platform reduces misallocation and excess stock in low-demand locations.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The platform executes allocation and replenishment recommendations using a unified forecast but is positioned for planner oversight and exception handling rather than full hands-off execution.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Allocation efficiency</span><span class="kpi-chip">Markdown rate</span><span class="kpi-chip">Inventory turn</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Signals</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Over-allocation to one channel — a single forecast feeding multiple decisions can propagate bias if regional or channel-specific demand signals are misread.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.centricsoftware.com/press-releases/centric-software-launches-enhanced-pricing-inventory-margins-excess-stock/" target="_blank">Centric Software Launches Enhanced Pricing &amp; Inventory Capabilities to ...</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#2</div>
+                        <div>
+                            <div class="card-title">SimplyDepo</div>
+                            <div class="card-subtitle">Demand Forecasting (Short-Term &amp; Long-Term)</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">SimplyDepo published a new 2026 AI inventory forecasting architecture on Feb 16, 2026, emphasizing continuous re-forecasting as new execution data arrives rather than batch planning cycles.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Inventory Lever</div>
+                            <div class="field-value">Forecast accuracy — near-real-time recalibration reduces short-term forecast error and improves downstream replenishment decisions.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+&#9675;                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The architecture focuses on generating continuously updated forecasts and corrective signals, with no evidence that it directly triggers execution without human approval.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Forecast accuracy %</span><span class="kpi-chip">Stockout rate</span><span class="kpi-chip">Weeks of supply</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Signals</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Forecast error amplification — frequent re-forecasting can overreact to short-term noise if demand signals are volatile or sparse.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://simplydepo.com/industry/ai-inventory-forecasting/" target="_blank">AI Inventory Forecasting: Reshaping Demand Planning in 2026</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#3</div>
+                        <div>
+                            <div class="card-title">CBC Inc.</div>
+                            <div class="card-subtitle">Replenishment Planning</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">CBC Inc. highlighted AI-driven replenishment engines that automatically translate forecasts into purchase orders or DC-to-store transfers, closing the loop from prediction to fulfillment.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Inventory Lever</div>
+                            <div class="field-value">Fill rate — automated execution reduces planner latency and improves responsiveness to demand changes at SKU-location level.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The systems execute replenishment actions within predefined guardrails, with humans primarily managing exceptions rather than approving every order.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Fill rate</span><span class="kpi-chip">In-stock rate</span><span class="kpi-chip">Inventory turn</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Signals</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Supplier constraint blind spots — automated order triggering may not fully account for upstream capacity or allocation limits without robust supplier data integration.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://cbcinc.ai/from-prediction-to-fulfillment-closing-the-loop-with-automated-ai-driven-replenishment/" target="_blank">AI-Driven Replenishment: Transforming Supply Chain Efficiency</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#4</div>
+                        <div>
+                            <div class="card-title">Mobio Solutions</div>
+                            <div class="card-subtitle">Safety Stock Optimization</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Mobio Solutions outlined AI systems that dynamically recalculate safety stock buffers by SKU-location and channel using volatility and lead-time risk rather than static rules.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Inventory Lever</div>
+                            <div class="field-value">Carrying cost — dynamic buffers lower excess inventory while maintaining service levels across channels.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+&#9675;                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The AI continuously tunes safety stock targets but is described as feeding planning decisions rather than autonomously executing inventory moves.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Carrying cost reduction</span><span class="kpi-chip">Stockout rate</span><span class="kpi-chip">Weeks of supply</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Signals</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Data latency / quality — inaccurate or delayed lead-time and volatility data can cause under-buffering and service degradation.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://mobiosolutions.com/ai-demand-forecasting-inventory-optimization-retail/" target="_blank">AI Demand Forecasting: Reduce Retail Inventory Costs &amp; Stockouts</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#5</div>
+                        <div>
+                            <div class="card-title">SupplyMint</div>
+                            <div class="card-subtitle">Inventory Health &amp; Aged Stock Management</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">SupplyMint’s February 2026 analysis highlighted AI-driven early identification of slow-moving and aged inventory by root cause, with automated markdown and transfer recommendations.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Inventory Lever</div>
+                            <div class="field-value">Markdown/waste reduction — earlier detection enables corrective actions before inventory reaches deep-discount stages.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+&#9675;                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The capability focuses on classification and recommendation of actions, with no indication of fully automated markdown or transfer execution.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Aged stock %</span><span class="kpi-chip">Markdown rate</span><span class="kpi-chip">Inventory turn</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Signals</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Seasonal pattern misalignment — misclassification of slow movers during normal seasonal troughs can trigger premature markdowns.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.supplymint.com/blogs/supplychain/ai-retail-supply-chain-management-2026/" target="_blank">How AI Is Revolutionizing Retail Supply Chains in 2026</a></div>                    </div>
+                </div>
+                <div class="trend-insight">
+                    <div class="trend-insight-header">
+                        <span>&#128202;</span> Trend Insight
+                    </div>
+                    <div class="trend-insight-body">Across the last two weeks, AI demand and inventory intelligence is clearly moving beyond traditional statistical forecasting toward machine-learning–driven, continuously updating systems, but the transition is evolutionary rather than abrupt. Vendors such as SimplyDepo emphasize re-forecasting loops that ingest execution data in near real time, signaling wider deployment of ML models that learn dynamically instead of relying on fixed seasonal curves. However, these models are still often positioned as decision-support layers rather than fully autonomous agents.
+
+Retailers and platforms are steadily centralizing inventory visibility across channels. The concept of “unified stock” has shifted from a reporting view to an operational decision engine, where a single demand signal informs allocation, replenishment, pricing, and markdowns. Centric Software’s unified forecast across multiple planning domains is the clearest structural signal that silos between merchandising, supply chain, and pricing are breaking down, even if execution remains partially governed by planners.
+
+Replenishment is becoming more automated but remains largely rule-constrained. AI-driven engines increasingly translate forecasts directly into orders or transfers, yet most implementations operate within predefined guardrails, with humans managing exceptions. Fully autonomous replenishment without human approval is still rare and not explicitly evidenced in this period’s announcements.
+
+Among the eight sub-practices, the most visible investment and deployment activity is concentrated in Demand Forecasting and Allocation &amp; Distribution Planning, particularly where a single AI forecast is reused across multiple downstream decisions. This reuse amplifies economic impact by simultaneously improving fill rates, reducing markdowns, and increasing inventory turns.
+
+The single most important structural shift this week is the emergence of AI as an operating layer rather than an insight layer: forecasts are no longer isolated outputs but shared, continuously refreshed inputs that directly drive replenishment, allocation, and inventory health actions across the retail value chain.</div>
+                </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         STORE OPERATIONS
+         ================================================================ -->
+    <div class="section" id="store-operations">
+        <div class="section-header">
+            <div class="section-label">&#9670; In-Store Intelligence</div>
+            <h2>Store Operations</h2>
+        </div>
+        <div class="section-body">
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#1</div>
+                        <div>
+                            <div class="card-title">Tier-1 multi-banner retailers via unnamed AI workforce scheduling vendors</div>
+                            <div class="card-subtitle">Workforce Scheduling</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Vendors released updated AI workforce scheduling capabilities incorporating real-time POS, footfall, and weather signals with closed-loop feedback into task execution, positioned as baseline 2026 functionality.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Labour cost — real-time demand sensing and execution feedback directly reduce overstaffing while improving manager productivity.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The system dynamically generates and adjusts schedules and task priorities, but store managers still approve exceptions and overrides.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Labour productivity</span><span class="kpi-chip">Task completion rate</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">ML scheduling</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Mobile task apps</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Worker displacement / labour relations — algorithmic scheduling changes hours and task allocation, increasing risk of pushback from unions and frontline staff.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://integratedretail.com/ai-driven-workforce-scheduling-retail-labor-optimization/" target="_blank">AI-Driven Workforce Scheduling: Optimizing Labor Costs in Modern Retail</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#2</div>
+                        <div>
+                            <div class="card-title">NVIDIA and retail loss-prevention ecosystem partners</div>
+                            <div class="card-subtitle">Shrink &amp; Loss Prevention</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">NVIDIA refreshed its retail loss-prevention AI workflows with few-shot SKU learning and edge deployment to enable faster rollout and lower privacy exposure.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Shrink/theft reduction — improved detection and intervention timing targets a material portion of the $100B+ annual shrink problem.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The system detects suspicious behavior and triggers context-aware alerts, but human staff still intervene and make final decisions.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Shrink %</span><span class="kpi-chip">Compliance score</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Edge AI</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>False positive detections — inaccurate alerts can disrupt legitimate shoppers and create operational friction.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.nvidia.com/en-us/ai-data-science/ai-workflows/retail-loss-prevention/" target="_blank">Retail Loss Prevention AI Workflow | NVIDIA</a></div><div class="citation"><a href="https://www.centific.com/blog/crack-down-on-retail-inventory-shrinkage-with-computer-vision" target="_blank">Crack down on retail inventory shrinkage with computer vision | Centific</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#3</div>
+                        <div>
+                            <div class="card-title">Specialty and grocery retailers via shelf-monitoring vendors (e.g., Scanwatch)</div>
+                            <div class="card-subtitle">Shelf Availability &amp; Compliance</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Vendors highlighted real-time shelf gap detection that automatically creates store tasks within minutes rather than hours, with pilots reporting 30–50% stockout reduction.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Stockout revenue loss — faster detection and task creation directly protects on-shelf availability and sales.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The system detects gaps and auto-generates tasks, but associates execute replenishment and confirm completion.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">In-stock rate</span><span class="kpi-chip">Task completion rate</span><span class="kpi-chip">Conversion rate</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Mobile task apps</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Integration complexity — tight coupling with inventory, planogram, and task systems raises implementation risk at scale.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://scanwatch.tech/ai-powered-shelf-monitoring-retail/" target="_blank">AI-Powered Shelf Monitoring: Reducing Stockouts and Theft in Retail</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#4</div>
+                        <div>
+                            <div class="card-title">Mid-to-large format retailers via AI queue-management platforms</div>
+                            <div class="card-subtitle">Footfall &amp; Queue Management</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Queue-management vendors published updated benchmarks tying queue-length thresholds directly to dynamic labor redeployment instead of passive alerts.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Queue/conversion — redeploying staff in real time reduces abandonment and improves checkout throughput.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            Systems recommend and trigger labor redeployment actions within guardrails, while managers retain control over staffing decisions.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Queue wait time</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Edge AI</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Privacy / facial recognition regulation — video analytics in customer areas face increasing state-level scrutiny despite privacy-preserving claims.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://scanwatch.tech/ai-powered-queue-management/" target="_blank">AI-Powered Queue Management: Eliminating Long Wait Times in Retail</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#5</div>
+                        <div>
+                            <div class="card-title">Enterprise retailers via IBM omnichannel orchestration platforms</div>
+                            <div class="card-subtitle">Omnichannel Order Fulfillment (BOPIS, curbside)</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">IBM and peers emphasized AI-driven order orchestration deciding store selection, pick timing, and labor assignment, reframing BOPIS as a labor optimization tool.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Fulfillment speed — smarter orchestration reduces pick delays and labor inefficiency while protecting omnichannel SLAs.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+&#9675;                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The AI recommends optimal fulfillment decisions, but store teams and managers execute picks and handle exceptions.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Fulfillment SLA</span><span class="kpi-chip">Labour productivity</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">ML scheduling</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Mobile task apps</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>System downtime impact — orchestration failures can cascade into missed pickups and store-level disruption.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.ibm.com/think/topics/bopis-retail" target="_blank">What is BOPIS (Buy Online, Pickup in Store) in Retail? | IBM</a></div>                    </div>
+                </div>
+                <div class="trend-insight">
+                    <div class="trend-insight-header">
+                        <span>&#128202;</span> Trend Insight
+                    </div>
+                    <div class="trend-insight-body">Store operations AI in early 2026 is clearly moving along the spectrum from assisted analytics toward semi-autonomous execution, but not yet to full autonomy. Across labor scheduling, queue management, shelf monitoring, and loss prevention, systems are no longer just generating insights; they are increasingly triggering tasks, reallocating labor, and timing interventions in real time, with humans primarily managing exceptions rather than day-to-day decisions. However, full end-to-end autonomy remains constrained by labor governance, customer experience risk, and regulatory exposure, especially in video-based systems.
+
+Among the sub-practices, labor optimization is receiving the broadest and most economically material investment. Workforce scheduling is being repositioned as a foundational execution layer that connects demand sensing, task management, and fulfillment, reflecting retailers’ need to extract margin through labor efficiency rather than growth. Loss prevention is the second major investment focus, driven by the scale of shrink and the maturation of edge-based computer vision that reduces privacy and infrastructure barriers.
+
+Physical AI systems such as robots remain largely stalled at the pilot or reassessment stage, while computer vision has crossed into mainstream deployment. The difference is ROI clarity: CV-based systems now directly tie detection to action (tasks, alerts, labor moves), whereas robots still struggle with flexibility and cost justification. As a result, software-first automation is winning budget share.
+
+Omnichannel fulfillment pressure is reshaping store priorities by reframing stores as dynamic micro-fulfillment nodes. BOPIS and curbside are no longer treated as incremental services but as core labor orchestration problems that compete with checkout, replenishment, and service tasks for scarce staff time.
+
+The single most important structural shift this week is the convergence of vision, labor, and task orchestration into a unified execution layer. Retailers are no longer buying isolated point solutions; they are investing in systems that sense, decide, and act across the store in near real time, with humans supervising rather than directing every step.</div>
+                </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         CUSTOMER ANALYTICS
+         ================================================================ -->
+
+    <!-- ================================================================
+         INVENTORY MANAGEMENT
+         ================================================================ -->
+
+    <!-- ================================================================
+         PERSONALIZATION
+         ================================================================ -->
+    <div class="section" id="personalization">
+        <div class="section-header">
+            <div class="section-label">&#9670; Customer Intelligence</div>
+            <h2>Personalization &amp; Customer Intelligence</h2>
+        </div>
+        <div class="section-body">
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#1</div>
+                        <div>
+                            <div class="card-title">Multi‑retailer landscape (industry-wide) via internal personalization stacks</div>
+                            <div class="card-subtitle">Recommendation (product/content)</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Industry analysis published this week explicitly reframed retail personalization success metrics from long‑cycle uplift to measurable in‑the‑moment impact, increasing executive pressure to operationalize real‑time decisioning rather than roadmap pilots.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Economic Relevance</div>
+                            <div class="field-value">Conversion rate — the shift toward real‑time relevance directly targets immediate purchase likelihood rather than downstream brand or engagement metrics.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+◑                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            Sources describe real‑time systems acting within predefined guardrails with humans retaining control over strategy and exceptions, not fully hands‑off execution.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Required</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">⚠</span>
+                        <div><strong>Key Risk: </strong>Model drift — real‑time models trained on fast‑changing behavioral signals risk rapid degradation without strong monitoring.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.msn.com/en-us/news/technology/ai-is-putting-retail-personalization-to-the-test/ar-AA1WeFq2" target="_blank">AI is putting retail personalization to the test</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#2</div>
+                        <div>
+                            <div class="card-title">Retailers broadly via consulting-led AI decision engines (e.g., Bain client base)</div>
+                            <div class="card-subtitle">Offer / Next-Best-Offer selection</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Strategic guidance released this period emphasized next‑best‑action architectures that unify marketing, merchandising, and pricing signals into a single decision layer rather than channel‑specific optimization.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Economic Relevance</div>
+                            <div class="field-value">Basket size — coordinated next‑best‑offer logic increases cross‑sell and upsell effectiveness across touchpoints.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+◑                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The described architectures optimize and execute offers algorithmically but assume human-defined objectives, constraints, and oversight.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Required</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Inventory-aware</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">⚠</span>
+                        <div><strong>Key Risk: </strong>Margin erosion — without explicit margin constraints, next‑best‑offer systems can over‑prioritize conversion over profitability.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.bain.com/insights/retail-personalization-ai-marketing-magic/" target="_blank">Personalization: AI for Retail Marketing Magic | Bain &amp; Company</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#3</div>
+                        <div>
+                            <div class="card-title">Retailers optimizing existing loyalty platforms (vendor-agnostic)</div>
+                            <div class="card-subtitle">Loyalty / CLV optimization</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Analysis this week positioned AI‑driven loyalty optimization as the primary ROI lever for personalization, signaling a shift from acquisition use cases toward retention‑centric AI tuning.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Economic Relevance</div>
+                            <div class="field-value">CLV — focusing AI on retention and repeat behavior maximizes lifetime value rather than one‑off conversion gains.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+○                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            Sources discuss AI informing loyalty decisions and personalization strategies, with humans still approving program structures and incentives.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Required</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Loyalty</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">⚠</span>
+                        <div><strong>Key Risk: </strong>Customer trust degradation — overly aggressive or opaque loyalty personalization can feel manipulative and erode brand trust.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.turing.com/blog/ai-powered-personalization-driving-customer-loyalty-and-retail-growth" target="_blank">AI-Powered Personalization: Driving Customer Loyalty and Retail Growth ...</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#4</div>
+                        <div>
+                            <div class="card-title">Retailers and enterprise AI vendors (agentic AI positioning)</div>
+                            <div class="card-subtitle">Autonomous campaign orchestration</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Vendor strategy content released this week elevated agentic and conversational AI from experimental tools to a stated 2026 operating model for retail decision automation.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Economic Relevance</div>
+                            <div class="field-value">Promo efficiency — agentic systems promise faster test‑and‑learn loops and reduced waste in campaign spend.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+○                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            Despite agentic framing, no evidence of fully autonomous production deployments is cited; systems are discussed as decision support and orchestration aids.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Required</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">⚠</span>
+                        <div><strong>Key Risk: </strong>Vendor lock-in — agentic AI stacks often bundle decisioning, data, and execution, increasing switching costs.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://acuvate.com/blog/artificial-intelligence-in-retail-strategies/" target="_blank">Artificial Intelligence in Retail: 2026 Strategies &amp; Solutions</a></div>                    </div>
+                </div>
+                <div class="trend-insight">
+                    <div class="trend-insight-header">
+                        <span>&#128202;</span> Trend Insight
+                    </div>
+                    <div class="trend-insight-body">Across this two‑week window, retail personalization is not marked by launch velocity but by a clear structural pivot in how value is defined and pursued. Personalization is steadily shifting toward real‑time decisioning, but it remains largely semi‑autonomous rather than fully autonomous. Systems are increasingly expected to act in the moment, yet almost all evidence points to continued human ownership of objectives, guardrails, and exception handling. Rule‑based logic is not disappearing, but it is being subsumed into faster, learning‑driven architectures.
+
+There is also a decisive move from segment‑level optimization toward individual‑level decisioning. Industry analysis consistently frames personalization as one‑to‑one, context‑aware, and continuous, even if most retailers are still retrofitting legacy stacks to reach that ideal. This transition is uneven, constrained less by algorithms than by data integration and operating models.
+
+Margin awareness is emerging as an implicit requirement rather than an explicit standard. While next‑best‑offer and loyalty optimization discussions acknowledge profitability, few sources indicate margin‑first optimization is fully embedded. The risk of conversion‑heavy AI eroding margins is repeatedly implied, suggesting this will be the next competitive differentiator rather than a solved problem.
+
+Customer intelligence is trending toward centralization in theory — CDPs and unified decision layers are repeatedly cited as foundational — but in practice remains fragmented across vendors, channels, and functions. The absence of new CDP launches underscores that retailers are trying to extract more value from existing platforms rather than replatforming.
+
+The single most important structural shift visible this week is the redefinition of personalization success: from promised uplift and pilot experimentation to provable, real‑time economic impact. This reframing is forcing retailers to operationalize AI within core decision flows, setting the stage for deeper autonomy once trust, governance, and margin controls mature.</div>
+                </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         PRICING OPTIMIZATION
+         ================================================================ -->
+
+    <!-- ================================================================
+         CASE STUDIES
+         ================================================================ -->
+
+    <!-- ================================================================
+         TRENDS
+         ================================================================ -->
+
+    <!-- ── Footer ── -->
+    <div class="footer">
+        <p>Generated <strong>February 18, 2026 at 01:01 PM UTC</strong></p>
+        <p style="margin-top:6px;color:#94a3b8;">Retail AI Intelligence Report · AI Collaborated</p>
+    </div>
+
+</div>
+</body>
+</html>
