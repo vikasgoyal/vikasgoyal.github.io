@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry AI Intelligence Reports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Inter Tight', 'Inter', sans-serif;
+        }
+
+        /* ── Top Nav ── */
+        .top-nav {
+            background-color: #000;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .top-nav nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .top-nav nav ul li a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            padding: 15px 18px;
+            transition: background-color 0.2s;
+        }
+
+        .top-nav nav ul li a:hover {
+            text-decoration: underline;
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .top-nav .aair-link { color: #ffd700 !important; font-weight: 600; }
+        .top-nav .aair-link:hover { color: #fff !important; }
+
+        /* ── Hero Header ── */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1e3a8a 100%);
+            color: #fff;
+            padding: 70px 40px 80px;
+            text-align: center;
+        }
+
+        .hero .label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.15em;
+            color: rgba(255,255,255,0.75);
+            max-width: 620px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* ── Cards grid ── */
+        .cards-section {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 0 30px;
+        }
+
+        .cards-section h2 {
+            font-size: 1.5em;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .report-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+            border-color: transparent;
+        }
+
+        .card-accent {
+            height: 6px;
+        }
+
+        .card-body {
+            padding: 30px 28px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-icon {
+            font-size: 2.2em;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .card-label {
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 14px;
+            color: #0f172a;
+        }
+
+        .card-desc {
+            font-size: 0.95em;
+            color: #475569;
+            line-height: 1.7;
+            flex: 1;
+            margin-bottom: 24px;
+        }
+
+        .card-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 24px;
+        }
+
+        .topic-chip {
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .card-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: opacity 0.2s;
+            align-self: flex-start;
+        }
+
+        .card-cta:hover { opacity: 0.85; }
+
+        /* ── Agentic AI — blue ── */
+        .card-agentic .card-accent  { background: linear-gradient(90deg, #1e40af, #3b82f6); }
+        .card-agentic .card-label   { color: #1e40af; }
+        .card-agentic .topic-chip   { background: #eff6ff; color: #1e40af; }
+        .card-agentic .card-cta     { background: #1e40af; color: #fff; }
+
+        /* ── Retail AI — green ── */
+        .card-retail .card-accent   { background: linear-gradient(90deg, #15803d, #4ade80); }
+        .card-retail .card-label    { color: #15803d; }
+        .card-retail .topic-chip    { background: #f0fdf4; color: #15803d; }
+        .card-retail .card-cta      { background: #15803d; color: #fff; }
+
+        /* ── Legal AI — amber ── */
+        .card-legal .card-accent    { background: linear-gradient(90deg, #b45309, #fbbf24); }
+        .card-legal .card-label     { color: #b45309; }
+        .card-legal .topic-chip     { background: #fffbeb; color: #92400e; }
+        .card-legal .card-cta       { background: #b45309; color: #fff; }
+
+        /* ── Footer ── */
+        .footer {
+            background: #1e293b;
+            color: #fff;
+            text-align: center;
+            padding: 36px 20px;
+            font-size: 0.9em;
+            margin-top: 60px;
+        }
+
+        .footer p { margin: 5px 0; opacity: 0.85; }
+        .footer a { color: #60a5fa; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .hero { padding: 50px 20px 60px; }
+            .hero h1 { font-size: 2em; }
+            .cards-section { margin: 40px auto; padding: 0 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/agentic/">Agentic AI</a></li>
+                <li><a class="aair-link" href="/agentic/agenticailatest.html">AAIR Report</a></li>
+                <li><a href="/industries/" style="text-decoration: underline;">Industries</a></li>
+                <li><a href="/startups/">Startups</a></li>
+                <li><a href="/genai/">Generative AI</a></li>
+                <li><a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank">LinkedIn</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="label">Intelligence Reports</div>
+        <h1>Industry AI Reports</h1>
+        <p>Practitioner-grade weekly intelligence on how AI and agentic systems are reshaping industries — from cross-sector to vertical-specific deep dives.</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-section">
+        <h2>Available Reports</h2>
+        <div class="cards-grid">
+
+            <!-- Agentic AI Report -->
+            <div class="report-card card-agentic">
+                <div class="card-accent"></div>
+                <div class="card-body">
+                    <div class="card-icon">🤖</div>
+                    <div class="card-label">Cross-Industry</div>
+                    <div class="card-title">Agentic AI Intelligence Report</div>
+                    <div class="card-desc">Weekly practitioner briefing covering the latest in agentic AI — platform updates, architecture trends, research digests, responsible AI, and real-world case studies across industries.</div>
+                    <div class="card-topics">
+                        <span class="topic-chip">Platform Updates</span>
+                        <span class="topic-chip">Architecture</span>
+                        <span class="topic-chip">Research</span>
+                        <span class="topic-chip">Case Studies</span>
+                    </div>
+                    <a class="card-cta" href="/agentic/agenticailatest.html">Read Report →</a>
+                </div>
+            </div>
+
+            <!-- Retail AI Report -->
+            <div class="report-card card-retail">
+                <div class="card-accent"></div>
+                <div class="card-body">
+                    <div class="card-icon">🛒</div>
+                    <div class="card-label">Retail &amp; Commerce</div>
+                    <div class="card-title">Retail AI Intelligence Report</div>
+                    <div class="card-desc">Deep-dive into how agentic AI is transforming retail — from autonomous decision systems and demand forecasting to store operations, personalization, and the vendor landscape.</div>
+                    <div class="card-topics">
+                        <span class="topic-chip">Decision Systems</span>
+                        <span class="topic-chip">Demand &amp; Inventory</span>
+                        <span class="topic-chip">Store Operations</span>
+                        <span class="topic-chip">Personalization</span>
+                    </div>
+                    <a class="card-cta" href="/industries/retail/retailailatest.html">Read Report →</a>
+                </div>
+            </div>
+
+            <!-- Legal AI Report -->
+            <div class="report-card card-legal">
+                <div class="card-accent"></div>
+                <div class="card-body">
+                    <div class="card-icon">⚖️</div>
+                    <div class="card-label">Legal &amp; Compliance</div>
+                    <div class="card-title">Legal AI Weekly Report</div>
+                    <div class="card-desc">Weekly intelligence on AI in the legal sector — covering breaking news, regulatory developments, case law, legaltech innovations, global trends, and upcoming industry events.</div>
+                    <div class="card-topics">
+                        <span class="topic-chip">Breaking News</span>
+                        <span class="topic-chip">Regulatory</span>
+                        <span class="topic-chip">Case Law</span>
+                        <span class="topic-chip">LegalTech</span>
+                    </div>
+                    <a class="card-cta" href="/industries/legal/legalai.html">Read Report →</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Industry AI Intelligence Reports · <a href="/">vikasgoyal.github.io</a></p>
+        <p style="margin-top: 8px; opacity: 0.6; font-size: 0.85em;">Practitioner-grade AI intelligence for builders and leaders</p>
+    </div>
+
+</body>
+</html>
