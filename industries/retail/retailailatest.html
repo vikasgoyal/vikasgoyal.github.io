@@ -240,7 +240,8 @@
         /* Stats/Summary Box */
         .summary-box {
             background: #f8fafc;
-            border-left: 4px solid #1e40af;
+            border: 1px solid #bfdbfe;
+            border-top: 3px solid #1e40af;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
@@ -537,10 +538,13 @@
             border-color: #bfdbfe;
         }
 
-        /* Ranked card accent */
+        /* Ranked card accent — top gradient bar instead of left border */
         .card-ranked {
-            border-left: 4px solid var(--blue);
-            padding-left: 24px;
+            border-top: 3px solid transparent;
+            background-image: linear-gradient(var(--white), var(--white)),
+                              linear-gradient(90deg, var(--blue) 0%, var(--teal) 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
         }
 
         .card-header {
@@ -683,7 +687,7 @@
             gap: 10px;
             background: #fffbeb;
             border: 1px solid #fde68a;
-            border-left: 4px solid var(--amber);
+            border-top: 3px solid var(--amber);
             border-radius: var(--radius-sm);
             padding: 12px 14px;
             margin: 14px 0;
@@ -697,6 +701,24 @@
             flex-shrink: 0;
             margin-top: 1px;
         }
+
+        /* ================================================================
+           URGENCY BADGE
+           ================================================================ */
+        .urgency-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            padding: 3px 11px;
+            border-radius: 99px;
+        }
+        .urgency-now     { background: #fee2e2; color: #b91c1c; }
+        .urgency-q2      { background: #fef3c7; color: #92400e; }
+        .urgency-monitor { background: var(--slate-100); color: var(--slate-500); }
 
         /* ================================================================
            TAGS / PILLS
@@ -739,7 +761,7 @@
         .trend-insight {
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             border: 1px solid #bae6fd;
-            border-left: 4px solid var(--teal);
+            border-top: 3px solid var(--teal);
             border-radius: var(--radius);
             padding: 28px 30px;
             margin: 24px 0;
@@ -768,7 +790,8 @@
            ================================================================ */
         .summary-box {
             background: var(--blue-pale);
-            border-left: 4px solid var(--blue);
+            border: 1px solid #bfdbfe;
+            border-top: 3px solid var(--blue);
             border-radius: var(--radius-sm);
             padding: 18px 20px;
             margin: 16px 0;
@@ -1026,7 +1049,7 @@
         <div class="header-meta">
             <span class="meta-chip">
                 <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 5h12M5 2v3M9 2v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-                February 18, 2026 at 01:01 PM UTC
+                February 18, 2026 at 08:08 PM UTC
             </span>
 
         </div>
@@ -1041,7 +1064,7 @@
                 &#8249;
             </button>
             <nav class="nav" id="sectionNav">
-<a href="#decision-systems">Decision Systems</a><a href="#vendor-tech">Vendor Landscape</a><a href="#demand-inventory">Demand &amp; Inventory</a><a href="#store-operations">Store Operations</a><a href="#personalization">Personalization</a>            </nav>
+<a href="#summary">Summary</a><a href="#decision-systems">Decision Systems</a><a href="#vendor-tech">Vendor Landscape</a><a href="#demand-inventory">Demand &amp; Inventory</a><a href="#store-operations">Store Operations</a><a href="#personalization">Personalization</a><a href="#upcoming-events">Upcoming Events</a>            </nav>
             <button class="nav-arrow nav-arrow-right" id="navArrowRight" aria-label="Scroll right">
                 &#8250;
             </button>
@@ -1078,6 +1101,175 @@
     <!-- ================================================================
          EXECUTIVE SUMMARY
          ================================================================ -->
+    <div class="section" id="summary">
+        <div class="section-header">
+            <div class="section-label">&#9670; Overview</div>
+            <h2>Executive Summary &mdash; 5 Actionable Insights</h2>
+        </div>
+        <div class="section-body">
+            <div class="trend-insight" style="margin-bottom:28px;">
+                <div class="trend-insight-header">
+                    <span>&#128161;</span> Strategic Narrative
+                </div>
+                <div class="trend-insight-body">Across pricing, inventory, labor, and promotions, AI in retail has shifted from advising humans to executing decisions at scale. The immediate opportunity is margin, working capital, and labor efficiency—but the near-term risk is automated error propagation without governance and data readiness. Executives who act this quarter to harden guardrails, data foundations, and pilot scope will capture upside while competitors absorb the cost of uncontrolled autonomy.</div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#1</div>
+                    <div>
+                        <div class="card-title">Pricing and markdown decisions have crossed the line from analyst-led to system-executed, making governance—not models—the immediate margin risk.</div>
+                        <div style="margin-top:8px;">
+                            <span class="urgency-badge urgency-now">
+&#9888; Act Now                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-full">
+                    <div class="field-label">Intelligence Context</div>
+                    <div class="field-value">Walmart and other large retailers disclosed in Q4 earnings (Feb 19, 2026) that pricing and markdowns are now AI-executed rather than analyst-led. antuit.ai and Microsoft platforms are automating SKU-location lifecycle pricing and coordinated pricing/promo decisions. The brief flags over-discounting and cascading automation failures as material risks if guardrails and objectives are mis-specified.</div>
+                </div>
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Recommended Action</div>
+                        <div class="field-value">CDO and CFO jointly mandate a pricing-automation governance sprint: inventory all autonomous pricing/markdown systems, define hard margin and discount guardrails, and require weekly exception reporting for automated markdowns exceeding thresholds.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Business Impact</div>
+                        <div class="field-value">Gross margin protection at enterprise scale; prevents rapid, system-driven over-discounting across thousands of SKUs.</div>
+                    </div>
+                </div>
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Practice Areas</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Pricing &amp; Markdown Optimization</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Revenue Growth Management</span>                    </div>
+                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#2</div>
+                    <div>
+                        <div class="card-title">Autonomous replenishment is now executing in near real time, amplifying bad data faster than humans ever could.</div>
+                        <div style="margin-top:8px;">
+                            <span class="urgency-badge urgency-now">
+&#9888; Act Now                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-full">
+                    <div class="field-label">Intelligence Context</div>
+                    <div class="field-value">Retailers reported that near-real-time demand sensing is directly triggering replenishment and allocation actions rather than just updating forecasts. Autonomous replenishment agents are live at store–SKU–day level with policy guardrails. The brief repeatedly highlights data latency and POS/inventory feed errors as systemic risks when execution is automated.</div>
+                </div>
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Recommended Action</div>
+                        <div class="field-value">COO sponsors a 30-day data-readiness audit on POS, inventory accuracy, and latency for banners using automated replenishment; pause scope expansion where data SLAs are not met.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Business Impact</div>
+                        <div class="field-value">Working capital and service-level protection; avoids enterprise-wide overstock or stockout cascades driven by bad signals.</div>
+                    </div>
+                </div>
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Practice Areas</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Replenishment Planning</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Inventory Allocation</span>                    </div>
+                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#3</div>
+                    <div>
+                        <div class="card-title">Agentic orchestration is coupling pricing, promotions, and supply—raising ROI potential but also single-point-of-failure risk.</div>
+                        <div style="margin-top:8px;">
+                            <span class="urgency-badge urgency-now">
+&#9888; Act Now                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-full">
+                    <div class="field-label">Intelligence Context</div>
+                    <div class="field-value">Microsoft announced a shift from copilots to goal-driven agents that recommend and execute coordinated pricing, promotion, and trade decisions. The brief explicitly warns that tightly coupled agents can propagate a single faulty objective across multiple revenue levers.</div>
+                </div>
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Recommended Action</div>
+                        <div class="field-value">CEO directs a constrained pilot: deploy agentic RGM orchestration on one category or banner with kill-switches, independent objective validation, and finance sign-off before scale.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Business Impact</div>
+                        <div class="field-value">Improved promotional ROI and reduced trade-spend leakage, while containing downside risk from cascading automation failures.</div>
+                    </div>
+                </div>
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Practice Areas</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Promotions &amp; Trade Spend</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Decision Orchestration</span>                    </div>
+                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#4</div>
+                    <div>
+                        <div class="card-title">Labor scheduling is becoming demand-responsive by AI, but compliance exposure is now an executive issue.</div>
+                        <div style="margin-top:8px;">
+                            <span class="urgency-badge urgency-q2">
+&#128337; Plan for Q2                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-full">
+                    <div class="field-label">Intelligence Context</div>
+                    <div class="field-value">Retailers are dynamically adjusting labor schedules using AI agents based on demand volatility and omnichannel load. TimeForge highlighted compliance-aware scheduling with real-time labor-law alerts, while the brief flags regulatory and union risks if governance is incomplete.</div>
+                </div>
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Recommended Action</div>
+                        <div class="field-value">COO and CHRO fund a compliance-first AI scheduling rollout or retrofit, ensuring labor rules, contracts, and override explainability are embedded before expanding automation.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Business Impact</div>
+                        <div class="field-value">Labor cost reduction with reduced risk of fines, grievances, or union disputes.</div>
+                    </div>
+                </div>
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Practice Areas</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Workforce Scheduling</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Store Operations</span>                    </div>
+                </div>
+            </div>
+            <div class="card card-ranked">
+                <div class="card-header">
+                    <div class="rank-badge">#5</div>
+                    <div>
+                        <div class="card-title">The vendor market is consolidating around agent-native platforms, making delayed choices more expensive later.</div>
+                        <div style="margin-top:8px;">
+                            <span class="urgency-badge urgency-monitor">
+&#128065; Monitor                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-full">
+                    <div class="field-label">Intelligence Context</div>
+                    <div class="field-value">Recent funding and enterprise wins show capital and deployment momentum concentrating around a narrower set of agent-native retail AI platforms. Microsoft’s agent layer is gaining traction, and vertical specialists like Profitmind and Global AI are validated by enterprise adoption and strategic investors.</div>
+                </div>
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Recommended Action</div>
+                        <div class="field-value">CDO initiates a 60-day vendor benchmark: compare current planning and execution tools against agent-native alternatives, prioritizing pricing, inventory, and back-office workflows.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Business Impact</div>
+                        <div class="field-value">Avoids stranded technology spend and positions the retailer ahead of platform consolidation and M&amp;A premiums.</div>
+                    </div>
+                </div>
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Practice Areas</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Retail AI Platform Strategy</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Vendor Management</span>                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ================================================================
          LATEST UPDATES
@@ -1096,19 +1288,19 @@
                 <div class="card-header">
                     <div class="rank-badge">#1</div>
                     <div>
-                        <div class="card-title">Agentic Price, Promotion &amp; Markdown Optimization</div>
-                        <div class="card-subtitle">Retailers via Microsoft Retail (Copilot Studio)</div>
+                        <div class="card-title">Autonomous Pricing and Markdown Optimization</div>
+                        <div class="card-subtitle">Walmart (and other large global retailers) via internal AI systems; Microsoft agentic revenue growth management platform</div>
                     </div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Recent Development</div>
-                    <div class="field-value">Microsoft released a new Price, Promotion &amp; Markdown Optimization Agent scenario enabling agent-based pricing decisions with closed-loop execution.</div>
+                    <div class="field-value">In Q4 earnings disclosures reported Feb 19, 2026, Walmart and peers explicitly described pricing and markdown decisions as system-driven and AI-executed rather than analyst-led.</div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Economic Relevance</div>
-                    <div class="field-value">Gross margin and Promo ROI are directly impacted by automating price changes, markdown depth, and promotional timing at scale across assortments.</div>
+                    <div class="field-value">Gross margin — pricing and markdown automation directly protects margin at scale by reacting faster to demand shifts and cost volatility across thousands of SKUs.</div>
                 </div>
 
                 <div class="autonomy-panel autonomy-semi">
@@ -1119,53 +1311,53 @@
                     </div>
                     <div class="autonomy-reasoning">
                         <strong>Autonomy Reasoning</strong>
-                        The system executes pricing and markdown actions automatically within policy guardrails, with humans retained for oversight and exception handling.
+                        Earnings language and Microsoft’s description indicate systems execute pricing actions within predefined margin and brand guardrails, with humans overseeing exceptions rather than approving each change.
                     </div>
                 </div>
 
                 <div style="margin:14px 0 0;">
                     <div class="field-label">KPI Impact</div>
                     <div class="kpi-list">
-<span class="kpi-chip">Gross margin %</span><span class="kpi-chip">Promo efficiency</span><span class="kpi-chip">Inventory turn</span>                    </div>
+<span class="kpi-chip">Gross margin %</span><span class="kpi-chip">Promo efficiency</span><span class="kpi-chip">Conversion rate</span>                    </div>
                 </div>
 
                 <div class="risk-box">
                     <span class="risk-icon">⚠</span>
-                    <div><strong>Key Risk: </strong>Margin erosion from over-discounting if guardrails or elasticity assumptions are misconfigured at scale.</div>
+                    <div><strong>Key Risk: </strong>Margin erosion from over-discounting — rapid automated reactions to noisy demand or competitor signals can cascade into unnecessary markdowns if guardrails are mis-specified.</div>
                 </div>
 
                 <div class="citations">
                     <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://adoption.microsoft.com/en-us/scenario-library/retail/price-promotion-markdown-optimization-agent/" target="_blank">Price, promotion &amp; markdown optimization agent – Microsoft Adoption</a></div>                </div>
+<div class="citation"><a href="https://markets.businessinsider.com/earnings-calendar" target="_blank">Earnings calendar - Markets Insider</a></div><div class="citation"><a href="https://www.microsoft.com/en-us/industry/blog/retail/2026/02/18/agentic-ai-in-revenue-growth-management-from-hype-to-decision-intelligence/" target="_blank">Agentic AI in Revenue Growth Management - Microsoft Industry Blogs</a></div>                </div>
             </div>
             <div class="card card-ranked">
                 <div class="card-header">
                     <div class="rank-badge">#2</div>
                     <div>
-                        <div class="card-title">Autonomous SKU-Store Replenishment Control</div>
-                        <div class="card-subtitle">Retailers via Invent Analytics (invent.ai)</div>
+                        <div class="card-title">Autonomous Replenishment and Inventory Allocation</div>
+                        <div class="card-subtitle">Large U.S. and EU retailers via internal systems; Microsoft agentic retail automation stack</div>
                     </div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Recent Development</div>
-                    <div class="field-value">Invent.ai highlighted increased retailer adoption of real-time, AI-driven replenishment that continuously automates reorder decisions at SKU-store level.</div>
+                    <div class="field-value">Retailers disclosed this week that near-real-time demand sensing is now directly triggering replenishment and allocation actions rather than merely updating forecasts.</div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Economic Relevance</div>
-                    <div class="field-value">Inventory carrying cost and in-stock rate are improved by reducing excess stock while preventing lost sales through continuous reorder automation.</div>
+                    <div class="field-value">Inventory carrying cost — automated replenishment reduces excess stock and stockouts simultaneously, freeing working capital at enterprise scale.</div>
                 </div>
 
-                <div class="autonomy-panel autonomy-full">
+                <div class="autonomy-panel autonomy-semi">
                     <div>
-                        <span class="autonomy-badge badge-full">
-⬤                            Fully Autonomous
+                        <span class="autonomy-badge badge-semi">
+◑                            Semi-Autonomous
                         </span>
                     </div>
                     <div class="autonomy-reasoning">
                         <strong>Autonomy Reasoning</strong>
-                        The replenishment system is positioned as a continuous control loop executing reorder decisions without planner intervention.
+                        Sources describe systems automatically executing transfers and replenishment resets while positioning humans as supervisors of exceptions and constraints.
                     </div>
                 </div>
 
@@ -1177,30 +1369,30 @@
 
                 <div class="risk-box">
                     <span class="risk-icon">⚠</span>
-                    <div><strong>Key Risk: </strong>Demand signal error can rapidly propagate through automated reorder loops, amplifying stockouts or overstocking.</div>
+                    <div><strong>Key Risk: </strong>Demand signal error — automated execution amplifies the impact of bad POS, weather, or event data, potentially causing systemic over- or under-stocking.</div>
                 </div>
 
                 <div class="citations">
                     <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.invent.ai/replenishment" target="_blank">Replenishment - Invent Analytics</a></div>                </div>
+<div class="citation"><a href="https://news.microsoft.com/source/2026/01/08/microsoft-propels-retail-forward-with-agentic-ai-capabilities-that-power-intelligent-automation-for-every-retail-function/" target="_blank">Microsoft propels retail forward with agentic AI capabilities that ...</a></div><div class="citation"><a href="https://builtbyrose.co/dynamic-middle-mile-ai-demand-sensing-route-optimization/" target="_blank">Dynamic Middle‑Mile: How Retail COOs Use AI for Demand Sensing and ...</a></div>                </div>
             </div>
             <div class="card card-ranked">
                 <div class="card-header">
                     <div class="rank-badge">#3</div>
                     <div>
-                        <div class="card-title">Agentic Fraud and Commerce Decision Orchestration</div>
-                        <div class="card-subtitle">Enterprise merchants via Forter</div>
+                        <div class="card-title">Agentic Revenue Growth Management Orchestration</div>
+                        <div class="card-subtitle">Microsoft with enterprise retail customers</div>
                     </div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Recent Development</div>
-                    <div class="field-value">Forter launched Agentic Orchestration enabling secure AI-to-AI commerce with coordinated fraud, loyalty, catalog, and checkout decisions.</div>
+                    <div class="field-value">On Feb 18, 2026, Microsoft announced an upgrade from copilot-style tools to goal-driven agents that recommend and execute coordinated pricing, promotion, and trade decisions.</div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Economic Relevance</div>
-                    <div class="field-value">Return rate and revenue per visit are impacted by approving more legitimate transactions while blocking fraud in automated agent-driven commerce flows.</div>
+                    <div class="field-value">Promo ROI — coordinated, automated trade and promotion decisions reduce spend leakage and improve returns on promotional investment across channels.</div>
                 </div>
 
                 <div class="autonomy-panel autonomy-semi">
@@ -1211,42 +1403,42 @@
                     </div>
                     <div class="autonomy-reasoning">
                         <strong>Autonomy Reasoning</strong>
-                        Fraud and transaction decisions are executed automatically by the system, but within merchant-defined risk policies and thresholds.
+                        Microsoft explicitly positions these agents as executing actions under financial controls and governance, indicating bounded autonomy rather than human-free operation.
                     </div>
                 </div>
 
                 <div style="margin:14px 0 0;">
                     <div class="field-label">KPI Impact</div>
                     <div class="kpi-list">
-<span class="kpi-chip">Return rate</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Shrink %</span>                    </div>
+<span class="kpi-chip">Promo efficiency</span><span class="kpi-chip">Gross margin %</span><span class="kpi-chip">Revenue per visit</span>                    </div>
                 </div>
 
                 <div class="risk-box">
                     <span class="risk-icon">⚠</span>
-                    <div><strong>Key Risk: </strong>Regulatory and liability exposure if autonomous agents approve transactions that violate consumer protection or fraud standards.</div>
+                    <div><strong>Key Risk: </strong>Cascading automation failure — tightly coupled pricing, promotion, and supply agents can propagate a single faulty objective or constraint across multiple revenue levers.</div>
                 </div>
 
                 <div class="citations">
                     <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.forter.com/blog/agentic-orchestration" target="_blank">Unlocking Agentic Commerce for Enterprise Merchants with Forter</a></div>                </div>
+<div class="citation"><a href="https://www.microsoft.com/en-us/industry/blog/retail/2026/02/18/agentic-ai-in-revenue-growth-management-from-hype-to-decision-intelligence/" target="_blank">Agentic AI in Revenue Growth Management - Microsoft Industry Blogs</a></div>                </div>
             </div>
             <div class="card card-ranked">
                 <div class="card-header">
                     <div class="rank-badge">#4</div>
                     <div>
-                        <div class="card-title">Integrated Pricing, Inventory &amp; Merchandise Planning Engine</div>
-                        <div class="card-subtitle">Retailers via Centric Software</div>
+                        <div class="card-title">Lifecycle Pricing and Markdown Decision Engine</div>
+                        <div class="card-subtitle">Enterprise retailers via antuit.ai</div>
                     </div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Recent Development</div>
-                    <div class="field-value">Centric Software was recognized for materially deeper integration of pricing, inventory, and merchandise planning with scenario-driven automated alignment.</div>
+                    <div class="field-value">antuit.ai highlighted recent platform updates emphasizing SKU-location-level automated lifecycle pricing and markdown execution rather than planner recommendations.</div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Economic Relevance</div>
-                    <div class="field-value">Gross margin and inventory turn improve by synchronizing pricing actions with inventory and assortment constraints rather than operating in silos.</div>
+                    <div class="field-value">Gross margin — lifecycle-aware markdown automation reduces end-of-season waste while preserving full-price sell-through earlier in the product life cycle.</div>
                 </div>
 
                 <div class="autonomy-panel autonomy-semi">
@@ -1257,7 +1449,7 @@
                     </div>
                     <div class="autonomy-reasoning">
                         <strong>Autonomy Reasoning</strong>
-                        The platform automates scenario execution across pricing and inventory while still relying on planners to select or adjust scenarios.
+                        The platform is described as automating pricing actions at granular levels within retailer-defined constraints, implying execution with oversight rather than advisory output.
                     </div>
                 </div>
 
@@ -1269,30 +1461,30 @@
 
                 <div class="risk-box">
                     <span class="risk-icon">⚠</span>
-                    <div><strong>Key Risk: </strong>Cascading automation failure if misaligned scenarios propagate incorrect pricing or allocation decisions across categories.</div>
+                    <div><strong>Key Risk: </strong>Model drift — changes in consumer price sensitivity or channel mix can silently degrade markdown logic over time if not continuously recalibrated.</div>
                 </div>
 
                 <div class="citations">
                     <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://themachinemaker.com/news/centric-software-recognized-in-gartner-report-on-retail-pricing-and-markdown-optimization/" target="_blank">Centric Software Recognized in Gartner Report on Retail Pricing and ...</a></div>                </div>
+<div class="citation"><a href="https://www.antuit.ai/solutions/retail/ai-enhanced-lifecycle-pricing-with-markdown-optimization" target="_blank">AI-Enhanced Lifecycle Pricing with Markdown Optimization - antuit.ai</a></div>                </div>
             </div>
             <div class="card card-ranked">
                 <div class="card-header">
                     <div class="rank-badge">#5</div>
                     <div>
-                        <div class="card-title">Omnichannel Agentic Commerce Orchestration</div>
-                        <div class="card-subtitle">Retailers via Camunda and Microsoft</div>
+                        <div class="card-title">Demand-Responsive Labor Scheduling Automation</div>
+                        <div class="card-subtitle">Large omnichannel retailers via Microsoft agentic retail capabilities</div>
                     </div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Recent Development</div>
-                    <div class="field-value">Camunda advanced its retail agentic orchestration positioning while Microsoft framed agentic commerce as the primary front door for retail interactions.</div>
+                    <div class="field-value">Recent agentic retail orchestration discussions highlighted labor scheduling being dynamically adjusted by AI agents based on demand volatility and omnichannel load.</div>
                 </div>
 
                 <div class="field-full">
                     <div class="field-label">Economic Relevance</div>
-                    <div class="field-value">Labour cost and revenue per visit are affected by reducing human handoffs across order management, fulfillment, and pricing in omnichannel execution.</div>
+                    <div class="field-value">Labour cost — automated alignment of staffing with real demand reduces chronic overstaffing and costly understaffing across store networks.</div>
                 </div>
 
                 <div class="autonomy-panel autonomy-semi">
@@ -1303,24 +1495,24 @@
                     </div>
                     <div class="autonomy-reasoning">
                         <strong>Autonomy Reasoning</strong>
-                        Multiple AI agents coordinate execution across systems automatically, with human intervention focused on exceptions and governance.
+                        Labor is treated as a decision variable adjusted automatically within policy constraints, with managers retaining override authority for compliance and exceptions.
                     </div>
                 </div>
 
                 <div style="margin:14px 0 0;">
                     <div class="field-label">KPI Impact</div>
                     <div class="kpi-list">
-<span class="kpi-chip">Labour productivity</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Basket size</span>                    </div>
+<span class="kpi-chip">Labour productivity</span><span class="kpi-chip">Conversion rate</span>                    </div>
                 </div>
 
                 <div class="risk-box">
                     <span class="risk-icon">⚠</span>
-                    <div><strong>Key Risk: </strong>Vendor lock-in and architectural rigidity if core commerce orchestration becomes tightly coupled to a single agent platform.</div>
+                    <div><strong>Key Risk: </strong>Regulatory/pricing compliance — automated schedule changes risk violating labor laws, union rules, or contractual constraints if governance is incomplete.</div>
                 </div>
 
                 <div class="citations">
                     <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://camunda.com/solutions/industry/retail/" target="_blank">Retail Agentic Orchestration | Camunda</a></div><div class="citation"><a href="https://www.microsoft.com/en-us/industry/blog/retail/2026/02/09/how-agentic-commerce-is-becoming-the-new-front-door-to-retail/" target="_blank">Why agentic commerce is the new front door to retail</a></div>                </div>
+<div class="citation"><a href="https://news.microsoft.com/source/2026/01/08/microsoft-propels-retail-forward-with-agentic-ai-capabilities-that-power-intelligent-automation-for-every-retail-function/" target="_blank">Microsoft propels retail forward with agentic AI capabilities that ...</a></div>                </div>
             </div>
         </div>
     </div>
@@ -1345,22 +1537,22 @@
 
                     <div class="field-full">
                         <div class="field-label">What Happened</div>
-                        <div class="field-value">Global AI signed an enterprise contract with one of the world’s largest supermarket operators to deploy its agentic AI platform in live production.</div>
+                        <div class="field-value">Global AI signed an enterprise contract with one of the world’s largest supermarket operators to deploy its agentic AI platform across core retail workflows.</div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">Agentic AI Capability</div>
-                        <div class="field-value">Autonomous agents continuously process invoices and exceptions end to end, escalating only edge cases to humans.</div>
+                        <div class="field-value">Autonomous agents continuously monitor invoices, detect exceptions, and resolve workflows end-to-end with human escalation only for edge cases.</div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">Competitive Signal</div>
-                            <div class="field-value">This is one of the clearest proofs that fully autonomous agents can run at tier‑1 grocery scale beyond pilots or copilots.</div>
+                            <div class="field-value">This represents one of the first large-scale proof points of always-on autonomous agents operating in a tier-1 grocery environment.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Retailer Implication</div>
-                            <div class="field-value">Retailers should reassess finance and back‑office automation roadmaps toward true agentic execution, not incremental RPA or copilots.</div>
+                            <div class="field-value">Retailers should reassess back-office and supply-chain processes that can move from human-led exception handling to agent-owned execution.</div>
                         </div>
                     </div>
 
@@ -1376,7 +1568,7 @@
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Integration complexity with legacy ERP and finance systems.</div>
+                        <div><strong>Key Risk: </strong>Integration complexity with legacy finance and supplier systems.</div>
                     </div>
 
                     <div class="citations">
@@ -1387,36 +1579,36 @@
                     <div class="card-header">
                         <div class="rank-badge">#2</div>
                         <div>
-                            <div class="card-title">Wesfarmers and Google Cloud</div>
-                            <div class="card-subtitle">Partnership / Integration</div>
+                            <div class="card-title">Wesfarmers</div>
+                            <div class="card-subtitle">Customer Win / Expansion</div>
                         </div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">What Happened</div>
-                        <div class="field-value">Wesfarmers signed a multi‑year agreement with Google Cloud to deploy agentic AI across retail operations including customer service and internal productivity.</div>
+                        <div class="field-value">Wesfarmers signed a multi-year agreement to deploy agentic AI across its retail operations, including Kmart and Officeworks.</div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">Agentic AI Capability</div>
-                        <div class="field-value">Agents move beyond chat to support and execute operational decisions across internal retail workflows.</div>
+                        <div class="field-value">Agents coordinate customer service, internal productivity, and cross-functional workflows with delegated task ownership.</div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">Competitive Signal</div>
-                            <div class="field-value">Large retailers are bypassing traditional retail software vendors by partnering directly with hyperscalers for agentic capability.</div>
+                            <div class="field-value">A multi-banner retailer is demonstrating confidence in agentic AI at operating-model scale rather than isolated pilots.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Retailer Implication</div>
-                            <div class="field-value">CIOs should evaluate whether hyperscaler‑led agent stacks can outpace traditional retail platforms in speed and autonomy.</div>
+                            <div class="field-value">Large retailers should begin defining which cross-functional processes can be safely orchestrated by agents rather than siloed teams.</div>
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Retail Practices Covered</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Store Operations</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Corporate &amp; Finance</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Personalized Customer Experience</span>                        </div>
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Personalized Customer Experience</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Store Operations</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Corporate &amp; Finance</span>                        </div>
                     </div>
 
                     <div class="tags" style="margin-top:12px;">
@@ -1425,7 +1617,7 @@
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Vendor lock‑in to a single cloud and AI ecosystem.</div>
+                        <div><strong>Key Risk: </strong>Organizational change management and trust in autonomous decisioning.</div>
                     </div>
 
                     <div class="citations">
@@ -1436,36 +1628,36 @@
                     <div class="card-header">
                         <div class="rank-badge">#3</div>
                         <div>
-                            <div class="card-title">Sifted</div>
-                            <div class="card-subtitle">Product Launch</div>
+                            <div class="card-title">Profitmind</div>
+                            <div class="card-subtitle">Funding Round</div>
                         </div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">What Happened</div>
-                        <div class="field-value">Sifted launched SiftedAI Copilot, an agentic AI overlay delivering autonomous logistics and fulfillment intelligence.</div>
+                        <div class="field-value">Profitmind continues to gain momentum following Accenture Ventures’ strategic investment validating its agentic AI pricing and planning platform.</div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">Agentic AI Capability</div>
-                        <div class="field-value">Agents reason, plan, and execute multi‑step workflows such as cost leakage detection, invoice analysis, and carrier compliance.</div>
+                        <div class="field-value">Agents autonomously manage pricing, promotions, and inventory decisions with closed-loop learning and execution.</div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">Competitive Signal</div>
-                            <div class="field-value">Execution‑oriented, logistics‑first agents are maturing faster than front‑office retail AI use cases.</div>
+                            <div class="field-value">System integrator backing signals that agent-native pricing and planning platforms are becoming enterprise-ready alternatives to incumbents.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Retailer Implication</div>
-                            <div class="field-value">Omnichannel retailers should prioritize agentic supply‑chain use cases where ROI and automation readiness are highest.</div>
+                            <div class="field-value">Retailers should benchmark agent-native pricing platforms against legacy planning tools for speed and margin impact.</div>
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Retail Practices Covered</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Supply Chain &amp; Logistics</span>                        </div>
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Pricing &amp; Promotion</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Demand &amp; Inventory Intelligence</span>                        </div>
                     </div>
 
                     <div class="tags" style="margin-top:12px;">
@@ -1474,47 +1666,47 @@
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Data integration effort across carriers, 3PLs, and internal systems.</div>
+                        <div><strong>Key Risk: </strong>Pricing power shift toward specialized vendors.</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.marketwatch.com/press-release/sifted-launches-siftedai-copilot-an-agentic-ai-platform-overlay-delivering-autonomous-logistics-intelligence-2ff89c58" target="_blank">Sifted Launches SiftedAI Copilot, an Agentic AI Platform Overlay Delivering Autonomous Logistics Intelligence</a></div>                    </div>
+<div class="citation"><a href="https://newsroom.accenture.com/news/2026/accenture-invests-in-profitmind-to-drive-agentic-ai-reinvention-in-retail-sector" target="_blank">Accenture Invests in Profitmind to Drive Agentic AI Reinvention in ...</a></div>                    </div>
                 </div>
                 <div class="card card-ranked">
                     <div class="card-header">
                         <div class="rank-badge">#4</div>
                         <div>
-                            <div class="card-title">Blue Yonder, Manhattan Associates, SAP Retail, Oracle Retail</div>
+                            <div class="card-title">Microsoft</div>
                             <div class="card-subtitle">Platform Upgrade</div>
                         </div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">What Happened</div>
-                        <div class="field-value">No new agentic AI product launches or acquisitions were announced by major retail platform vendors during the last 14 days.</div>
+                        <div class="field-value">Retailers and system integrators are showing early traction building agent-based automation layers on Microsoft’s retail AI stack announced earlier in Q1.</div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">Agentic AI Capability</div>
-                        <div class="field-value">Assistive AI only, with no confirmed shift to autonomous agent execution announced in this period.</div>
+                        <div class="field-value">Agents are embedded within ERP, OMS, SCM, and commerce workflows to automate decisions rather than provide standalone copilots.</div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">Competitive Signal</div>
-                            <div class="field-value">Incumbent silence suggests agentic capabilities are being deployed quietly with lighthouse customers rather than marketed broadly.</div>
+                            <div class="field-value">Microsoft is positioning agentic AI as a horizontal capability layer, increasing pressure on retail-specific vendors to differentiate.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Retailer Implication</div>
-                            <div class="field-value">Retailers should demand concrete autonomy roadmaps and production references before renewing or expanding platform contracts.</div>
+                            <div class="field-value">Retailers heavily invested in Microsoft should evaluate agent extensions before procuring net-new point solutions.</div>
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Retail Practices Covered</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Demand &amp; Inventory Intelligence</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Merchandising</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Supply Chain &amp; Logistics</span>                        </div>
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Supply Chain &amp; Logistics</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">E-Commerce &amp; Digital Optimization</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Store Operations</span>                        </div>
                     </div>
 
                     <div class="tags" style="margin-top:12px;">
@@ -1523,75 +1715,75 @@
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Over‑hype versus delivered autonomy in existing vendor stacks.</div>
+                        <div><strong>Key Risk: </strong>Vendor lock-in within a single cloud and productivity ecosystem.</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://aifundingtracker.com/" target="_blank">AI Funding Tracker | AI Startup Investment Roundups 2026</a></div>                    </div>
+<div class="citation"><a href="https://news.microsoft.com/source/2026/01/08/microsoft-propels-retail-forward-with-agentic-ai-capabilities-that-power-intelligent-automation-for-every-retail-function/" target="_blank">Microsoft propels retail forward with agentic AI capabilities that ...</a></div>                    </div>
                 </div>
                 <div class="card card-ranked">
                     <div class="card-header">
                         <div class="rank-badge">#5</div>
                         <div>
-                            <div class="card-title">Retail AI Startup Ecosystem</div>
+                            <div class="card-title">Multiple Retail AI Startups</div>
                             <div class="card-subtitle">Funding Round</div>
                         </div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">What Happened</div>
-                        <div class="field-value">No major retail‑specific AI startup funding rounds were publicly announced in the last 14 days, indicating capital selectivity.</div>
+                        <div class="field-value">Seven retail technology funding rounds announced in early February focused on AI-driven pricing, automated customer engagement, and merchandising intelligence.</div>
                     </div>
 
                     <div class="field-full">
                         <div class="field-label">Agentic AI Capability</div>
-                        <div class="field-value">Not applicable, as funding activity is concentrated on horizontal AI infrastructure rather than retail agents.</div>
+                        <div class="field-value">Most funded platforms emphasize decision-owning agents rather than assistive chat or analytics-only tools.</div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">Competitive Signal</div>
-                            <div class="field-value">Limited funding signals fewer new entrants and greater power for vendors with proven production deployments.</div>
+                            <div class="field-value">Capital is concentrating on retail-specific, ROI-provable agentic AI rather than horizontal generative AI platforms.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Retailer Implication</div>
-                            <div class="field-value">Retailers should prioritize financially stable vendors with live deployments over early‑stage pilots.</div>
+                            <div class="field-value">Retail leaders should monitor emerging specialists as potential partners or acquisition targets ahead of platform consolidation.</div>
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Retail Practices Covered</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Corporate &amp; Finance</span>                        </div>
+<span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Pricing &amp; Promotion</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Merchandising</span><span class="kpi-chip" style="background:#f0fdf4;color:#166534;">Personalized Customer Experience</span>                        </div>
                     </div>
 
                     <div class="tags" style="margin-top:12px;">
-                        <span class="tag tag-blue">Market consolidation</span>
+                        <span class="tag tag-blue">Vertical specialisation</span>
                     </div>
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Reduced innovation diversity as fewer retail‑focused startups reach scale.</div>
+                        <div><strong>Key Risk: </strong>Over-hype and uneven maturity across early-stage vendors.</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://aifundingtracker.com/" target="_blank">AI Funding Tracker | AI Startup Investment Roundups 2026</a></div>                    </div>
+<div class="citation"><a href="https://retailtechinnovationhub.com/home/2026/2/4/including-profitmind-and-skene-seven-retail-technology-funding-rounds-you-need-to-know-about" target="_blank">Including Profitmind and Skene: seven retail technology funding rounds ...</a></div>                    </div>
                 </div>
                 <div class="trend-insight">
                     <div class="trend-insight-header">
                         <span>&#128202;</span> Market Intelligence Synthesis
                     </div>
-                    <div class="trend-insight-body">The retail AI vendor market is entering a phase of selective consolidation in outcomes, even as the vendor count itself remains fragmented. There is no visible wave of M&amp;A or platform roll‑ups yet, but power is concentrating around a smaller number of vendors that can prove production‑grade autonomy inside real retail operations. The past two weeks show a clear bifurcation: many vendors are still marketing vision, while a few are quietly embedding agents that actually execute work. Consolidation is therefore happening de facto, through retailer adoption and spend concentration, rather than formally through acquisitions.
+                    <div class="trend-insight-body">Over the last two weeks the retail AI vendor market has shown clear signs of selective consolidation rather than broad fragmentation. The number of vendors is still growing, but capital, enterprise attention, and deployment momentum are concentrating around a narrower set of agent-native platforms that can prove margin impact. Funding is no longer spraying across generic GenAI tooling; it is flowing into vertical retail AI companies that own decisions in pricing, inventory, procurement, and merchandising. This creates a barbell dynamic: a handful of scaled incumbents on one side, and a fast-thinning field of specialized AI-native players on the other, with little oxygen left in the middle.
 
-Established ERP and supply‑chain vendors are not losing relevance, but they are temporarily losing narrative and execution velocity to AI‑native players. SAP, Oracle Retail, Blue Yonder, Manhattan, and their peers have gone conspicuously quiet on net‑new agentic launches, focusing instead on thought leadership and positioning. Meanwhile, AI‑native platforms like Global AI and newer agentic overlays such as SiftedAI are winning lighthouse deployments by solving narrow but painful operational problems end to end. This does not mean incumbents are being displaced; rather, they are being bypassed at the execution layer. Retailers are layering agentic systems alongside core ERP and SCM, not waiting for those systems to evolve.
+Established ERP and SCM vendors are not losing relevance, but they are losing narrative leadership. SAP, Oracle Retail, Blue Yonder, and Manhattan remain deeply embedded and operationally critical, and they benefit from being the system of record into which agents must plug. However, in pricing, promotion optimization, replenishment, and margin intelligence, agent-native startups are increasingly setting buyer expectations. Retailers are no longer comparing forecast accuracy or model sophistication; they are asking which vendor’s AI can autonomously act, close loops, and escalate only exceptions. Incumbents are being pulled into this paradigm reactively, while startups like Profitmind and Global AI are defining it proactively. The balance of power is shifting at the decision layer, even if the data layer remains incumbent-owned.
 
-Agentic AI is clearly moving from buzzword to production, but in a very specific way. Retailers are not starting with customer‑facing agents or merchandising decision engines. They are deploying autonomous agents in internal, operationally bounded domains such as invoice processing, exception management, logistics intelligence, and internal service workflows. The announcements from Global AI and Wesfarmers demonstrate that true autonomy—agents that reason, act, and escalate only edge cases—is now acceptable in tier‑one retail environments, provided the scope is controlled and the ROI is measurable.
+Agentic AI has decisively moved from buzzword to production. The deployments at a tier-one global grocer and at Wesfarmers show that retailers are now comfortable letting AI agents continuously execute operational work across invoices, pricing, customer service, and cross-functional workflows. These are not pilots or copilots; they are always-on agents with bounded authority and human-in-the-loop governance. The fading interest in standalone retail chatbots underscores this shift from interaction to execution.
 
-The retail AI practice area attracting the most vendor investment right now is operations and supply‑chain execution rather than merchandising, pricing, or personalization. Logistics, finance operations, and fulfillment intelligence are proving to be the fastest path from pilot to production because they combine high data maturity with clear economic leakage.
+The retail AI practice area attracting the most vendor investment is pricing and margin optimization, closely followed by replenishment and procurement automation. These domains combine rich data, frequent decisions, and immediate P&amp;L visibility, making them ideal proving grounds for autonomous agents.
 
-The single most important strategic shift a CTO or CDO should act on is to stop treating AI as a feature of existing platforms and start architecting for agent orchestration. The winning retailers in 2026 will be those that design governance, integration, and monitoring layers that allow multiple autonomous agents—often from different vendors—to execute safely inside core operations, rather than waiting for any single platform vendor to deliver a fully formed agentic future.</div>
+The single most important strategic shift a CTO or CDO should act on now is to reorganize technology strategy around “decision ownership” rather than tools. Retailers that explicitly define which decisions AI agents are allowed to own, and architect guardrails and data flows accordingly, will move faster than those still layering copilots onto legacy workflows. The competitive advantage is no longer better insight; it is faster, safer autonomous execution.</div>
                 </div>
         </div>
     </div>
@@ -1609,19 +1801,19 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
                     <div class="card-header">
                         <div class="rank-badge">#1</div>
                         <div>
-                            <div class="card-title">Centric Software</div>
-                            <div class="card-subtitle">Allocation &amp; Distribution Planning</div>
+                            <div class="card-title">Multi-retailer deployments via autonomous replenishment platforms (as reported by Growth Acceleration Partners)</div>
+                            <div class="card-subtitle">Replenishment Planning</div>
                         </div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">What Changed</div>
-                            <div class="field-value">Centric Software announced enhancements to its Pricing &amp; Inventory platform, launching a single shared AI demand forecast used across pricing, allocation, replenishment, and markdown planning on Feb 14, 2026.</div>
+                            <div class="field-value">Retailers moved autonomous replenishment agents from decision support into live execution for store–SKU–day ordering with policy guardrails during this period.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Inventory Lever</div>
-                            <div class="field-value">Allocation efficiency — by synchronising allocation decisions with pricing and markdown risk, the platform reduces misallocation and excess stock in low-demand locations.</div>
+                            <div class="field-value">Inventory turn</div>
                         </div>
                     </div>
 
@@ -1633,48 +1825,48 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
                         </div>
                         <div class="autonomy-reasoning">
                             <strong>Autonomy Reasoning</strong>
-                            The platform executes allocation and replenishment recommendations using a unified forecast but is positioned for planner oversight and exception handling rather than full hands-off execution.
+                            Sources explicitly state that systems are executing replenishment decisions automatically while humans manage exceptions and guardrails rather than approving every order.
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">KPI Impact</div>
                         <div class="kpi-list">
-<span class="kpi-chip">Allocation efficiency</span><span class="kpi-chip">Markdown rate</span><span class="kpi-chip">Inventory turn</span>                        </div>
+<span class="kpi-chip">Inventory turn</span><span class="kpi-chip">Fill rate</span><span class="kpi-chip">In-stock rate</span><span class="kpi-chip">Weeks of supply</span>                        </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Data Signals</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span>                        </div>
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
                     </div>
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Over-allocation to one channel — a single forecast feeding multiple decisions can propagate bias if regional or channel-specific demand signals are misread.</div>
+                        <div><strong>Key Risk: </strong>Data latency / quality — near-real-time execution amplifies errors if store-level inventory or sales feeds are delayed or inaccurate.</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.centricsoftware.com/press-releases/centric-software-launches-enhanced-pricing-inventory-margins-excess-stock/" target="_blank">Centric Software Launches Enhanced Pricing &amp; Inventory Capabilities to ...</a></div>                    </div>
+<div class="citation"><a href="https://www.growthaccelerationpartners.com/blog/are-retailers-ready-for-autonomous-ai-agents-what-ecommerce-leaders-need-to-know-in-2026" target="_blank">Autonomous AI Agents for Retail? What to Know in 2026</a></div>                    </div>
                 </div>
                 <div class="card card-ranked">
                     <div class="card-header">
                         <div class="rank-badge">#2</div>
                         <div>
-                            <div class="card-title">SimplyDepo</div>
-                            <div class="card-subtitle">Demand Forecasting (Short-Term &amp; Long-Term)</div>
+                            <div class="card-title">Retailers using unified inventory platforms highlighted by TechVerx</div>
+                            <div class="card-subtitle">Omnichannel Inventory Visibility</div>
                         </div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">What Changed</div>
-                            <div class="field-value">SimplyDepo published a new 2026 AI inventory forecasting architecture on Feb 16, 2026, emphasizing continuous re-forecasting as new execution data arrives rather than batch planning cycles.</div>
+                            <div class="field-value">Retailers operationalised unified, real-time inventory layers as core infrastructure enabling AI-driven replenishment and fulfillment from a single stock view.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Inventory Lever</div>
-                            <div class="field-value">Forecast accuracy — near-real-time recalibration reduces short-term forecast error and improves downstream replenishment decisions.</div>
+                            <div class="field-value">Stockout reduction</div>
                         </div>
                     </div>
 
@@ -1686,14 +1878,67 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
                         </div>
                         <div class="autonomy-reasoning">
                             <strong>Autonomy Reasoning</strong>
-                            The architecture focuses on generating continuously updated forecasts and corrective signals, with no evidence that it directly triggers execution without human approval.
+                            The unified inventory layer enables downstream automation but itself functions as a shared visibility and reasoning foundation rather than executing decisions independently.
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">KPI Impact</div>
                         <div class="kpi-list">
-<span class="kpi-chip">Forecast accuracy %</span><span class="kpi-chip">Stockout rate</span><span class="kpi-chip">Weeks of supply</span>                        </div>
+<span class="kpi-chip">In-stock rate</span><span class="kpi-chip">Fill rate</span><span class="kpi-chip">Allocation efficiency</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Signals</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">IoT / RFID</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Web traffic / digital signals</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Data latency / quality — a unified view becomes a single point of failure if feeds across channels are not synchronised.</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.techverx.com/ai-powered-retail-inventory-optimization/" target="_blank">AI-Powered Retail Inventory Optimization That Actually Works</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#3</div>
+                        <div>
+                            <div class="card-title">Retailers deploying continuous reforecasting models via SimplyDepo-referenced platforms</div>
+                            <div class="card-subtitle">Demand Forecasting (Short-Term &amp; Long-Term)</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Continuous-reforecasting demand models entered production, recalculating forecasts dynamically as execution signals and lead-time changes occurred.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Inventory Lever</div>
+                            <div class="field-value">Forecast accuracy</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+&#9675;                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The models automatically update forecasts but are positioned as feeding planners and downstream systems rather than autonomously triggering all actions.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Forecast accuracy %</span><span class="kpi-chip">Weeks of supply</span><span class="kpi-chip">Stockout rate</span>                        </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
@@ -1704,7 +1949,7 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Forecast error amplification — frequent re-forecasting can overreact to short-term noise if demand signals are volatile or sparse.</div>
+                        <div><strong>Key Risk: </strong>Forecast error amplification — rapid reforecasting loops can overreact to short-term noise without proper damping.</div>
                     </div>
 
                     <div class="citations">
@@ -1713,21 +1958,21 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
                 </div>
                 <div class="card card-ranked">
                     <div class="card-header">
-                        <div class="rank-badge">#3</div>
+                        <div class="rank-badge">#4</div>
                         <div>
-                            <div class="card-title">CBC Inc.</div>
-                            <div class="card-subtitle">Replenishment Planning</div>
+                            <div class="card-title">Retailers implementing probabilistic safety stock via AI platforms cited by SimplyDepo and Growth Acceleration Partners</div>
+                            <div class="card-subtitle">Safety Stock Optimization</div>
                         </div>
                     </div>
 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">What Changed</div>
-                            <div class="field-value">CBC Inc. highlighted AI-driven replenishment engines that automatically translate forecasts into purchase orders or DC-to-store transfers, closing the loop from prediction to fulfillment.</div>
+                            <div class="field-value">Safety stock calculations shifted from static buffers to probabilistic, AI-driven outputs embedded directly into replenishment logic.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Inventory Lever</div>
-                            <div class="field-value">Fill rate — automated execution reduces planner latency and improves responsiveness to demand changes at SKU-location level.</div>
+                            <div class="field-value">Carrying cost</div>
                         </div>
                     </div>
 
@@ -1739,89 +1984,36 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
                         </div>
                         <div class="autonomy-reasoning">
                             <strong>Autonomy Reasoning</strong>
-                            The systems execute replenishment actions within predefined guardrails, with humans primarily managing exceptions rather than approving every order.
+                            Safety stock levels are recalculated automatically and enforced by replenishment agents, while humans retain oversight of service-level policies.
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">KPI Impact</div>
                         <div class="kpi-list">
-<span class="kpi-chip">Fill rate</span><span class="kpi-chip">In-stock rate</span><span class="kpi-chip">Inventory turn</span>                        </div>
+<span class="kpi-chip">Carrying cost reduction</span><span class="kpi-chip">Fill rate</span><span class="kpi-chip">Weeks of supply</span>                        </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Data Signals</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
                     </div>
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Supplier constraint blind spots — automated order triggering may not fully account for upstream capacity or allocation limits without robust supplier data integration.</div>
+                        <div><strong>Key Risk: </strong>Supplier constraint blind spots — probabilistic models can underestimate risk when upstream disruptions fall outside historical patterns.</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://cbcinc.ai/from-prediction-to-fulfillment-closing-the-loop-with-automated-ai-driven-replenishment/" target="_blank">AI-Driven Replenishment: Transforming Supply Chain Efficiency</a></div>                    </div>
-                </div>
-                <div class="card card-ranked">
-                    <div class="card-header">
-                        <div class="rank-badge">#4</div>
-                        <div>
-                            <div class="card-title">Mobio Solutions</div>
-                            <div class="card-subtitle">Safety Stock Optimization</div>
-                        </div>
-                    </div>
-
-                    <div class="field-grid">
-                        <div class="field">
-                            <div class="field-label">What Changed</div>
-                            <div class="field-value">Mobio Solutions outlined AI systems that dynamically recalculate safety stock buffers by SKU-location and channel using volatility and lead-time risk rather than static rules.</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Inventory Lever</div>
-                            <div class="field-value">Carrying cost — dynamic buffers lower excess inventory while maintaining service levels across channels.</div>
-                        </div>
-                    </div>
-
-                    <div class="autonomy-panel autonomy-assistive">
-                        <div>
-                            <span class="autonomy-badge badge-assistive">
-&#9675;                                Assistive
-                            </span>
-                        </div>
-                        <div class="autonomy-reasoning">
-                            <strong>Autonomy Reasoning</strong>
-                            The AI continuously tunes safety stock targets but is described as feeding planning decisions rather than autonomously executing inventory moves.
-                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">KPI Impact</div>
-                        <div class="kpi-list">
-<span class="kpi-chip">Carrying cost reduction</span><span class="kpi-chip">Stockout rate</span><span class="kpi-chip">Weeks of supply</span>                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">Data Signals</div>
-                        <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Supplier lead times</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
-                    </div>
-
-                    <div class="risk-box">
-                        <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Data latency / quality — inaccurate or delayed lead-time and volatility data can cause under-buffering and service degradation.</div>
-                    </div>
-
-                    <div class="citations">
-                        <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://mobiosolutions.com/ai-demand-forecasting-inventory-optimization-retail/" target="_blank">AI Demand Forecasting: Reduce Retail Inventory Costs &amp; Stockouts</a></div>                    </div>
+<div class="citation"><a href="https://simplydepo.com/industry/ai-inventory-forecasting/" target="_blank">AI Inventory Forecasting: Reshaping Demand Planning in 2026</a></div><div class="citation"><a href="https://www.growthaccelerationpartners.com/blog/are-retailers-ready-for-autonomous-ai-agents-what-ecommerce-leaders-need-to-know-in-2026" target="_blank">Autonomous AI Agents for Retail? What to Know in 2026</a></div>                    </div>
                 </div>
                 <div class="card card-ranked">
                     <div class="card-header">
                         <div class="rank-badge">#5</div>
                         <div>
-                            <div class="card-title">SupplyMint</div>
+                            <div class="card-title">Retailers deploying AI inventory health models via TechVerx</div>
                             <div class="card-subtitle">Inventory Health &amp; Aged Stock Management</div>
                         </div>
                     </div>
@@ -1829,11 +2021,11 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">What Changed</div>
-                            <div class="field-value">SupplyMint’s February 2026 analysis highlighted AI-driven early identification of slow-moving and aged inventory by root cause, with automated markdown and transfer recommendations.</div>
+                            <div class="field-value">AI models began triggering preventive actions (markdowns, channel shifts, placement changes) before inventory formally aged into slow-moving status.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Inventory Lever</div>
-                            <div class="field-value">Markdown/waste reduction — earlier detection enables corrective actions before inventory reaches deep-discount stages.</div>
+                            <div class="field-value">Markdown/waste reduction</div>
                         </div>
                     </div>
 
@@ -1845,44 +2037,44 @@ The single most important strategic shift a CTO or CDO should act on is to stop 
                         </div>
                         <div class="autonomy-reasoning">
                             <strong>Autonomy Reasoning</strong>
-                            The capability focuses on classification and recommendation of actions, with no indication of fully automated markdown or transfer execution.
+                            Systems automatically identify and time interventions, but pricing and channel decisions are still typically approved by merchandising teams.
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">KPI Impact</div>
                         <div class="kpi-list">
-<span class="kpi-chip">Aged stock %</span><span class="kpi-chip">Markdown rate</span><span class="kpi-chip">Inventory turn</span>                        </div>
+<span class="kpi-chip">Markdown rate</span><span class="kpi-chip">Aged stock %</span><span class="kpi-chip">Inventory turn</span>                        </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Data Signals</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span>                        </div>
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">POS / Transaction</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Historical seasonality</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Web traffic / digital signals</span>                        </div>
                     </div>
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Seasonal pattern misalignment — misclassification of slow movers during normal seasonal troughs can trigger premature markdowns.</div>
+                        <div><strong>Key Risk: </strong>Over-allocation to one channel — premature re-routing or markdown signals can cannibalise full-price demand if mis-timed.</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.supplymint.com/blogs/supplychain/ai-retail-supply-chain-management-2026/" target="_blank">How AI Is Revolutionizing Retail Supply Chains in 2026</a></div>                    </div>
+<div class="citation"><a href="https://www.techverx.com/ai-powered-retail-inventory-optimization/" target="_blank">AI-Powered Retail Inventory Optimization That Actually Works</a></div>                    </div>
                 </div>
                 <div class="trend-insight">
                     <div class="trend-insight-header">
                         <span>&#128202;</span> Trend Insight
                     </div>
-                    <div class="trend-insight-body">Across the last two weeks, AI demand and inventory intelligence is clearly moving beyond traditional statistical forecasting toward machine-learning–driven, continuously updating systems, but the transition is evolutionary rather than abrupt. Vendors such as SimplyDepo emphasize re-forecasting loops that ingest execution data in near real time, signaling wider deployment of ML models that learn dynamically instead of relying on fixed seasonal curves. However, these models are still often positioned as decision-support layers rather than fully autonomous agents.
+                    <div class="trend-insight-body">AI demand forecasting in retail is no longer defined by a simple shift from statistical models to ML or deep learning; instead, the dominant change is operational. Retailers are already using ML-based forecasts, but this week’s developments show that value is coming from continuous reforecasting, faster refresh cycles, and tighter coupling between forecasts and execution systems. The intelligence layer is becoming dynamic and always-on, rather than batch-oriented, which matters more economically than marginal model accuracy gains.
 
-Retailers and platforms are steadily centralizing inventory visibility across channels. The concept of “unified stock” has shifted from a reporting view to an operational decision engine, where a single demand signal informs allocation, replenishment, pricing, and markdowns. Centric Software’s unified forecast across multiple planning domains is the clearest structural signal that silos between merchandising, supply chain, and pricing are breaking down, even if execution remains partially governed by planners.
+Inventory visibility is clearly centralising across channels. Multiple sources emphasise unified, real-time inventory layers as foundational infrastructure rather than optional omnichannel features. This indicates a decisive move away from siloed store, DC, and e-commerce stock pools toward a single semantic inventory model that both humans and AI agents can reason over. Retailers increasingly recognise that without this unification, autonomous replenishment and allocation simply cannot scale.
 
-Replenishment is becoming more automated but remains largely rule-constrained. AI-driven engines increasingly translate forecasts directly into orders or transfers, yet most implementations operate within predefined guardrails, with humans managing exceptions. Fully autonomous replenishment without human approval is still rare and not explicitly evidenced in this period’s announcements.
+Replenishment is becoming autonomous, but not unconstrained. The prevailing model is semi-autonomous execution: systems place orders or trigger transfers within defined service-level, budget, and policy guardrails, while planners handle exceptions. Fully autonomous, end-to-end replenishment without human oversight remains rare and largely absent from the evidence this week.
 
-Among the eight sub-practices, the most visible investment and deployment activity is concentrated in Demand Forecasting and Allocation &amp; Distribution Planning, particularly where a single AI forecast is reused across multiple downstream decisions. This reuse amplifies economic impact by simultaneously improving fill rates, reducing markdowns, and increasing inventory turns.
+Among the eight sub-practices, Replenishment Planning and Demand Forecasting (short-term, execution-focused) show the most deployment momentum, closely followed by Omnichannel Inventory Visibility as the enabling layer. Safety Stock Optimization is also evolving rapidly, but as an embedded capability rather than a standalone function.
 
-The single most important structural shift this week is the emergence of AI as an operating layer rather than an insight layer: forecasts are no longer isolated outputs but shared, continuously refreshed inputs that directly drive replenishment, allocation, and inventory health actions across the retail value chain.</div>
+The single most important structural shift this week is the convergence of planning and execution. Forecasting, safety stock, replenishment, and allocation are no longer sequential steps owned by different tools; they are being fused into continuous, agent-driven loops operating at SKU–store granularity. This marks a fundamental change in how retailers manage demand volatility and inventory risk in 2026.</div>
                 </div>
         </div>
     </div>
@@ -1900,7 +2092,7 @@ The single most important structural shift this week is the emergence of AI as a
                     <div class="card-header">
                         <div class="rank-badge">#1</div>
                         <div>
-                            <div class="card-title">Tier-1 multi-banner retailers via unnamed AI workforce scheduling vendors</div>
+                            <div class="card-title">Multi‑state U.S. retailers via TimeForge</div>
                             <div class="card-subtitle">Workforce Scheduling</div>
                         </div>
                     </div>
@@ -1908,223 +2100,11 @@ The single most important structural shift this week is the emergence of AI as a
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">What Changed</div>
-                            <div class="field-value">Vendors released updated AI workforce scheduling capabilities incorporating real-time POS, footfall, and weather signals with closed-loop feedback into task execution, positioned as baseline 2026 functionality.</div>
+                            <div class="field-value">TimeForge published a 2026 update highlighting active retailer rollouts of compliance‑aware AI scheduling with real‑time labor‑law violation alerts and explainable manager overrides.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Operations Lever</div>
-                            <div class="field-value">Labour cost — real-time demand sensing and execution feedback directly reduce overstaffing while improving manager productivity.</div>
-                        </div>
-                    </div>
-
-                    <div class="autonomy-panel autonomy-semi">
-                        <div>
-                            <span class="autonomy-badge badge-semi">
-&#9681;                                Semi-Autonomous
-                            </span>
-                        </div>
-                        <div class="autonomy-reasoning">
-                            <strong>Autonomy Reasoning</strong>
-                            The system dynamically generates and adjusts schedules and task priorities, but store managers still approve exceptions and overrides.
-                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">KPI Impact</div>
-                        <div class="kpi-list">
-<span class="kpi-chip">Labour productivity</span><span class="kpi-chip">Task completion rate</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">Enabling Technology</div>
-                        <div class="kpi-list">
-<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">ML scheduling</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Mobile task apps</span>                        </div>
-                    </div>
-
-                    <div class="risk-box">
-                        <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Worker displacement / labour relations — algorithmic scheduling changes hours and task allocation, increasing risk of pushback from unions and frontline staff.</div>
-                    </div>
-
-                    <div class="citations">
-                        <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://integratedretail.com/ai-driven-workforce-scheduling-retail-labor-optimization/" target="_blank">AI-Driven Workforce Scheduling: Optimizing Labor Costs in Modern Retail</a></div>                    </div>
-                </div>
-                <div class="card card-ranked">
-                    <div class="card-header">
-                        <div class="rank-badge">#2</div>
-                        <div>
-                            <div class="card-title">NVIDIA and retail loss-prevention ecosystem partners</div>
-                            <div class="card-subtitle">Shrink &amp; Loss Prevention</div>
-                        </div>
-                    </div>
-
-                    <div class="field-grid">
-                        <div class="field">
-                            <div class="field-label">What Changed</div>
-                            <div class="field-value">NVIDIA refreshed its retail loss-prevention AI workflows with few-shot SKU learning and edge deployment to enable faster rollout and lower privacy exposure.</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Operations Lever</div>
-                            <div class="field-value">Shrink/theft reduction — improved detection and intervention timing targets a material portion of the $100B+ annual shrink problem.</div>
-                        </div>
-                    </div>
-
-                    <div class="autonomy-panel autonomy-semi">
-                        <div>
-                            <span class="autonomy-badge badge-semi">
-&#9681;                                Semi-Autonomous
-                            </span>
-                        </div>
-                        <div class="autonomy-reasoning">
-                            <strong>Autonomy Reasoning</strong>
-                            The system detects suspicious behavior and triggers context-aware alerts, but human staff still intervene and make final decisions.
-                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">KPI Impact</div>
-                        <div class="kpi-list">
-<span class="kpi-chip">Shrink %</span><span class="kpi-chip">Compliance score</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">Enabling Technology</div>
-                        <div class="kpi-list">
-<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Edge AI</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
-                    </div>
-
-                    <div class="risk-box">
-                        <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>False positive detections — inaccurate alerts can disrupt legitimate shoppers and create operational friction.</div>
-                    </div>
-
-                    <div class="citations">
-                        <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.nvidia.com/en-us/ai-data-science/ai-workflows/retail-loss-prevention/" target="_blank">Retail Loss Prevention AI Workflow | NVIDIA</a></div><div class="citation"><a href="https://www.centific.com/blog/crack-down-on-retail-inventory-shrinkage-with-computer-vision" target="_blank">Crack down on retail inventory shrinkage with computer vision | Centific</a></div>                    </div>
-                </div>
-                <div class="card card-ranked">
-                    <div class="card-header">
-                        <div class="rank-badge">#3</div>
-                        <div>
-                            <div class="card-title">Specialty and grocery retailers via shelf-monitoring vendors (e.g., Scanwatch)</div>
-                            <div class="card-subtitle">Shelf Availability &amp; Compliance</div>
-                        </div>
-                    </div>
-
-                    <div class="field-grid">
-                        <div class="field">
-                            <div class="field-label">What Changed</div>
-                            <div class="field-value">Vendors highlighted real-time shelf gap detection that automatically creates store tasks within minutes rather than hours, with pilots reporting 30–50% stockout reduction.</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Operations Lever</div>
-                            <div class="field-value">Stockout revenue loss — faster detection and task creation directly protects on-shelf availability and sales.</div>
-                        </div>
-                    </div>
-
-                    <div class="autonomy-panel autonomy-semi">
-                        <div>
-                            <span class="autonomy-badge badge-semi">
-&#9681;                                Semi-Autonomous
-                            </span>
-                        </div>
-                        <div class="autonomy-reasoning">
-                            <strong>Autonomy Reasoning</strong>
-                            The system detects gaps and auto-generates tasks, but associates execute replenishment and confirm completion.
-                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">KPI Impact</div>
-                        <div class="kpi-list">
-<span class="kpi-chip">In-stock rate</span><span class="kpi-chip">Task completion rate</span><span class="kpi-chip">Conversion rate</span>                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">Enabling Technology</div>
-                        <div class="kpi-list">
-<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Mobile task apps</span>                        </div>
-                    </div>
-
-                    <div class="risk-box">
-                        <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Integration complexity — tight coupling with inventory, planogram, and task systems raises implementation risk at scale.</div>
-                    </div>
-
-                    <div class="citations">
-                        <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://scanwatch.tech/ai-powered-shelf-monitoring-retail/" target="_blank">AI-Powered Shelf Monitoring: Reducing Stockouts and Theft in Retail</a></div>                    </div>
-                </div>
-                <div class="card card-ranked">
-                    <div class="card-header">
-                        <div class="rank-badge">#4</div>
-                        <div>
-                            <div class="card-title">Mid-to-large format retailers via AI queue-management platforms</div>
-                            <div class="card-subtitle">Footfall &amp; Queue Management</div>
-                        </div>
-                    </div>
-
-                    <div class="field-grid">
-                        <div class="field">
-                            <div class="field-label">What Changed</div>
-                            <div class="field-value">Queue-management vendors published updated benchmarks tying queue-length thresholds directly to dynamic labor redeployment instead of passive alerts.</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Operations Lever</div>
-                            <div class="field-value">Queue/conversion — redeploying staff in real time reduces abandonment and improves checkout throughput.</div>
-                        </div>
-                    </div>
-
-                    <div class="autonomy-panel autonomy-semi">
-                        <div>
-                            <span class="autonomy-badge badge-semi">
-&#9681;                                Semi-Autonomous
-                            </span>
-                        </div>
-                        <div class="autonomy-reasoning">
-                            <strong>Autonomy Reasoning</strong>
-                            Systems recommend and trigger labor redeployment actions within guardrails, while managers retain control over staffing decisions.
-                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">KPI Impact</div>
-                        <div class="kpi-list">
-<span class="kpi-chip">Queue wait time</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">Enabling Technology</div>
-                        <div class="kpi-list">
-<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Edge AI</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
-                    </div>
-
-                    <div class="risk-box">
-                        <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>Privacy / facial recognition regulation — video analytics in customer areas face increasing state-level scrutiny despite privacy-preserving claims.</div>
-                    </div>
-
-                    <div class="citations">
-                        <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://scanwatch.tech/ai-powered-queue-management/" target="_blank">AI-Powered Queue Management: Eliminating Long Wait Times in Retail</a></div>                    </div>
-                </div>
-                <div class="card card-ranked">
-                    <div class="card-header">
-                        <div class="rank-badge">#5</div>
-                        <div>
-                            <div class="card-title">Enterprise retailers via IBM omnichannel orchestration platforms</div>
-                            <div class="card-subtitle">Omnichannel Order Fulfillment (BOPIS, curbside)</div>
-                        </div>
-                    </div>
-
-                    <div class="field-grid">
-                        <div class="field">
-                            <div class="field-label">What Changed</div>
-                            <div class="field-value">IBM and peers emphasized AI-driven order orchestration deciding store selection, pick timing, and labor assignment, reframing BOPIS as a labor optimization tool.</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Operations Lever</div>
-                            <div class="field-value">Fulfillment speed — smarter orchestration reduces pick delays and labor inefficiency while protecting omnichannel SLAs.</div>
+                            <div class="field-value">Compliance cost</div>
                         </div>
                     </div>
 
@@ -2136,7 +2116,166 @@ The single most important structural shift this week is the emergence of AI as a
                         </div>
                         <div class="autonomy-reasoning">
                             <strong>Autonomy Reasoning</strong>
-                            The AI recommends optimal fulfillment decisions, but store teams and managers execute picks and handle exceptions.
+                            The system generates predictive schedules and flags violations, but store managers retain approval authority and can override shifts with AI‑provided explanations.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Labour productivity</span><span class="kpi-chip">Compliance score</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">ML scheduling</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Worker displacement / labour relations</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://timeforge.com/industry-news/the-future-of-retail-workforce-management-optimizing-staff-scheduling/" target="_blank">The Future Of Retail Workforce Scheduling Optimization</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#2</div>
+                        <div>
+                            <div class="card-title">Tier‑1 grocery and big‑box retailers via IoTTive</div>
+                            <div class="card-subtitle">Shelf Availability &amp; Compliance</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">IoTTive reported live 2026 deployments of computer‑vision shelf mismatch detection that identifies SKUs marked in‑stock in systems but missing on shelves and triggers corrective action.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Stockout revenue loss</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The system autonomously detects mismatches and prioritizes issues by revenue at risk, but relies on staff to execute physical restocking.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">In-stock rate</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Edge AI</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>False positive detections</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://iottive.com/2026/02/18/smart-retail-shelf-inventory-mismatch-detection-to-prevent-lost-sales/" target="_blank">Smart Retail shelf inventory mismatch detection to prevent lost sales</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#3</div>
+                        <div>
+                            <div class="card-title">Large U.S. retailers via multiple CV vendors (industry-wide, per VDC Research)</div>
+                            <div class="card-subtitle">Shrink &amp; Loss Prevention</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">VDC Research documented a 2026 shift in active retailer pilots and rollouts from theft‑only detection to real‑time loss detection combining computer vision with inventory mismatch analysis.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Shrink/theft reduction</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            Systems continuously monitor loss conditions and surface incidents in real time, while humans investigate and intervene rather than the AI acting directly.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Shrink %</span><span class="kpi-chip">In-stock rate</span>                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer Vision</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">RFID/EAS</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Edge AI</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Privacy / facial recognition regulation</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.vdcresearch.com/Coverage/AIDC/reports/25-Retail-Loss-Prevention.html" target="_blank">From Loss Prevention to Loss Detection: How Computer Vision, RFID and ...</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#4</div>
+                        <div>
+                            <div class="card-title">Omnichannel retailers via MetroSCG advisory (multiple platforms)</div>
+                            <div class="card-subtitle">Omnichannel Order Fulfillment (BOPIS, curbside)</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">MetroSCG reported that retailers are moving from basic BOPIS enablement to AI‑driven orchestration that dynamically decides store vs micro‑fulfillment picking locations in 2026 deployments.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Fulfillment speed</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+&#9681;                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            AI systems automatically route orders based on labor and inventory signals, with human oversight for substitutions and exceptions.
                         </div>
                     </div>
 
@@ -2149,31 +2288,70 @@ The single most important structural shift this week is the emergence of AI as a
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Enabling Technology</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">ML scheduling</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Mobile task apps</span>                        </div>
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">ML scheduling</span>                        </div>
                     </div>
 
                     <div class="risk-box">
                         <span class="risk-icon">&#9888;</span>
-                        <div><strong>Key Risk: </strong>System downtime impact — orchestration failures can cascade into missed pickups and store-level disruption.</div>
+                        <div><strong>Key Risk: </strong>Integration complexity</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.ibm.com/think/topics/bopis-retail" target="_blank">What is BOPIS (Buy Online, Pickup in Store) in Retail? | IBM</a></div>                    </div>
+<div class="citation"><a href="https://www.metroscg.com/insights/beyond-bopis-whats-next-for-omnichannel-fulfillment" target="_blank">Beyond BOPIS: What’s next for omnichannel fulfillment</a></div>                    </div>
                 </div>
-                <div class="trend-insight">
-                    <div class="trend-insight-header">
-                        <span>&#128202;</span> Trend Insight
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#5</div>
+                        <div>
+                            <div class="card-title">Multi‑banner retailers via integrated workforce platforms (referenced by TimeForge)</div>
+                            <div class="card-subtitle">Footfall &amp; Queue Management</div>
+                        </div>
                     </div>
-                    <div class="trend-insight-body">Store operations AI in early 2026 is clearly moving along the spectrum from assisted analytics toward semi-autonomous execution, but not yet to full autonomy. Across labor scheduling, queue management, shelf monitoring, and loss prevention, systems are no longer just generating insights; they are increasingly triggering tasks, reallocating labor, and timing interventions in real time, with humans primarily managing exceptions rather than day-to-day decisions. However, full end-to-end autonomy remains constrained by labor governance, customer experience risk, and regulatory exposure, especially in video-based systems.
 
-Among the sub-practices, labor optimization is receiving the broadest and most economically material investment. Workforce scheduling is being repositioned as a foundational execution layer that connects demand sensing, task management, and fulfillment, reflecting retailers’ need to extract margin through labor efficiency rather than growth. Loss prevention is the second major investment focus, driven by the scale of shrink and the maturation of edge-based computer vision that reduces privacy and infrastructure barriers.
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">TimeForge noted that footfall and queue analytics are now being operationally embedded as automated staffing signals rather than standalone reporting tools.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Operations Lever</div>
+                            <div class="field-value">Queue/conversion</div>
+                        </div>
+                    </div>
 
-Physical AI systems such as robots remain largely stalled at the pilot or reassessment stage, while computer vision has crossed into mainstream deployment. The difference is ROI clarity: CV-based systems now directly tie detection to action (tasks, alerts, labor moves), whereas robots still struggle with flexibility and cost justification. As a result, software-first automation is winning budget share.
+                    <div class="autonomy-panel autonomy-assistive">
+                        <div>
+                            <span class="autonomy-badge badge-assistive">
+&#9675;                                Assistive
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            The AI recommends lane openings or staffing changes based on queue conditions, but managers decide whether to act.
+                        </div>
+                    </div>
 
-Omnichannel fulfillment pressure is reshaping store priorities by reframing stores as dynamic micro-fulfillment nodes. BOPIS and curbside are no longer treated as incremental services but as core labor orchestration problems that compete with checkout, replenishment, and service tasks for scarce staff time.
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">KPI Impact</div>
+                        <div class="kpi-list">
+<span class="kpi-chip">Queue wait time</span><span class="kpi-chip">Conversion rate</span><span class="kpi-chip">Customer satisfaction</span>                        </div>
+                    </div>
 
-The single most important structural shift this week is the convergence of vision, labor, and task orchestration into a unified execution layer. Retailers are no longer buying isolated point solutions; they are investing in systems that sense, decide, and act across the store in near real time, with humans supervising rather than directing every step.</div>
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Enabling Technology</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">IoT sensors</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-time analytics</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">&#9888;</span>
+                        <div><strong>Key Risk: </strong>Model drift</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://timeforge.com/industry-news/the-future-of-retail-workforce-management-optimizing-staff-scheduling/" target="_blank">The Future Of Retail Workforce Scheduling Optimization</a></div>                    </div>
                 </div>
         </div>
     </div>
@@ -2199,54 +2377,7 @@ The single most important structural shift this week is the convergence of visio
                     <div class="card-header">
                         <div class="rank-badge">#1</div>
                         <div>
-                            <div class="card-title">Multi‑retailer landscape (industry-wide) via internal personalization stacks</div>
-                            <div class="card-subtitle">Recommendation (product/content)</div>
-                        </div>
-                    </div>
-
-                    <div class="field-grid">
-                        <div class="field">
-                            <div class="field-label">What Changed</div>
-                            <div class="field-value">Industry analysis published this week explicitly reframed retail personalization success metrics from long‑cycle uplift to measurable in‑the‑moment impact, increasing executive pressure to operationalize real‑time decisioning rather than roadmap pilots.</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Economic Relevance</div>
-                            <div class="field-value">Conversion rate — the shift toward real‑time relevance directly targets immediate purchase likelihood rather than downstream brand or engagement metrics.</div>
-                        </div>
-                    </div>
-
-                    <div class="autonomy-panel autonomy-semi">
-                        <div>
-                            <span class="autonomy-badge badge-semi">
-◑                                Semi-Autonomous
-                            </span>
-                        </div>
-                        <div class="autonomy-reasoning">
-                            <strong>Autonomy Reasoning</strong>
-                            Sources describe real‑time systems acting within predefined guardrails with humans retaining control over strategy and exceptions, not fully hands‑off execution.
-                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">Data Required</div>
-                        <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span>                        </div>
-                    </div>
-
-                    <div class="risk-box">
-                        <span class="risk-icon">⚠</span>
-                        <div><strong>Key Risk: </strong>Model drift — real‑time models trained on fast‑changing behavioral signals risk rapid degradation without strong monitoring.</div>
-                    </div>
-
-                    <div class="citations">
-                        <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.msn.com/en-us/news/technology/ai-is-putting-retail-personalization-to-the-test/ar-AA1WeFq2" target="_blank">AI is putting retail personalization to the test</a></div>                    </div>
-                </div>
-                <div class="card card-ranked">
-                    <div class="card-header">
-                        <div class="rank-badge">#2</div>
-                        <div>
-                            <div class="card-title">Retailers broadly via consulting-led AI decision engines (e.g., Bain client base)</div>
+                            <div class="card-title">Wakefern Food Corp. via Eagle Eye</div>
                             <div class="card-subtitle">Offer / Next-Best-Offer selection</div>
                         </div>
                     </div>
@@ -2254,11 +2385,11 @@ The single most important structural shift this week is the convergence of visio
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">What Changed</div>
-                            <div class="field-value">Strategic guidance released this period emphasized next‑best‑action architectures that unify marketing, merchandising, and pricing signals into a single decision layer rather than channel‑specific optimization.</div>
+                            <div class="field-value">Wakefern selected Eagle Eye to deploy real-time AI-driven loyalty personalization and next-best-offer decisioning across all major grocery banners.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Economic Relevance</div>
-                            <div class="field-value">Basket size — coordinated next‑best‑offer logic increases cross‑sell and upsell effectiveness across touchpoints.</div>
+                            <div class="field-value">Promo efficiency and CLV are directly targeted by optimizing individualized offers in-transaction for one of the largest US grocery cooperatives, materially impacting promotional ROI at scale.</div>
                         </div>
                     </div>
 
@@ -2270,77 +2401,30 @@ The single most important structural shift this week is the convergence of visio
                         </div>
                         <div class="autonomy-reasoning">
                             <strong>Autonomy Reasoning</strong>
-                            The described architectures optimize and execute offers algorithmically but assume human-defined objectives, constraints, and oversight.
+                            The system executes real-time offer decisions automatically at POS and digital touchpoints but operates within retailer-defined promotional, margin, and loyalty constraints.
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Data Required</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Inventory-aware</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span>                        </div>
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Loyalty</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span>                        </div>
                     </div>
 
                     <div class="risk-box">
                         <span class="risk-icon">⚠</span>
-                        <div><strong>Key Risk: </strong>Margin erosion — without explicit margin constraints, next‑best‑offer systems can over‑prioritize conversion over profitability.</div>
+                        <div><strong>Key Risk: </strong>Over-discounting</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.bain.com/insights/retail-personalization-ai-marketing-magic/" target="_blank">Personalization: AI for Retail Marketing Magic | Bain &amp; Company</a></div>                    </div>
+<div class="citation"><a href="https://theshelbyreport.com/2026/02/18/wakefern-food-corp-selects-eagle-eye-to-power-loyalty-personalization/" target="_blank">Wakefern Food Corp. Selects Eagle Eye To Power Loyalty, Personalization</a></div>                    </div>
                 </div>
                 <div class="card card-ranked">
                     <div class="card-header">
-                        <div class="rank-badge">#3</div>
+                        <div class="rank-badge">#2</div>
                         <div>
-                            <div class="card-title">Retailers optimizing existing loyalty platforms (vendor-agnostic)</div>
-                            <div class="card-subtitle">Loyalty / CLV optimization</div>
-                        </div>
-                    </div>
-
-                    <div class="field-grid">
-                        <div class="field">
-                            <div class="field-label">What Changed</div>
-                            <div class="field-value">Analysis this week positioned AI‑driven loyalty optimization as the primary ROI lever for personalization, signaling a shift from acquisition use cases toward retention‑centric AI tuning.</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Economic Relevance</div>
-                            <div class="field-value">CLV — focusing AI on retention and repeat behavior maximizes lifetime value rather than one‑off conversion gains.</div>
-                        </div>
-                    </div>
-
-                    <div class="autonomy-panel autonomy-assistive">
-                        <div>
-                            <span class="autonomy-badge badge-assistive">
-○                                Assistive
-                            </span>
-                        </div>
-                        <div class="autonomy-reasoning">
-                            <strong>Autonomy Reasoning</strong>
-                            Sources discuss AI informing loyalty decisions and personalization strategies, with humans still approving program structures and incentives.
-                        </div>
-                    </div>
-
-                    <div style="margin:14px 0 0;">
-                        <div class="field-label">Data Required</div>
-                        <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Loyalty</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span>                        </div>
-                    </div>
-
-                    <div class="risk-box">
-                        <span class="risk-icon">⚠</span>
-                        <div><strong>Key Risk: </strong>Customer trust degradation — overly aggressive or opaque loyalty personalization can feel manipulative and erode brand trust.</div>
-                    </div>
-
-                    <div class="citations">
-                        <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://www.turing.com/blog/ai-powered-personalization-driving-customer-loyalty-and-retail-growth" target="_blank">AI-Powered Personalization: Driving Customer Loyalty and Retail Growth ...</a></div>                    </div>
-                </div>
-                <div class="card card-ranked">
-                    <div class="card-header">
-                        <div class="rank-badge">#4</div>
-                        <div>
-                            <div class="card-title">Retailers and enterprise AI vendors (agentic AI positioning)</div>
+                            <div class="card-title">Enterprise retailers via agentic AI vendors</div>
                             <div class="card-subtitle">Autonomous campaign orchestration</div>
                         </div>
                     </div>
@@ -2348,54 +2432,148 @@ The single most important structural shift this week is the convergence of visio
                     <div class="field-grid">
                         <div class="field">
                             <div class="field-label">What Changed</div>
-                            <div class="field-value">Vendor strategy content released this week elevated agentic and conversational AI from experimental tools to a stated 2026 operating model for retail decision automation.</div>
+                            <div class="field-value">Retailers began deploying agentic AI systems that autonomously select offers, trigger campaigns, and coordinate actions across chat, search, and promotions based on live customer behavior.</div>
                         </div>
                         <div class="field">
                             <div class="field-label">Economic Relevance</div>
-                            <div class="field-value">Promo efficiency — agentic systems promise faster test‑and‑learn loops and reduced waste in campaign spend.</div>
+                            <div class="field-value">Conversion rate and basket size are impacted by removing latency and human intervention from campaign decisions during live customer interactions.</div>
                         </div>
                     </div>
 
-                    <div class="autonomy-panel autonomy-assistive">
+                    <div class="autonomy-panel autonomy-full">
                         <div>
-                            <span class="autonomy-badge badge-assistive">
-○                                Assistive
+                            <span class="autonomy-badge badge-full">
+⬤                                Fully Autonomous
                             </span>
                         </div>
                         <div class="autonomy-reasoning">
                             <strong>Autonomy Reasoning</strong>
-                            Despite agentic framing, no evidence of fully autonomous production deployments is cited; systems are discussed as decision support and orchestration aids.
+                            The disclosed systems initiate, select, and execute campaigns without human approval, responding directly to real-time behavioral signals.
                         </div>
                     </div>
 
                     <div style="margin:14px 0 0;">
                         <div class="field-label">Data Required</div>
                         <div class="kpi-list">
-<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span>                        </div>
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span>                        </div>
                     </div>
 
                     <div class="risk-box">
                         <span class="risk-icon">⚠</span>
-                        <div><strong>Key Risk: </strong>Vendor lock-in — agentic AI stacks often bundle decisioning, data, and execution, increasing switching costs.</div>
+                        <div><strong>Key Risk: </strong>Customer trust degradation</div>
                     </div>
 
                     <div class="citations">
                         <div class="citations-title">Sources</div>
-<div class="citation"><a href="https://acuvate.com/blog/artificial-intelligence-in-retail-strategies/" target="_blank">Artificial Intelligence in Retail: 2026 Strategies &amp; Solutions</a></div>                    </div>
+<div class="citation"><a href="https://www.forbes.com/councils/forbestechcouncil/2026/02/11/how-agentic-ai-is-reshaping-retail-manufacturing-and-hospitality/" target="_blank">How Agentic AI Is Reshaping Retail, Manufacturing And Hospitality</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#3</div>
+                        <div>
+                            <div class="card-title">Large enterprise retailers (various) via internal AI stacks</div>
+                            <div class="card-subtitle">Autonomous campaign orchestration</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">Retailers are testing self-optimizing personalization campaigns that dynamically adjust experiences in real time based on inventory, margin constraints, and predicted customer value rather than static A/B rules.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Economic Relevance</div>
+                            <div class="field-value">Gross margin protection becomes a primary lever by embedding inventory and margin awareness directly into real-time personalization decisions.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+◑                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            Systems automatically optimize campaigns in real time but are still being tested and constrained by enterprise guardrails rather than fully unconstrained execution.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Required</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Inventory-aware</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Loyalty</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Contextual</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">⚠</span>
+                        <div><strong>Key Risk: </strong>Model drift</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.bcg.com/publications/2026/how-ai-is-reshaping-the-retail-business-model" target="_blank">Retail Rewired: How AI Is Reshaping the Retail Business Model</a></div>                    </div>
+                </div>
+                <div class="card card-ranked">
+                    <div class="card-header">
+                        <div class="rank-badge">#4</div>
+                        <div>
+                            <div class="card-title">Retailers via CDP platforms (various vendors)</div>
+                            <div class="card-subtitle">Loyalty / CLV optimization</div>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <div class="field-label">What Changed</div>
+                            <div class="field-value">CDPs began embedding real-time AI decisioning capabilities, shifting from passive data repositories to active engines that trigger personalization and campaigns within milliseconds.</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Economic Relevance</div>
+                            <div class="field-value">Retention and CLV are enhanced by enabling immediate activation of first-party data without downstream execution delays.</div>
+                        </div>
+                    </div>
+
+                    <div class="autonomy-panel autonomy-semi">
+                        <div>
+                            <span class="autonomy-badge badge-semi">
+◑                                Semi-Autonomous
+                            </span>
+                        </div>
+                        <div class="autonomy-reasoning">
+                            <strong>Autonomy Reasoning</strong>
+                            Decisioning is automated at the data layer, but retailers still define policies and objectives governing how CDP-driven actions are used.
+                        </div>
+                    </div>
+
+                    <div style="margin:14px 0 0;">
+                        <div class="field-label">Data Required</div>
+                        <div class="kpi-list">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">First-party identity</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Loyalty</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Transactional</span><span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">Behavioral</span>                        </div>
+                    </div>
+
+                    <div class="risk-box">
+                        <span class="risk-icon">⚠</span>
+                        <div><strong>Key Risk: </strong>Vendor lock-in</div>
+                    </div>
+
+                    <div class="citations">
+                        <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.turing.com/blog/ai-powered-personalization-driving-customer-loyalty-and-retail-growth" target="_blank">AI-Powered Personalization: Driving Customer Loyalty and Retail Growth ...</a></div>                    </div>
                 </div>
                 <div class="trend-insight">
                     <div class="trend-insight-header">
                         <span>&#128202;</span> Trend Insight
                     </div>
-                    <div class="trend-insight-body">Across this two‑week window, retail personalization is not marked by launch velocity but by a clear structural pivot in how value is defined and pursued. Personalization is steadily shifting toward real‑time decisioning, but it remains largely semi‑autonomous rather than fully autonomous. Systems are increasingly expected to act in the moment, yet almost all evidence points to continued human ownership of objectives, guardrails, and exception handling. Rule‑based logic is not disappearing, but it is being subsumed into faster, learning‑driven architectures.
+                    <div class="trend-insight-body">Retail personalization is decisively shifting toward real-time autonomy rather than remaining rule-based, with multiple signals this week showing execution logic moving closer to the moment of customer interaction. While not all systems are fully autonomous, the center of gravity has moved from human-approved rules and A/B testing toward AI systems that act continuously within economic and operational constraints. This represents a structural acceleration rather than incremental optimization.
 
-There is also a decisive move from segment‑level optimization toward individual‑level decisioning. Industry analysis consistently frames personalization as one‑to‑one, context‑aware, and continuous, even if most retailers are still retrofitting legacy stacks to reach that ideal. This transition is uneven, constrained less by algorithms than by data integration and operating models.
+Personalization is also moving from segment-level logic to individual-level optimization. Loyalty IDs, first-party identity graphs, and live behavioral signals are now the default activation layer, particularly in grocery and omnichannel retail where trip context and price sensitivity vary dramatically by visit. The Wakefern deployment illustrates how individual households, not segments, are becoming the unit of decision-making for promotions and offers.
 
-Margin awareness is emerging as an implicit requirement rather than an explicit standard. While next‑best‑offer and loyalty optimization discussions acknowledge profitability, few sources indicate margin‑first optimization is fully embedded. The risk of conversion‑heavy AI eroding margins is repeatedly implied, suggesting this will be the next competitive differentiator rather than a solved problem.
+Margin-aware personalization is rapidly becoming table stakes. This week’s intelligence shows that retailers are no longer willing to personalize purely for engagement or conversion; inventory position, promotional cost, and gross margin constraints are being embedded directly into AI decisioning. This marks a critical shift from revenue-maximizing personalization to profit-optimizing personalization, especially as inflation and promotional fatigue persist.
 
-Customer intelligence is trending toward centralization in theory — CDPs and unified decision layers are repeatedly cited as foundational — but in practice remains fragmented across vendors, channels, and functions. The absence of new CDP launches underscores that retailers are trying to extract more value from existing platforms rather than replatforming.
+Customer intelligence is increasingly being centralized rather than fragmented. The evolution of CDPs into real-time decision engines, combined with loyalty platforms acting as orchestration layers, suggests retailers are consolidating intelligence and execution rather than adding disconnected point solutions. However, this centralization also raises strategic dependency risks as decision logic becomes tightly coupled to a smaller number of core vendors.
 
-The single most important structural shift visible this week is the redefinition of personalization success: from promised uplift and pilot experimentation to provable, real‑time economic impact. This reframing is forcing retailers to operationalize AI within core decision flows, setting the stage for deeper autonomy once trust, governance, and margin controls mature.</div>
+The single most important structural shift visible this week is the relocation of decision authority: from humans and static rules to AI systems operating continuously across the full customer journey. Personalization is no longer a feature or surface—it is becoming an autonomous operating layer that directly controls economic outcomes in retail.</div>
                 </div>
         </div>
     </div>
@@ -2412,9 +2590,305 @@ The single most important structural shift visible this week is the redefinition
          TRENDS
          ================================================================ -->
 
+    <!-- ================================================================
+         UPCOMING EVENTS
+         ================================================================ -->
+    <div class="section" id="upcoming-events">
+        <div class="section-header">
+            <div class="section-label">&#9670; Events &amp; Conferences</div>
+            <h2>Upcoming Retail AI Events</h2>
+        </div>
+        <div class="section-body">
+
+
+            <div style="margin-bottom:8px;">
+                <span style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2563eb;">&#9654; Upcoming</span>
+            </div>
+            <div class="card card-ranked" >
+                <div class="card-header">
+                    <div class="rank-badge">#1</div>
+                    <div>
+                        <div class="card-title">
+                            Shoptalk Spring 2026
+                        </div>
+                        <div class="card-subtitle">Shoptalk</div>
+                    </div>
+                </div>
+
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Date</div>
+                        <div class="field-value">March 24–26, 2026</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Location</div>
+                        <div class="field-value">Las Vegas, United States</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Format</div>
+                        <div class="field-value">
+<span class="kpi-chip" style="background:#d1fae5;color:#065f46;">&#127970; In-Person</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Key Topics</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Generative AI for commerce</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Retail media networks</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">AI-driven personalization</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Decision automation</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Agentic workflows in retail</span>                    </div>
+                </div>
+
+                <div class="field-grid" style="margin-top:14px;">
+                    <div class="field">
+                        <div class="field-label">Target Audience</div>
+                        <div class="field-value">Retail strategy executives, CDOs, AI product leaders, and customer experience technology teams.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Why Attend</div>
+                        <div class="field-value">This is the most influential retail technology event of the year with deep, practical insight into how leading retailers are operationalizing generative and agentic AI at scale.</div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <a href="https://spring.shoptalk.com/agendas/2026-agenda" target="_blank"
+                       style="display:inline-block;padding:7px 16px;background:#2563eb;color:#fff;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;">
+                        &#128196; Register / Learn More
+                    </a>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://spring.shoptalk.com/agendas/2026-agenda" target="_blank">2026 Agenda | Shoptalk Spring</a></div>                </div>
+            </div>
+            <div class="card card-ranked" >
+                <div class="card-header">
+                    <div class="rank-badge">#2</div>
+                    <div>
+                        <div class="card-title">
+                            Groceryshop 2026
+                        </div>
+                        <div class="card-subtitle">Shoptalk</div>
+                    </div>
+                </div>
+
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Date</div>
+                        <div class="field-value">September 22–24, 2026</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Location</div>
+                        <div class="field-value">Las Vegas, United States</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Format</div>
+                        <div class="field-value">
+<span class="kpi-chip" style="background:#d1fae5;color:#065f46;">&#127970; In-Person</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Key Topics</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">AI-driven demand forecasting</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Retail media monetization</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Supply chain automation</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Personalization in grocery retail</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Predictive analytics for CPGs</span>                    </div>
+                </div>
+
+                <div class="field-grid" style="margin-top:14px;">
+                    <div class="field">
+                        <div class="field-label">Target Audience</div>
+                        <div class="field-value">Grocery retailers, CPG leaders, retail media executives, and supply chain technology decision-makers.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Why Attend</div>
+                        <div class="field-value">Groceryshop is the premier forum for understanding how AI is transforming grocery, retail media networks, and end-to-end supply chain operations.</div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <a href="https://groceryshop.com/page/2026-key-themes" target="_blank"
+                       style="display:inline-block;padding:7px 16px;background:#2563eb;color:#fff;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;">
+                        &#128196; Register / Learn More
+                    </a>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://groceryshop.com/page/2026-key-themes" target="_blank">2026 Key Themes | Groceryshop</a></div><div class="citation"><a href="https://www.retailaicouncil.com/event-details/groceryshop-2026" target="_blank">Groceryshop 2026 - Retail AI Council</a></div>                </div>
+            </div>
+            <div class="card card-ranked" >
+                <div class="card-header">
+                    <div class="rank-badge">#3</div>
+                    <div>
+                        <div class="card-title">
+                            Shoptalk Fall 2026
+                        </div>
+                        <div class="card-subtitle">Shoptalk</div>
+                    </div>
+                </div>
+
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Date</div>
+                        <div class="field-value">September 29 – October 1, 2026</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Location</div>
+                        <div class="field-value">Nashville, United States</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Format</div>
+                        <div class="field-value">
+<span class="kpi-chip" style="background:#d1fae5;color:#065f46;">&#127970; In-Person</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Key Topics</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Applied AI in physical stores</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Retail operations automation</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Computer vision in retail</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">In-store personalization</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Hands-on AI workshops</span>                    </div>
+                </div>
+
+                <div class="field-grid" style="margin-top:14px;">
+                    <div class="field">
+                        <div class="field-label">Target Audience</div>
+                        <div class="field-value">Retail operations leaders, innovation teams, and applied AI practitioners.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Why Attend</div>
+                        <div class="field-value">Shoptalk Fall offers a more hands-on, implementation-focused environment ideal for teams deploying AI in stores and retail operations.</div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <a href="https://shoptalk.com/" target="_blank"
+                       style="display:inline-block;padding:7px 16px;background:#2563eb;color:#fff;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;">
+                        &#128196; Register / Learn More
+                    </a>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://shoptalk.com/" target="_blank">Home – Shoptalk 2026: Community, Connections &amp; Content</a></div>                </div>
+            </div>
+            <div class="card card-ranked" >
+                <div class="card-header">
+                    <div class="rank-badge">#4</div>
+                    <div>
+                        <div class="card-title">
+                            Agentic Commerce Summit 2026
+                        </div>
+                        <div class="card-subtitle">AI Data Analytics Network</div>
+                    </div>
+                </div>
+
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Date</div>
+                        <div class="field-value">2026 (TBA)</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Location</div>
+                        <div class="field-value">Online and In-Person (Location TBA)</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Format</div>
+                        <div class="field-value">
+<span class="kpi-chip" style="background:#ede9fe;color:#5b21b6;">&#9654; Hybrid</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Key Topics</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Agentic AI in retail</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Autonomous commerce systems</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">AI agents for discovery and checkout</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">AI-driven payments</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Multi-agent retail architectures</span>                    </div>
+                </div>
+
+                <div class="field-grid" style="margin-top:14px;">
+                    <div class="field">
+                        <div class="field-label">Target Audience</div>
+                        <div class="field-value">Retail AI architects, commerce platform leaders, and enterprise innovation labs.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Why Attend</div>
+                        <div class="field-value">This summit uniquely focuses on autonomous and agentic AI systems that represent the next frontier of retail and commerce automation.</div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <a href="https://www.aidataanalytics.network/events-agentic-commerce-summit" target="_blank"
+                       style="display:inline-block;padding:7px 16px;background:#2563eb;color:#fff;border-radius:6px;font-size:0.82rem;font-weight:600;text-decoration:none;">
+                        &#128196; Register / Learn More
+                    </a>
+                </div>
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://www.aidataanalytics.network/events-agentic-commerce-summit" target="_blank">Agentic Commerce Summit - aidataanalytics.network</a></div>                </div>
+            </div>
+
+            <div style="margin:28px 0 8px;">
+                <span style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;">&#9632; Past Events</span>
+            </div>
+            <div class="card card-ranked" style="opacity:0.72;">
+                <div class="card-header">
+                    <div class="rank-badge">#5</div>
+                    <div>
+                        <div class="card-title">
+                            AiR Conference &amp; Gala (During NRF 2026)
+<span style="margin-left:8px;font-size:0.75rem;font-weight:600;background:#f1f5f9;color:#64748b;padding:2px 8px;border-radius:4px;">Past</span>                        </div>
+                        <div class="card-subtitle">RETHINK Retail</div>
+                    </div>
+                </div>
+
+                <div class="field-grid">
+                    <div class="field">
+                        <div class="field-label">Date</div>
+                        <div class="field-value">January 12, 2026</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Location</div>
+                        <div class="field-value">New York City, United States</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Format</div>
+                        <div class="field-value">
+<span class="kpi-chip" style="background:#d1fae5;color:#065f46;">&#127970; In-Person</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin:14px 0 0;">
+                    <div class="field-label">Key Topics</div>
+                    <div class="kpi-list">
+<span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Real-world retail AI deployments</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Enterprise AI case studies</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">AI ROI measurement</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Change management for AI</span><span class="kpi-chip" style="background:#fef3c7;color:#92400e;">Retail data strategy</span>                    </div>
+                </div>
+
+                <div class="field-grid" style="margin-top:14px;">
+                    <div class="field">
+                        <div class="field-label">Target Audience</div>
+                        <div class="field-value">Retail executives, innovation leaders, and AI transformation teams.</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Why Attend</div>
+                        <div class="field-value">AiR is highly valued for its practitioner-led case studies that show what actually works when deploying AI in large retail organizations.</div>
+                    </div>
+                </div>
+
+
+                <div class="citations">
+                    <div class="citations-title">Sources</div>
+<div class="citation"><a href="https://rethink.industries/events/air-conference-and-gala-nrf-2026/" target="_blank">AiR Conference &amp; Gala During NRF’26 - RETHINK Retail</a></div>                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- ── Footer ── -->
     <div class="footer">
-        <p>Generated <strong>February 18, 2026 at 01:01 PM UTC</strong></p>
+        <p>Generated <strong>February 18, 2026 at 08:08 PM UTC</strong></p>
         <p style="margin-top:6px;color:#94a3b8;">Retail AI Intelligence Report · AI Collaborated</p>
     </div>
 
