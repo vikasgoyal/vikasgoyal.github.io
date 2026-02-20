@@ -71,10 +71,45 @@
             text-decoration: underline;
         }
         
+        /* Mobile Menu Toggle Button */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            padding: 15px 20px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .mobile-menu-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-menu-toggle .menu-icon {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
         @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
             .top-nav nav ul {
                 flex-direction: column;
                 align-items: stretch;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+            }
+            
+            .top-nav nav ul.show {
+                max-height: 500px;
+                transition: max-height 0.5s ease-in;
             }
             
             .top-nav nav ul li a {
@@ -129,13 +164,33 @@
             text-align: left;
         }
         
+        .header .edition-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
         .header .edition-label {
             font-size: 0.75em;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 15px;
+            margin-bottom: 0;
             font-weight: 400;
+        }
+        
+        .header .experiment-badge {
+            display: inline-block;
+            background: #fbbf24;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
         }
         
         .header h1 {
@@ -703,6 +758,11 @@
                 display: none !important;
             }
             
+            /* Show PDF-only links in print mode */
+            .pdf-only-link {
+                display: block !important;
+            }
+            
             /* Header - compact for print */
             .header {
                 background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -954,14 +1014,18 @@
     </style>
 </head>
 <body>
+    <a id="top"></a>
     <!-- Top Navigation Bar -->
     <div class="top-nav">
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+            <span class="menu-icon">☰</span> Menu
+        </button>
         <nav>
-            <ul>
+            <ul id="mobile-nav-menu">
                 <li><a href="https://vikasgoyal.github.io/">Home</a></li>
                 <li><a href="https://vikasgoyal.github.io/blog/">Blog</a></li>
                 <li><a href="https://vikasgoyal.github.io/agentic" target="_blank">Agentic AI</a></li>
-                <li><a class="aair-link" href="https://vikasgoyal.github.io/agentic/agenticailatest.html" target="_blank">AAIR Report</a></li>
+                <li><a href="https://vikasgoyal.github.io/industries/index.html" target="_blank" style="color: #ffd700;">Industry AI</a></li>
                 <li><a href="https://vikasgoyal.github.io/startups/" target="_blank">Startups</a></li>
                 <li><a href="https://vikasgoyal.github.io/genai" target="_blank">Generative AI</a></li>
                 <li><a href="https://vikasgoyal.github.io/ecp/" target="_blank">ECP</a></li>
@@ -970,16 +1034,39 @@
         </nav>
     </div>
     
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-nav-menu');
+            menu.classList.toggle('show');
+        }
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('.top-nav nav ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                const menu = document.getElementById('mobile-nav-menu');
+                if (menu.classList.contains('show')) {
+                    menu.classList.remove('show');
+                }
+            });
+        });
+    </script>
+    
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <p class="edition-label">PRACTITIONER EDITION</p>
+            <div class="edition-row">
+                <p class="edition-label">PRACTITIONER EDITION</p>
+                <div class="experiment-badge">EXPERIMENT</div>
+            </div>
             <h1>Agentic AI Intelligence Report</h1>
-            <p class="timestamp">Last Updated: February 15, 2026 at 09:07 PM UTC</p>
+            <p class="timestamp">Last Updated: February 20, 2026 at 02:22 AM UTC</p>
+            <p class="pdf-only-link" style="margin-top: 10px; font-size: 0.9em; color: rgba(255, 255, 255, 0.8); display: none;">
+                <a href="https://vikasgoyal.github.io/agentic/agenticailatest.html" target="_blank" style="color: #60a5fa; text-decoration: underline;">View Latest Version Online</a>
+            </p>
         </div>
         
         <!-- Quick Navigation -->
-        <div class="quick-nav" id="top">
+        <div class="quick-nav">
             <a href="#executive-summary">Executive Summary</a> |
             <a href="#latest-updates">Latest Updates</a> |
             <a href="#platform-updates">Platform Updates</a> |
@@ -997,27 +1084,27 @@
                 <div style="margin-bottom: 30px;">
                     <div style="background: white; border: 1px solid #bae6fd; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
                         <p style="margin: 0; font-size: 1.1em; line-height: 1.8; color: #334155;">
-                            Agentic AI is shifting from experimental autonomy to governed enterprise control planes. OpenAI Frontier, Microsoft’s observability stack, Cisco’s agent security, and ATF all converge on a model where agents are first-class actors with identity, permissions, auditability, and deterministic orchestration rather than free-form chat loops.
+                            Agentic AI is moving from experimental pilots to always-on production systems, forcing evaluation to shift from output quality to behavior, trajectories, and outcomes. Amazon’s standardized agent evaluations, Arize’s trace-first observability, and MemoryArena research all converge on the same conclusion: unmanaged agent behavior over time is now the primary failure mode, not model accuracy.
                         </p>
                     </div>
                     <div style="background: white; border: 1px solid #bae6fd; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
                         <p style="margin: 0; font-size: 1.1em; line-height: 1.8; color: #334155;">
-                            The dominant production architecture now cleanly separates probabilistic reasoning from deterministic execution. Graph-based orchestration, workflow engines, and server-side tools are increasingly paired with LLM reasoning and reasoning-effort controls, improving reliability, cost predictability, and compliance without sacrificing intelligence.
+                            Enterprises are converging on deterministic orchestration layers as a control plane for increasingly powerful models. The rise of centralized orchestrators, separation of LLM planning from workflow execution, and IBM’s embedded autonomous storage agents all show that predictability, retries, and policy enforcement are becoming architectural requirements rather than optional safeguards.
                         </p>
                     </div>
                     <div style="background: white; border: 1px solid #bae6fd; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
                         <p style="margin: 0; font-size: 1.1em; line-height: 1.8; color: #334155;">
-                            Memory has emerged as the primary lever for agent improvement and longevity, surpassing model fine-tuning in practical importance. Research like Memento, platform features such as context compaction, and enterprise memory governance patterns all indicate that learning, reuse, and auditability are being implemented at the agent-system layer rather than the model layer.
+                            Governance has shifted from a compliance afterthought to a core enabler of scale. Gartner’s risk outlook, SOC 2/ISO mappings for agents, and governed deployments by Cognizant and Infosys indicate that enterprises that cannot audit, constrain, and explain agent actions will be structurally blocked from broad rollout.
                         </p>
                     </div>
                     <div style="background: white; border: 1px solid #bae6fd; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
                         <p style="margin: 0; font-size: 1.1em; line-height: 1.8; color: #334155;">
-                            Security and risk management are lagging adoption, creating a widening exposure gap in autonomous systems. Microsoft’s telemetry, OpenAI’s Lockdown Mode, and Cisco’s agent governance features collectively show that enterprises are now retrofitting zero-trust, runtime intervention, and policy enforcement after agents are already in production.
+                            Long-context and memory innovations are exposing orchestration, not model capability, as the dominant bottleneck. Claude 4.6’s million-token context and OpenAI’s server-side compaction reduce context limits, but research like DeepPlanning and Efficient Agents shows real-world failures stem from memory misuse, tool over-calling, and unbounded planning depth.
                         </p>
                     </div>
                     <div style="background: white; border: 1px solid #bae6fd; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
                         <p style="margin: 0; font-size: 1.1em; line-height: 1.8; color: #334155;">
-                            Evaluation and optimization of agent behavior are becoming outcome-driven rather than prompt-driven. Frameworks like RagaAI’s AAEF, reinforcement-based tool selection from ARTIST, and structured self-correction approaches signal a move toward continuous measurement of planning quality, tool usage effectiveness, and end-to-end task success.
+                            Agentic AI is embedding directly into core business infrastructure rather than sitting at the application edge. From IBM’s autonomous storage to logistics and CX case studies, agents are now executing irreversible actions, raising the stakes for runtime monitoring, HITL insertion, and rollback mechanisms across enterprise systems.
                         </p>
                     </div>
                 </div>
@@ -1027,7 +1114,7 @@
                         Forward-Looking Recommendation
                     </h3>
                     <p style="color: #1e3a8a; font-size: 1.1em; margin: 0; line-height: 1.8; font-weight: 400;">
-                        In the next 1–3 months, practitioners should establish a formal agent control plane that integrates orchestration, memory layering, security identity, and observability before scaling further autonomy. This includes defining agent roles and permissions, instrumenting decision and tool-use telemetry, and adopting an agent-specific evaluation framework to catch risk and performance issues early. Doing this now prevents costly retrofits as agents become embedded in core business processes.
+                        In the next 1–3 months, practitioners should standardize on a production-grade agent control stack that combines deterministic orchestration, trace-first observability, and behavior-level evaluation. This means selecting or building a central orchestrator, integrating continuous agent evaluation and tracing, and explicitly mapping agent actions to governance controls before scaling autonomy further.
                     </p>
                 </div>
             
@@ -1043,30 +1130,7 @@
                 <div style="margin-bottom: 40px;">
                     <div class="content-card">
                         <div style="margin-bottom: 15px;">
-                            <div class="title"><a href="https://almcorp.com/blog/openai-frontier-enterprise-ai-agent-platform-guide/" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">OpenAI Frontier enters enterprise production pilots</a></div>
-                            <div style="margin-top: 8px;">
-                                <span class="tag">
-                                    Maturity: 5/5
-                                </span>
-                                <span class="tag urgency-high">
-                                    High Urgency
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <strong style="color: #1e40af;">What Happened:</strong>
-                            <p style="margin: 8px 0; color: #334155;">OpenAI’s Frontier platform transitioned from announcement to active enterprise evaluations and early production pilots between Feb 8–12, 2026. Detailed disclosures clarified Frontier as a managed semantic orchestration layer combining agent memory, tool execution, permissions, audit logs, and system-of-record integrations into a single control plane.</p>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <strong style="color: #1e40af;">Why It Matters:</strong>
-                            <p style="margin: 8px 0; color: #334155;">Frontier signals a shift from assembling agent stacks manually to adopting standardized enterprise agent platforms. For practitioners, it materially reduces orchestration complexity and compliance burden while redefining reference architectures for multi-agent governance, memory, and runtime control.</p>
-                        </div>
-                    </div>
-                    <div class="content-card">
-                        <div style="margin-bottom: 15px;">
-                            <div class="title"><a href="https://intuitionlabs.ai/articles/openai-codex-app-ai-coding-agents" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">OpenAI Codex App demonstrates parallel multi-agent coding</a></div>
+                            <div class="title"><a href="https://aws.amazon.com/blogs/machine-learning/evaluating-ai-agents-real-world-lessons-from-building-agentic-systems-at-amazon/" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">Amazon standardizes evaluation for production agentic systems</a></div>
                             <div style="margin-top: 8px;">
                                 <span class="tag">
                                     Maturity: 4/5
@@ -1079,63 +1143,63 @@
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">What Happened:</strong>
-                            <p style="margin: 8px 0; color: #334155;">OpenAI expanded access and published technical details for the Codex App, a multi-agent coding environment enabling parallel task decomposition, agent handoffs, and tool-driven execution within real codebases. The app acts as a command center for coordinating multiple specialized coding agents concurrently.</p>
+                            <p style="margin: 8px 0; color: #334155;">Amazon released a standardized evaluation framework for agentic AI based on thousands of internal production agents. It measures tool selection, memory behavior, reasoning consistency, and end-to-end outcomes, and is integrated into Bedrock AgentCore Evaluations with continuous monitoring and HITL audits.</p>
                         </div>
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">Why It Matters:</strong>
-                            <p style="margin: 8px 0; color: #334155;">Codex App validates multi-agent orchestration patterns in real production workflows, not just demos. It shows how planner–executor–reviewer agents, shared context, and parallelism can improve throughput while managing cost and latency.</p>
+                            <p style="margin: 8px 0; color: #334155;">Evaluation is the main blocker to scaling multi-step, tool-using agents into production. This framework gives practitioners concrete patterns for detecting behavioral drift, measuring long-horizon performance, and operationalizing trust in autonomous systems.</p>
                         </div>
                     </div>
                     <div class="content-card">
                         <div style="margin-bottom: 15px;">
-                            <div class="title"><a href="https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2026/m02/cisco-redefines-security-for-the-agentic-era.html" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">Cisco adds agent-specific security and governance controls</a></div>
+                            <div class="title"><a href="https://www.forbes.com/sites/stevemcdowell/2026/02/19/ibm-brings-autonomous-agentic-ai-operations-to-enterprise-storage/" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">IBM embeds autonomous agents directly into enterprise storage</a></div>
                             <div style="margin-top: 8px;">
                                 <span class="tag">
                                     Maturity: 5/5
                                 </span>
-                                <span class="tag urgency-medium">
-                                    Medium Urgency
+                                <span class="tag urgency-high">
+                                    High Urgency
                                 </span>
                             </div>
                         </div>
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">What Happened:</strong>
-                            <p style="margin: 8px 0; color: #334155;">Cisco announced new security capabilities focused on agentic AI, including agent identity, encrypted agent-to-agent communication, policy enforcement, and governance across autonomous workflows. These controls extend traditional security models to autonomous decision-making systems.</p>
+                            <p style="margin: 8px 0; color: #334155;">IBM announced agentic AI capabilities built directly into its FlashSystem storage arrays. These always-on agents autonomously detect threats like ransomware, reason over system state, and execute recovery actions without human intervention.</p>
                         </div>
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">Why It Matters:</strong>
-                            <p style="margin: 8px 0; color: #334155;">As agents act autonomously and interact with other agents and tools, security shifts from app-centric to agent-centric enforcement. Cisco’s approach highlights agent identity and runtime policy as first-class architectural requirements for enterprise deployments.</p>
+                            <p style="margin: 8px 0; color: #334155;">This shows agentic systems operating at the infrastructure layer with strict safety boundaries and deterministic fallbacks. It raises expectations for reliability, observability, and failure handling in mission-critical agent deployments.</p>
                         </div>
                     </div>
                     <div class="content-card">
                         <div style="margin-bottom: 15px;">
-                            <div class="title"><a href="https://docs.raga.ai/ragaai-aaef-agentic-application-evaluation-framework" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">RagaAI releases Agentic Application Evaluation Framework (AAEF)</a></div>
+                            <div class="title"><a href="https://www.gartner.com/en/newsroom/press-releases/2026-02-17-gartner-global-ai-regulations-fuel-billion-dollar-market-for-ai-governance-platforms" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">Gartner flags governance as critical risk for agentic AI</a></div>
                             <div style="margin-top: 8px;">
                                 <span class="tag">
-                                    Maturity: 2/5
+                                    Maturity: 3/5
                                 </span>
-                                <span class="tag urgency-medium">
-                                    Medium Urgency
+                                <span class="tag urgency-high">
+                                    High Urgency
                                 </span>
                             </div>
                         </div>
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">What Happened:</strong>
-                            <p style="margin: 8px 0; color: #334155;">RagaAI’s AAEF emerged as one of the first public frameworks designed specifically to evaluate agentic systems. It focuses on tool usage quality, memory coherence, planning effectiveness, and multi-component agent integration.</p>
+                            <p style="margin: 8px 0; color: #334155;">Gartner reported that expanding AI regulation and agent autonomy are driving a billion-dollar market for AI governance platforms. The analysis highlights unmanaged agentic systems as a growing source of compliance and operational risk.</p>
                         </div>
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">Why It Matters:</strong>
-                            <p style="margin: 8px 0; color: #334155;">Agent failures are often non-deterministic and invisible to traditional testing. AAEF addresses a critical gap by giving practitioners structured ways to measure agent reliability, memory drift, and tool misuse beyond simple task success.</p>
+                            <p style="margin: 8px 0; color: #334155;">Decentralized agent decisions and real-world tool actions break traditional governance models. Practitioners must now design logging, policy enforcement, and accountability directly into agent architectures.</p>
                         </div>
                     </div>
                     <div class="content-card">
                         <div style="margin-bottom: 15px;">
-                            <div class="title"><a href="https://www.microsoft.com/en-us/security/security-insider/emerging-trends/cyber-pulse-ai-security-report" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">Microsoft Cyber Pulse report highlights agent security gaps</a></div>
+                            <div class="title"><a href="https://explore.n1n.ai/blog/infosys-anthropic-enterprise-ai-agents-partnership-2026-02-18" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">Infosys and Anthropic push enterprise-grade AI agents</a></div>
                             <div style="margin-top: 8px;">
                                 <span class="tag">
                                     Maturity: 3/5
@@ -1148,12 +1212,35 @@
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">What Happened:</strong>
-                            <p style="margin: 8px 0; color: #334155;">Microsoft published its Cyber Pulse AI Security Report, presenting telemetry from enterprise deployments that shows rapid adoption of AI agents alongside insufficient observability, memory governance, and runtime controls. The report focuses specifically on risks introduced by autonomous agents.</p>
+                            <p style="margin: 8px 0; color: #334155;">Infosys and Anthropic announced a partnership to deliver enterprise-grade agentic systems. The focus shifts from chatbots and RAG toward multi-step, tool-using agents embedded in core business processes.</p>
                         </div>
                         
                         <div style="margin-bottom: 15px;">
                             <strong style="color: #1e40af;">Why It Matters:</strong>
-                            <p style="margin: 8px 0; color: #334155;">The findings confirm that agent adoption is outpacing safety infrastructure in real environments. For builders, it reinforces the need to design traceability, scoped memory, and action-level auditability into agent architectures from the start.</p>
+                            <p style="margin: 8px 0; color: #334155;">This signals a services-led commercialization wave where agents are treated as operational units. Practitioner expectations around orchestration, auditability, and ROI will rise as these systems move into production environments.</p>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <div style="margin-bottom: 15px;">
+                            <div class="title"><a href="https://news.cognizant.com/2026-02-16-Cognizant-Expands-Strategic-Partnership-with-Google-Cloud-to-Operationalize-Agentic-AI-at-Enterprise-Scale" target="_blank" rel="noopener" style="color: #1e40af; text-decoration: none;">Cognizant and Google Cloud scale governed agentic AI</a></div>
+                            <div style="margin-top: 8px;">
+                                <span class="tag">
+                                    Maturity: 4/5
+                                </span>
+                                <span class="tag urgency-medium">
+                                    Medium Urgency
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <strong style="color: #1e40af;">What Happened:</strong>
+                            <p style="margin: 8px 0; color: #334155;">Cognizant expanded its partnership with Google Cloud to operationalize agentic AI at enterprise scale. The effort emphasizes governed deployments across real business environments rather than isolated pilots.</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <strong style="color: #1e40af;">Why It Matters:</strong>
+                            <p style="margin: 8px 0; color: #334155;">The industry focus is shifting from building agents to running large numbers of them safely and cost-effectively. This highlights demand for orchestration layers, lifecycle management, and cost controls for agent swarms.</p>
                         </div>
                     </div>
                 </div>
@@ -1161,7 +1248,7 @@
                 <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 25px; border-radius: 8px; margin-top: 30px;">
                     <h3 style="color: #92400e; margin: 0 0 15px 0; font-size: 1.2em;">Key Takeaway</h3>
                     <p style="color: #78350f; font-size: 1.1em; margin: 0; line-height: 1.8;">
-                        If you only track one development this week, it should be OpenAI Frontier because it marks the transition of agentic AI from bespoke engineering efforts to standardized enterprise infrastructure that will define how agents are orchestrated, governed, and deployed at scale.
+                        If you only track one development this week, it should be Amazon’s agentic AI evaluation framework because evaluation is now the gating factor for safely deploying and scaling autonomous, tool-using agents in production.
                     </p>
                 </div>
             
@@ -1177,44 +1264,44 @@
                 <div class="content-card">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <div class="title" style="flex: 1;">
-                            <a href="https://www.anthropic.com/news/claude-opus-4-6" target="_blank" rel="noopener">Claude Opus 4.6 adds adaptive thinking and context compaction</a>
+                            <a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Claude Sonnet 4.6 launches with 1M token context (beta)</a>
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
                                 Anthropic
                             </span>
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                                Model
+                                Context Window
                             </span>
                         </div>
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">Claude Opus 4.6 introduces adaptive thinking that dynamically adjusts reasoning depth based on task complexity. It adds effort controls and context compaction, allowing agents to summarize their own histories and run for hours without external memory systems. Anthropic also released updated system cards and transparency documentation.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">Anthropic released Claude Sonnet 4.6 with a major capability upgrade focused on agent planning, coding, and long-horizon reasoning. The model introduces a 1 million token context window in beta, matching Opus 4.6 long-context support. Sonnet 4.6 became the default model in Claude.ai, increasing production exposure.</p>
                     </div>
                     
                     <div style="display: grid; gap: 15px; margin-bottom: 20px;">
                         <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
-                                <strong>Capability Impact:</strong> Agents can now execute longer, multi-step tasks autonomously with fewer orchestration layers. Developers gain direct control over intelligence, latency, and cost tradeoffs per task. Context compaction reduces the need for custom memory or summarization pipelines.
+                                <strong>Capability Impact:</strong> Agents can maintain persistent memory over massive codebases, documents, and multi-day task histories without external chunking. This simplifies agent architectures and improves planning, reflection, and tool-augmented reasoning over long horizons.
                             </p>
                         </div>
                         
                         <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                                <strong>Risk Impact:</strong> Long-running agents increase potential impact if safety constraints are misconfigured. Adaptive reasoning can introduce less predictable behavior without strong evaluation and monitoring.
+                                <strong>Risk Impact:</strong> Long-context usage increases risks of latent prompt injection, stale assumptions, and hidden malicious instructions deep in context. Developers must implement context hygiene, validation, and compaction strategies to maintain safety.
                             </p>
                         </div>
                         
                         <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #065f46; line-height: 1.6;">
-                                <strong>Cost Impact:</strong> List pricing remains unchanged, but context compaction and adaptive effort can significantly reduce effective token spend.
+                                <strong>Cost Impact:</strong> No pricing changes were announced, but large context usage can significantly increase token spend if unmanaged. Summarization and memory compaction are recommended to control costs.
                             </p>
                         </div>
                         
                         <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1f2937; line-height: 1.6;">
-                                <strong>Practitioner Takeaway:</strong> Revisit agent memory and summarization designs, as the model can now handle much of this internally. Use effort controls explicitly to balance reasoning quality against speed and cost.
+                                <strong>Practitioner Takeaway:</strong> Teams building long-running or repository-scale agents should evaluate Sonnet 4.6 to reduce architectural complexity. Plan explicit memory management and guardrails before relying on million-token contexts.
                             </p>
                         </div>
                     </div>
@@ -1222,51 +1309,51 @@
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://www.anthropic.com/news/claude-opus-4-6" target="_blank" rel="noopener">Introducing Claude Opus 4.6 - Anthropic</a>
+                            <a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Introducing Claude Sonnet 4.6 - Anthropic</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <div class="title" style="flex: 1;">
-                            <a href="https://developers.openai.com/api/docs/changelog" target="_blank" rel="noopener">OpenAI GPT-5 and o3-mini gain explicit reasoning-effort controls</a>
+                            <a href="https://developers.openai.com/api/docs/changelog" target="_blank" rel="noopener">OpenAI Responses API adds server-side context compaction</a>
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
                                 OpenAI
                             </span>
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                                Model
+                                Api
                             </span>
                         </div>
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">OpenAI expanded reasoning-effort controls across GPT-5 models and o3-mini, enabling low, medium, or high reasoning depth selection. o3-mini now supports structured outputs, function calling, developer messages, and streaming, and runs roughly 25% faster. GPT-5.2 inference was further optimized for up to 40% speed gains in some variants.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">OpenAI introduced server-side context compaction in the Responses API to automatically summarize and compress prior conversation state. The feature is designed for long-running, agentic workflows where context would otherwise exceed limits. Compaction is model-aware and removes the need for custom client-side summarization.</p>
                     </div>
                     
                     <div style="display: grid; gap: 15px; margin-bottom: 20px;">
                         <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
-                                <strong>Capability Impact:</strong> Agents can dynamically switch reasoning depth between planning and execution phases. More reliable structured outputs improve tool invocation and reduce parsing errors. Faster inference enables more responsive interactive agents.
+                                <strong>Capability Impact:</strong> Agents can run longer autonomous loops without hitting context ceilings or losing coherence. This simplifies orchestration for research, coding, and multi-tool agents by offloading memory management to the platform.
                             </p>
                         </div>
                         
                         <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                                <strong>Risk Impact:</strong> Improper effort tuning can silently degrade reasoning quality. Mixed-effort agent designs require stronger regression testing to detect subtle failures.
+                                <strong>Risk Impact:</strong> Automatic summarization introduces non-determinism and may omit details required for auditing or compliance. Regulated deployments should log pre- and post-compaction states for traceability.
                             </p>
                         </div>
                         
                         <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #065f46; line-height: 1.6;">
-                                <strong>Cost Impact:</strong> Improved efficiency and targeted reasoning reduce wasted tokens, lowering overall operational costs without list-price changes.
+                                <strong>Cost Impact:</strong> Improved token efficiency can significantly reduce inference costs for long-running agents. Savings depend on task duration and compaction frequency.
                             </p>
                         </div>
                         
                         <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1f2937; line-height: 1.6;">
-                                <strong>Practitioner Takeaway:</strong> Treat reasoning effort as a first-class control surface in agent controllers. Explicitly set effort levels per step rather than relying on implicit model behavior.
+                                <strong>Practitioner Takeaway:</strong> Adopt server-side compaction to simplify agent memory handling, but add audit logging where decision traceability matters. Test compaction behavior on critical workflows before full rollout.
                             </p>
                         </div>
                     </div>
@@ -1281,115 +1368,11 @@
                 <div class="content-card">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <div class="title" style="flex: 1;">
-                            <a href="https://openai.com/news/" target="_blank" rel="noopener">OpenAI introduces Lockdown Mode and Elevated Risk labels</a>
+                            <a href="https://developers.openai.com/api/docs/deprecations" target="_blank" rel="noopener">chatgpt-4o-latest removed from OpenAI API</a>
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
                                 OpenAI
-                            </span>
-                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                                Safety
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">OpenAI launched Lockdown Mode and Elevated Risk labels for ChatGPT and enterprise offerings. These features restrict tool access, reduce autonomy, and flag higher-risk interactions at deployment time. The update emphasizes runtime governance over prompt-only safety controls.</p>
-                    </div>
-                    
-                    <div style="display: grid; gap: 15px; margin-bottom: 20px;">
-                        <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
-                                <strong>Capability Impact:</strong> Enables tiered autonomy where the same agent can operate under different risk profiles. Supports deployment of agents in regulated or high-risk environments with clearer controls.
-                            </p>
-                        </div>
-                        
-                        <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                                <strong>Risk Impact:</strong> Overly strict configurations can prevent agents from completing tasks effectively. Effective use requires clear internal policy mapping and governance processes.
-                            </p>
-                        </div>
-                        
-                        <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #065f46; line-height: 1.6;">
-                                <strong>Cost Impact:</strong> No direct pricing impact, but additional governance and review processes may add operational overhead.
-                            </p>
-                        </div>
-                        
-                        <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #1f2937; line-height: 1.6;">
-                                <strong>Practitioner Takeaway:</strong> Integrate Lockdown Mode into runtime policy engines rather than relying solely on prompts. Use it to align agent autonomy with regulatory and organizational risk tolerance.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="citations">
-                        <div class="citations-title">Sources:</div>
-                        <div class="citation">
-                            <a href="https://openai.com/news/" target="_blank" rel="noopener">OpenAI News</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-card">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                        <div class="title" style="flex: 1;">
-                            <a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-amazon-bedrock-agent-workflows-amazon-sagemaker-private-connectivity-and-more-february-2-2026/" target="_blank" rel="noopener">AWS Bedrock adds server-side tools and extended prompt caching</a>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                                AWS
-                            </span>
-                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                                Latency
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">AWS enhanced Amazon Bedrock with server-side tool execution and extended prompt caching for agent workflows. These features reduce repeated token processing and round trips across multi-step agent loops. The improvements apply across supported foundation models, including Claude Opus 4.6.</p>
-                    </div>
-                    
-                    <div style="display: grid; gap: 15px; margin-bottom: 20px;">
-                        <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
-                                <strong>Capability Impact:</strong> Agents execute multi-step workflows faster with more predictable tool semantics. Reduced orchestration overhead improves reliability for complex agent pipelines.
-                            </p>
-                        </div>
-                        
-                        <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                                <strong>Risk Impact:</strong> Server-side abstractions can reduce observability and complicate debugging. Cached prompts require careful invalidation to avoid stale or unsafe behavior.
-                            </p>
-                        </div>
-                        
-                        <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #065f46; line-height: 1.6;">
-                                <strong>Cost Impact:</strong> Prompt caching directly lowers token usage and associated costs for iterative agents.
-                            </p>
-                        </div>
-                        
-                        <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
-                            <p style="margin: 0; color: #1f2937; line-height: 1.6;">
-                                <strong>Practitioner Takeaway:</strong> Refactor agent loops to take advantage of prompt caching for high-ROI cost and latency gains. Add monitoring to compensate for reduced transparency in server-side tooling.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="citations">
-                        <div class="citations-title">Sources:</div>
-                        <div class="citation">
-                            <a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-amazon-bedrock-agent-workflows-amazon-sagemaker-private-connectivity-and-more-february-2-2026/" target="_blank" rel="noopener">AWS Weekly Roundup: Amazon Bedrock agent workflows, Amazon SageMaker ...</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-card">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                        <div class="title" style="flex: 1;">
-                            <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/" target="_blank" rel="noopener">Google announces Gemini 3 Deep Think for scientific reasoning</a>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                                Google
                             </span>
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
                                 Model
@@ -1398,31 +1381,31 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">Google unveiled Gemini 3 Deep Think, a model optimized for science, research, and engineering problem-solving. The model emphasizes deeper deliberation over speed and is available only to Gemini app users and early-access API testers. Tooling and production readiness remain limited.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">OpenAI officially removed the chatgpt-4o-latest snapshot from the API as part of ongoing model deprecations. Developers were directed to migrate to gpt-5.1-chat-latest, with parallel retirements in the ChatGPT UI. Any remaining dependencies on 4o snapshots now hard-fail.</p>
                     </div>
                     
                     <div style="display: grid; gap: 15px; margin-bottom: 20px;">
                         <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
-                                <strong>Capability Impact:</strong> Signals a new class of domain-specialized reasoning agents for hypothesis generation and technical planning. Potentially strong for R&amp;D-focused autonomous workflows.
+                                <strong>Capability Impact:</strong> Agents pinned to deprecated model IDs will stop functioning until migrated. Newer GPT-5.1 models introduce different reasoning, latency, and behavior tradeoffs that may require retuning agents.
                             </p>
                         </div>
                         
                         <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                                <strong>Risk Impact:</strong> Experimental access means stability and reproducibility are not guaranteed. Limited ecosystem support increases integration risk.
+                                <strong>Risk Impact:</strong> This highlights model lifecycle risk for long-lived agent systems. Undocumented or implicit snapshot dependencies create reliability and availability hazards.
                             </p>
                         </div>
                         
                         <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #065f46; line-height: 1.6;">
-                                <strong>Cost Impact:</strong> Pricing has not been disclosed and is likely to be positioned as a premium offering.
+                                <strong>Cost Impact:</strong> GPT-5.1 pricing and token behavior differ from 4o, potentially changing cost predictability. Teams should re-benchmark workloads after migration.
                             </p>
                         </div>
                         
                         <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1f2937; line-height: 1.6;">
-                                <strong>Practitioner Takeaway:</strong> Track this model if you build scientific or engineering agents, but avoid production dependence for now. Expect higher reasoning depth with slower inference.
+                                <strong>Practitioner Takeaway:</strong> Audit all agent deployments for deprecated model IDs and implement explicit version pinning. Add lifecycle monitoring and alerts to prevent surprise outages.
                             </p>
                         </div>
                     </div>
@@ -1430,18 +1413,122 @@
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/" target="_blank" rel="noopener">Gemini 3 Deep Think: AI model update designed for science</a>
+                            <a href="https://developers.openai.com/api/docs/deprecations" target="_blank" rel="noopener">Deprecations - OpenAI API</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <div class="title" style="flex: 1;">
-                            <a href="https://help.openai.com/en/articles/9624314-model-release-notes.pdf" target="_blank" rel="noopener">OpenAI confirms retirement of GPT-4o and legacy snapshots</a>
+                            <a href="https://aws.amazon.com/about-aws/whats-new/2026/2/claude-opus-4.6-available-amazon-bedrock/" target="_blank" rel="noopener">Claude Opus 4.6 broadly available on AWS Bedrock</a>
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                                OpenAI
+                                AWS
+                            </span>
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                                Model
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary" style="margin-bottom: 20px;">
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">Anthropic’s Claude Opus 4.6 became broadly available through Amazon Bedrock with multi-region and streaming support. The model is optimized for sustained tool use and deep agentic reasoning. Availability was confirmed across regions during this announcement window.</p>
+                    </div>
+                    
+                    <div style="display: grid; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
+                                <strong>Capability Impact:</strong> Enterprise agents can now deploy top-tier Anthropic models with AWS-native IAM, security, and data residency controls. This enables complex autonomous workflows in regulated or cloud-native environments.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #92400e; line-height: 1.6;">
+                                <strong>Risk Impact:</strong> Cross-region inference and streaming increase exposure to data egress and latency risks. Teams must ensure proper access controls and monitoring are in place.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #065f46; line-height: 1.6;">
+                                <strong>Cost Impact:</strong> Bedrock pricing differs from Anthropic’s direct API and may offer consolidation benefits. Enterprises should benchmark costs under expected agent workloads.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #1f2937; line-height: 1.6;">
+                                <strong>Practitioner Takeaway:</strong> AWS-centric teams can now treat Opus 4.6 as a first-class option for complex agents. Validate latency, region placement, and cost assumptions before production rollout.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="citations">
+                        <div class="citations-title">Sources:</div>
+                        <div class="citation">
+                            <a href="https://aws.amazon.com/about-aws/whats-new/2026/2/claude-opus-4.6-available-amazon-bedrock/" target="_blank" rel="noopener">Claude Opus 4.6 now available in Amazon Bedrock - AWS</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <div class="title" style="flex: 1;">
+                            <a href="https://anthropic.com/claude-sonnet-4-6-system-card" target="_blank" rel="noopener">Claude Sonnet 4.6 system card published</a>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                                Anthropic
+                            </span>
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                                Safety
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary" style="margin-bottom: 20px;">
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">Anthropic released the system card for Claude Sonnet 4.6 detailing safety evaluations, mitigations, and deployment rationale. The card confirms the model meets Responsible Scaling Policy thresholds despite major capability gains. Known risks and failure modes are explicitly documented.</p>
+                    </div>
+                    
+                    <div style="display: grid; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
+                                <strong>Capability Impact:</strong> Clear safety documentation helps enterprises deploy autonomous agents with greater confidence. Teams gain insight into evaluated behaviors and intended deployment boundaries.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #92400e; line-height: 1.6;">
+                                <strong>Risk Impact:</strong> The system card surfaces known risks and mitigations, enabling defense-in-depth design. Ignoring documented limitations could still expose agents to misuse or failure modes.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #065f46; line-height: 1.6;">
+                                <strong>Cost Impact:</strong> There is no direct pricing impact, but clearer safety guidance can reduce compliance and review overhead. This may lower indirect deployment costs.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #1f2937; line-height: 1.6;">
+                                <strong>Practitioner Takeaway:</strong> Incorporate the system card into internal risk assessments and governance reviews. Align agent guardrails and monitoring with documented failure modes.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="citations">
+                        <div class="citations-title">Sources:</div>
+                        <div class="citation">
+                            <a href="https://anthropic.com/claude-sonnet-4-6-system-card" target="_blank" rel="noopener">Claude Sonnet 4.6 System Card - anthropic.com</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <div class="title" style="flex: 1;">
+                            <a href="https://docs.cloud.google.com/gemini/docs/conversational-analytics-api/release-notes" target="_blank" rel="noopener">Google exposes agent reasoning traces in Conversational Analytics API</a>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                                Google
                             </span>
                             <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
                                 Api
@@ -1450,31 +1537,31 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">OpenAI confirmed the retirement of GPT-4o, GPT-4.1, and related snapshots, with removals beginning mid-February 2026. Developers are required to migrate to GPT-5-series replacements. Effective dates were clarified to reduce ambiguity.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">Google updated the Conversational Analytics API to expose more insight into agent reasoning when querying BigQuery-backed data. The feature is part of Google’s pre-GA analytics tooling. It improves transparency of analytical agent outputs.</p>
                     </div>
                     
                     <div style="display: grid; gap: 15px; margin-bottom: 20px;">
                         <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
-                                <strong>Capability Impact:</strong> Forces agent systems onto newer reasoning-first models with different behaviors. Legacy prompt heuristics may no longer transfer cleanly.
+                                <strong>Capability Impact:</strong> Data agents can produce more explainable and debuggable analytical results. This improves trust and makes it easier to validate agent-driven insights.
                             </p>
                         </div>
                         
                         <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                                <strong>Risk Impact:</strong> Hard failures will occur if deprecated model IDs remain in production. Migration can introduce behavioral drift without careful testing.
+                                <strong>Risk Impact:</strong> Exposed reasoning traces may leak sensitive assumptions or logic if access controls are weak. Teams must carefully manage permissions and logging.
                             </p>
                         </div>
                         
                         <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #065f46; line-height: 1.6;">
-                                <strong>Cost Impact:</strong> Generally neutral to slightly positive due to improved efficiency in GPT-5-series models.
+                                <strong>Cost Impact:</strong> There is minimal direct pricing impact. Improved observability may reduce debugging and investigation costs.
                             </p>
                         </div>
                         
                         <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
                             <p style="margin: 0; color: #1f2937; line-height: 1.6;">
-                                <strong>Practitioner Takeaway:</strong> Audit all agent configurations immediately to remove deprecated model references. Re-test agent behavior after migration to detect subtle changes.
+                                <strong>Practitioner Takeaway:</strong> For data-centric agents, leverage reasoning traces to improve auditability and trust. Ensure reasoning visibility is restricted to appropriate roles.
                             </p>
                         </div>
                     </div>
@@ -1482,7 +1569,59 @@
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://help.openai.com/en/articles/9624314-model-release-notes.pdf" target="_blank" rel="noopener">Model Release Notes - OpenAI Help Center</a>
+                            <a href="https://docs.cloud.google.com/gemini/docs/conversational-analytics-api/release-notes" target="_blank" rel="noopener">Conversational Analytics API release notes | Google Cloud Documentation</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <div class="title" style="flex: 1;">
+                            <a href="https://developers.openai.com/api/docs/changelog" target="_blank" rel="noopener">OpenAI Batch API extended to image models</a>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                                OpenAI
+                            </span>
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                                Cost
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary" style="margin-bottom: 20px;">
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">OpenAI extended Batch API support to GPT image models, enabling asynchronous, high-throughput image generation and analysis. The update targets large-scale, non-interactive workloads. This expands batch processing beyond text-only agents.</p>
+                    </div>
+                    
+                    <div style="display: grid; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #1e3a8a; line-height: 1.6;">
+                                <strong>Capability Impact:</strong> Agents can pipeline multimodal tasks such as document ingestion, UI analysis, and bulk image generation more efficiently. This enables scalable multimodal agent workflows.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #92400e; line-height: 1.6;">
+                                <strong>Risk Impact:</strong> Batch processing reduces real-time oversight and may delay detection of failures or misuse. Additional monitoring is needed for large asynchronous jobs.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #d1fae5; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #065f46; line-height: 1.6;">
+                                <strong>Cost Impact:</strong> Batch pricing improves cost efficiency for large image workloads. Savings are most significant for high-volume, non-interactive tasks.
+                            </p>
+                        </div>
+                        
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
+                            <p style="margin: 0; color: #1f2937; line-height: 1.6;">
+                                <strong>Practitioner Takeaway:</strong> Use the Batch API for offline or back-office multimodal agents to reduce cost and latency pressure. Avoid batch mode for tasks requiring immediate human oversight.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="citations">
+                        <div class="citations-title">Sources:</div>
+                        <div class="citation">
+                            <a href="https://developers.openai.com/api/docs/changelog" target="_blank" rel="noopener">Changelog - OpenAI API</a>
                         </div>
                     </div>
                 </div>
@@ -1498,7 +1637,7 @@
             
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">Graph-Based Multi-Agent Orchestration as Control Plane</a>
+                        <a href="https://github.com/microsoft/multi-agent-reference-architecture" target="_blank" rel="noopener">Centralized Orchestrators for Multi-Agent Governance</a>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -1508,12 +1647,12 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">Enterprises are adopting explicit graph-based orchestration layers to control how multiple agents collaborate. Instead of emergent chat loops, execution paths, state transitions, and handoffs are modeled deterministically, enabling governance and observability.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7;">Enterprises are converging on hub-and-spoke agent architectures where a deterministic orchestrator governs routing, retries, lifecycle, and policy enforcement. Specialized agents remain narrowly scoped, reducing emergent behavior and improving predictability.</p>
                     </div>
                     
                     <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                         <p style="margin: 0; color: #475569; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Example Implementation:</strong> LangGraph provides a graph-based orchestration framework where agents are nodes, transitions are explicit edges, and execution state is durable and replayable.
+                            <strong style="color: #1e293b;">Example Implementation:</strong> Microsoft’s Multi-Agent Reference Architecture uses a central orchestrator to coordinate planner, executor, and verifier agents with explicit control flow and governance.
                         </p>
                     </div>
                     
@@ -1521,19 +1660,19 @@
                         <div>
                             <h4 style="color: #10b981; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Strengths</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Deterministic and auditable execution</li>
-                                <li style="margin-bottom: 6px;">Durable state with replay and rollback</li>
-                                <li style="margin-bottom: 6px;">Supports hierarchical and parallel agents</li>
-                                <li style="margin-bottom: 6px;">Strong alignment with regulated workflows</li>
+                                <li style="margin-bottom: 6px;">Predictable execution paths</li>
+                                <li style="margin-bottom: 6px;">Centralized governance and policy enforcement</li>
+                                <li style="margin-bottom: 6px;">Improved observability and auditability</li>
+                                <li style="margin-bottom: 6px;">Clear separation of agent responsibilities</li>
                             </ul>
                         </div>
                         
                         <div>
                             <h4 style="color: #f59e0b; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Limitations</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Higher upfront design complexity</li>
-                                <li style="margin-bottom: 6px;">Less emergent agent behavior</li>
-                                <li style="margin-bottom: 6px;">Requires engineers to model graphs explicitly</li>
+                                <li style="margin-bottom: 6px;">Orchestrator can become a scalability bottleneck</li>
+                                <li style="margin-bottom: 6px;">Less flexible than peer-to-peer agent swarms</li>
+                                <li style="margin-bottom: 6px;">Higher coupling around the orchestration layer</li>
                             </ul>
                         </div>
                     </div>
@@ -1541,13 +1680,13 @@
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph: Agent Orchestration Framework for Reliable AI Agents - LangChain</a>
+                            <a href="https://github.com/microsoft/multi-agent-reference-architecture" target="_blank" rel="noopener">GitHub - microsoft/multi-agent-reference-architecture: Guide for ...</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns" target="_blank" rel="noopener">Hybrid Architectures: Deterministic Workflows + LLM Reasoning</a>
+                        <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/building-human-in-the-loop-ai-workflows-with-microsoft-agent-framework/4460342" target="_blank" rel="noopener">Deterministic Workflows with LLM-Based Planning</a>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -1557,12 +1696,12 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">A dominant pattern is emerging where LLMs handle reasoning tasks while deterministic workflow engines control execution, retries, and policy enforcement. This cleanly separates probabilistic intelligence from reliable system behavior.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7;">Architectures increasingly separate probabilistic LLM reasoning from deterministic execution. LLMs generate plans or decisions, while workflow engines enforce state, retries, and human-in-the-loop controls.</p>
                     </div>
                     
                     <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                         <p style="margin: 0; color: #475569; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Example Implementation:</strong> Azure AI Agent Orchestration patterns define sequential, handoff, and group-chat workflows where LLM agents are embedded inside governed execution flows.
+                            <strong style="color: #1e293b;">Example Implementation:</strong> Microsoft Agent Framework combines deterministic workflow graphs with LLM-powered agents to support auditable, human-in-the-loop enterprise processes.
                         </p>
                     </div>
                     
@@ -1570,19 +1709,19 @@
                         <div>
                             <h4 style="color: #10b981; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Strengths</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Predictable behavior under failure</li>
-                                <li style="margin-bottom: 6px;">Clear separation of concerns</li>
-                                <li style="margin-bottom: 6px;">Easier SRE and operations integration</li>
-                                <li style="margin-bottom: 6px;">Aligns with microservices and BPMN models</li>
+                                <li style="margin-bottom: 6px;">Reproducible and debuggable executions</li>
+                                <li style="margin-bottom: 6px;">Safe recovery from partial failures</li>
+                                <li style="margin-bottom: 6px;">Alignment with BPMN and SRE practices</li>
+                                <li style="margin-bottom: 6px;">Easier regulatory compliance (SOC2, SOX)</li>
                             </ul>
                         </div>
                         
                         <div>
                             <h4 style="color: #f59e0b; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Limitations</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Reduced agent autonomy</li>
-                                <li style="margin-bottom: 6px;">Requires disciplined workflow modeling</li>
-                                <li style="margin-bottom: 6px;">More infrastructure components to operate</li>
+                                <li style="margin-bottom: 6px;">More upfront workflow design effort</li>
+                                <li style="margin-bottom: 6px;">Reduced adaptability compared to free-form agents</li>
+                                <li style="margin-bottom: 6px;">Potential rigidity in novel scenarios</li>
                             </ul>
                         </div>
                     </div>
@@ -1590,16 +1729,13 @@
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns" target="_blank" rel="noopener">AI Agent Orchestration Patterns - Azure Architecture Center</a>
-                        </div>
-                        <div class="citation">
-                            <a href="https://developers.redhat.com/articles/2026/02/11/agentic-ai-design-reliable-workflows-across-hybrid-cloud" target="_blank" rel="noopener">Agentic AI: Design reliable workflows across the hybrid cloud</a>
+                            <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/building-human-in-the-loop-ai-workflows-with-microsoft-agent-framework/4460342" target="_blank" rel="noopener">Building Human-in-the-loop AI Workflows with Microsoft Agent Framework</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://docs.crewai.com/en/concepts/memory" target="_blank" rel="noopener">First-Class Memory Layering for Agent Systems</a>
+                        <a href="https://arxiv.org/abs/2601.02744" target="_blank" rel="noopener">Layered Agent Memory Architectures</a>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -1609,12 +1745,12 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">Agent memory is being treated as an explicit architectural layer rather than ad-hoc context. Enterprises are separating episodic memory, semantic knowledge, and operational state with unified APIs and governance controls.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7;">Agent systems are adopting multi-tier memory models combining episodic logs, semantic knowledge stores, and procedural skills. This reduces token usage while enabling long-horizon reasoning and personalization.</p>
                     </div>
                     
                     <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                         <p style="margin: 0; color: #475569; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Example Implementation:</strong> CrewAI implements unified short-term, long-term, entity, and external memory layers that agents can selectively access.
+                            <strong style="color: #1e293b;">Example Implementation:</strong> The SYNAPSE architecture and Oracle’s enterprise agent memory guidance map episodic and semantic memory to structured data stores and databases.
                         </p>
                     </div>
                     
@@ -1622,19 +1758,19 @@
                         <div>
                             <h4 style="color: #10b981; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Strengths</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Improved agent consistency across tasks</li>
-                                <li style="margin-bottom: 6px;">Enables cross-task learning</li>
-                                <li style="margin-bottom: 6px;">Clear mental model for developers</li>
-                                <li style="margin-bottom: 6px;">Supports long-running workflows</li>
+                                <li style="margin-bottom: 6px;">Significant reduction in prompt context size</li>
+                                <li style="margin-bottom: 6px;">Supports continuity and personalization</li>
+                                <li style="margin-bottom: 6px;">Maps cleanly to enterprise data platforms</li>
+                                <li style="margin-bottom: 6px;">Enables long-running agent behavior</li>
                             </ul>
                         </div>
                         
                         <div>
                             <h4 style="color: #f59e0b; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Limitations</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Memory growth management is complex</li>
-                                <li style="margin-bottom: 6px;">Risk of semantic drift over time</li>
-                                <li style="margin-bottom: 6px;">Requires governance over persistence policies</li>
+                                <li style="margin-bottom: 6px;">Complex memory consolidation logic</li>
+                                <li style="margin-bottom: 6px;">Higher data governance requirements</li>
+                                <li style="margin-bottom: 6px;">Risk of stale or biased memory representations</li>
                             </ul>
                         </div>
                     </div>
@@ -1642,62 +1778,16 @@
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://docs.crewai.com/en/concepts/memory" target="_blank" rel="noopener">Memory - CrewAI</a>
+                            <a href="https://arxiv.org/abs/2601.02744" target="_blank" rel="noopener">SYNAPSE: Empowering LLM Agents with Episodic-Semantic Memory via ...</a>
                         </div>
-                    </div>
-                </div>
-                <div class="content-card">
-                    <div class="title">
-                        <a href="https://github.com/microsoft/autogen" target="_blank" rel="noopener">Event-Driven Agent Communication (Actor Model Revival)</a>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                            Early Adoption
-                        </span>
-                    </div>
-                    
-                    <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">Multi-agent systems are increasingly designed as event-driven, actor-style architectures. Agents communicate asynchronously via events, improving scalability and fault isolation compared to synchronous agent chains.</p>
-                    </div>
-                    
-                    <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
-                        <p style="margin: 0; color: #475569; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Example Implementation:</strong> Microsoft AutoGen models agents as event-driven actors that publish and consume messages asynchronously.
-                        </p>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                        <div>
-                            <h4 style="color: #10b981; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Strengths</h4>
-                            <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Horizontal scalability</li>
-                                <li style="margin-bottom: 6px;">Strong fault isolation</li>
-                                <li style="margin-bottom: 6px;">Natural fit for distributed systems</li>
-                                <li style="margin-bottom: 6px;">Avoids brittle synchronous chains</li>
-                            </ul>
-                        </div>
-                        
-                        <div>
-                            <h4 style="color: #f59e0b; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Limitations</h4>
-                            <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Harder mental model for developers</li>
-                                <li style="margin-bottom: 6px;">Debugging async flows is complex</li>
-                                <li style="margin-bottom: 6px;">Memory and state must be externalized</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="citations">
-                        <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://github.com/microsoft/autogen" target="_blank" rel="noopener">microsoft/autogen: A programming framework for agentic AI - GitHub</a>
+                            <a href="https://blogs.oracle.com/developers/agent-memory-why-your-ai-has-amnesia-and-how-to-fix-it" target="_blank" rel="noopener">Agent Memory: Why Your AI Has Amnesia and How to Fix It</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://visualstudiomagazine.com/articles/2026/02/09/hands-on-with-new-multi-agent-orchestration-in-vs-code.aspx" target="_blank" rel="noopener">IDE-Level Multi-Agent Orchestration for Developer Workflows</a>
+                        <a href="https://bix-tech.com/ai-agents-orchestration-langgraph/" target="_blank" rel="noopener">Graph-Based, Tool-First Agent Orchestration</a>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -1707,12 +1797,12 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">Agent orchestration is moving directly into IDEs, enabling developers to coordinate planning, execution, and validation agents inside their daily tools. This trend targets developer productivity rather than runtime system architecture.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7;">Frameworks are standardizing on explicit graphs or state machines where tools, agents, and humans are first-class nodes. LLMs operate within guardrails instead of directly controlling execution flow.</p>
                     </div>
                     
                     <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                         <p style="margin: 0; color: #475569; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Example Implementation:</strong> VS Code 1.109 introduces built-in multi-agent orchestration for planning and executing coding tasks in parallel.
+                            <strong style="color: #1e293b;">Example Implementation:</strong> LangGraph provides deterministic DAG-based orchestration for agents and tools, enabling visualizable and testable workflows.
                         </p>
                     </div>
                     
@@ -1720,19 +1810,19 @@
                         <div>
                             <h4 style="color: #10b981; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Strengths</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">Shorter feedback loops</li>
-                                <li style="margin-bottom: 6px;">High developer adoption</li>
-                                <li style="margin-bottom: 6px;">Strong auditability for code tasks</li>
-                                <li style="margin-bottom: 6px;">Low barrier to experimentation</li>
+                                <li style="margin-bottom: 6px;">Visual and testable workflows</li>
+                                <li style="margin-bottom: 6px;">Strong failure isolation</li>
+                                <li style="margin-bottom: 6px;">Improved capacity and cost planning</li>
+                                <li style="margin-bottom: 6px;">Clear operational semantics</li>
                             </ul>
                         </div>
                         
                         <div>
                             <h4 style="color: #f59e0b; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Limitations</h4>
                             <ul style="margin: 0; padding-left: 20px; color: #334155;">
-                                <li style="margin-bottom: 6px;">IDE-bound, not runtime architecture</li>
-                                <li style="margin-bottom: 6px;">Limited applicability outside engineering tasks</li>
-                                <li style="margin-bottom: 6px;">Not a replacement for backend orchestration</li>
+                                <li style="margin-bottom: 6px;">Graph complexity can grow quickly</li>
+                                <li style="margin-bottom: 6px;">Less adaptive than emergent agent systems</li>
+                                <li style="margin-bottom: 6px;">Requires careful workflow design</li>
                             </ul>
                         </div>
                     </div>
@@ -1740,7 +1830,56 @@
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://visualstudiomagazine.com/articles/2026/02/09/hands-on-with-new-multi-agent-orchestration-in-vs-code.aspx" target="_blank" rel="noopener">Hands On with New Multi-Agent Orchestration in VS Code</a>
+                            <a href="https://bix-tech.com/ai-agents-orchestration-langgraph/" target="_blank" rel="noopener">AI Agents orchestration with LangGraph: architectures, patterns, and ...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div class="title">
+                        <a href="https://github.com/a2aproject/A2A" target="_blank" rel="noopener">Standardized Agent-to-Agent Communication Protocols</a>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                            Early Adoption
+                        </span>
+                    </div>
+                    
+                    <div class="summary" style="margin-bottom: 20px;">
+                        <p style="font-size: 1.05em; line-height: 1.7;">Interoperability is emerging as a priority, with open protocols enabling agents from different vendors or teams to communicate as services. This supports cross-organizational collaboration and agent marketplaces.</p>
+                    </div>
+                    
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                        <p style="margin: 0; color: #475569; line-height: 1.6;">
+                            <strong style="color: #1e293b;">Example Implementation:</strong> The Agent2Agent (A2A) protocol defines standardized discovery and communication mechanisms for interoperable agents.
+                        </p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <h4 style="color: #10b981; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Strengths</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #334155;">
+                                <li style="margin-bottom: 6px;">Vendor-neutral interoperability</li>
+                                <li style="margin-bottom: 6px;">Enables distributed agent ecosystems</li>
+                                <li style="margin-bottom: 6px;">Supports cross-team and cross-org integration</li>
+                                <li style="margin-bottom: 6px;">Decouples agents from specific frameworks</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: #f59e0b; font-size: 1em; margin-bottom: 10px; font-weight: 600;">Limitations</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #334155;">
+                                <li style="margin-bottom: 6px;">Immature security and trust models</li>
+                                <li style="margin-bottom: 6px;">Performance overhead compared to local calls</li>
+                                <li style="margin-bottom: 6px;">Governance standards still evolving</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="citations">
+                        <div class="citations-title">Sources:</div>
+                        <div class="citation">
+                            <a href="https://github.com/a2aproject/A2A" target="_blank" rel="noopener">An open protocol enabling communication and interoperability ... - GitHub</a>
                         </div>
                     </div>
                 </div>
@@ -1750,7 +1889,7 @@
                         Key Architectural Pattern
                     </h3>
                     <p style="color: #78350f; line-height: 1.8; margin: 0; font-size: 1.05em;">
-                        A Governed Multi-Agent Execution Mesh combines a graph or workflow orchestrator, specialized single-responsibility agents, layered memory, and an event bus. LLMs are constrained to reasoning tasks while deterministic systems enforce execution, policy, and observability, making the architecture reliable, auditable, and enterprise-ready.
+                        Adopt a deterministic orchestration spine that owns control flow, state, retries, and audit, while embedding LLM-powered agents as replaceable cognitive components. Combine this with layered memory (episodic and semantic) and protocol-based agent communication to achieve reliability, scalability, and vendor flexibility in enterprise environments.
                     </p>
                 </div>
             
@@ -1761,11 +1900,11 @@
         
         <!-- Research Digest Section -->
         <div id="research-digest" class="section" style="background: #f0fdf4;">
-            <h2>Research Digest: Implementation-Ready Papers</h2>
+            <h2>Research Digest</h2>
             
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://github.com/Agent-on-the-Fly/Memento" target="_blank" rel="noopener">Memento: Fine-Tuning LLM Agents without Fine-Tuning LLMs</a>
+                        <a href="https://arxiv.org/pdf/2602.16313" target="_blank" rel="noopener">MemoryArena: Benchmarking Agent Memory in Interdependent Multi-Session Agentic Tasks</a>
                     </div>
                     
                     <div style="margin: 15px 0;">
@@ -1781,30 +1920,30 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">Memento proposes a memory-centric continual learning system that allows agents to improve without updating model weights. It combines planner–executor architectures, case-based reasoning, and persistent memory to enable skill reuse across tasks. Learning occurs at the agent-system level, making it highly practical for production settings.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">MemoryArena introduces a standardized benchmark to evaluate whether agents can retain, retrieve, and correctly reuse memory across multiple sessions. Tasks are interdependent across time, forcing agents to actively manage memory updates, compression, and selective recall. The benchmark exposes session-level memory failures that commonly appear in deployed long-lived agents.</p>
                     </div>
                     
                     <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                         <p style="margin: 0; color: #78350f; line-height: 1.6;">
-                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Practitioners should experiment immediately, especially if constrained by closed-model APIs or high fine-tuning costs. The approach is production-ready but requires careful memory growth and retrieval tuning to avoid long-term degradation.
+                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Practitioners building long-lived or stateful agents should use MemoryArena as a regression test for memory architectures such as vector stores, episodic memory, or summarization pipelines. While it does not introduce a new algorithm, it is immediately valuable for uncovering memory failures already present in production systems.
                         </p>
                     </div>
                     
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://github.com/Agent-on-the-Fly/Memento" target="_blank" rel="noopener">Memento: Fine-tuning LLM Agents without Fine-tuning LLMs - GitHub</a>
+                            <a href="https://arxiv.org/pdf/2602.16313" target="_blank" rel="noopener">Benchmarking Agent Memory in Interdependent Multi-Session Agentic Tasks</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2025/04/AgenticReasoning.pdf" target="_blank" rel="noopener">ARTIST: Agentic Reasoning and Tool Integration via Reinforcement Learning</a>
+                        <a href="https://arxiv.org/pdf/2601.14192" target="_blank" rel="noopener">Toward Efficient Agents: Memory, Tool Learning, and Planning</a>
                     </div>
                     
                     <div style="margin: 15px 0;">
                         <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                            Tool Learning
+                            Planning Architectures
                         </span>
                         <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
                             Feasibility: 4/5
@@ -1815,59 +1954,25 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">ARTIST introduces a framework where LLM agents learn when and how to use tools using outcome-based reinforcement learning. Tool invocation decisions are optimized for end-task success rather than heuristic prompts or step-level correctness. This reduces brittleness in tool-augmented agents and enables self-improving behavior.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">This paper analyzes how agent performance is increasingly constrained by orchestration costs rather than model capability. It synthesizes practical techniques for memory management, tool-use minimization, and bounded planning depth. An accompanying code repository provides concrete implementations of efficient agent design patterns.</p>
                     </div>
                     
                     <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                         <p style="margin: 0; color: #78350f; line-height: 1.6;">
-                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Teams building tool-using agents should prototype ARTIST-style policies, especially if they have logged traces or offline RL setups. However, teams without evaluation harnesses or reward definitions may find adoption slower.
+                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Teams facing latency, token, or tool-call cost limits will benefit from the implementation patterns consolidated in this work. Because it is a synthesis rather than a single method, practitioners must selectively integrate techniques that fit their existing agent stack.
                         </p>
                     </div>
                     
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2025/04/AgenticReasoning.pdf" target="_blank" rel="noopener">Agentic Reasoning and Tool Integration for LLMs via Reinforcement Learning</a>
+                            <a href="https://arxiv.org/pdf/2601.14192" target="_blank" rel="noopener">Toward Efficient Agents: Memory, Tool learning, and Planning</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://aclanthology.org/2024.findings-emnlp.458/" target="_blank" rel="noopener">LLM Self-Correction with DeCRIM: Decompose, Critique, and Refine</a>
-                    </div>
-                    
-                    <div style="margin: 15px 0;">
-                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                            Self Correction Methods
-                        </span>
-                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                            Feasibility: 4/5
-                        </span>
-                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151; margin-left: 8px;">
-                            1-3 months
-                        </span>
-                    </div>
-                    
-                    <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">DeCRIM formalizes self-correction as a structured pipeline that decomposes constraints, critiques outputs, and selectively refines them. A Critic model determines when correction is needed, avoiding unnecessary reflection. The approach improves reliability even with weak feedback signals.</p>
-                    </div>
-                    
-                    <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
-                        <p style="margin: 0; color: #78350f; line-height: 1.6;">
-                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Practitioners seeking higher reliability in agent outputs should adopt DeCRIM due to its modular and lightweight design. The main trade-off is added latency from critique passes, which may not suit low-latency applications.
-                        </p>
-                    </div>
-                    
-                    <div class="citations">
-                        <div class="citations-title">Sources:</div>
-                        <div class="citation">
-                            <a href="https://aclanthology.org/2024.findings-emnlp.458/" target="_blank" rel="noopener">LLM Self-Correction with DeCRIM: Decompose, Critique, and Refine for ...</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-card">
-                    <div class="title">
-                        <a href="https://aclanthology.org/2025.acl-long.1575.pdf" target="_blank" rel="noopener">HiAgent: Hierarchical Working Memory Management for Long-Horizon Agents</a>
+                        <a href="https://arxiv.org/pdf/2601.18137" target="_blank" rel="noopener">DeepPlanning: Benchmarking Long-Horizon Agentic Planning with Realistic Constraints</a>
                     </div>
                     
                     <div style="margin: 15px 0;">
@@ -1883,19 +1988,19 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">HiAgent introduces hierarchical working memory that organizes agent reasoning around subgoals rather than raw histories. The system dynamically summarizes and replaces memory based on relevance, reducing context bloat in long-horizon tasks. This approach mirrors human problem-solving more closely than flat memory buffers.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">DeepPlanning introduces a benchmark focused on realistic long-horizon planning tasks such as multi-day travel and constrained shopping. The tasks require both information gathering and global optimization over long time horizons. Results reveal that many agents performing well on synthetic benchmarks fail under real-world planning constraints.</p>
                     </div>
                     
                     <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                         <p style="margin: 0; color: #78350f; line-height: 1.6;">
-                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Teams facing context-length failures in multi-step agents should experiment with HiAgent, as it is model-agnostic and requires no fine-tuning. Performance depends heavily on the quality of subgoal decomposition.
+                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Practitioners can use DeepPlanning to validate whether their agents handle messy, real user goals beyond demo scenarios. Although it does not propose a new planning algorithm, it is highly effective for distinguishing deployable planners from brittle prototypes.
                         </p>
                     </div>
                     
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://aclanthology.org/2025.acl-long.1575.pdf" target="_blank" rel="noopener">HiAgent: Hierarchical Working Memory Management for Solving Long ...</a>
+                            <a href="https://arxiv.org/pdf/2601.18137" target="_blank" rel="noopener">DeepPlanning: Benchmarking Long-Horizon Agentic Planning with ...</a>
                         </div>
                     </div>
                 </div>
@@ -1917,12 +2022,12 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">WebAnchor identifies that early planning decisions disproportionately affect long-horizon agent success. It introduces Anchor-GRPO, which decouples planning and execution rewards in reinforcement learning to stabilize early steps. This reduces cascading failures in web-browsing and research agents.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">WebAnchor identifies early planning errors as a major source of failure in long-horizon web agents. It proposes Anchor-GRPO, a two-stage reinforcement learning approach that separates planning from execution and applies denser rewards to initial plans. The method significantly improves long-horizon stability without increasing model size.</p>
                     </div>
                     
                     <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
                         <p style="margin: 0; color: #78350f; line-height: 1.6;">
-                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> Practitioners training RL-based browsing or research agents should consider WebAnchor to address silent long-horizon failures. The approach is less impactful for prompt-only systems and requires RL expertise.
+                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> This work is valuable for teams building browsing, search, or research agents that suffer from cascading planning errors. However, the need for reinforcement learning infrastructure may limit short-term adoption for teams relying solely on API-based models.
                         </p>
                     </div>
                     
@@ -1930,6 +2035,40 @@
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
                             <a href="https://arxiv.org/abs/2601.03164" target="_blank" rel="noopener">WebAnchor: Anchoring Agent Planning to Stabilize Long-Horizon Web Reasoning</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div class="title">
+                        <a href="https://mit-mi.github.io/mem1-site/" target="_blank" rel="noopener">MEM1: Learning to Synergize Memory and Reasoning for Efficient Long-Horizon Agents</a>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                            Memory Modeling
+                        </span>
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                            Feasibility: 3/5
+                        </span>
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151; margin-left: 8px;">
+                            6-12 months
+                        </span>
+                    </div>
+                    
+                    <div class="summary" style="margin-bottom: 20px;">
+                        <p style="font-size: 1.05em; line-height: 1.7; color: #334155;">MEM1 introduces a training framework where agents learn when to store, retrieve, and reason over memory instead of treating memory as passive storage. The approach improves performance on multi-hop, multi-objective long-horizon tasks under realistic context constraints. It directly addresses coordination failures between memory and reasoning observed in deployed agents.</p>
+                    </div>
+                    
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 6px;">
+                        <p style="margin: 0; color: #78350f; line-height: 1.6;">
+                            <strong style="color: #92400e;">Practitioner Recommendation:</strong> MEM1 is a strong fit for teams developing agents that degrade as task length grows and require tighter memory–reasoning integration. Adoption may be challenging for practitioners limited to API-only models due to its training-centric approach.
+                        </p>
+                    </div>
+                    
+                    <div class="citations">
+                        <div class="citations-title">Sources:</div>
+                        <div class="citation">
+                            <a href="https://mit-mi.github.io/mem1-site/" target="_blank" rel="noopener">MEM1: Learning to Synergize Memory and Reasoning for Efficient Long ...</a>
                         </div>
                     </div>
                 </div>
@@ -1945,7 +2084,7 @@
             
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://www.microsoft.com/en-us/security/blog/2026/02/10/80-of-fortune-500-use-active-ai-agents-observability-governance-and-security-shape-the-new-frontier/" target="_blank" rel="noopener">Microsoft Enterprise Observability &amp; Guardrails for AI Agents</a>
+                        <a href="https://aws.amazon.com/blogs/machine-learning/evaluating-ai-agents-real-world-lessons-from-building-agentic-systems-at-amazon/" target="_blank" rel="noopener">Amazon Bedrock AgentCore evaluation framework for agentic systems</a>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -1955,31 +2094,31 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">Microsoft introduced an integrated control plane for enterprise AI agents that unifies observability, runtime guardrails, and security controls. The guidance reflects widespread production use of agents and emphasizes continuous telemetry, role-based access, and runtime intervention for agent behavior.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7;">Amazon 공개한 Bedrock AgentCore 평가 프레임워크는 에이전트의 다단계 실행 궤적, 도구 호출 정확성, 신뢰성 및 컴플라이언스를 체계적으로 평가하는 실제 운영 사례를 제시한다. 이는 출력 품질 중심 평가에서 벗어나, 행동과 의사결정 흐름을 평가 대상으로 삼는 전환점이다.</p>
                     </div>
                     
                     <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
                         <p style="margin: 0; color: #1e40af; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Implementation Implications:</strong> Organizations should treat agents as first-class operational entities with dedicated logging of decisions, tool usage, and memory access. Guardrails and permissions should be centralized at the agent runtime layer rather than embedded in individual applications.
+                            <strong style="color: #1e293b;">Implementation Implications:</strong> 에이전트 평가를 단일 응답 점수가 아닌 전체 계획→도구 호출→결과의 연속 흐름으로 설계해야 한다. 또한 오프라인 테스트가 아니라 CI/CD 및 운영 환경에 연속 평가 파이프라인을 통합해야 한다.
                         </p>
                     </div>
                     
                     <div style="background: #fef3c7; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                         <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                            <strong style="color: #78350f;">Risk Mitigation:</strong> Enforce policy-based capability scoping instead of relying on prompts. Require human escalation for irreversible actions and actively monitor cross-agent interactions as a security risk surface.
+                            <strong style="color: #78350f;">Risk Mitigation:</strong> 모든 에이전트 행동을 세분화해 로깅하고, 실패 유형(루프, 도구 오용, 정책 위반 등)을 명시적으로 분류해야 한다. 평가 결과를 개발 지표가 아닌 감사 및 책임 추적을 위한 기록으로 관리해야 한다.
                         </p>
                     </div>
                     
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://www.microsoft.com/en-us/security/blog/2026/02/10/80-of-fortune-500-use-active-ai-agents-observability-governance-and-security-shape-the-new-frontier/" target="_blank" rel="noopener">80% of Fortune 500 use active AI Agents: Observability, governance, and security shape the new frontier</a>
+                            <a href="https://aws.amazon.com/blogs/machine-learning/evaluating-ai-agents-real-world-lessons-from-building-agentic-systems-at-amazon/" target="_blank" rel="noopener">Evaluating AI agents: Real-world lessons from building agentic systems ...</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://cloudsecurityalliance.org/blog/2026/02/02/the-agentic-trust-framework-zero-trust-governance-for-ai-agents" target="_blank" rel="noopener">Agentic Trust Framework (ATF) for Zero-Trust Agent Governance</a>
+                        <a href="https://bastion.tech/blog/ai-agent-security-guardrails-soc2-iso27001" target="_blank" rel="noopener">SOC 2 및 ISO 27001에 AI 에이전트 통제 매핑</a>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -1989,31 +2128,99 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">The Agentic Trust Framework defines a zero-trust governance model for autonomous agents, applying identity, least privilege, and continuous verification principles. Adoption increased as organizations seek clearer trust boundaries between agents, tools, and humans.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7;">Bastion은 AI 에이전트를 자율 행위자로 간주하고, 프롬프트 인젝션·데이터 유출·무단 행동을 SOC 2 및 ISO 27001 통제 항목과 직접 연결하는 가이드를 제시했다. 이는 실제 감사 환경에서 요구되는 운영 통제를 반영한다.</p>
                     </div>
                     
                     <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
                         <p style="margin: 0; color: #1e40af; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Implementation Implications:</strong> Each agent should be assigned a unique identity and governed through policy-based access control. Decision authority and execution authority should be separated across agents to reduce blast radius.
+                            <strong style="color: #1e293b;">Implementation Implications:</strong> 각 에이전트에 비인간 ID를 부여하고 최소 권한 원칙에 따라 도구 접근을 제한해야 한다. 에이전트의 도구 호출과 행동은 보안 이벤트로 취급되어 중앙 로그에 기록돼야 한다.
                         </p>
                     </div>
                     
                     <div style="background: #fef3c7; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                         <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                            <strong style="color: #78350f;">Risk Mitigation:</strong> Bind permissions to runtime context to prevent silent privilege escalation. Log and audit policy evaluation decisions, not just agent actions, and phase autonomy using ATF maturity tiers.
+                            <strong style="color: #78350f;">Risk Mitigation:</strong> 도구 수준의 허용 목록을 적용하고, 변경 불가능한 에이전트 행동 로그를 유지해야 한다. 이를 통해 감사 대응과 사고 분석 시 증적을 확보할 수 있다.
                         </p>
                     </div>
                     
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://cloudsecurityalliance.org/blog/2026/02/02/the-agentic-trust-framework-zero-trust-governance-for-ai-agents" target="_blank" rel="noopener">The Agentic Trust Framework: Zero Trust Governance for AI Agents</a>
+                            <a href="https://bastion.tech/blog/ai-agent-security-guardrails-soc2-iso27001" target="_blank" rel="noopener">AI Agent Security Guardrails for SOC 2 &amp; ISO 27001 Compliance | Bastion</a>
                         </div>
                     </div>
                 </div>
                 <div class="content-card">
                     <div class="title">
-                        <a href="https://www.ibm.com/think/insights/building-trustworthy-ai-agents-compliance-auditability-explainability" target="_blank" rel="noopener">IBM Auditability Patterns for Autonomous Agent Decisions</a>
+                        <a href="https://github.com/Arize-ai/phoenix" target="_blank" rel="noopener">Trace-first 에이전트 관측성과 평가의 표준화(Phoenix)</a>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                            Early Adoption
+                        </span>
+                    </div>
+                    
+                    <div class="summary" style="margin-bottom: 20px;">
+                        <p style="font-size: 1.05em; line-height: 1.7;">Arize의 Phoenix는 OpenTelemetry 기반 트레이싱, 에이전트 평가 워크플로, 데이터셋 버저닝을 강화하며 에이전트 관측성의 표준화를 가속했다. 이는 추론 단계와 도구 호출을 런타임에서 직접 관찰·평가하는 흐름을 정착시키고 있다.</p>
+                    </div>
+                    
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                        <p style="margin: 0; color: #1e40af; line-height: 1.6;">
+                            <strong style="color: #1e293b;">Implementation Implications:</strong> 관측성 스택에서 추론 단계, 메모리 접근, 도구 호출을 모두 추적해야 한다. 평가는 사후 분석이 아니라 운영 중 실시간으로 연결되어야 한다.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                        <p style="margin: 0; color: #92400e; line-height: 1.6;">
+                            <strong style="color: #78350f;">Risk Mitigation:</strong> 트레이스를 단순 디버깅 로그가 아닌 안전 텔레메트리로 활용하고, 이상 행동 패턴에 대한 알림을 구성해야 한다. 사고 조사에 충분한 기간 동안 트레이스를 보존해야 한다.
+                        </p>
+                    </div>
+                    
+                    <div class="citations">
+                        <div class="citations-title">Sources:</div>
+                        <div class="citation">
+                            <a href="https://github.com/Arize-ai/phoenix" target="_blank" rel="noopener">GitHub - Arize-ai/phoenix: AI Observability &amp; Evaluation</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div class="title">
+                        <a href="https://brightdata.com/ai/mcp-server/launch-week/day5" target="_blank" rel="noopener">행동 궤적 중심의 에이전트 평가 및 관측(Bright Data)</a>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
+                            Early Adoption
+                        </span>
+                    </div>
+                    
+                    <div class="summary" style="margin-bottom: 20px;">
+                        <p style="font-size: 1.05em; line-height: 1.7;">Bright Data는 에이전트가 실제로 의도한 행동을 수행하는지 여부를 평가하는 전용 평가·관측 프레임워크를 출시했다. 출력 품질보다 행동 궤적과 운영 효율성에 초점을 둔다.</p>
+                    </div>
+                    
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                        <p style="margin: 0; color: #1e40af; line-height: 1.6;">
+                            <strong style="color: #1e293b;">Implementation Implications:</strong> 에이전트 성공과 실패 상태를 명확히 정의하고, 루프·재시도·비효율적 행동과 같은 행동 KPI를 설계해야 한다. 평가는 런타임 시스템의 일부로 통합되어야 한다.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                        <p style="margin: 0; color: #92400e; line-height: 1.6;">
+                            <strong style="color: #78350f;">Risk Mitigation:</strong> 겉으로는 성공처럼 보이지만 비효율적이거나 위험한 행동을 조기에 탐지해야 한다. 평가 신호를 인시던트 대응 프로세스와 직접 연결하는 것이 중요하다.
+                        </p>
+                    </div>
+                    
+                    <div class="citations">
+                        <div class="citations-title">Sources:</div>
+                        <div class="citation">
+                            <a href="https://brightdata.com/ai/mcp-server/launch-week/day5" target="_blank" rel="noopener">Evaluations &amp; Observability – Measure What Matters - Bright Data</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div class="title">
+                        <a href="https://developer.ibm.com/articles/governing-ai-agents-watsonx-governance/" target="_blank" rel="noopener">연속 거버넌스 루프 기반 AI 에이전트 관리(IBM)</a>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -2023,93 +2230,25 @@
                     </div>
                     
                     <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">IBM published concrete patterns to make autonomous agent decisions auditable under existing compliance regimes. The focus is on decision attribution, replayability, and aligning agent actions with established RACI and audit requirements.</p>
+                        <p style="font-size: 1.05em; line-height: 1.7;">IBM은 watsonx.governance를 통해 AI 에이전트에 대한 연속 평가·모니터링·컴플라이언스를 결합한 거버넌스 루프를 공식화했다. 이는 배포 전 승인 중심 거버넌스에서 운영 중 지속 통제로의 전환을 의미한다.</p>
                     </div>
                     
                     <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
                         <p style="margin: 0; color: #1e40af; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Implementation Implications:</strong> Teams should persist decision snapshots including inputs, model versions, policies, and tool state. Multi-agent systems must clearly record which agent made each decision, anticipating future audit review.
+                            <strong style="color: #1e293b;">Implementation Implications:</strong> 에이전트를 구성 요소 단위로 분해해 각각 평가·통제할 수 있어야 한다. 신뢰도나 성능 지표가 하락할 경우 자동으로 재평가나 인간 감독으로 전환해야 한다.
                         </p>
                     </div>
                     
                     <div style="background: #fef3c7; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                         <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                            <strong style="color: #78350f;">Risk Mitigation:</strong> Avoid regenerating explanations after the fact and instead store immutable decision logs. Map explicit human accountability to each autonomous capability and align log retention with regulatory timelines.
+                            <strong style="color: #78350f;">Risk Mitigation:</strong> 정기적인 재인증 프로세스를 통해 에이전트 행동을 재검증해야 한다. 위험 신호 발생 시 인간 개입과 권한 축소를 즉시 수행할 수 있는 체계를 마련해야 한다.
                         </p>
                     </div>
                     
                     <div class="citations">
                         <div class="citations-title">Sources:</div>
                         <div class="citation">
-                            <a href="https://www.ibm.com/think/insights/building-trustworthy-ai-agents-compliance-auditability-explainability" target="_blank" rel="noopener">Building trustworthy AI agents for compliance | IBM</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-card">
-                    <div class="title">
-                        <a href="https://github.com/openguardrails/openguardrails" target="_blank" rel="noopener">OpenGuardrails v6 Runtime Security Layer for AI Agents</a>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                            Early Adoption
-                        </span>
-                    </div>
-                    
-                    <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">OpenGuardrails released a v6 architectural rewrite that provides a dedicated guard agent enforcing security policies on every agent input and output. It targets prompt injection, data leakage, and misuse through composable detection pipelines.</p>
-                    </div>
-                    
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
-                        <p style="margin: 0; color: #1e40af; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Implementation Implications:</strong> Deploy OpenGuardrails as a sidecar or middleware around agent runtimes and define guardrails as version-controlled detection pipelines. Integrate alerts with existing SIEM and SOC workflows.
-                        </p>
-                    </div>
-                    
-                    <div style="background: #fef3c7; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
-                        <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                            <strong style="color: #78350f;">Risk Mitigation:</strong> Configure guards to fail closed on policy violations and monitor for bypass attempts or guardrail fatigue. Combine guardrails with observability tooling to identify systemic weaknesses.
-                        </p>
-                    </div>
-                    
-                    <div class="citations">
-                        <div class="citations-title">Sources:</div>
-                        <div class="citation">
-                            <a href="https://github.com/openguardrails/openguardrails" target="_blank" rel="noopener">GitHub - openguardrails/openguardrails: Prevents enterprise AI ...</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-card">
-                    <div class="title">
-                        <a href="https://openai.github.io/openai-agents-python/guardrails/" target="_blank" rel="noopener">OpenAI Agents SDK: Agent-Scoped Guardrails &amp; Telemetry</a>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; background: #f3f4f6; color: #374151;">
-                            Experimental
-                        </span>
-                    </div>
-                    
-                    <div class="summary" style="margin-bottom: 20px;">
-                        <p style="font-size: 1.05em; line-height: 1.7;">OpenAI updated its Agents SDK documentation to emphasize guardrails and monitoring that are scoped to individual agents rather than execution runners. This enables differentiated safety profiles for planners, executors, and other agent roles.</p>
-                    </div>
-                    
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
-                        <p style="margin: 0; color: #1e40af; line-height: 1.6;">
-                            <strong style="color: #1e293b;">Implementation Implications:</strong> Practitioners should define guardrails alongside agent definitions and tailor them to each agent’s role. Built-in telemetry can be used as a baseline but should not replace enterprise governance tooling.
-                        </p>
-                    </div>
-                    
-                    <div style="background: #fef3c7; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
-                        <p style="margin: 0; color: #92400e; line-height: 1.6;">
-                            <strong style="color: #78350f;">Risk Mitigation:</strong> Avoid applying uniform guardrails across heterogeneous agents and explicitly monitor guardrail execution failures. Layer SDK-level controls with external policy enforcement for defense in depth.
-                        </p>
-                    </div>
-                    
-                    <div class="citations">
-                        <div class="citations-title">Sources:</div>
-                        <div class="citation">
-                            <a href="https://openai.github.io/openai-agents-python/guardrails/" target="_blank" rel="noopener">Guardrails - OpenAI Agents SDK</a>
+                            <a href="https://developer.ibm.com/articles/governing-ai-agents-watsonx-governance/" target="_blank" rel="noopener">Effective governance frameworks for AI agents - IBM Developer</a>
                         </div>
                     </div>
                 </div>
@@ -2121,41 +2260,41 @@
         
         <!-- Industry Quotes Section -->
         <div id="quotes" class="section" style="background: #fef2f2;">
-            <h2>Industry Voices on AI Agents</h2>
+            <h2>Industry Voices</h2>
             
                 <div class="quote-card">
                     <div class="quote-mark">❝</div>
-                    <div class="quote-text">The era of Agentic AI—where software doesn’t just talk to you, but works for you—has officially arrived.</div>
+                    <div class="quote-text">AI systems are clicking around the Internet.</div>
                     <div class="quote-attribution">
-                        <strong>Jensen Huang</strong>, Founder &amp; CEO at NVIDIA • <a href="https://investor.wedbush.com/wedbush/article/tokenring-2026-1-26-nvidia-unveils-vera-rubin-platform-at-ces-2026-the-dawn-of-the-agentic-ai-era" target="_blank" rel="noopener" class="quote-source">Source</a>
+                        <strong>Sam Altman</strong>, CEO at OpenAI • <a href="https://www.windowscentral.com/software-apps/sam-altman-predicts-agentic-ai-clicking-around-the-internet" target="_blank" rel="noopener" class="quote-source">Source</a>
                     </div>
                 </div>
                 <div class="quote-card">
                     <div class="quote-mark">❝</div>
-                    <div class="quote-text">Artificial intelligence is evolving from generative AI to agent‑based AI, which has much stronger problem‑solving and fact‑based reasoning capabilities.</div>
+                    <div class="quote-text">Reliable agents are the next milestone—this is about systems you can actually trust to act.</div>
                     <div class="quote-attribution">
-                        <strong>Jensen Huang</strong>, Founder &amp; CEO at NVIDIA • <a href="https://news.futunn.com/en/post/66887030/yang-yuanqing-in-conversation-with-jensen-huang-the-two-parties" target="_blank" rel="noopener" class="quote-source">Source</a>
+                        <strong>Demis Hassabis</strong>, CEO &amp; Co-founder at Google DeepMind • <a href="https://aihola.com/article/hassabis-agi-agents-predictions" target="_blank" rel="noopener" class="quote-source">Source</a>
                     </div>
                 </div>
                 <div class="quote-card">
                     <div class="quote-mark">❝</div>
-                    <div class="quote-text">My goal was to pull the conversation out of ‘wow’ and into ‘now.’ AI isn’t just a technology story anymore—it’s becoming a macro force.</div>
+                    <div class="quote-text">We need agents that learn continually. We need world models and planning.</div>
                     <div class="quote-attribution">
-                        <strong>Demis Hassabis</strong>, Co-founder &amp; CEO at Google DeepMind • <a href="https://imaginarytalks.com/demis-hassabis-at-davos-2026/" target="_blank" rel="noopener" class="quote-source">Source</a>
+                        <strong>Richard Sutton</strong>, Professor of Computer Science at University of Alberta • <a href="https://neurips.cc/virtual/2025/eventlistwithbios/Invited%20Talk" target="_blank" rel="noopener" class="quote-source">Source</a>
                     </div>
                 </div>
                 <div class="quote-card">
                     <div class="quote-mark">❝</div>
-                    <div class="quote-text">So it’s an incredible amount of transformation—but also disruption—that’s going to happen.</div>
+                    <div class="quote-text">Today’s AI is powerful information retrieval — not true intelligence.</div>
                     <div class="quote-attribution">
-                        <strong>Demis Hassabis</strong>, Co-founder &amp; CEO at Google DeepMind • <a href="https://globaladvisors.biz/2026/01/16/quote-demis-hassabis-deepmind-co-founder-ceo/" target="_blank" rel="noopener" class="quote-source">Source</a>
+                        <strong>Yann LeCun</strong>, Chairman, Advanced Machine Intelligence Labs at AMI Labs • <a href="https://www.bloomberg.com/news/videos/2026-02-19/yann-lecun-a-godfather-of-ai-on-why-llms-fall-short-video" target="_blank" rel="noopener" class="quote-source">Source</a>
                     </div>
                 </div>
                 <div class="quote-card">
                     <div class="quote-mark">❝</div>
-                    <div class="quote-text">We will likely see the arrival of AI systems that can figure out novel insights.</div>
+                    <div class="quote-text">Artificial intelligence poses serious risks that require urgent attention and international cooperation.</div>
                     <div class="quote-attribution">
-                        <strong>Sam Altman</strong>, CEO at OpenAI • <a href="https://www.msn.com/en-us/technology/artificial-intelligence/openai-s-sam-altman-claims-ai-will-offer-novel-insights-as-early-as-2026/ar-AA1Gwn9r" target="_blank" rel="noopener" class="quote-source">Source</a>
+                        <strong>Demis Hassabis</strong>, CEO at Google DeepMind • <a href="https://www.bloomberg.com/news/articles/2026-02-19/deepmind-ceo-warns-of-ai-risks-calls-for-global-cooperation" target="_blank" rel="noopener" class="quote-source">Source</a>
                     </div>
                 </div>
             
@@ -2170,43 +2309,43 @@
             
                 <div class="case-study-card">
                     <div class="case-study-header">
-                        <div class="case-study-company"><a href="https://www.growthhq.io/our-thinking/enterprise-autonomous-agents-real-world-case-studies-driving-double-digit-roi-productivity-and-cost-savings-2025-industry-insights" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Microsoft</a></div>
-                        <div class="case-study-industry">Enterprise Software / IT &amp; Operations</div>
+                        <div class="case-study-company"><a href="https://www.creolestudios.com/real-world-ai-agent-case-studies/" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">H&amp;M</a></div>
+                        <div class="case-study-industry">Retail / E-commerce</div>
                     </div>
-                    <div class="case-study-use-case">Autonomous enterprise agents embedded in Microsoft Copilot to orchestrate internal workflows</div>
-                    <div class="case-study-description">Microsoft deployed autonomous AI agents within Copilot to handle multi-step reasoning tasks across engineering, sales, HR, and IT operations, including software testing automation, deal qualification, and internal support routing. The deployment resulted in a 60% reduction in manual software testing effort, a 141% increase in deal win rates in sales-assisted workflows, and reported ROI of up to 353% from scaled autonomous-agent deployments.</div>
+                    <div class="case-study-use-case">Autonomous virtual shopping agent for personalized commerce and cart recovery</div>
+                    <div class="case-study-description">H&amp;M deployed an autonomous virtual shopping agent embedded in its e-commerce platform to provide personalized product recommendations, multi-turn shopping guidance, cart recovery actions, and FAQ/order-flow orchestration. The production deployment reduced cart abandonment by double-digit percentages, increased online conversion rates, and shortened customer response times from minutes to seconds. The system also reduced dependency on human support agents during peak traffic periods.</div>
                 </div>
                 <div class="case-study-card">
                     <div class="case-study-header">
-                        <div class="case-study-company"><a href="https://www.salesforce.com/news/press-releases/2025/10/13/agentic-enterprise-announcement/" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Salesforce (Enterprise Customers)</a></div>
-                        <div class="case-study-industry">CRM / Sales &amp; Customer Operations</div>
+                        <div class="case-study-company"><a href="https://www.nice.com/press-releases/nice-unveils-the-agentic-ai-cx-frontline-report-delivering-first-quantifiable-evidence-of-ai-first-customer-experience-at-scale" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">NICE Customers (Multiple Enterprises)</a></div>
+                        <div class="case-study-industry">Contact Centers / Customer Experience</div>
                     </div>
-                    <div class="case-study-use-case">Agentforce 360 autonomous agents for sales, service, and CRM workflow orchestration</div>
-                    <div class="case-study-description">Salesforce enterprise customers deployed Agentforce 360, a production agentic AI platform with task-specific agents for sales follow-ups, lead qualification, customer case resolution, and cross-CRM workflow orchestration. Across multiple enterprises, deployments delivered double-digit productivity gains for sales and service teams, significant reductions in cost-to-serve through autonomous case handling, faster customer response times, and measurable improvements in customer satisfaction scores.</div>
+                    <div class="case-study-use-case">Goal-driven autonomous CX agents for Tier-1 inquiry resolution</div>
+                    <div class="case-study-description">Multiple enterprise customers using NICE’s agentic AI CX platform deployed goal-driven autonomous agents that dynamically interpret intent, decide resolution paths, and escalate only when needed. Across deployed customers, organizations achieved up to 3× faster deployment cycles, double-digit reductions in cost per contact, more than 80% Tier-1 inquiry containment, and CSAT improvements of up to 20%. Human agents were redeployed to higher-value judgment and exception-handling roles.</div>
                 </div>
                 <div class="case-study-card">
                     <div class="case-study-header">
-                        <div class="case-study-company"><a href="https://www.unleash.so/post/ai-agent-case-studies-real-world-success-stories-transforming-enterprise-operations" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Large Global Enterprises (Multiple)</a></div>
-                        <div class="case-study-industry">Multi-Industry (Sales, Support, Finance, Operations)</div>
+                        <div class="case-study-company"><a href="https://huntagency.io/blog/i-case-study-cost-savings" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Mid-Size Logistics Company (Anonymized)</a></div>
+                        <div class="case-study-industry">Logistics &amp; Supply Chain</div>
                     </div>
-                    <div class="case-study-use-case">Production agentic AI systems automating core enterprise business processes</div>
-                    <div class="case-study-description">Large global enterprises across multiple industries deployed production-grade agentic AI systems to autonomously plan and execute sales operations, customer support workflows, finance processes, and internal knowledge work. These deployments accelerated core business processes by 30–50%, delivered material cost reductions in customer support and operations, and generated revenue lift through AI-assisted sales execution and conversion optimization.</div>
+                    <div class="case-study-use-case">Autonomous operations agents for back-office automation</div>
+                    <div class="case-study-description">A mid-size logistics company deployed autonomous operations agents integrated across ERP and CRM systems to handle invoice processing, customer status updates, and internal reporting. The production deployment delivered a 40% operational cost reduction within 12 months, reduced processing times from hours to minutes, improved billing accuracy, and achieved these gains without requiring layoffs or headcount reductions.</div>
                 </div>
                 <div class="case-study-card">
                     <div class="case-study-header">
-                        <div class="case-study-company"><a href="https://cloud.google.com/transform/roi-of-ai-how-agents-help-business" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Google Cloud Enterprise Customers</a></div>
-                        <div class="case-study-industry">Cloud Computing / Security / Customer Operations</div>
+                        <div class="case-study-company"><a href="https://www.prnewswire.com/news-releases/google-cloud-study-reveals-52-of-executives-say-their-organizations-have-deployed-ai-agents-unlocking-a-new-wave-of-business-value-302546045.html" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Enterprise Customers (Google Cloud Study)</a></div>
+                        <div class="case-study-industry">Multi-Industry</div>
                     </div>
-                    <div class="case-study-use-case">Task-specific AI agents automating security operations, customer service, and analytics</div>
-                    <div class="case-study-description">Enterprise customers using Google Cloud deployed task-specific AI agents to automate complex, multi-tool workflows in security operations, customer service, and internal analytics. The agentic systems autonomously coordinated APIs and enterprise tools, delivering high first-year ROI, up to 2× productivity improvements in selected workflows, faster incident resolution times, and improved service reliability.</div>
+                    <div class="case-study-use-case">Autonomous agents for CX, marketing, security, and software development</div>
+                    <div class="case-study-description">According to Google Cloud’s Second Annual ROI of AI Study, enterprises that deployed autonomous AI agents across customer experience, marketing operations, security workflows, and software development reported significantly higher ROI than non-agentic GenAI users. Among revenue-growing companies, 53% reported a 6–10% revenue uplift, along with a faster path from deployment to measurable business value.</div>
                 </div>
                 <div class="case-study-card">
                     <div class="case-study-header">
-                        <div class="case-study-company"><a href="https://www.optinampout.com/blogs/agentic-ai-customer-service-roi-guide.html" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Enterprise Customer Support Organizations</a></div>
-                        <div class="case-study-industry">Financial Services / SaaS / Retail</div>
+                        <div class="case-study-company"><a href="https://vallettasoftware.com/blog/post/ai-agents-enterprise-case-studies-cost-reduction" target="_blank" rel="noopener" style="color: #1e293b; text-decoration: none;">Enterprises Using Valletta Software Solutions</a></div>
+                        <div class="case-study-industry">Regulated Industries</div>
                     </div>
-                    <div class="case-study-use-case">End-to-end agentic AI customer service agents for chat and voice support</div>
-                    <div class="case-study-description">Customer support organizations across financial services, SaaS, and retail deployed agentic AI agents capable of autonomously handling end-to-end ticket resolution across chat and voice channels. These systems performed intent detection, tool usage, and case closure without human escalation, resulting in approximately 30% reductions in support operating costs, up to 40% improvements in CSAT scores, and an average ROI of around 171%.</div>
+                    <div class="case-study-use-case">Autonomous compliance monitoring and support agents</div>
+                    <div class="case-study-description">Enterprises in regulated industries deployed autonomous compliance and support agents integrated with ERP and CRM systems to perform continuous compliance checks, support triage, and exception handling. These production deployments achieved 30–40% efficiency gains, up to 40% cost reduction in compliance and support operations, and realized ROI within 6–12 months while reducing human error risk.</div>
                 </div>
             
             <div class="back-to-top">
@@ -2217,7 +2356,8 @@
         <!-- Footer -->
         <div class="footer">
             <p><strong>Agentic AI Intelligence Report</strong> - Practitioner Edition v2.0</p>
-            <p>Generated: February 15, 2026 at 09:07 PM UTC</p>
+            <p>Generated: February 20, 2026 at 02:22 AM UTC</p>
+            <p class="pdf-only-link" style="display: none;">Latest version: <a href="https://vikasgoyal.github.io/agentic/agenticailatest.html" target="_blank" style="color: #60a5fa;">vikasgoyal.github.io/agentic/agenticailatest.html</a></p>
             <p>AI-generated content may require verification</p>
         </div>
     </div>
