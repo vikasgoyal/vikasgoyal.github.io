@@ -486,6 +486,7 @@ const phaseMap = {
     agents: ["build", "manage"],
     workflows: ["build"],
     orchestration: ["build", "manage"],
+    "multi-agent": ["build", "manage"],
     evaluations: ["govern"],
     traces: ["govern", "manage"],
     monitoring: ["govern", "manage"],
@@ -505,6 +506,7 @@ const linksLabel = document.getElementById("detail-links-label");
 const capabilities = document.getElementById("detail-capabilities");
 const uses = document.getElementById("detail-uses");
 const triggers = document.querySelectorAll("[data-detail]");
+const phaseControlledElements = document.querySelectorAll("[data-phase-key]");
 const diagram = document.querySelector(".diagram");
 const phaseToggles = document.querySelectorAll("[data-phase-toggle]");
 const newsButton = document.getElementById("open-news");
@@ -514,7 +516,6 @@ const newsStatus = document.getElementById("news-status");
 const newsList = document.getElementById("news-list");
 
 let activeTrigger = null;
-let closeTimer = null;
 let openMode = null;
 let newsItems = [];
 let newsRequest = null;
@@ -532,12 +533,13 @@ function getActivePhases() {
         .map((toggle) => toggle.value);
 }
 
-function matchesActivePhase(trigger, activePhases) {
+function matchesActivePhase(element, activePhases) {
     if (activePhases.length === 0) {
         return false;
     }
 
-    const blockPhases = phaseMap[trigger.dataset.detail] || [];
+    const phaseKey = element.dataset.detail || element.dataset.phaseKey;
+    const blockPhases = phaseMap[phaseKey] || [];
     return blockPhases.some((phase) => activePhases.includes(phase));
 }
 
@@ -551,6 +553,15 @@ function applyPhaseFilter() {
         if (!isMatch && activeTrigger === trigger) {
             closePanel();
         }
+    });
+
+    phaseControlledElements.forEach((element) => {
+        if (element.dataset.detail) {
+            return;
+        }
+
+        const isMatch = matchesActivePhase(element, activePhases);
+        element.classList.toggle("is-phase-dimmed", !isMatch);
     });
 }
 
@@ -583,11 +594,6 @@ function openPanel(key, trigger, mode) {
     const content = detailContent[key];
     if (!content) {
         return;
-    }
-
-    if (closeTimer) {
-        window.clearTimeout(closeTimer);
-        closeTimer = null;
     }
 
     kicker.textContent = content.kicker;
@@ -837,22 +843,8 @@ function closeNewsPanel() {
     }, 180);
 }
 
-function scheduleClose() {
-    if (openMode !== "hover") {
-        return;
-    }
-
-    closeTimer = window.setTimeout(() => {
-        if (!panel.matches(":hover")) {
-            closePanel();
-        }
-    }, 140);
-}
-
 triggers.forEach((trigger) => {
     trigger.setAttribute("aria-expanded", "false");
-    trigger.addEventListener("mouseenter", () => openPanel(trigger.dataset.detail, trigger, "hover"));
-    trigger.addEventListener("focus", () => openPanel(trigger.dataset.detail, trigger, "focus"));
     trigger.addEventListener("click", () => {
         if (activeTrigger === trigger && openMode === "click") {
             closePanel();
@@ -861,21 +853,12 @@ triggers.forEach((trigger) => {
 
         openPanel(trigger.dataset.detail, trigger, "click");
     });
-    trigger.addEventListener("mouseleave", scheduleClose);
 });
 
 phaseToggles.forEach((toggle) => {
     toggle.addEventListener("change", applyPhaseFilter);
 });
 
-panel.addEventListener("mouseenter", () => {
-    if (closeTimer) {
-        window.clearTimeout(closeTimer);
-        closeTimer = null;
-    }
-});
-
-panel.addEventListener("mouseleave", closePanel);
 panel.addEventListener("click", (event) => {
     if (event.target === panel) {
         closePanel();

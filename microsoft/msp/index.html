@@ -7,20 +7,38 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZBXY60BLWE');
+    </script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="top-nav">
+        <nav aria-label="Primary">
+            <ul>
+                <li><a href="https://vikasgoyal.github.io/">Home</a></li>
+                <li><a href="https://vikasgoyal.github.io/blog/">Blog</a></li>
+                <li><a href="https://vikasgoyal.github.io/agentic/">Agentic AI</a></li>
+                <li><a class="aair-link" href="https://vikasgoyal.github.io/industries/index.html">Industry AI</a></li>
+                <li><a href="https://vikasgoyal.github.io/startups/">Startups</a></li>
+                <li><a href="https://vikasgoyal.github.io/genai/">Generative AI</a></li>
+                <li><a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noreferrer noopener">LinkedIn</a></li>
+            </ul>
+        </nav>
+    </div>
     <main class="page-shell">
         <header class="hero">
-            <p class="eyebrow">Agent Platform Concept</p>
+            <p class="eyebrow">Agentic AI Platform</p>
             <h1>Microsoft Foundry</h1>
-            <p class="hero-copy">A visual home layout for exploring core building blocks, orchestration, and operational controls around an agent-first platform.</p>
-            <div class="hero-actions">
+            <div class="hero-controls">
                 <button class="hero-action-button" id="open-news" type="button" aria-haspopup="dialog" aria-expanded="false">
                     What's New
                 </button>
-            </div>
-            <div class="phase-filter" role="group" aria-label="Phase filter">
+                <div class="phase-filter" role="group" aria-label="Phase filter">
                 <label class="phase-option">
                     <input type="checkbox" value="prepare" data-phase-toggle checked>
                     <span>Prepare</span>
@@ -37,6 +55,7 @@
                     <input type="checkbox" value="manage" data-phase-toggle checked>
                     <span>Manage</span>
                 </label>
+                </div>
             </div>
         </header>
 
@@ -151,7 +170,16 @@
                         </span>
                     </button>
                 </div>
-                <p class="bottom-caption">multi-agent</p>
+                <p class="bottom-caption" data-phase-key="multi-agent" aria-label="Multi-agent workflows and orchestration">
+                    <span class="caption-visual" aria-hidden="true">
+                        <span class="caption-box caption-box-agent"></span>
+                        <span class="caption-link"></span>
+                        <span class="caption-box caption-box-workflow"></span>
+                        <span class="caption-link caption-link-branch"></span>
+                        <span class="caption-box caption-box-orchestration"></span>
+                    </span>
+                    <span class="caption-text">multi-agent</span>
+                </p>
             </div>
 
             <div class="column column-right">
@@ -231,6 +259,7 @@
                     <span class="platform-meta">registry · access · security</span>
                 </span>
             </button>
+            <p class="diagram-last-updated">Last updated: <span id="last-updated-date">March 8, 2026</span></p>
         </section>
     </main>
 
