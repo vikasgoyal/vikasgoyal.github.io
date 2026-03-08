@@ -1,0 +1,54 @@
+{
+  "source": "https://devblogs.microsoft.com/foundry/feed/",
+  "generatedAt": "2026-03-08T17:56:26.2902834Z",
+  "items": [
+    {
+      "title": "What’s new in Microsoft Foundry | February 2026",
+      "link": "https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-feb-2026/",
+      "date": "2026-03-06T15:08:31",
+      "summary": "February brings Anthropic’s Claude Opus 4.6 and Sonnet 4.6 with 1M-token context, GPT-Realtime-1.5 and GPT-Audio-1.5, Grok 4.0 GA, the Microsoft Agent Framework reaching Release Candidate, and the Foundry REST API v1 quietly going GA — laying the foundation for imminent SDK GA announcements across Python, .NET, JS/TS, and Java."
+    },
+    {
+      "title": "What’s new in Microsoft Foundry | Dec 2025 & Jan 2026",
+      "link": "https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-dec-2025-jan-2026/",
+      "date": "2026-02-18T17:01:09",
+      "summary": "Catch up on all the new models, audio updates, fine-tuning expansions, and SDK updates from Microsoft Foundry spanning December 2025 and January 2026 — including GPT-5.2, Codex Max, DeepSeek V3.2, FLUX.2, and the azure-ai-projects v2 beta consolidation."
+    },
+    {
+      "title": "What’s new in Microsoft Foundry | October and November 2025",
+      "link": "https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-oct-nov-2025/",
+      "date": "2025-12-18T20:55:08",
+      "summary": "Azure AI Foundry is now Microsoft Foundry. Read the latest announcements about agents, models, tools and more."
+    },
+    {
+      "title": "What’s new in Azure AI Foundry | September 2025",
+      "link": "https://devblogs.microsoft.com/foundry/whats-new-in-azure-ai-foundry-september-2025/",
+      "date": "2025-10-07T17:58:44",
+      "summary": "GPT‑5‑Codex GA, Sora video‑to‑video preview, Grok 4 Fast, Browser Automation & Key Vault previews, new Search knowledge sources, Voice Live GA."
+    },
+    {
+      "title": "What’s new in Azure AI Foundry | August 2025",
+      "link": "https://devblogs.microsoft.com/foundry/whats-new-in-azure-ai-foundry-august-2025/",
+      "date": "2025-09-03T08:00:50",
+      "summary": "August 2025 highlights GPT‑5 arrives in Foundry, Model Router adds GPT‑5 support, Responses API is GA, Browser Automation enters public preview, plus Sora updates, Mistral Document AI, FLUX image models, OpenAI gpt‑oss with Foundry Local, and SDK/documentation updates."
+    },
+    {
+      "title": "What’s new in Azure AI Foundry | July 2025",
+      "link": "https://devblogs.microsoft.com/foundry/whats-new-in-azure-ai-foundry-july-2025/",
+      "date": "2025-08-04T08:00:27",
+      "summary": "July 2025 brings Deep Research Agent (public preview), GPT-image-1 model enhancements, new developer tools, and platform, security, and SDK updates to Azure AI Foundry."
+    },
+    {
+      "title": "What’s new in Azure AI Foundry | June 2025",
+      "link": "https://devblogs.microsoft.com/foundry/whats-new-in-azure-ai-foundry-june-2025/",
+      "date": "2025-06-30T08:00:36",
+      "summary": "Latest features and updates in Azure AI Foundry for June 2025, featuring major model releases, Agent Service GA, enhanced developer tools, and significant portal improvements."
+    },
+    {
+      "title": "Announcing Developer Essentials for Agents and Apps in Azure AI Foundry",
+      "link": "https://devblogs.microsoft.com/foundry/announcing-developer-essentials-for-agents-and-apps-in-azure-ai-foundry/",
+      "date": "2025-05-19T08:59:14",
+      "summary": "Learn about the latest release of Azure AI Foundry, including new models, agent service GA, unified developer tools, and productivity enhancements for building, deploying, and managing AI agents and apps at scale."
+    }
+  ]
+}

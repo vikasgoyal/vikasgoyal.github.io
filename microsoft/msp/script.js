@@ -519,6 +519,7 @@ let openMode = null;
 let newsItems = [];
 let newsRequest = null;
 
+const localNewsDataUrl = "news.json";
 const newsFeedUrl = "https://devblogs.microsoft.com/foundry/feed/";
 const newsCategoryLookupUrl = "https://devblogs.microsoft.com/foundry/wp-json/wp/v2/categories?search=What's%20New";
 const newsPostsApiBaseUrl = "https://devblogs.microsoft.com/foundry/wp-json/wp/v2/posts?per_page=8&_fields=date,link,title,excerpt";
@@ -681,6 +682,37 @@ function parseWordPressPosts(posts) {
         .slice(0, 8);
 }
 
+function normalizeSnapshotItems(items) {
+    return (Array.isArray(items) ? items : [])
+        .map((item) => ({
+            title: decodeMarkup(item.title || "Untitled update"),
+            link: (item.link || newsFeedUrl).trim(),
+            dateLabel: item.dateLabel || formatFeedDate(item.date || ""),
+            summary: decodeMarkup(item.summary || "") || "Open the post for the full update."
+        }))
+        .filter((item) => item.title && item.link)
+        .slice(0, 8);
+}
+
+async function loadNewsFromLocalSnapshot() {
+    const snapshotResponse = await fetch(localNewsDataUrl, {
+        cache: "no-store"
+    });
+
+    if (!snapshotResponse.ok) {
+        throw new Error("The local news snapshot is unavailable.");
+    }
+
+    const snapshot = await snapshotResponse.json();
+    const items = normalizeSnapshotItems(snapshot.items || snapshot);
+
+    if (items.length === 0) {
+        throw new Error("The local news snapshot is empty.");
+    }
+
+    return items;
+}
+
 async function loadNewsFromWordPressApi() {
     let categoryId = "";
 
@@ -728,16 +760,17 @@ async function loadNewsFeed() {
     }
 
     if (!newsRequest) {
-        newsRequest = fetch(newsFeedUrl)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("The Microsoft Foundry feed is unavailable right now.");
-                }
+        newsRequest = loadNewsFromLocalSnapshot()
+            .catch(() => fetch(newsFeedUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("The Microsoft Foundry feed is unavailable right now.");
+                    }
 
-                return response.text();
-            })
-            .then((xmlText) => parseFeedItems(xmlText))
-            .catch(() => loadNewsFromWordPressApi())
+                    return response.text();
+                })
+                .then((xmlText) => parseFeedItems(xmlText))
+                .catch(() => loadNewsFromWordPressApi()))
             .then((items) => {
                 newsItems = items;
                 return newsItems;
