@@ -519,7 +519,9 @@ let openMode = null;
 let newsItems = [];
 let newsRequest = null;
 
-const localNewsDataUrl = "news.json";
+const currentScriptUrl = document.currentScript?.src || window.location.href;
+const localNewsDataUrl = new URL("news.json", currentScriptUrl).href;
+const allowRemoteNewsFetch = window.location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(window.location.hostname);
 const newsFeedUrl = "https://devblogs.microsoft.com/foundry/feed/";
 const newsCategoryLookupUrl = "https://devblogs.microsoft.com/foundry/wp-json/wp/v2/categories?search=What's%20New";
 const newsPostsApiBaseUrl = "https://devblogs.microsoft.com/foundry/wp-json/wp/v2/posts?per_page=8&_fields=date,link,title,excerpt";
@@ -761,16 +763,22 @@ async function loadNewsFeed() {
 
     if (!newsRequest) {
         newsRequest = loadNewsFromLocalSnapshot()
-            .catch(() => fetch(newsFeedUrl)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("The Microsoft Foundry feed is unavailable right now.");
-                    }
+            .catch((error) => {
+                if (!allowRemoteNewsFetch) {
+                    throw error;
+                }
 
-                    return response.text();
-                })
-                .then((xmlText) => parseFeedItems(xmlText))
-                .catch(() => loadNewsFromWordPressApi()))
+                return fetch(newsFeedUrl)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("The Microsoft Foundry feed is unavailable right now.");
+                        }
+
+                        return response.text();
+                    })
+                    .then((xmlText) => parseFeedItems(xmlText))
+                    .catch(() => loadNewsFromWordPressApi());
+            })
             .then((items) => {
                 newsItems = items;
                 return newsItems;
