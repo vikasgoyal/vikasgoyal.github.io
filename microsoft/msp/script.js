@@ -7,9 +7,9 @@ const detailContent = {
         linkLabel: "Microsoft Learn documentation",
         links: [
             {
-                title: "What is Microsoft Foundry",
-                meta: "Platform overview and core concepts",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+                title: "Microsoft Foundry Models overview",
+                meta: "Model options, capabilities, and tuning strategies in Microsoft Foundry",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/concepts/foundry-models-overview"
             },
             {
                 title: "Model Catalog",
@@ -19,7 +19,7 @@ const detailContent = {
             {
                 title: "Fine-Tuning Overview",
                 meta: "Adapt supported models for domain tasks",
-                href: "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/fine-tuning"
+                href: "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/fine-tuning-considerations"
             }
         ],
         capabilities: [
@@ -478,18 +478,18 @@ const detailContent = {
 };
 
 const phaseMap = {
-    models: ["prepare", "build"],
-    tools: ["prepare", "build"],
-    knowledge: ["prepare", "build"],
-    data: ["prepare", "build"],
-    memory: ["prepare", "build"],
-    agents: ["build", "manage"],
+    models: ["prepare"],
+    tools: ["prepare"],
+    knowledge: ["prepare"],
+    data: ["prepare"],
+    memory: ["prepare"],
+    agents: ["build"],
     workflows: ["build"],
-    orchestration: ["build", "manage"],
-    "multi-agent": ["build", "manage"],
+    orchestration: ["build"],
+    "multi-agent": ["build"],
     evaluations: ["govern"],
-    traces: ["govern", "manage"],
-    monitoring: ["govern", "manage"],
+    traces: ["govern"],
+    monitoring: ["govern"],
     guardrails: ["govern"],
     compliance: ["govern"],
     agent365: ["manage"]
