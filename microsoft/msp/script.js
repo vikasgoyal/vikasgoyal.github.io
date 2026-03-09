@@ -85,9 +85,9 @@ const detailContent = {
                 href: "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/use-foundry-knowledge"
             },
             {
-                title: "What is Microsoft Foundry",
-                meta: "See knowledge integration in the platform context",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+                title: "Relationship to Fabric IQ and Work IQ",
+                meta: "Microsoft provides three IQ workloads that give agents access to different aspects of your organization",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/what-is-foundry-iq?tabs=portal#relationship-to-fabric-iq-and-work-iq"
             }
         ],
         capabilities: [
@@ -109,9 +109,9 @@ const detailContent = {
         linkLabel: "Microsoft Learn documentation",
         links: [
             {
-                title: "What is Microsoft Foundry",
-                meta: "Platform context for data-backed agent systems",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+                title: "Generate synthetic data",
+                meta: "generate synthetic data in Microsoft Foundry for fine-tuning",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/fine-tuning/data-generation"
             },
             {
                 title: "SDK Overview",
@@ -139,34 +139,34 @@ const detailContent = {
         tone: "input",
         kicker: "Input Layer",
         title: "Memory",
-        summary: "Memory stores user, session, and system context so agents can behave consistently across interactions and collaborate across time.",
-        linkLabel: "Microsoft Learn documentation",
+        summary: "Memory in Microsoft Foundry Agent Service is a managed long-term memory system that retains durable user knowledge across sessions so agents can personalize interactions over time.",
+        linkLabel: "Microsoft Learn memory documentation",
         links: [
             {
                 title: "Memory Overview",
-                meta: "How agent memory works in Microsoft Foundry",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/what-is-memory"
+                meta: "Core concepts for long-term memory, memory types, security, and limits",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/what-is-memory?tabs=conversational-agent"
             },
             {
-                title: "What is Microsoft Foundry",
-                meta: "See enhanced memory capabilities in the platform overview",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+                title: "Create and Use Memory",
+                meta: "Set up memory stores and use memory through tools or APIs",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/memory-usage"
             },
             {
-                title: "Workflow Concepts",
-                meta: "Use memory inside longer-running agent workflows",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow"
+                title: "Limits and Regions",
+                meta: "Check supported models, quotas, and regional availability for memory",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions"
             }
         ],
         capabilities: [
-            "Session and long-term memory",
-            "Preference and state persistence",
-            "Cross-agent context sharing"
+            "Extraction, consolidation, and retrieval of durable memories from conversations",
+            "User profile memory for stable preferences and chat summary memory for prior conversation threads",
+            "Memory search tools and low-level memory store APIs for different integration styles"
         ],
         uses: [
-            "Recall prior user preferences",
-            "Resume multi-step business tasks",
-            "Maintain context across agent handoffs"
+            "Recall user preferences such as name, language, or dietary restrictions across sessions",
+            "Resume prior conversations without forcing users to repeat earlier context",
+            "Personalize support, shopping, planning, or research agents with persistent user-specific context"
         ]
     },
     agents: {
@@ -207,34 +207,34 @@ const detailContent = {
         tone: "execution",
         kicker: "Execution",
         title: "Workflows",
-        summary: "Workflows define repeatable business processes around agents, including approvals, checkpoints, retries, and human review stages.",
-        linkLabel: "Microsoft Learn documentation",
+        summary: "Workflows in Microsoft Foundry are visual, declarative orchestration flows that combine agents, logic, variables, and human interaction into repeatable business processes without requiring custom code for every step.",
+        linkLabel: "Microsoft Learn workflow documentation",
         links: [
             {
                 title: "Workflow Concepts",
-                meta: "Multi-agent orchestration and workflow patterns",
+                meta: "Workflow builder concepts, orchestration patterns, nodes, and Power Fx guidance",
                 href: "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow"
             },
             {
-                title: "AI Templates",
-                meta: "Start from a packaged application pattern",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/ai-template-get-started"
+                title: "Low-Code Workflows in VS Code",
+                meta: "Edit declarative agent workflows in Visual Studio Code",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/vs-code-agents-workflow-low-code"
             },
             {
-                title: "Create a Project",
-                meta: "Set up the project container for execution workflows",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects"
+                title: "Hosted Workflows in VS Code",
+                meta: "Work with pro-code hosted workflows and local playground support",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/vs-code-agents-workflow-pro-code"
             }
         ],
         capabilities: [
-            "Stateful multi-step execution",
-            "Rules, triggers, and checkpoints",
-            "Human-in-the-loop review paths"
+            "Built-in workflow patterns for sequential flows, group chat handoffs, and human-in-the-loop approvals or clarifying questions",
+            "Composable nodes for agent invocation, logic branches, data transformation, and chat interactions",
+            "Power Fx expressions, variables, YAML-backed editing, and versioned saves for repeatable automation design"
         ],
         uses: [
-            "Incident triage pipelines",
-            "Claims or case handling journeys",
-            "Automated intake and fulfillment flows"
+            "Create repeatable multi-agent business processes with branching logic and saved outputs",
+            "Build approval flows or user clarification steps directly into agent execution",
+            "Model step-by-step pipelines that mix agent actions, variable handling, and structured JSON outputs"
         ]
     },
     orchestration: {
@@ -275,170 +275,170 @@ const detailContent = {
         tone: "control",
         kicker: "Operational Controls",
         title: "Evaluations",
-        summary: "Evaluation frameworks score quality, reliability, and policy adherence so teams can improve prompts, tools, and models based on evidence.",
-        linkLabel: "Microsoft Learn documentation",
+        summary: "Agent evaluators in Microsoft Foundry act like workflow-focused tests, measuring both end-to-end task outcomes and the quality of each tool-driven step so teams can improve agent behavior with evidence.",
+        linkLabel: "Microsoft Learn evaluator documentation",
         links: [
             {
-                title: "Continuous Evaluation",
-                meta: "Set up evaluation in the observability dashboard",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation"
+                title: "Agent Evaluators",
+                meta: "System and process evaluators, tool support, mappings, and example outputs",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators"
             },
             {
-                title: "What is Microsoft Foundry",
-                meta: "See real-time observability in the platform overview",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+                title: "Run Cloud Evaluation",
+                meta: "Execute evaluation jobs and configure datasets or generated responses as inputs",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/cloud-evaluation"
             },
             {
-                title: "What's New",
-                meta: "Track evaluation and governance feature updates",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/whats-new-foundry"
+                title: "Agent Evaluator Samples",
+                meta: "Reference implementations for task completion, tool quality, and navigation efficiency",
+                href: "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators"
             }
         ],
         capabilities: [
-            "Benchmarking and regression testing",
-            "Task-specific scoring rubrics",
-            "Release gates for prompt and model changes"
+            "System evaluators for task completion, task adherence, intent resolution, navigation efficiency, and RAG quality on final responses",
+            "Process evaluators for tool call accuracy, tool selection, input accuracy, output utilization, and tool call success",
+            "Pass or fail results with reasoning, thresholds, and data mappings over agent message sequences and tool definitions"
         ],
         uses: [
-            "Track answer quality over time",
-            "Compare agent versions before release",
-            "Detect regressions after model changes"
+            "Compare agent versions before release by testing both outcome quality and workflow execution quality",
+            "Catch regressions in tool usage, parameter quality, or intent handling during iterative agent development",
+            "Validate supported tool-based agents while avoiding evaluator combinations with currently limited tool support"
         ]
     },
     traces: {
         tone: "control",
         kicker: "Operational Controls",
         title: "Traces",
-        summary: "Traces capture what an agent did, why it acted, which tools it called, and how long each step took. They are essential for debugging and auditing.",
-        linkLabel: "Microsoft Learn documentation",
+        summary: "Agent tracing in Microsoft Foundry captures the full request journey across inputs, outputs, tool usage, retries, and latency so teams can inspect how an agent run unfolded step by step.",
+        linkLabel: "Microsoft Learn tracing documentation",
         links: [
             {
-                title: "Monitor Agents Dashboard",
-                meta: "Observability entry point for trace and runtime insight",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard"
+                title: "Agent Tracing Overview",
+                meta: "Trace concepts, OpenTelemetry model, multi-agent observability, and best practices",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/concepts/trace-agent-concept"
             },
             {
-                title: "Microsoft Foundry API",
-                meta: "Platform APIs for deeper operational integration",
-                href: "https://learn.microsoft.com/en-us/rest/api/aifoundry/"
+                title: "Set Up Tracing",
+                meta: "Enable tracing end to end with a Foundry project and Application Insights",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup"
             },
             {
-                title: "What's New",
-                meta: "Stay current on tracing and monitoring updates",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/whats-new-foundry"
+                title: "Tracing Integrations",
+                meta: "Connect tracing across supported frameworks and multi-agent runtimes",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-framework"
             }
         ],
         capabilities: [
-            "Step-by-step execution visibility",
-            "Tool call and prompt inspection",
-            "Latency and dependency analysis"
+            "OpenTelemetry-based traces made of spans, attributes, events, and semantic conventions",
+            "Visibility into user inputs, agent outputs, tool calls, tool results, and timing signals stored in Application Insights",
+            "Multi-agent observability conventions for planning, orchestration, memory, tool arguments, and tool results"
         ],
         uses: [
-            "Root-cause failed agent actions",
-            "Inspect multi-agent handoffs",
-            "Audit how a response was produced"
+            "Identify where an error, retry, or latency spike was introduced in a complex agent run",
+            "Inspect nested tool activity and agent-to-agent handoffs with a consistent trace structure",
+            "Correlate trace data with evaluation runs while redacting sensitive content from telemetry"
         ]
     },
     monitoring: {
         tone: "control",
         kicker: "Operational Controls",
         title: "Monitoring",
-        summary: "Monitoring tracks health, latency, cost, and user outcomes in production. It closes the loop between platform design and real-world usage.",
-        linkLabel: "Microsoft Learn documentation",
+        summary: "The Agent Monitoring Dashboard in Microsoft Foundry surfaces operational metrics, evaluation results, and red-teaming signals for agent traffic using telemetry from a connected Application Insights resource.",
+        linkLabel: "Microsoft Learn monitoring documentation",
         links: [
             {
                 title: "Monitor Agents Dashboard",
-                meta: "Production health, latency, and governance views",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard"
+                meta: "Portal workflow, dashboard metrics, settings, and troubleshooting guidance",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard?tabs=python"
             },
             {
-                title: "Manage Costs",
-                meta: "Plan and control operational spend",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/concepts/manage-costs"
+                title: "Set Up Tracing",
+                meta: "Connect Application Insights so the dashboard can read agent telemetry",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup"
             },
             {
-                title: "Region Support",
-                meta: "Monitor with region-aware deployment planning",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/reference/region-support"
+                title: "Agent Tracing Overview",
+                meta: "Understand the telemetry model behind monitoring and diagnostics",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/observability/concepts/trace-agent-concept"
             }
         ],
         capabilities: [
-            "Health and reliability telemetry",
-            "Cost and throughput tracking",
-            "Alerting on degraded behavior"
+            "Summary cards and time-range charts for token usage, latency, run success rate, evaluator scores, and red-team results",
+            "Monitor settings for continuous evaluation, scheduled evaluations, red team scans, and alerts",
+            "Application Insights-backed observability with RBAC and Log Analytics access requirements for deeper views"
         ],
         uses: [
-            "Watch production agent fleets",
-            "Control operational spend",
-            "Identify quality drift early"
+            "Spot latency spikes, failed runs, and unusually high token usage before they impact production users",
+            "Verify continuous evaluation rules are producing scores and reports for sampled agent responses",
+            "Troubleshoot empty charts, authorization issues, or missing evaluation results from the dashboard"
         ]
     },
     guardrails: {
         tone: "control",
         kicker: "Operational Controls",
         title: "Guardrails",
-        summary: "Guardrails define safe boundaries for behavior, content, access, and action. They reduce unsafe outcomes without over-restricting useful automation.",
-        linkLabel: "Microsoft Learn documentation",
+        summary: "Microsoft Foundry guardrails are named collections of controls that detect risk, choose where to intervene, and decide whether to annotate or block content across models and agents.",
+        linkLabel: "Microsoft Learn guardrails documentation",
         links: [
             {
-                title: "Disable Preview Features with RBAC",
-                meta: "Use role-based controls to lock down production experiences",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/concepts/disable-preview-features-with-rbac"
+                title: "Guardrails Overview",
+                meta: "Core concepts for controls, risks, intervention points, and override behavior",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/guardrails/guardrails-overview"
             },
             {
-                title: "Hide Preview Features with Azure Tags",
-                meta: "Suppress preview features at the portal level",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/how-to/disable-preview-features"
+                title: "Intervention Points and Controls",
+                meta: "Understand user input, tool call, tool response, and output scanning",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/guardrails/intervention-points"
             },
             {
-                title: "What is Microsoft Foundry",
-                meta: "Overview of enterprise support and policy controls",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+                title: "Configure Guardrails and Controls",
+                meta: "Create and assign guardrails for models and agents in a project",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/guardrails/how-to-create-guardrails"
             }
         ],
         capabilities: [
-            "Policy filters and moderation",
-            "Access control and action limits",
-            "Prompt and tool safety enforcement"
+            "Risk controls for hate, sexual, self-harm, violence, jailbreaks, indirect attacks, protected material, and selected preview risks",
+            "Scanning at user input and output, plus tool call and tool response intervention points for agents in preview",
+            "Severity thresholds and override behavior so an agent guardrail can fully replace the underlying model guardrail"
         ],
         uses: [
-            "Block sensitive actions without approval",
-            "Filter unsafe or disallowed content",
-            "Enforce environment-specific policies"
+            "Apply one named guardrail across multiple model deployments and agents in a project",
+            "Tune blocking strictness with Low, Medium, or High severity thresholds by risk category",
+            "Troubleshoot why content was blocked or why tool-call traffic was not scanned"
         ]
     },
     compliance: {
         tone: "control",
         kicker: "Operational Controls",
         title: "Compliance",
-        summary: "Compliance capabilities align the system with legal, governance, and enterprise audit requirements. This is where operational trust becomes enterprise-ready.",
-        linkLabel: "Microsoft Learn documentation",
+        summary: "Azure OpenAI applies default guardrail policies across supported text, vision, image, and audio models so prompts and completions are filtered against core harm categories before production use.",
+        linkLabel: "Microsoft Learn safety policy documentation",
         links: [
             {
-                title: "What is Microsoft Foundry",
-                meta: "Enterprise-ready platform overview",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+                title: "Default Guardrail Policies",
+                meta: "Baseline safety coverage, thresholds, and model-specific policy tables",
+                href: "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/default-safety-policies?tabs=gpt-image-1%2Cwarning"
             },
             {
-                title: "Disable Preview Features with RBAC",
-                meta: "Tighten operational posture for controlled environments",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/concepts/disable-preview-features-with-rbac"
+                title: "Configure Custom Safety Policies",
+                meta: "Adjust guardrail behavior beyond the default configuration",
+                href: "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/content-filters"
             },
             {
-                title: "Manage Costs",
-                meta: "Operational governance for usage and billing visibility",
-                href: "https://learn.microsoft.com/en-us/azure/foundry/concepts/manage-costs"
+                title: "Content Credentials",
+                meta: "Understand provenance support for generated image content",
+                href: "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/concepts/content-credentials"
             }
         ],
         capabilities: [
-            "Policy evidence and audit readiness",
-            "Regional and sector controls",
-            "Retention and reporting strategies"
+            "Default filtering for hate, violence, sexual, and self-harm content at Medium severity",
+            "Additional protections for jailbreaks, protected material, public figures, profanity, and sensitive attribute scenarios depending on model type",
+            "Blocked requests return category-aware filtering responses for both prompts and model outputs"
         ],
         uses: [
-            "Prepare internal audit reviews",
-            "Map platform behavior to policy controls",
-            "Support regulated business deployments"
+            "Explain baseline safety posture during security and risk reviews",
+            "Validate text, vision, image, and audio workloads against the built-in policy set",
+            "Test deployments with known trigger prompts before enabling production traffic"
         ]
     },
     agent365: {
