@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Anatomy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f3f4f1;
+            --text: #1b1f1c;
+            --muted: #5e6761;
+            --surface: rgba(255, 252, 247, 0.8);
+            --surface-border: rgba(27, 31, 28, 0.08);
+            --input: #245c4a;
+            --input-deep: #1d4a3b;
+            --core: #106c89;
+            --core-deep: #0d5971;
+            --output: #8c5a30;
+            --output-deep: #714723;
+            --control: #5c4e7d;
+            --control-deep: #4c4068;
+            --plane: #18242c;
+            --plane-deep: #0f171d;
+            --shadow: 0 20px 40px rgba(20, 24, 22, 0.08);
+            --shadow-tight: 0 10px 20px rgba(20, 24, 22, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Manrope", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(180, 199, 158, 0.2), transparent 30%),
+                radial-gradient(circle at top right, rgba(16, 108, 137, 0.14), transparent 28%),
+                linear-gradient(180deg, #f8f8f4 0%, var(--bg) 100%);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            background: #000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .top-nav nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
+            list-style: none;
+        }
+
+        .top-nav nav ul li a {
+            display: block;
+            padding: 15px 18px;
+            color: #fff;
+            font-size: 15px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .top-nav nav ul li a:hover,
+        .top-nav nav ul li a:focus-visible {
+            background-color: rgba(255, 255, 255, 0.1);
+            text-decoration: underline;
+        }
+
+        .top-nav .aair-link {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .top-nav .aair-link:hover,
+        .top-nav .aair-link:focus-visible {
+            color: #fff;
+        }
+
+        .page-shell {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 28px 24px 56px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+            align-items: stretch;
+            margin-bottom: 28px;
+        }
+
+        .hero-copy,
+        .section-card,
+        .flow-card,
+        .principle-card {
+            border: 1px solid var(--surface-border);
+            border-radius: 30px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.58));
+            box-shadow: var(--shadow-tight);
+            backdrop-filter: blur(14px);
+        }
+
+        .hero-copy {
+            padding: 28px 36px 30px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            font-size: 0.76rem;
+            color: var(--muted);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            margin-top: 0;
+        }
+
+        h1,
+        h2 {
+            font-family: "Space Grotesk", sans-serif;
+            letter-spacing: -0.04em;
+        }
+
+        h1 {
+            margin-bottom: 14px;
+            font-size: clamp(3rem, 5vw, 5.4rem);
+            line-height: 0.92;
+        }
+
+        .hero-copy p {
+            max-width: none;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .hero-copy p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .section-card {
+            padding: 28px;
+            margin-bottom: 24px;
+            scroll-margin-top: 84px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 0;
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            line-height: 0.98;
+        }
+
+        .section-heading p {
+            max-width: 56ch;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .anatomy-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .anatomy-card {
+            padding: 20px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(27, 31, 28, 0.08);
+            scroll-margin-top: 84px;
+        }
+
+        .anatomy-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.06rem;
+        }
+
+        .anatomy-card p {
+            margin-bottom: 0;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .diagram-shell {
+            position: relative;
+            display: grid;
+            gap: 8px;
+        }
+
+        .diagram-copy p {
+            max-width: 70ch;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .diagram-board {
+            position: relative;
+            margin-top: 0;
+            padding: 20px;
+            border-radius: 28px;
+            border: 1px solid rgba(27, 31, 28, 0.08);
+            background:
+                radial-gradient(circle at 50% 50%, rgba(16, 108, 137, 0.08), transparent 34%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 247, 243, 0.94));
+            overflow: hidden;
+        }
+
+        .diagram-board::before {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border-radius: 24px;
+            border: 1px dashed rgba(16, 108, 137, 0.12);
+            pointer-events: none;
+        }
+
+        .agent-svg {
+            position: relative;
+            z-index: 1;
+            display: block;
+            width: 100%;
+            height: auto;
+            overflow: visible;
+        }
+
+        .svg-link {
+            cursor: pointer;
+        }
+
+        .svg-link:focus-visible {
+            outline: none;
+        }
+
+        .svg-shape {
+            transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease;
+            transform-origin: center;
+        }
+
+        .svg-link:hover .svg-shape,
+        .svg-link:focus-visible .svg-shape {
+            filter: brightness(1.06) saturate(1.05);
+            transform: translateY(-3px);
+        }
+
+        .svg-link:hover .svg-outline,
+        .svg-link:focus-visible .svg-outline {
+            stroke: rgba(13, 89, 113, 0.95);
+            stroke-width: 4;
+            stroke-opacity: 0.45;
+        }
+
+        .svg-outline {
+            stroke: rgba(255, 255, 255, 0.22);
+            stroke-width: 2;
+            fill: none;
+            stroke-opacity: 0.18;
+            transition: stroke-opacity 180ms ease;
+        }
+
+        .svg-title {
+            fill: #fff;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .svg-title.dark {
+            fill: var(--text);
+        }
+
+        .svg-copy {
+            fill: rgba(255, 255, 255, 0.82);
+            font-family: "Manrope", sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .svg-copy.dark {
+            fill: var(--muted);
+        }
+
+        .svg-connector {
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-dasharray: 8 10;
+            opacity: 0.58;
+        }
+
+        .svg-core-ring {
+            fill: rgba(255, 255, 255, 0.92);
+            stroke: var(--core-deep);
+            stroke-width: 20;
+        }
+
+        .svg-shadow {
+            filter: drop-shadow(0 18px 28px rgba(20, 24, 22, 0.12));
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .legend-card {
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(27, 31, 28, 0.08);
+            background: rgba(255, 255, 255, 0.74);
+        }
+
+        .legend-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .legend-card p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .legend-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 999px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+        }
+
+        .legend-swatch.input {
+            background: linear-gradient(180deg, var(--input) 0%, var(--input-deep) 100%);
+        }
+
+        .legend-swatch.context {
+            background: linear-gradient(180deg, var(--control) 0%, var(--control-deep) 100%);
+        }
+
+        .legend-swatch.core {
+            background: linear-gradient(180deg, var(--core) 0%, var(--core-deep) 100%);
+        }
+
+        .legend-swatch.output {
+            background: linear-gradient(180deg, var(--output) 0%, var(--output-deep) 100%);
+        }
+
+        .legend-swatch.plane {
+            background: linear-gradient(180deg, var(--plane) 0%, var(--plane-deep) 100%);
+        }
+
+        .flows {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .flow-card {
+            padding: 22px;
+            scroll-margin-top: 84px;
+        }
+
+        .flow-index {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            margin-bottom: 14px;
+            border-radius: 50%;
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(180deg, var(--core) 0%, var(--core-deep) 100%);
+        }
+
+        .flow-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.08rem;
+        }
+
+        .flow-card p {
+            margin-bottom: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .principles {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .principle-card {
+            padding: 22px;
+            scroll-margin-top: 84px;
+        }
+
+        .principle-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.06rem;
+        }
+
+        .principle-card p {
+            margin-bottom: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .page-last-updated {
+            margin: 8px 4px 0 0;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-align: right;
+            color: rgba(27, 31, 28, 0.62);
+        }
+
+        @media (max-width: 1180px) {
+            .diagram-board {
+                padding: 16px;
+            }
+
+            .svg-title {
+                font-size: 22px;
+            }
+
+            .svg-copy {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .hero,
+            .anatomy-grid,
+            .legend-grid,
+            .flows,
+            .principles {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page-shell {
+                padding-inline: 16px;
+            }
+
+            .hero,
+            .anatomy-grid,
+            .legend-grid,
+            .flows,
+            .principles {
+                grid-template-columns: 1fr;
+            }
+
+            .diagram-board {
+                padding: 12px;
+            }
+
+            .svg-title {
+                font-size: 18px;
+            }
+
+            .svg-copy {
+                font-size: 13px;
+            }
+
+            .hero-copy,
+            .section-card,
+            .flow-card,
+            .principle-card {
+                border-radius: 24px;
+            }
+
+            .hero-copy {
+                padding: 24px 24px 26px;
+            }
+
+            .section-heading {
+                display: block;
+            }
+
+            .page-last-updated {
+                margin-right: 0;
+                font-size: 0.72rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <nav aria-label="Primary">
+            <ul>
+                <li><a href="https://vikasgoyal.github.io/">Home</a></li>
+                <li><a href="https://vikasgoyal.github.io/blog/">Blog</a></li>
+                <li><a href="https://vikasgoyal.github.io/agentic/">Agentic AI</a></li>
+                <li><a class="aair-link" href="https://vikasgoyal.github.io/industries/index.html">Industry AI</a></li>
+                <li><a href="https://vikasgoyal.github.io/startups/">Startups</a></li>
+                <li><a href="https://vikasgoyal.github.io/genai/">Generative AI</a></li>
+                <li><a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noreferrer noopener">LinkedIn</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="page-shell">
+        <section class="hero" aria-label="Agent anatomy overview">
+            <div class="hero-copy">
+                <p class="eyebrow">Architecture Reference</p>
+                <h1>Agent Anatomy</h1>
+                <p>
+                    A reference model for reading an enterprise agent runtime from left to right: ingress,
+                    context assembly, LLM reasoning, orchestration, and egress, with the model acting as the inference
+                    core and memory, integration surfaces, and control-plane services shaping how it operates.
+                </p>
+                <p>
+                    Start with the diagram, then use the node reference to inspect each block in the same order the runtime executes.
+                </p>
+            </div>
+        </section>
+
+        <section class="section-card" id="agent-diagram" aria-labelledby="diagram-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Architecture Diagram</p>
+                    <h2 id="diagram-title">Reference Agent Runtime</h2>
+                </div>
+            </div>
+
+            <div class="diagram-shell">
+                <div class="diagram-copy">
+                    <p>
+                        The topology separates runtime decisions from external calls, durable state, and control-plane supervision.
+                    </p>
+                    <div class="legend-grid" aria-label="Color categories">
+                        <article class="legend-card">
+                            <h3><span class="legend-swatch input" aria-hidden="true"></span>Green: Ingress</h3>
+                            <p>Requests, triggers, upstream apps, and entry signals.</p>
+                        </article>
+                        <article class="legend-card">
+                            <h3><span class="legend-swatch context" aria-hidden="true"></span>Purple: State</h3>
+                            <p>Context assembly, RAG state, session state, and memory.</p>
+                        </article>
+                        <article class="legend-card">
+                            <h3><span class="legend-swatch core" aria-hidden="true"></span>Blue: Runtime</h3>
+                            <p>Reasoning, planning, orchestration, tool routing, and MCP/A2A coordination.</p>
+                        </article>
+                        <article class="legend-card">
+                            <h3><span class="legend-swatch output" aria-hidden="true"></span>Amber: Egress</h3>
+                            <p>Responses, side effects, downstream execution, and system mutations.</p>
+                        </article>
+                        <article class="legend-card">
+                            <h3><span class="legend-swatch plane" aria-hidden="true"></span>Charcoal: Control Plane</h3>
+                            <p>Guardrails, approvals, observability, and evaluation across the runtime.</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="diagram-board" aria-label="Agent anatomy diagram">
+                    <svg class="agent-svg" viewBox="0 0 1400 760" role="img" aria-labelledby="agent-diagram-svg-title agent-diagram-svg-desc">
+                        <title id="agent-diagram-svg-title">Interactive agent anatomy diagram</title>
+                        <desc id="agent-diagram-svg-desc">A clickable SVG showing agent anatomy with inputs, context assembly, an LLM reasoning and planning core, orchestration, outputs, side systems for tools and memory, and a surrounding control plane for guardrails and observability.</desc>
+                        <defs>
+                            <linearGradient id="gradInput" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#2f6854"/>
+                                <stop offset="100%" stop-color="#24503f"/>
+                            </linearGradient>
+                            <linearGradient id="gradCore" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#3a7897"/>
+                                <stop offset="100%" stop-color="#215e7c"/>
+                            </linearGradient>
+                            <linearGradient id="gradOutput" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#9a6a36"/>
+                                <stop offset="100%" stop-color="#7e5328"/>
+                            </linearGradient>
+                            <linearGradient id="gradContext" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#6a5a91"/>
+                                <stop offset="100%" stop-color="#524473"/>
+                            </linearGradient>
+                        </defs>
+
+                        <rect x="90" y="126" width="1220" height="420" rx="44" fill="rgba(255,255,255,0.22)" stroke="rgba(27,31,28,0.1)" stroke-width="2.5" />
+                        <rect x="114" y="150" width="1172" height="372" rx="34" fill="none" stroke="rgba(16,108,137,0.12)" stroke-width="2" stroke-dasharray="7 10" />
+
+                        <a class="svg-link" href="#detail-guardrails" aria-label="View guardrails and policy details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="522" y="72" width="214" height="54" rx="22" fill="rgba(17, 31, 41, 0.92)" />
+                                <rect class="svg-outline" x="522" y="72" width="214" height="54" rx="22" />
+                                <text class="svg-title" x="629" y="107" text-anchor="middle" style="font-size: 20px;">Guardrails + Policy</text>
+                            </g>
+                        </a>
+
+                        <a class="svg-link" href="#detail-observability" aria-label="View observability and evaluation details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="846" y="546" width="258" height="54" rx="22" fill="rgba(17, 31, 41, 0.92)" />
+                                <rect class="svg-outline" x="846" y="546" width="258" height="54" rx="22" />
+                                <text class="svg-title" x="975" y="581" text-anchor="middle" style="font-size: 20px;">Observability + Evaluation</text>
+                            </g>
+                        </a>
+
+                        <path class="svg-connector" stroke="#106c89" d="M1020 198 C930 198, 890 210, 850 246" />
+                        <path class="svg-connector" stroke="#5c4e7d" d="M380 515 C470 515, 548 475, 628 425" />
+                        <path class="svg-connector" stroke="#5c4e7d" d="M396 515 C515 515, 635 470, 735 420" />
+
+                        <path d="M286 336 H330" stroke="rgba(27,31,28,0.18)" stroke-width="6" stroke-linecap="round" />
+                        <path d="M516 336 H566" stroke="rgba(27,31,28,0.18)" stroke-width="6" stroke-linecap="round" />
+                        <path d="M860 336 H902" stroke="rgba(27,31,28,0.18)" stroke-width="6" stroke-linecap="round" />
+                        <path d="M1110 336 H1152" stroke="rgba(27,31,28,0.18)" stroke-width="6" stroke-linecap="round" />
+
+                        <a class="svg-link" href="#detail-tools" aria-label="View external tools details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="932" y="158" width="180" height="82" rx="24" fill="url(#gradCore)" />
+                                <rect class="svg-outline" x="932" y="158" width="180" height="82" rx="24" />
+                                <text class="svg-title" x="1022" y="192" text-anchor="middle" style="font-size: 18px;">External Tools</text>
+                                <text class="svg-copy" x="1022" y="214" text-anchor="middle" style="font-size: 14px;">
+                                    <tspan x="1022" dy="0">MCP, A2A, APIs,</tspan>
+                                    <tspan x="1022" dy="18">workflows</tspan>
+                                </text>
+                            </g>
+                        </a>
+
+                        <a class="svg-link" href="#detail-ingress" aria-label="View input and ingress details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="120" y="276" width="168" height="120" rx="28" fill="url(#gradInput)" />
+                                <rect class="svg-outline" x="120" y="276" width="168" height="120" rx="28" />
+                                <text class="svg-title" x="204" y="320" text-anchor="middle" style="font-size: 22px;">Inputs</text>
+                                <text class="svg-copy" x="204" y="348" text-anchor="middle" style="font-size: 15px;">
+                                    <tspan x="204" dy="0">User requests,</tspan>
+                                    <tspan x="204" dy="20">events, triggers</tspan>
+                                </text>
+                            </g>
+                        </a>
+
+                        <a class="svg-link" href="#detail-context" aria-label="View context assembly details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="330" y="258" width="186" height="156" rx="32" fill="url(#gradContext)" />
+                                <rect class="svg-outline" x="330" y="258" width="186" height="156" rx="32" />
+                                <text class="svg-title" x="423" y="308" text-anchor="middle" style="font-size: 21px;">Context</text>
+                                <text class="svg-title" x="423" y="334" text-anchor="middle" style="font-size: 21px;">Assembly</text>
+                                <text class="svg-copy" x="423" y="364" text-anchor="middle" style="font-size: 14px;">
+                                    <tspan x="423" dy="0">Prompt, RAG,</tspan>
+                                    <tspan x="423" dy="18">session state</tspan>
+                                </text>
+                            </g>
+                        </a>
+
+                        <a class="svg-link" href="#detail-reasoning" aria-label="View reasoning and planning core details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape svg-core-ring" x="566" y="212" width="294" height="248" rx="108" />
+                                <text class="svg-title dark" x="713" y="276" text-anchor="middle" style="font-size: 24px;">LLM Reasoning /</text>
+                                <text class="svg-title dark" x="713" y="308" text-anchor="middle" style="font-size: 24px;">Planning Core</text>
+                                <text class="svg-copy dark" x="713" y="360" text-anchor="middle" style="font-size: 15px;">
+                                    <tspan x="713" dy="0">Run inference over context,</tspan>
+                                    <tspan x="713" dy="20">choose steps, rank options</tspan>
+                                </text>
+                            </g>
+                        </a>
+
+                        <a class="svg-link" href="#detail-orchestration" aria-label="View orchestration details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="902" y="258" width="208" height="156" rx="32" fill="url(#gradCore)" />
+                                <rect class="svg-outline" x="902" y="258" width="208" height="156" rx="32" />
+                                <text class="svg-title" x="1006" y="308" text-anchor="middle" style="font-size: 20px;">Tool / Workflow</text>
+                                <text class="svg-title" x="1006" y="334" text-anchor="middle" style="font-size: 20px;">Orchestration</text>
+                                <text class="svg-copy" x="1006" y="362" text-anchor="middle" style="font-size: 14px;">
+                                    <tspan x="1006" dy="0">Route MCP, A2A, tools,</tspan>
+                                    <tspan x="1006" dy="18">and workflow calls</tspan>
+                                </text>
+                            </g>
+                        </a>
+
+                        <a class="svg-link" href="#detail-egress" aria-label="View outputs and egress details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="1152" y="276" width="158" height="120" rx="28" fill="url(#gradOutput)" />
+                                <rect class="svg-outline" x="1152" y="276" width="158" height="120" rx="28" />
+                                <text class="svg-title" x="1231" y="318" text-anchor="middle" style="font-size: 20px;">Outputs /</text>
+                                <text class="svg-title" x="1231" y="344" text-anchor="middle" style="font-size: 20px;">Actions</text>
+                                <text class="svg-copy" x="1231" y="370" text-anchor="middle" style="font-size: 14px;">
+                                    <tspan x="1231" dy="0">Answers, tasks,</tspan>
+                                    <tspan x="1231" dy="18">side effects</tspan>
+                                </text>
+                            </g>
+                        </a>
+
+                        <a class="svg-link" href="#detail-memory" aria-label="View memory details">
+                            <g class="svg-shadow">
+                                <rect class="svg-shape" x="198" y="478" width="198" height="82" rx="24" fill="url(#gradContext)" />
+                                <rect class="svg-outline" x="198" y="478" width="198" height="82" rx="24" />
+                                <text class="svg-title" x="297" y="510" text-anchor="middle" style="font-size: 18px;">Memory</text>
+                                <text class="svg-copy" x="297" y="534" text-anchor="middle" style="font-size: 14px;">
+                                    <tspan x="297" dy="0">Profiles, summaries,</tspan>
+                                    <tspan x="297" dy="18">durable state</tspan>
+                                </text>
+                            </g>
+                        </a>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card" id="anatomy-map" aria-labelledby="anatomy-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Node Reference</p>
+                    <h2 id="anatomy-title">Diagram Nodes And Runtime Contracts</h2>
+                </div>
+                <p>
+                    These components define what executes inside the loop, what is delegated outward, and what remains under platform control.
+                </p>
+            </div>
+
+            <div class="anatomy-grid">
+                <article class="anatomy-card" id="detail-ingress">
+                    <h3>Ingress And Triggers</h3>
+                    <p>Captures user requests, app events, identities, and upstream signals that enter the runtime boundary.</p>
+                </article>
+                <article class="anatomy-card" id="detail-instructions">
+                    <h3>Instruction Stack</h3>
+                    <p>System prompts, policy, schemas, tool contracts, and escalation rules define the runtime envelope before execution starts.</p>
+                </article>
+                <article class="anatomy-card" id="detail-context">
+                    <h3>Context Assembly</h3>
+                    <p>Builds the effective prompt from retrieval results, session state, memory lookups, identity, and runtime metadata.</p>
+                </article>
+                <article class="anatomy-card" id="detail-reasoning">
+                    <h3>LLM Reasoning Core</h3>
+                    <p>Runs model inference over the assembled context, then performs decomposition, ranking, routing, and step selection across candidate actions and agents.</p>
+                </article>
+                <article class="anatomy-card" id="detail-tools">
+                    <h3>External Tools</h3>
+                    <p>Represents the callable surfaces outside the agent boundary, including MCP servers, A2A peers, APIs, and workflow endpoints.</p>
+                </article>
+                <article class="anatomy-card" id="detail-orchestration">
+                    <h3>Orchestration Surface</h3>
+                    <p>Chooses when to invoke external tools, coordinates calls, and normalizes returned state for the next runtime step.</p>
+                </article>
+                <article class="anatomy-card" id="detail-memory">
+                    <h3>Memory Subsystem</h3>
+                    <p>Stores durable user facts, summaries, checkpoints, and retrieval keys for cross-session continuity.</p>
+                </article>
+                <article class="anatomy-card" id="detail-egress">
+                    <h3>Response And Egress</h3>
+                    <p>Materializes structured JSON, UI payloads, citations, messages, and side-effect metadata.</p>
+                </article>
+                <article class="anatomy-card" id="detail-guardrails">
+                    <h3>Guardrails And Policy</h3>
+                    <p>Enforces safety policy, data residency, authZ boundaries, approval gates, and fallback behavior.</p>
+                </article>
+                <article class="anatomy-card" id="detail-observability">
+                    <h3>Observability And Eval</h3>
+                    <p>Captures traces, tokens, latency, tool outcomes, eval runs, and regression signals.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-card" aria-labelledby="flow-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Execution Path</p>
+                    <h2 id="flow-title">Five-Step Runtime Path</h2>
+                </div>
+            </div>
+
+            <div class="flows">
+                <article class="flow-card" id="flow-assemble">
+                    <span class="flow-index">01</span>
+                    <h3>Enter</h3>
+                    <p>Accept a user request, system event, or trigger and establish identity and policy context.</p>
+                </article>
+                <article class="flow-card" id="flow-plan">
+                    <span class="flow-index">02</span>
+                    <h3>Assemble Context</h3>
+                    <p>Resolve retrieval scope, memory lookups, prompt instructions, and runtime metadata before inference.</p>
+                </article>
+                <article class="flow-card">
+                    <span class="flow-index">03</span>
+                    <h3>Reason</h3>
+                    <p>Interpret intent, rank candidate actions, and decide whether the next step stays in-model or leaves the boundary.</p>
+                </article>
+                <article class="flow-card">
+                    <span class="flow-index">04</span>
+                    <h3>Orchestrate</h3>
+                    <p>Invoke tools, MCP sessions, A2A peers, or workflows and normalize their outputs back into runtime state.</p>
+                </article>
+                <article class="flow-card" id="flow-commit">
+                    <span class="flow-index">05</span>
+                    <h3>Respond + Record</h3>
+                    <p>Return answers, persist memory updates, emit output contracts, and capture telemetry for governance and evaluation.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-card" aria-labelledby="principles-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Architecture Principles</p>
+                    <h2 id="principles-title">Production Design Constraints</h2>
+                </div>
+                <p>
+                    Production agent platforms depend on explicit contracts between inference, context, orchestration,
+                    and control-plane services.
+                </p>
+            </div>
+
+            <div class="principles">
+                <article class="principle-card">
+                    <h3>Separation Of Runtime Concerns</h3>
+                    <p>Keep prompt assembly, reasoning, orchestration, memory, and response shaping independently observable.</p>
+                </article>
+                <article class="principle-card">
+                    <h3>Contracts Before Calls</h3>
+                    <p>Tooling should be schema-bound and policy-checked across MCP, A2A, or direct API surfaces.</p>
+                </article>
+                <article class="principle-card">
+                    <h3>Traceability Over Intuition</h3>
+                    <p>Favor trace logs, eval runs, latency budgets, and regression signals over prompt-only reasoning.</p>
+                </article>
+            </div>
+        </section>
+
+        <p class="page-last-updated">Last updated: <span id="last-updated-date">March 12, 2026</span></p>
+    </main>
+</body>
+</html>

@@ -1,12 +1,12 @@
 {
   "source": "https://devblogs.microsoft.com/foundry/feed/",
-  "generatedAt": "2026-03-09T03:30:35.8947687Z",
+  "generatedAt": "2026-03-12T22:21:29.3799217Z",
   "items": [
     {
       "title": "What’s new in Microsoft Foundry | February 2026",
       "link": "https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-feb-2026/",
       "date": "2026-03-06T15:08:31",
-      "summary": "February brings Anthropic’s Claude Opus 4.6 and Sonnet 4.6 with 1M-token context, GPT-Realtime-1.5 and GPT-Audio-1.5, Grok 4.0 GA, the Microsoft Agent Framework reaching Release Candidate, and the Foundry REST API v1 quietly going GA — laying the foundation for imminent SDK GA announcements across Python, .NET, JS/TS, and Java."
+      "summary": "February brings Anthropic’s Claude Opus 4.6 and Sonnet 4.6 with 1M-token context, GPT-Realtime-1.5 and GPT-Audio-1.5, Grok 4.0 GA, the Microsoft Agent Framework reaching Release Candidate, and the Foundry REST API quietly going GA — laying the foundation for imminent SDK GA announcements across Python, .NET, JS/TS, and Java."
     },
     {
       "title": "What’s new in Microsoft Foundry | Dec 2025 & Jan 2026",
