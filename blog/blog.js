@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Load posts from JSON
-    fetch(`${baseUrl}/latest-posts.json`)
+    fetch(`${baseUrl}/latest-posts.json?v=20260313`)
         .then(response => response.json())
         .then(data => {
             allPosts = data.posts;

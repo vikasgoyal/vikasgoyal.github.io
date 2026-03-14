@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return new Date(year, month - 1, day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
     
-    fetch(`${baseUrl}/latest-posts.json`)
+    fetch(`${baseUrl}/latest-posts.json?v=20260313`)
         .then(response => response.json())
         .then(data => {
             // Sort by date (most recent first)
