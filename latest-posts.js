@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
         ? '' 
         : 'https://vikasgoyal.github.io';
+
+    function formatPostDate(dateString) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
     
     fetch(`${baseUrl}/latest-posts.json`)
         .then(response => response.json())
@@ -21,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
             html += '<ul style="list-style: none; padding: 0; margin: 0;">';
             
             latestThree.forEach(post => {
-                const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const date = formatPostDate(post.date);
                 html += `
                     <li style="margin-bottom: 1em; padding-bottom: 0.8em; border-bottom: 1px solid #222;">
                         <a href="${post.url}" style="color: #4da6ff; font-size: 0.85em; line-height: 1.4; text-decoration: none; display: block;">

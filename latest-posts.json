@@ -1,6 +1,21 @@
 ﻿{
     "posts":  [
                   {
+                      "url":  "/blog/2026/03/award-winning-failures-projects-that-should-not-exist.html",
+                      "readTime":  3,
+                      "excerpt":  "Some projects win awards, executive praise, and promotions before they prove they matter. That gap between internal recognition and real value is where expensive failures thrive.",
+                      "category":  "Career",
+                      "tags":  [
+                                   "leadership",
+                                   "project governance",
+                                   "business value",
+                                   "user adoption",
+                                   "enterprise technology"
+                               ],
+                      "date":  "2026-03-13",
+                      "title":  "Award-Winning Failures: When Recognition Hides Weak Value"
+                  },
+                  {
                       "url":  "/blog/2026/01/agentic-advantage-new-leverage.html",
                       "readTime":  5,
                       "excerpt":  "Just as machines multiplied physical effort, agentic AI systems create leverage in knowledge work by absorbing cognitive load and enabling humans to focus on judgment, intent, and oversight.",

@@ -12,6 +12,11 @@ document.addEventListener("DOMContentLoaded", function() {
     let allPosts = [];
     let currentFilter = 'all';
 
+    function formatPostDate(dateString, options) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day).toLocaleDateString('en-US', options);
+    }
+
     // Load posts from JSON
     fetch(`${baseUrl}/latest-posts.json`)
         .then(response => response.json())
@@ -40,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         let html = '';
         sortedPosts.forEach(post => {
-            const date = new Date(post.date).toLocaleDateString('en-US', { 
+            const date = formatPostDate(post.date, { 
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric' 
