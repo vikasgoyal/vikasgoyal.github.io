@@ -1,226 +1,779 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ZBXY60BLWE');
-    </script>
-    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
-
-    <!-- Basic Meta Tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <!-- SEO Meta Tags -->
-    <title>Agentic AI - Thinking, Behaviors and Systems | Vikas Goyal</title>
-    <meta name="description" content="Comprehensive resource on Agentic AI systems, multi-agent architectures, LLM-based agents, and enterprise software development. Explore frameworks, patterns, and reference architectures.">
-    <meta name="keywords" content="agentic AI, multi-agent systems, LLMs, AI agents, conversational AI, AI architecture, AutoGen, MCP, action models">
-    <meta name="author" content="Vikas Goyal">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Agentic AI - Thinking, Behaviors and Systems">
-    <meta property="og:description" content="Comprehensive resource on Agentic AI systems, multi-agent architectures, and enterprise software development.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/">
-    <meta property="og:site_name" content="Vikas Goyal">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Agentic AI - Thinking, Behaviors and Systems">
-    <meta name="twitter:description" content="Comprehensive resource on Agentic AI systems, multi-agent architectures, and enterprise software development.">
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "Agentic AI - Thinking, Behaviors and Systems",
-      "description": "Comprehensive resource on Agentic AI systems, multi-agent architectures, and enterprise software development",
-      "author": {
-        "@type": "Person",
-        "name": "Vikas Goyal",
-        "url": "https://www.linkedin.com/in/vikasgoyal/"
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZBXY60BLWE');
+  </script>
+  <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Agentic AI - Systems, Architectures, and Design Patterns | Vikas Goyal</title>
+  <meta name="description" content="A practical hub for agentic AI: systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.">
+  <meta name="author" content="Vikas Goyal">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vikasgoyal.github.io/agentic/">
+  <meta property="og:title" content="Agentic AI - Systems, Architectures, and Design Patterns">
+  <meta property="og:description" content="A practical hub for agentic AI: systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vikasgoyal.github.io/agentic/">
+  <meta property="og:site_name" content="Vikas Goyal">
+  <meta property="og:image" content="https://vikasgoyal.github.io/agentic/assets/refarchagentic.png">
+  <meta property="og:image:alt" content="Reference architecture for agentic systems">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Agentic AI - Systems, Architectures, and Design Patterns">
+  <meta name="twitter:description" content="A practical hub for agentic AI: systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.">
+  <meta name="twitter:image" content="https://vikasgoyal.github.io/agentic/assets/refarchagentic.png">
+  <meta name="twitter:image:alt" content="Reference architecture for agentic systems">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "name": "Agentic AI - Systems, Architectures, and Design Patterns",
+        "description": "A practical hub for agentic AI covering systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.",
+        "author": {
+          "@type": "Person",
+          "name": "Vikas Goyal",
+          "url": "https://www.linkedin.com/in/vikasgoyal/"
+        },
+        "url": "https://vikasgoyal.github.io/agentic/",
+        "primaryImageOfPage": "https://vikasgoyal.github.io/agentic/assets/refarchagentic.png"
       },
-      "url": "https://vikasgoyal.github.io/agentic/"
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vikasgoyal.github.io/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Agentic AI",
+            "item": "https://vikasgoyal.github.io/agentic/"
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "name": "Featured Agentic AI resources",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://vikasgoyal.github.io/agentic/mcpfoundation.html",
+            "name": "MCP as a foundational layer of the AI-native internet"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "https://vikasgoyal.github.io/agentic/actionmodels.html",
+            "name": "The Evolution of Machine Learning Models: From LLMs to Action Models"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "https://vikasgoyal.github.io/agentic/refarchagentic.html",
+            "name": "Agentic Systems - Reference Architecture"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --ink: #121212;
+      --ink-soft: #505050;
+      --paper: #f6f4ee;
+      --surface: rgba(255, 255, 255, 0.88);
+      --line: rgba(18, 18, 18, 0.10);
+      --green: #0f5d44;
+      --green-deep: #0a3f30;
+      --gold: #b8892f;
+      --blue: #173c73;
+      --shadow: 0 22px 60px rgba(18, 18, 18, 0.10);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --content-width: 1240px;
     }
-    </script>
-    
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="../styles.css">
-    <script src="../latest-posts.js"></script>
-    <style>
-/* Sidebar Styles */
-        .sidebar {
-            width: 250px;
-            background-color: #000000;
-            color: white;
-            padding: 20px;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-        
-        .sidebar h2 {
-            text-align: center;
-            color: white;
-            margin-bottom: 0.5em;
-        }
-        
-        .sidebar p {
-            text-align: center;
-            color: #ccc;
-        }
-        
-        .sidebar .links {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .sidebar .links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            text-align: center;
-            transition: background-color 0.3s ease;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar .links a:hover {
-            background-color: #0d6233;
-        }
-        
-        #latest-posts h3 {
-            color: white;
-            font-size: 1em;
-            margin-bottom: 0.5em;
-        }
-        
-        #latest-posts a {
-            color: #81b1ff;
-        }
-        
-        #latest-posts a:hover {
-            color: #fff;
-            text-decoration: underline;
-        }
-        
-        /* Page-specific styles for index page with sidebar */
-        body {
-            display: flex;
-            width: 100%;
-            margin: 10px 30px 30px;
-            padding: 0;
-            min-height: 100vh;
-            align-items: flex-start;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            padding-top: 0;
-        }
-        .container-lg {
-            padding: 0;
-        }
-    </style>
-  </head>
 
-  <body>
-    <div class="sidebar">
-        <h2>Vikas Goyal</h2>
-        <p><em>learn more. laugh more.</em></p>
-        
-        <div class="links">
-            <a href="/" style="border: 1px solid #333; border-radius: 6px; transition: all 0.3s ease;">Home</a>
-            <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank">LinkedIn</a>
-        </div>
+    * {
+      box-sizing: border-box;
+    }
 
-        <!-- Latest Posts Section -->
-        <div id="latest-posts" style="margin-top: 2em; padding-top: 1.5em; border-top: 1px solid #333;">
-            <p style="color: #888; font-size: 0.8em;">Loading latest posts...</p>
-        </div>
+    html {
+      scroll-behavior: smooth;
+    }
 
-        <div style="margin-top: 3em;">
-            <h6 style="text-align: center; font-size: 0.75em; line-height: 1.4;">This site has been co-created with GitHub Copilot and other LLMs</h6>
-            
-            <p style="margin-top: 2em; font-size: 0.8em; line-height: 1.4;">
-                <strong>Disclaimer</strong><br>
-                These views are mine alone and not those of my employer. If you're upset, blame me, not the folks who sign my checks!!
-            </p>
-        </div>
-    </div>
+    body {
+      margin: 0;
+      font-family: 'Manrope', 'Segoe UI', sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15, 93, 68, 0.14), transparent 24%),
+        radial-gradient(circle at top right, rgba(184, 137, 47, 0.12), transparent 22%),
+        linear-gradient(180deg, #fbfaf6 0%, var(--paper) 42%, #ffffff 100%);
+    }
 
-    <div class="content">
-      <div class="container-lg px-3 my-5 markdown-body">
-        
-        <p class="accent-text">Agents augment and not just automate.</p>
-        <h1>🤖 Agentic AI: Thinking, Behaviors and Systems</h1> 
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-        <section id="featured">
-          <h2>🌟 Featured Articles</h2>
-          <p><a href="/agentic/mcpfoundation.html"><mark>MCP as a foundational layer of the AI-native internet</mark></a></p>
-          <p><a href="/agentic/actionmodels.html"><mark>The Evolution of Machine Learning Models: From LLMs to Action Models</mark></a></p>
-        </section>
+    a:hover {
+      text-decoration: none;
+    }
 
-        <section id="core-concepts">
-          <h2>Core Concepts</h2>
-          <p><a href="/genai/agenticthinking.html">What is Agentic Thinking?</a></p>
-          <p><a href="/genai/agenticsystems.html">What are Agentic Systems in context of LLMs and Generative AI?</a></p>
-          <p><a href="/agentic/whynowagentic.html">Agentic Systems - Why now?</a></p>
-          <p><a href="/genai/languageagenticsystems.html">How are earlier generations of agentic AI systems differ from those that reason through language?</a></p>
-          <p><a href="/genai/agenticness.html">Agenticness of AI systems</a></p>
-        </section>
+    .page-shell {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 24px 20px 72px;
+    }
 
-        <section id="multi-agent-systems">
-          <h2>Multi-Agent Systems</h2>
-          <p><a href="/agentic/mas.html">What are Multi-Agent Systems (MAS)?</a></p>
-          <p><a href="/agentic/refarchmas.html">Multi-Agent Systems - Reference Architecture</a></p>
-          <p><a href="/agentic/masterslavepattern.html">Master Slave Pattern</a></p>
-        </section>
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
 
-        <section id="architectures">
-          <h2>Architecture & Design</h2>
-          <p><a href="/genai/timeline.html">Timeline of Significant Shifts in Software Design to Decrease Cognitive Load</a></p>
-          <p><a href="/agentic/refarchagentic.html">Agentic Systems - Reference Architecture</a></p>
-          <p><a href="/agentic/reactivedeliberativeagents.html">Reactive and Deliberative AI agents</a></p>
-          <p><a href="/genai/cognitive.html">The software design is about to change ... forever.</a></p>
-        </section>
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1 1 420px;
+      min-width: 280px;
+    }
 
-        <section id="applications">
-          <h2>Applications & Use Cases</h2>
-          <p><a href="/agentic/chatbotquerytypes.html">Designing a Robust Chatbot: Handling a Variety of Query Types</a></p>
-          <p><a href="/agentic/agenticsystems.html">Embracing Agentic Systems: Revolutionizing Enterprise Software Development</a></p>
-          <p><a href="/agentic/personalization.html">Personalization Maturity Model for Agentic Conversational AI</a></p>
-        </section>
+    .brand-name {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
 
-        <section id="advanced-topics">
-          <h2>Advanced Topics</h2>
-          <p><a href="/agentic/learning.html">The Role of Learning in Agentic AI</a></p>
-          <p><a href="/agentic/teachableagents.html">Teachable AI Agents: Revolutionizing the Development and Adaptability of AI Systems</a></p>
-        </section>
+    .brand-tagline {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
 
-        <section id="frameworks">
-          <h2>Frameworks & Products</h2>
-          <p><a href="https://microsoft.github.io/autogen/" target="_blank">AutoGen</a></p>
-          <p><a href="https://microsoft.github.io/autogen-for-net/index.html" target="_blank">AutoGen for .NET</a></p>
-        </section>
-        
-        <section id="research">
-          <h2>Papers & Research</h2>
-          <p><a href="https://arxiv.org/html/2404.11584v1" target="_blank">The Landscape of Emerging AI Agent Architectures for Reasoning, Planning, and Tool Calling: A Survey</a></p>
-        </section>
+    .topnav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 0 1 auto;
+    }
 
+    .topnav a {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.88rem;
+      white-space: nowrap;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.56);
+      transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .topnav a:hover,
+    .topnav a:focus {
+      color: var(--ink);
+      border-color: rgba(18, 18, 18, 0.26);
+      transform: translateY(-1px);
+    }
+
+    .topnav .nav-highlight {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
+      border-color: transparent;
+      box-shadow: 0 12px 24px rgba(23, 60, 115, 0.18);
+    }
+
+    .topnav .nav-highlight:hover,
+    .topnav .nav-highlight:focus {
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      margin-bottom: 26px;
+    }
+
+    .hero-panel,
+    .signal-card,
+    .section-card,
+    .feature-card,
+    .topic-card,
+    .resource-card,
+    .latest-card,
+    .footer-card {
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      padding: 42px;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(15, 93, 68, 0.11), transparent 45%),
+        linear-gradient(315deg, rgba(184, 137, 47, 0.12), transparent 38%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(18, 18, 18, 0.05);
+      color: var(--green-deep);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      position: relative;
+      margin: 0 0 18px;
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: clamp(2.25rem, 4.6vw, 4.15rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      max-width: 11ch;
+    }
+
+    .hero-copy {
+      position: relative;
+      max-width: 65ch;
+      font-size: 1.08rem;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button:hover,
+    .button:focus {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+      box-shadow: 0 14px 30px rgba(15, 93, 68, 0.24);
+    }
+
+    .button-secondary {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+    }
+
+    .hero-metrics {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(18, 18, 18, 0.08);
+    }
+
+    .metric-label {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .metric strong {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .signal-grid,
+    .feature-grid,
+    .topic-grid,
+    .resource-grid,
+    .footer-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .signal-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 26px;
+    }
+
+    .signal-card {
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .signal-card strong {
+      display: block;
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+
+    .signal-card p,
+    .section-heading p,
+    .feature-card p,
+    .topic-card p,
+    .resource-card p,
+    .latest-card p,
+    .footer-card p {
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+
+    .section-card {
+      border-radius: 32px;
+      padding: 30px;
+      margin-bottom: 26px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: clamp(1.65rem, 2.1vw, 2.25rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-heading p {
+      max-width: 58ch;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .feature-card,
+    .topic-card,
+    .resource-card {
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      min-height: 100%;
+    }
+
+    .card-tag {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(15, 93, 68, 0.10);
+      color: var(--green-deep);
+      margin-bottom: 14px;
+    }
+
+    .feature-card h3,
+    .topic-card h3,
+    .resource-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+      line-height: 1.4;
+    }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .topic-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .topic-links {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .topic-links a,
+    .resource-links a,
+    .footer-links a {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .resource-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .resource-links {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .footer-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+
+    .footer-card {
+      border-radius: 26px;
+      padding: 24px;
+    }
+
+    .footer-card h2,
+    .footer-card h3 {
+      margin: 0 0 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .footer-links a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .note {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 1100px) {
+      .resource-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .signal-grid,
+      .feature-grid,
+      .topic-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        padding: 16px 14px 48px;
+      }
+
+      .topbar,
+      .section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-panel,
+      .section-card,
+      .footer-card {
+        padding: 22px;
+      }
+
+      .hero-metrics,
+      .signal-grid,
+      .feature-grid,
+      .topic-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-name">Vikas Goyal</div>
+        <div class="brand-tagline">A practical guide to agentic systems, architectures, and enterprise applications.</div>
       </div>
-    </div>
+      <nav class="topnav" aria-label="Primary">
+        <a href="../">Home</a>
+        <a class="nav-highlight" href="../industries/">Industries AI</a>
+        <a href="../startups/">Startups</a>
+        <a href="../ecp/">Career Guidance</a>
+        <a href="../blog/">All Writing</a>
+        <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </header>
 
-  </body>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-panel">
+        <div class="eyebrow">Agentic AI Hub</div>
+        <h1 id="hero-title">Agentic AI: systems thinking, architectures, and design patterns.</h1>
+        <p class="hero-copy">
+          This page organizes the core ideas behind agentic AI: what agentic behavior means, how multi-agent systems are structured, what agentic AI architecture looks like, and where design choices matter in real software systems.
+          It is a practical starting point for understanding enterprise AI agents, orchestration patterns, and multi-agent system design without reducing the topic to tooling alone.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#featured">Start with the featured pieces</a>
+          <a class="button button-secondary" href="#topics">Browse by topic</a>
+        </div>
+        <div class="hero-metrics" aria-label="Topic signals">
+          <div class="metric">
+            <span class="metric-label">Foundations</span>
+            <strong>Definitions, mental models, and the shift from prompt-response behavior to purposeful systems.</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Architectures</span>
+            <strong>Reference designs, orchestration patterns, and system boundaries for production-grade agentic software.</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Applications</span>
+            <strong>Use cases, query-handling patterns, and enterprise implications of deploying agentic capabilities.</strong>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="signal-grid" aria-label="What this collection covers">
+      <article class="signal-card">
+        <strong>Agentic behavior</strong>
+        <p>How autonomy, intentionality, and goal-directed action differ from ordinary automation.</p>
+      </article>
+      <article class="signal-card">
+        <strong>Multi-agent coordination</strong>
+        <p>How roles, control loops, and communication patterns shape the behavior of teams of agents.</p>
+      </article>
+      <article class="signal-card">
+        <strong>System design</strong>
+        <p>How memory, tools, orchestration, and evaluation fit together in software that must actually work.</p>
+      </article>
+      <article class="signal-card">
+        <strong>Enterprise implications</strong>
+        <p>Where agentic patterns start changing product design, user expectations, and organizational choices.</p>
+      </article>
+    </section>
+
+    <section class="section-card" id="featured" aria-labelledby="featured-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="featured-title">Start Here</h2>
+        </div>
+        <p>These pieces are the strongest entry points for understanding where agentic systems are heading and what design choices matter most.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="card-tag">Featured</div>
+          <h3>MCP as a foundational layer of the AI-native internet</h3>
+          <p>A framing for why protocol and interoperability matter if agentic systems are going to operate across tools, services, and environments.</p>
+          <a class="card-link" href="./mcpfoundation.html">Read the article</a>
+        </article>
+        <article class="feature-card">
+          <div class="card-tag">Models</div>
+          <h3>The Evolution of Machine Learning Models: From LLMs to Action Models</h3>
+          <p>A useful bridge between model capability, reasoning, and the move toward systems that can choose and execute actions.</p>
+          <a class="card-link" href="./actionmodels.html">Read the article</a>
+        </article>
+        <article class="feature-card">
+          <div class="card-tag">Architecture</div>
+          <h3>Agentic Systems - Reference Architecture</h3>
+          <p>A system-level view of orchestration, tools, control, and interaction patterns for production-minded implementations.</p>
+          <a class="card-link" href="./refarchagentic.html">Read the article</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-card" id="topics" aria-labelledby="topics-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="topics-title">Browse by Topic</h2>
+        </div>
+        <p>Organized by the kinds of questions architects and builders usually have when evaluating or designing agentic systems.</p>
+      </div>
+      <p style="margin: 0 0 22px; color: var(--ink-soft); line-height: 1.8; max-width: 72ch;">
+        Use these topic clusters to move from definitions and mental models into agentic AI architecture, multi-agent systems, enterprise use cases, and design patterns that hold up in production settings.
+      </p>
+      <div class="topic-grid">
+        <article class="topic-card">
+          <div class="card-tag">Foundations</div>
+          <h3>Core Concepts</h3>
+          <p>Start here if the question is what agentic systems are and how they differ from earlier AI or software patterns.</p>
+          <div class="topic-links">
+            <a href="../genai/agenticthinking.html">What is Agentic Thinking?</a>
+            <a href="../genai/agenticsystems.html">What are Agentic Systems?</a>
+            <a href="./whynowagentic.html">Agentic Systems - Why now?</a>
+            <a href="../genai/languageagenticsystems.html">Language-based reasoning versus earlier generations</a>
+            <a href="../genai/agenticness.html">Agenticness of AI systems</a>
+          </div>
+        </article>
+
+        <article class="topic-card">
+          <div class="card-tag">Coordination</div>
+          <h3>Multi-Agent Systems</h3>
+          <p>Use these when the problem is role design, coordination, decomposition, or supervisory control across multiple agents.</p>
+          <div class="topic-links">
+            <a href="./mas.html">What are Multi-Agent Systems (MAS)?</a>
+            <a href="./refarchmas.html">Multi-Agent Systems - Reference Architecture</a>
+            <a href="./masterslavepattern.html">Master Slave Pattern</a>
+          </div>
+        </article>
+
+        <article class="topic-card">
+          <div class="card-tag">Architecture</div>
+          <h3>Architecture and Design</h3>
+          <p>Start here if the immediate question is how to structure behavior, control loops, memory, and decision pathways.</p>
+          <div class="topic-links">
+            <a href="./refarchagentic.html">Agentic Systems - Reference Architecture</a>
+            <a href="./reactivedeliberativeagents.html">Reactive and Deliberative AI agents</a>
+            <a href="../genai/timeline.html">Timeline of shifts in software design</a>
+            <a href="../genai/cognitive.html">The software design is about to change ... forever.</a>
+          </div>
+        </article>
+
+        <article class="topic-card">
+          <div class="card-tag">Applications</div>
+          <h3>Applications and Use Cases</h3>
+          <p>These pieces show where agentic thinking becomes concrete in products, enterprise software, and interaction models.</p>
+          <div class="topic-links">
+            <a href="./chatbotquerytypes.html">Handling a variety of query types</a>
+            <a href="./agenticsystems.html">Agentic systems in enterprise software development</a>
+            <a href="./personalization.html">Personalization maturity model</a>
+          </div>
+        </article>
+
+        <article class="topic-card">
+          <div class="card-tag">Advanced</div>
+          <h3>Learning and Adaptation</h3>
+          <p>Use these if the question is how systems learn, get taught, or evolve after deployment rather than staying fixed.</p>
+          <div class="topic-links">
+            <a href="./learning.html">The Role of Learning in Agentic AI</a>
+            <a href="./teachableagents.html">Teachable AI Agents</a>
+          </div>
+        </article>
+
+        <article class="topic-card">
+          <div class="card-tag">Momentum</div>
+          <h3>Recent Agentic Writing</h3>
+          <p>Recent posts and adjacent writing that sharpen the strategic case for why agentic systems matter right now.</p>
+          <div class="topic-links">
+            <a href="../blog/2026/01/agentic-advantage-new-leverage.html">The Agentic Advantage: A New Form of Leverage</a>
+            <a href="./agneticadvantage.html">The Agentic Advantage</a>
+            <a href="./agenticai.html">Agentic AI</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-card" aria-labelledby="resources-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="resources-title">Frameworks and Research</h2>
+        </div>
+        <p>Once the conceptual model is clear, these external references help connect the topic to implementation ecosystems and current research surveys.</p>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card">
+          <div class="card-tag">Frameworks</div>
+          <h3>Products and Platforms</h3>
+          <p>Reference frameworks are useful once system boundaries, roles, and tool interactions are already well understood.</p>
+          <div class="resource-links">
+            <a href="https://microsoft.github.io/autogen/" target="_blank" rel="noopener noreferrer">AutoGen</a>
+            <a href="https://microsoft.github.io/autogen-for-net/index.html" target="_blank" rel="noopener noreferrer">AutoGen for .NET</a>
+          </div>
+        </article>
+        <article class="resource-card">
+          <div class="card-tag">Research</div>
+          <h3>Survey and Reference Reading</h3>
+          <p>This survey is a useful map of the design space if you want a broader view of reasoning, planning, and tool-calling architectures.</p>
+          <div class="resource-links">
+            <a href="https://arxiv.org/html/2404.11584v1" target="_blank" rel="noopener noreferrer">The Landscape of Emerging AI Agent Architectures for Reasoning, Planning, and Tool Calling</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="footer-grid" aria-label="About and site notes">
+      <article class="footer-card">
+        <h2>What You Will Find Here</h2>
+        <p>
+          This collection focuses on agentic behavior, multi-agent coordination, system design, and the enterprise implications of building with AI agents. The goal is practical clarity rather than exhaustive coverage.
+        </p>
+        <div class="footer-links">
+          <a href="../">Back to home</a>
+          <a href="../blog/">Explore the blog</a>
+          <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+        </div>
+      </article>
+      <article class="footer-card">
+        <h3>Site Notes</h3>
+        <p class="note">This site has been co-created with GitHub Copilot and other LLMs.</p>
+        <p class="note" style="margin-top: 14px;">These views are mine alone and not those of my employer.</p>
+      </article>
+    </section>
+  </div>
+
+</body>
 </html>
