@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industry AI Intelligence Reports</title>
+    <title>Industry AI Intelligence Reports | Vikas Goyal</title>
+    <meta name="description" content="Industry AI intelligence reports covering agentic AI, retail, legal, and healthcare. Practitioner-grade briefings for builders, operators, and decision-makers.">
+    <link rel="canonical" href="https://vikasgoyal.github.io/industries/">
+    <meta property="og:title" content="Industry AI Intelligence Reports | Vikas Goyal">
+    <meta property="og:description" content="Practitioner-grade intelligence on how AI and agentic systems are reshaping industries, from cross-sector briefings to vertical deep dives.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vikasgoyal.github.io/industries/">
+    <meta property="og:site_name" content="Vikas Goyal">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Industry AI Intelligence Reports | Vikas Goyal">
+    <meta name="twitter:description" content="Practitioner-grade intelligence on how AI and agentic systems are reshaping industries, from cross-sector briefings to vertical deep dives.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -16,12 +25,52 @@
       gtag('config', 'G-ZBXY60BLWE');
     </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --ink: #0f172a;
+            --ink-soft: #475569;
+            --paper: #f8fafc;
+            --white: #ffffff;
+            --line: rgba(15, 23, 42, 0.10);
+            --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+            --radius-xl: 34px;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --content-width: 1240px;
+
+            --agentic-primary: #1e3a8a;
+            --agentic-secondary: #3b82f6;
+            --agentic-surface: #eff6ff;
+
+            --retail-primary: #ca8a04;
+            --retail-secondary: #fbbf24;
+            --retail-surface: #fffbeb;
+
+            --legal-primary: #b45309;
+            --legal-secondary: #fbbf24;
+            --legal-surface: #fffbeb;
+
+            --health-primary: #15803d;
+            --health-secondary: #4ade80;
+            --health-surface: #f0fdf4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
+            background:
+                radial-gradient(circle at top left, rgba(30, 58, 138, 0.10), transparent 24%),
+                radial-gradient(circle at top right, rgba(251, 191, 36, 0.12), transparent 22%),
+                linear-gradient(180deg, #fcfdff 0%, var(--paper) 46%, #ffffff 100%);
+            color: var(--ink);
             line-height: 1.6;
         }
 
@@ -29,344 +78,714 @@
             font-family: 'Inter Tight', 'Inter', sans-serif;
         }
 
-        /* ── Top Nav ── */
-        .top-nav {
-            background-color: #000;
-            width: 100%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
-        .top-nav nav ul {
-            list-style: none;
+        .page-shell {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: 22px 20px 70px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .brand {
+            flex: 1 1 420px;
+            min-width: 280px;
+        }
+
+        .brand h2 {
+            font-size: 2rem;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            margin-bottom: 10px;
+        }
+
+        .brand p {
+            font-size: 0.95rem;
+            color: var(--ink-soft);
+            max-width: 38ch;
+        }
+
+        .topnav {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0;
+            justify-content: flex-end;
+            gap: 8px;
         }
 
-        .top-nav nav ul li a {
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            font-size: 15px;
-            padding: 15px 18px;
-            transition: background-color 0.2s;
+        .topnav a {
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.72);
+            color: var(--ink-soft);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
         }
 
-        .top-nav nav ul li a:hover {
-            text-decoration: underline;
-            background-color: rgba(255,255,255,0.1);
+        .topnav a:hover,
+        .topnav a:focus {
+            color: var(--ink);
+            border-color: rgba(15, 23, 42, 0.24);
+            transform: translateY(-1px);
         }
 
-        .top-nav .aair-link { color: #ffd700 !important; font-weight: 600; }
-        .top-nav .aair-link:hover { color: #fff !important; }
-
-        /* ── Hero Header ── */
-        .hero {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1e3a8a 100%);
-            color: #fff;
-            padding: 70px 40px 80px;
-            text-align: center;
+        .topnav .nav-highlight {
+            color: #ffffff;
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--agentic-primary) 0%, #0f766e 100%);
+            box-shadow: 0 12px 24px rgba(30, 58, 138, 0.18);
         }
 
-        .hero .label {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.55);
-            margin-bottom: 18px;
-        }
-
-        .hero h1 {
-            font-size: 3em;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 1.15em;
-            color: rgba(255,255,255,0.75);
-            max-width: 620px;
-            margin: 0 auto;
-            font-weight: 300;
-        }
-
-        /* ── Cards grid ── */
-        .cards-section {
-            max-width: 1100px;
-            margin: 60px auto;
-            padding: 0 30px;
-        }
-
-        .cards-section h2 {
-            font-size: 1.5em;
-            color: #64748b;
-            text-align: center;
-            margin-bottom: 50px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 0.85em;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .report-card {
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            overflow: hidden;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-
-        .report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        .topnav .nav-highlight:hover,
+        .topnav .nav-highlight:focus {
+            color: #ffffff;
             border-color: transparent;
         }
 
-        .card-accent {
-            height: 6px;
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+            gap: 22px;
+            margin-bottom: 24px;
         }
 
-        .card-body {
-            padding: 30px 28px 24px;
-            flex: 1;
+        .hero-panel,
+        .hero-aside,
+        .section-card,
+        .report-card,
+        .footer-card {
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-panel {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-xl);
+            padding: 42px;
+            background:
+                linear-gradient(135deg, rgba(17, 17, 17, 0.97) 0%, rgba(42, 42, 42, 0.96) 55%, rgba(72, 72, 72, 0.95) 100%);
+            color: #ffffff;
+        }
+
+        .hero-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top right, rgba(255, 255, 255, 0.10), transparent 28%),
+                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.06), transparent 24%);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.10);
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero-panel h1 {
+            position: relative;
+            font-size: clamp(2.4rem, 5vw, 4.5rem);
+            line-height: 1.02;
+            letter-spacing: -0.05em;
+            max-width: 10ch;
+            margin-bottom: 18px;
+        }
+
+        .hero-panel p {
+            position: relative;
+            max-width: 62ch;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .hero-actions {
+            position: relative;
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hero-actions a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            transition: transform 0.2s ease;
+        }
+
+        .hero-actions a:hover,
+        .hero-actions a:focus {
+            transform: translateY(-2px);
+        }
+
+        .hero-actions .primary {
+            background: #ffffff;
+            color: #1f1f1f;
+        }
+
+        .hero-actions .secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+        }
+
+        .hero-aside {
+            border-radius: 30px;
+            padding: 28px;
+        }
+
+        .hero-aside h2 {
+            font-size: 1.45rem;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .hero-aside p {
+            color: var(--ink-soft);
+            margin-bottom: 20px;
+        }
+
+        .signal-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .signal-item {
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            background: rgba(15, 23, 42, 0.03);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+        }
+
+        .signal-item strong {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--agentic-primary);
+            margin-bottom: 6px;
+        }
+
+        .signal-item span {
+            color: var(--ink-soft);
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        .section-card {
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(1.7rem, 2.4vw, 2.35rem);
+            letter-spacing: -0.03em;
+        }
+
+        .section-heading p {
+            max-width: 58ch;
+            color: var(--ink-soft);
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .report-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 26px;
+            padding: 28px;
+        }
+
+        .report-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+            pointer-events: none;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 16px;
+            margin-bottom: 18px;
         }
 
         .card-icon {
-            font-size: 2.2em;
-            margin-bottom: 16px;
-            line-height: 1;
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
-        .card-label {
-            font-size: 0.7em;
+        .card-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.9;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card-kicker {
+            font-size: 0.76rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
+            letter-spacing: 0.10em;
+            font-weight: 700;
             margin-bottom: 10px;
         }
 
         .card-title {
-            font-size: 1.4em;
-            font-weight: 700;
-            line-height: 1.25;
-            margin-bottom: 14px;
-            color: #0f172a;
+            font-size: 1.45rem;
+            line-height: 1.18;
+            margin-bottom: 12px;
+            letter-spacing: -0.03em;
         }
 
         .card-desc {
-            font-size: 0.95em;
-            color: #475569;
-            line-height: 1.7;
-            flex: 1;
-            margin-bottom: 24px;
+            color: var(--ink-soft);
+            font-size: 0.97rem;
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .card-detail-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .detail-box {
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 0.86rem;
+            line-height: 1.55;
+        }
+
+        .detail-box strong {
+            display: block;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
         }
 
         .card-topics {
             display: flex;
             flex-wrap: wrap;
-            gap: 7px;
-            margin-bottom: 24px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .topic-chip {
-            font-size: 0.75em;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 500;
+            font-size: 0.76rem;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-weight: 600;
         }
 
         .card-cta {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.9em;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 18px;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .card-cta:hover,
+        .card-cta:focus {
+            transform: translateY(-1px);
+            opacity: 0.94;
+        }
+
+        .card-agentic {
+            background: linear-gradient(180deg, rgba(239, 246, 255, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .card-agentic .card-kicker { color: var(--agentic-primary); }
+        .card-agentic .card-icon { background: var(--agentic-surface); color: var(--agentic-primary); }
+        .card-agentic .topic-chip,
+        .card-agentic .detail-box { background: var(--agentic-surface); color: var(--agentic-primary); }
+        .card-agentic .card-cta { background: var(--agentic-primary); color: #ffffff; }
+
+        .card-retail {
+            background: linear-gradient(180deg, rgba(255, 251, 235, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .card-retail .card-kicker { color: var(--retail-primary); }
+        .card-retail .card-icon { background: var(--retail-surface); color: #92400e; }
+        .card-retail .topic-chip,
+        .card-retail .detail-box { background: var(--retail-surface); color: #92400e; }
+        .card-retail .card-cta { background: var(--retail-primary); color: #ffffff; }
+
+        .card-legal {
+            background: linear-gradient(180deg, rgba(255, 251, 235, 0.92) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .card-legal .card-kicker { color: var(--legal-primary); }
+        .card-legal .card-icon { background: var(--legal-surface); color: #92400e; }
+        .card-legal .topic-chip,
+        .card-legal .detail-box { background: var(--legal-surface); color: #92400e; }
+        .card-legal .card-cta { background: var(--legal-primary); color: #ffffff; }
+
+        .card-healthcare {
+            background: linear-gradient(180deg, rgba(240, 253, 244, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .card-healthcare .card-kicker { color: var(--health-primary); }
+        .card-healthcare .card-icon { background: var(--health-surface); color: var(--health-primary); }
+        .card-healthcare .topic-chip,
+        .card-healthcare .detail-box { background: var(--health-surface); color: var(--health-primary); }
+        .card-healthcare .card-cta { background: var(--health-primary); color: #ffffff; }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+            gap: 20px;
+        }
+
+        .footer-card {
+            border-radius: 24px;
+            padding: 24px;
+        }
+
+        .footer-card h3,
+        .footer-card h2 {
+            margin-bottom: 12px;
+        }
+
+        .footer-card p {
+            color: var(--ink-soft);
+            line-height: 1.7;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .footer-links a {
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.75);
             font-weight: 600;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            transition: opacity 0.2s;
-            align-self: flex-start;
         }
 
-        .card-cta:hover { opacity: 0.85; }
+        @media (max-width: 1080px) {
+            .hero,
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
 
-        /* ── Agentic AI — blue ── */
-        .card-agentic .card-accent  { background: linear-gradient(90deg, #1e40af, #3b82f6); }
-        .card-agentic .card-label   { color: #1e40af; }
-        .card-agentic .topic-chip   { background: #eff6ff; color: #1e40af; }
-        .card-agentic .card-cta     { background: #1e40af; color: #fff; }
-
-        /* ── Retail AI — green ── */
-        .card-retail .card-accent   { background: linear-gradient(90deg, #15803d, #4ade80); }
-        .card-retail .card-label    { color: #15803d; }
-        .card-retail .topic-chip    { background: #f0fdf4; color: #15803d; }
-        .card-retail .card-cta      { background: #15803d; color: #fff; }
-
-        /* ── Legal AI — amber ── */
-        .card-legal .card-accent    { background: linear-gradient(90deg, #b45309, #fbbf24); }
-        .card-legal .card-label     { color: #b45309; }
-        .card-legal .topic-chip     { background: #fffbeb; color: #92400e; }
-        .card-legal .card-cta       { background: #b45309; color: #fff; }
-
-        /* ── Healthcare AI — teal-green ── */
-        .card-healthcare .card-accent  { background: linear-gradient(90deg, #0f766e, #14b8a6); }
-        .card-healthcare .card-label   { color: #0f766e; }
-        .card-healthcare .topic-chip   { background: #f0fdfa; color: #0f766e; }
-        .card-healthcare .card-cta     { background: #0f766e; color: #fff; }
-
-        /* ── Footer ── */
-        .footer {
-            background: #1e293b;
-            color: #fff;
-            text-align: center;
-            padding: 36px 20px;
-            font-size: 0.9em;
-            margin-top: 60px;
+            .reports-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
 
-        .footer p { margin: 5px 0; opacity: 0.85; }
-        .footer a { color: #60a5fa; text-decoration: none; }
-        .footer a:hover { text-decoration: underline; }
+        @media (max-width: 760px) {
+            .page-shell {
+                padding: 16px 14px 48px;
+            }
 
-        /* ── Responsive ── */
-        @media (max-width: 640px) {
-            .hero { padding: 50px 20px 60px; }
-            .hero h1 { font-size: 2em; }
-            .cards-section { margin: 40px auto; padding: 0 16px; }
+            .topbar,
+            .section-heading {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-panel,
+            .hero-aside,
+            .section-card,
+            .report-card,
+            .footer-card {
+                padding: 22px;
+            }
+
+            .reports-grid,
+            .card-detail-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-panel h1 {
+                max-width: none;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="brand">
+                <h2>Vikas Goyal</h2>
+                <p>Industry AI intelligence for builders, operators, and leaders tracking where agentic systems are becoming operational reality.</p>
+            </div>
+            <nav class="topnav" aria-label="Primary">
+                <a href="../">Home</a>
+                <a href="../agentic/">Agentic AI</a>
+                <a class="nav-highlight" href="./">Industry AI</a>
+                <a href="../startups/">Startups</a>
+                <a href="../blog/">All Writing</a>
+                <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </nav>
+        </header>
 
-    <!-- Top Navigation -->
-    <div class="top-nav">
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/blog/">Blog</a></li>
-                <li><a href="/agentic/">Agentic AI</a></li>
-                <li><a class="aair-link" href="/industries/index.html">Industry AI</a></li>
-                <li><a href="/startups/">Startups</a></li>
-                <li><a href="/genai/">Generative AI</a></li>
-                <li><a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank">LinkedIn</a></li>
-            </ul>
-        </nav>
-    </div>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-panel">
+                <div class="eyebrow">Intelligence Reports</div>
+                <h1 id="hero-title">Industry AI reports built for real operating decisions.</h1>
+                <p>
+                    Practitioner-grade briefings on how AI and agentic systems are reshaping industries, from cross-sector intelligence to vertical-specific change signals in retail, legal, and healthcare.
+                </p>
+                <div class="hero-actions">
+                    <a class="primary" href="#reports">Browse reports</a>
+                    <a class="secondary" href="../agentic/">Explore Agentic AI hub</a>
+                </div>
+            </div>
 
-    <!-- Hero -->
-    <div class="hero">
-        <div class="label">Intelligence Reports</div>
-        <h1>Industry AI Reports</h1>
-        <p>Practitioner-grade periodic intelligence on how AI and agentic systems are reshaping industries — from cross-sector to vertical-specific deep dives.</p>
-    </div>
+            <aside class="hero-aside" aria-label="What this page covers">
+                <h2>What makes these reports useful</h2>
+                <p>Each report is designed as an operator-facing briefing: where the signals are changing, what patterns matter, and which implications deserve attention now.</p>
+                <div class="signal-list">
+                    <div class="signal-item">
+                        <strong>Cross-sector view</strong>
+                        <span>Agentic AI coverage tracks platform shifts, architecture patterns, and major implementation signals across domains.</span>
+                    </div>
+                    <div class="signal-item">
+                        <strong>Vertical detail</strong>
+                        <span>Retail, legal, and healthcare reports focus on concrete operational implications, not just abstract AI trends.</span>
+                    </div>
+                    <div class="signal-item">
+                        <strong>Decision support</strong>
+                        <span>The goal is to help builders and leaders prioritize where to investigate, pilot, or adjust strategy.</span>
+                    </div>
+                </div>
+            </aside>
+        </section>
 
-    <!-- Cards -->
-    <div class="cards-section">
-        <h2>Available Reports</h2>
-        <div class="cards-grid">
+        <section class="section-card" id="reports" aria-labelledby="reports-title">
+            <div class="section-heading">
+                <div>
+                    <h2 id="reports-title">Available Reports</h2>
+                </div>
+                <p>Cross-sector and vertical-specific reports covering where AI is creating practical operating shifts.</p>
+            </div>
 
-            <!-- Agentic AI Report -->
-            <div class="report-card card-agentic">
-                <div class="card-accent"></div>
-                <div class="card-body">
-                    <div class="card-icon">🤖</div>
-                    <div class="card-label">Cross-Industry</div>
-                    <div class="card-title">Agentic AI Intelligence Report</div>
-                    <div class="card-desc">Periodic practitioner briefing covering the latest in agentic AI — platform updates, architecture trends, research digests, responsible AI, and real-world case studies across industries.</div>
+            <div class="reports-grid">
+                <article class="report-card card-agentic">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-kicker">Cross-Industry</div>
+                            <h3 class="card-title">Agentic AI Intelligence Report</h3>
+                        </div>
+                        <div class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="5" r="2"></circle>
+                                <circle cx="6" cy="18" r="2"></circle>
+                                <circle cx="18" cy="18" r="2"></circle>
+                                <path d="M12 7v4"></path>
+                                <path d="M10 13l-2.6 3"></path>
+                                <path d="M14 13l2.6 3"></path>
+                                <path d="M8 11h8"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="card-desc">Periodic practitioner briefing on agentic AI platform updates, architecture movements, research shifts, and real-world implementation signals across industries.</p>
+                    <div class="card-detail-row">
+                        <div class="detail-box">
+                            <strong>Best For</strong>
+                            Technical leaders and architects tracking cross-industry AI movement.
+                        </div>
+                        <div class="detail-box">
+                            <strong>Lens</strong>
+                            Platform updates, architecture trends, responsible AI, and case studies.
+                        </div>
+                    </div>
                     <div class="card-topics">
                         <span class="topic-chip">Platform Updates</span>
                         <span class="topic-chip">Architecture</span>
                         <span class="topic-chip">Research</span>
                         <span class="topic-chip">Case Studies</span>
                     </div>
-                    <a class="card-cta" href="/agentic/agenticailatest.html">Read Report →</a>
-                </div>
-            </div>
+                    <a class="card-cta" href="../agentic/agenticailatest.html">Read latest report</a>
+                </article>
 
-            <!-- Retail AI Report -->
-            <div class="report-card card-retail">
-                <div class="card-accent"></div>
-                <div class="card-body">
-                    <div class="card-icon">🛒</div>
-                    <div class="card-label">Retail &amp; Commerce</div>
-                    <div class="card-title">Retail AI Intelligence Report</div>
-                    <div class="card-desc">Deep-dive into how agentic AI is transforming retail — from autonomous decision systems and demand forecasting to store operations, personalization, and the vendor landscape.</div>
+                <article class="report-card card-retail">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-kicker">Retail and Commerce</div>
+                            <h3 class="card-title">Retail AI Intelligence Report</h3>
+                        </div>
+                        <div class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 6h2l2 9h9l2-6H7"></path>
+                                <circle cx="10" cy="19" r="1.5"></circle>
+                                <circle cx="17" cy="19" r="1.5"></circle>
+                                <path d="M8.5 9.5h8"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="card-desc">A retail-focused view of how AI is changing planning, pricing, demand sensing, store operations, personalization, and the emerging vendor landscape.</p>
+                    <div class="card-detail-row">
+                        <div class="detail-box">
+                            <strong>Best For</strong>
+                            Operators and strategists in commerce, merchandising, and supply chain.
+                        </div>
+                        <div class="detail-box">
+                            <strong>Lens</strong>
+                            Decision systems, inventory, execution, and customer relevance.
+                        </div>
+                    </div>
                     <div class="card-topics">
                         <span class="topic-chip">Decision Systems</span>
-                        <span class="topic-chip">Demand &amp; Inventory</span>
+                        <span class="topic-chip">Demand and Inventory</span>
                         <span class="topic-chip">Store Operations</span>
                         <span class="topic-chip">Personalization</span>
                     </div>
-                    <a class="card-cta" href="/industries/retail/retailailatest.html">Read Report →</a>
-                </div>
-            </div>
+                    <a class="card-cta" href="./retail/retailailatest.html">Read latest report</a>
+                </article>
 
-            <!-- Legal AI Report -->
-            <div class="report-card card-legal">
-                <div class="card-accent"></div>
-                <div class="card-body">
-                    <div class="card-icon">⚖️</div>
-                    <div class="card-label">Legal &amp; Compliance</div>
-                    <div class="card-title">Legal AI Report</div>
-                    <div class="card-desc">Periodic intelligence on AI in the legal sector — covering breaking news, regulatory developments, case law, legaltech innovations, global trends, and upcoming industry events.</div>
+                <article class="report-card card-legal">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-kicker">Legal and Compliance</div>
+                            <h3 class="card-title">Legal AI Intelligence Report</h3>
+                        </div>
+                        <div class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 4v16"></path>
+                                <path d="M7 7h10"></path>
+                                <path d="M9 7l-3 5h6l-3-5z"></path>
+                                <path d="M15 7l-3 5h6l-3-5z"></path>
+                                <path d="M8 20h8"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="card-desc">Periodic intelligence on legal AI, including breaking developments, regulation, case law, legaltech tooling, and the workflow shifts affecting firms and in-house teams.</p>
+                    <div class="card-detail-row">
+                        <div class="detail-box">
+                            <strong>Best For</strong>
+                            Legal leaders, compliance teams, and legaltech builders.
+                        </div>
+                        <div class="detail-box">
+                            <strong>Lens</strong>
+                            Regulatory movement, case law, practice workflows, and events.
+                        </div>
+                    </div>
                     <div class="card-topics">
                         <span class="topic-chip">Breaking News</span>
                         <span class="topic-chip">Regulatory</span>
                         <span class="topic-chip">Case Law</span>
                         <span class="topic-chip">LegalTech</span>
                     </div>
-                    <a class="card-cta" href="/industries/legal/legalailatest.html">Read Report →</a>
-                </div>
-            </div>
+                    <a class="card-cta" href="./legal/legalailatest.html">Read latest report</a>
+                </article>
 
-            <!-- Healthcare AI Report -->
-            <div class="report-card card-healthcare">
-                <div class="card-accent"></div>
-                <div class="card-body">
-                    <div class="card-icon">🏥</div>
-                    <div class="card-label">Healthcare &amp; Life Sciences</div>
-                    <div class="card-title">Healthcare AI Intelligence Report</div>
-                    <div class="card-desc">Intelligence on AI in healthcare — covering clinical AI adoption, diagnostic tools, regulatory approvals, digital health innovations, and real-world implementation case studies.</div>
+                <article class="report-card card-healthcare">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-kicker">Healthcare and Life Sciences</div>
+                            <h3 class="card-title">Healthcare AI Intelligence Report</h3>
+                        </div>
+                        <div class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 5v14"></path>
+                                <path d="M5 12h14"></path>
+                                <path d="M7 4h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="card-desc">Coverage of clinical AI adoption, diagnostics, regulatory approvals, digital health innovation, and implementation patterns moving from pilot to production.</p>
+                    <div class="card-detail-row">
+                        <div class="detail-box">
+                            <strong>Best For</strong>
+                            Healthcare operators, digital health teams, and innovation leads.
+                        </div>
+                        <div class="detail-box">
+                            <strong>Lens</strong>
+                            Clinical AI, diagnostics, regulation, and delivery transformation.
+                        </div>
+                    </div>
                     <div class="card-topics">
                         <span class="topic-chip">Clinical AI</span>
                         <span class="topic-chip">Diagnostics</span>
                         <span class="topic-chip">Regulatory</span>
                         <span class="topic-chip">Digital Health</span>
                     </div>
-                    <a class="card-cta" href="https://vikasgoyal.github.io/industries/healthcare/healthcareailatest.html">Read Report →</a>
-                </div>
+                    <a class="card-cta" href="./healthcare/healthcareailatest.html">Read latest report</a>
+                </article>
             </div>
+        </section>
 
-        </div>
+        <section class="footer-grid" aria-label="Footer content">
+            <article class="footer-card">
+                <h2>Industry AI Intelligence Reports</h2>
+                <p>Built for practitioners who need a clearer view of where AI is creating real operational shifts across industries and where the implications are still more speculative than immediate.</p>
+                <div class="footer-links">
+                    <a href="../">Back to home</a>
+                    <a href="../agentic/">Explore Agentic AI</a>
+                    <a href="../blog/">Browse all writing</a>
+                </div>
+            </article>
+            <article class="footer-card">
+                <h3>Focus</h3>
+                <p>Practitioner-grade AI intelligence for builders and leaders tracking strategic and operational change.</p>
+            </article>
+        </section>
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        <p>Industry AI Intelligence Reports · <a href="/">vikasgoyal.github.io</a></p>
-        <p style="margin-top: 8px; opacity: 0.6; font-size: 0.85em;">Practitioner-grade AI intelligence for builders and leaders</p>
-    </div>
-
 </body>
 </html>
