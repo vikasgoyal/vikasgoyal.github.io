@@ -10,6 +10,13 @@
     --link-color: #2f1aba;
     --background-color: #ffffff;
     --header-bg: #000000;
+    --shell-surface: rgba(255, 255, 255, 0.92);
+    --shell-line: rgba(18, 18, 18, 0.10);
+    --shell-green: #0f5d44;
+    --shell-green-deep: #0a3f30;
+    --shell-blue: #173c73;
+    --shell-ink-soft: #505050;
+    --shell-shadow: 0 18px 44px rgba(18, 18, 18, 0.10);
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     --font-heading: 'Merriweather', Georgia, 'Times New Roman', serif;
 }
@@ -106,6 +113,115 @@ a:hover {
 a:focus {
     outline: 2px solid var(--secondary-color);
     outline-offset: 2px;
+}
+
+/* Shared header shell for content pages */
+.site-shell-header {
+    margin: 0 0 2rem;
+}
+
+.site-shell-topbar,
+.site-shell-search {
+    background: var(--shell-surface);
+    border: 1px solid var(--shell-line);
+    box-shadow: var(--shell-shadow);
+}
+
+.site-shell-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 28px;
+}
+
+.site-shell-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 220px;
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.site-shell-brand:hover {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.site-shell-brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.site-shell-brand-tagline {
+    font-size: 0.92rem;
+    color: var(--shell-ink-soft);
+}
+
+.site-shell-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.site-shell-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 0.9rem;
+    border: 1px solid var(--shell-line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--shell-ink-soft);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site-shell-nav a:hover,
+.site-shell-nav a:focus {
+    color: var(--primary-color);
+    text-decoration: none;
+    border-color: rgba(18, 18, 18, 0.22);
+    transform: translateY(-1px);
+}
+
+.site-shell-nav .nav-highlight {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--shell-blue) 0%, var(--shell-green) 100%);
+    border-color: transparent;
+    box-shadow: 0 10px 22px rgba(23, 60, 115, 0.18);
+}
+
+.site-shell-nav .nav-highlight:hover,
+.site-shell-nav .nav-highlight:focus {
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.site-shell-search {
+    margin-top: 0.85rem;
+    border-radius: 22px;
+    padding: 0.85rem 1.1rem 0.35rem;
+}
+
+.site-shell-search .gsc-control-cse,
+.site-shell-search .gsc-control-cse-en {
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.site-shell-search .gsc-search-box {
+    margin-bottom: 0;
 }
 
 /* Navigation Styles */
@@ -398,13 +514,22 @@ article section {
         font-size: 1.5em;
     }
     
-    nav ul {
+    .site-shell-topbar {
         flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
     }
-    
-    nav ul li {
-        margin-right: 0;
-        margin-bottom: 5px;
+
+    .site-shell-brand {
+        min-width: 0;
+    }
+
+    .site-shell-nav {
+        justify-content: flex-start;
+    }
+
+    .site-shell-search {
+        padding: 0.8rem 0.85rem 0.3rem;
     }
     
     main {
