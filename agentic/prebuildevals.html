@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Pre-Build Evals for AI Agents | Vikas Goyal</title>
+    <meta name="description" content="Pre-build evals help teams define behaviors, scenarios, failure modes, rubrics, and acceptance criteria for AI agents before implementation starts.">
+    <meta name="keywords" content="pre-build evals, AI agents, agent evaluation, offline evals, build-time evals, runtime evals, prompt evaluation, tool evaluation">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/prebuildevals.html">
+
+    <meta property="og:title" content="Pre-Build Evals for AI Agents">
+    <meta property="og:description" content="Why evaluation for AI agents should start before implementation, and how pre-build, build-time, and runtime evals fit together.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/prebuildevals.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Pre-Build Evals for AI Agents">
+    <meta name="twitter:description" content="Why evaluation for AI agents should start before implementation, not after the first prototype.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Pre-Build Evals for AI Agents",
+      "description": "Pre-build evals help teams define behaviors, scenarios, failure modes, rubrics, and acceptance criteria for AI agents before implementation starts.",
+      "author": {
+        "@type": "Person",
+        "name": "Vikas Goyal",
+        "url": "https://www.linkedin.com/in/vikasgoyal/"
+      },
+      "datePublished": "2026-03-15",
+      "dateModified": "2026-03-15",
+      "publisher": {
+        "@type": "Person",
+        "name": "Vikas Goyal"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://vikasgoyal.github.io/agentic/prebuildevals.html"
+      },
+      "keywords": "pre-build evals, AI agents, agent evaluation, build-time evals, runtime evals"
+    }
+    </script>
+
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .article-kicker {
+            color: #0d6233;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.82rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .article-lead {
+            font-size: 1.1rem;
+            color: #444;
+            margin-top: 1.25rem;
+            margin-bottom: 0;
+        }
+
+        .article-note {
+            background: #f7faf8;
+            border-left: 4px solid #0d6233;
+            padding: 1rem 1.2rem;
+            margin: 1.75rem 0;
+        }
+
+        .lifecycle-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .lifecycle-card {
+            border: 1px solid #d9e3dc;
+            border-radius: 10px;
+            padding: 1rem;
+            background: #fbfcfb;
+        }
+
+        .lifecycle-card h3 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .related-links li {
+            margin-bottom: 0.6rem;
+        }
+
+        @media (max-width: 768px) {
+            .article-lead {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <main class="container-lg px-3 my-5 markdown-body">
+        <article>
+            <header>
+                <p class="article-kicker">AI Evaluation Strategy</p>
+                <h1>Pre-Build Evals for AI Agents</h1>
+                <div class="article-meta">
+                    <time datetime="2026-03-15">March 15, 2026</time>
+                </div>
+                <p class="article-lead">The biggest mistake many teams make with AI agents is starting implementation before they have defined how success, failure, and quality will be judged. Pre-build evals correct that sequencing problem.</p>
+            </header>
+
+            <section id="introduction">
+                <h2>Start With Evaluation, Not Implementation</h2>
+                <p>Most teams build AI agents backwards. They start with prompts, tools, frameworks, and demos. Only later do they try to define what the system was actually supposed to do, what kinds of failures matter, and how quality should be judged.</p>
+                <p>That sequence creates confusion. A prompt that looks impressive in a demo may fail on an edge case the team never wrote down. A workflow that seems useful in development may quietly violate a policy requirement that no one translated into an eval scenario. By the time these problems are visible, the implementation is already shaping the requirements.</p>
+                <p>Pre-build evals reverse that order. They force a team to decide what success looks like before writing prompts, wiring tools, building orchestration logic, or integrating retrieval. They are the AI equivalent of specifying tests before building the system, except the focus is not just on deterministic software behavior. It is on expected agent behavior under ambiguity, imperfect instructions, safety boundaries, and tool interactions.</p>
+                <div class="article-note">
+                    <strong>Working definition:</strong> Pre-build evals are evaluation design activities done before implementation starts. They define behaviors, scenarios, failure modes, rubrics, and acceptance criteria while the team is still clarifying requirements.
+                </div>
+            </section>
+
+            <section id="why-it-matters">
+                <h2>Why This Matters</h2>
+                <p>Traditional software teams usually begin with requirements, edge cases, and acceptance criteria. AI projects often skip that discipline because the system feels exploratory. But agents are still systems, and systems still need explicit behavioral expectations.</p>
+                <p>If you do not define the evaluation set early, several problems appear later: teams confuse a good demo with a reliable system, prompt changes are judged subjectively instead of against a fixed test set, tool-calling failures are discovered late, and safety requirements remain vague until a production incident forces clarity.</p>
+                <p>Pre-build evals do not eliminate uncertainty. They make uncertainty explicit and testable.</p>
+            </section>
+
+            <section id="lifecycle">
+                <h2>Where Pre-Build Evals Fit</h2>
+                <p>It helps to place pre-build evals inside a broader evaluation lifecycle rather than treating them as the only kind of evaluation that matters.</p>
+                <div class="lifecycle-grid">
+                    <div class="lifecycle-card">
+                        <h3>Pre-Build Evals</h3>
+                        <p>Define behaviors, scenarios, failure modes, rubrics, and acceptance criteria.</p>
+                    </div>
+                    <div class="lifecycle-card">
+                        <h3>Build-Time Evals</h3>
+                        <p>Test prompts, tools, workflows, retrieval, and outputs while developing.</p>
+                    </div>
+                    <div class="lifecycle-card">
+                        <h3>Runtime Evals</h3>
+                        <p>Monitor real-world behavior after release using production signals, feedback, and incidents.</p>
+                    </div>
+                </div>
+                <p>These stages serve different purposes. Pre-build evals answer what the system should do. Build-time evals answer whether the implementation satisfies those expectations. Runtime evals answer how the live system behaves under real traffic, real users, and real distribution shift.</p>
+                <p>If you skip pre-build evals, build-time evaluation becomes reactive. If you skip build-time evals, production becomes the test environment. And if you skip runtime evals, you never learn how the system behaves outside the lab.</p>
+            </section>
+
+            <section id="artifacts">
+                <h2>What Should Be Evaluated Before Build</h2>
+                <p>At the pre-build stage, you are not yet measuring production quality. You are designing the evaluation lens through which quality will later be measured. That means deciding which artifacts matter and what questions each artifact must answer.</p>
+
+                <h3>Models</h3>
+                <ul>
+                    <li><strong>Reasoning depth:</strong> Does the use case require decomposition, ranking, or multi-step logic?</li>
+                    <li><strong>Knowledge dependence:</strong> Can the task rely on model knowledge, or will it need external grounding?</li>
+                    <li><strong>Context handling:</strong> Will long instructions, long dialogues, or large retrieved contexts stress the model?</li>
+                    <li><strong>Reliability expectations:</strong> Is mild inconsistency acceptable, or does the task require tightly bounded outputs?</li>
+                </ul>
+
+                <h3>Meta Prompts</h3>
+                <ul>
+                    <li><strong>Instruction following:</strong> Must the system always return a schema, persona, or strict format?</li>
+                    <li><strong>Sensitivity:</strong> Would minor phrasing changes alter output quality or tool behavior?</li>
+                    <li><strong>Negative constraints:</strong> What must never appear in the response?</li>
+                    <li><strong>Escalation rules:</strong> When should the system refuse, defer, or ask a clarifying question?</li>
+                </ul>
+
+                <h3>Platform-Level Guardrails</h3>
+                <ul>
+                    <li><strong>False positives:</strong> Which legitimate requests must not be blocked?</li>
+                    <li><strong>False negatives:</strong> Which harmful requests must always be intercepted?</li>
+                    <li><strong>Boundary cases:</strong> Which ambiguous prompts require escalation or review?</li>
+                    <li><strong>User experience impact:</strong> How should the system respond when a guardrail triggers?</li>
+                </ul>
+
+                <h3>Tool Specifications</h3>
+                <ul>
+                    <li><strong>Parameter accuracy:</strong> What fields must be extracted from user input?</li>
+                    <li><strong>Tool selection:</strong> When is tool use mandatory, optional, or prohibited?</li>
+                    <li><strong>Tool hallucination:</strong> How will you detect attempts to call tools that do not exist?</li>
+                    <li><strong>Recovery behavior:</strong> What should happen when a tool fails or returns no result?</li>
+                </ul>
+
+                <h3>RAG or Retrieval Design</h3>
+                <ul>
+                    <li><strong>Corpus coverage:</strong> Does the source material even contain the answers users need?</li>
+                    <li><strong>Chunking strategy:</strong> How small or large should retrieval units be?</li>
+                    <li><strong>Relevance expectations:</strong> What does a good retrieval result look like?</li>
+                    <li><strong>Grounding behavior:</strong> When must the system answer only from retrieved content?</li>
+                </ul>
+
+                <h3>Token and Cost Estimation</h3>
+                <ul>
+                    <li><strong>Token assumptions:</strong> How large will instructions, context, and outputs likely be?</li>
+                    <li><strong>Cost targets:</strong> What cost per task is acceptable?</li>
+                    <li><strong>Latency tradeoffs:</strong> Is a slower but better workflow acceptable?</li>
+                    <li><strong>Fallback strategy:</strong> When should cheaper models or staged flows be considered?</li>
+                </ul>
+            </section>
+
+            <section id="dimensions">
+                <h2>Core Evaluation Dimensions</h2>
+                <p>Pre-build evals translate product intent into testable expectations. These are not implementation tasks yet. They are requirements that should later become datasets, rubrics, and pass-fail checks.</p>
+                <ul>
+                    <li><strong>Intent classification:</strong> Can the system correctly recognize what the user is trying to do?</li>
+                    <li><strong>Data extraction:</strong> Can it reliably extract the fields needed for reasoning or tool use?</li>
+                    <li><strong>Multi-intent classification:</strong> Can it split, sequence, or reject mixed requests correctly?</li>
+                    <li><strong>Multi-turn dialogue management:</strong> Can it maintain context without inventing facts or losing the user goal?</li>
+                    <li><strong>Tool selection:</strong> Does it know when tool use is mandatory, optional, or prohibited?</li>
+                    <li><strong>Response generation:</strong> Does the final answer remain accurate, grounded, complete, clear, and policy compliant?</li>
+                </ul>
+            </section>
+
+            <section id="example">
+                <h2>A Concrete End-To-End Example</h2>
+                <p>Consider a support agent for enterprise software. The team has not built the workflow yet, but it already knows that the future agent will answer product questions, look up account status, and create support tickets through tools.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Scenario ID</td>
+                            <td>PB-017</td>
+                        </tr>
+                        <tr>
+                            <td>User Goal</td>
+                            <td>Resolve an outage and understand account impact.</td>
+                        </tr>
+                        <tr>
+                            <td>Input</td>
+                            <td>Our analytics dashboard has been down since this morning. Can you check whether there is an active incident on our account and open a severity-one ticket if needed?</td>
+                        </tr>
+                        <tr>
+                            <td>Expected Intent</td>
+                            <td>Primary intent: incident status lookup. Secondary intent: ticket creation if outage is confirmed or required.</td>
+                        </tr>
+                        <tr>
+                            <td>Required Data</td>
+                            <td>Product area, time reference, severity signal, and account context.</td>
+                        </tr>
+                        <tr>
+                            <td>Tool Expectation</td>
+                            <td>Must use incident lookup first. Must not create a ticket without enough account context or confirmation.</td>
+                        </tr>
+                        <tr>
+                            <td>Safety Expectation</td>
+                            <td>Must not invent incident IDs, outage status, ticket IDs, or account details.</td>
+                        </tr>
+                        <tr>
+                            <td>Response Expectation</td>
+                            <td>Acknowledge the report, explain that status must be verified through tools, and ask for missing account details if needed.</td>
+                        </tr>
+                        <tr>
+                            <td>Pass-Fail Rule</td>
+                            <td>Pass if the agent chooses tool-first behavior, extracts the right fields, and asks for clarification when needed. Fail if it answers from prior knowledge, skips required tool use, or creates a ticket prematurely.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Even a single scenario like this exercises multiple eval dimensions at once. It tests intent classification, extraction, tool selection, multi-turn handling, and response generation before a single orchestration workflow exists.</p>
+            </section>
+
+            <section id="using-it">
+                <h2>How To Use This In a Real Project</h2>
+                <p>An effective pre-build eval set does not need to be huge. It needs to be representative. Start with happy paths, edge cases, ambiguous cases, adversarial or policy-sensitive cases, multi-turn cases, and tool-dependent cases.</p>
+                <p>For each scenario, define the user input, expected intent, required extracted fields, expected tool behavior, allowed and disallowed response characteristics, and a clear pass-fail rule. If a team cannot write these expectations down, it is usually not ready to build the agent.</p>
+                <p>Once development starts, use the same scenarios to run build-time evals against prompts, tools, and workflows. After release, use production failures and real-user feedback to expand the scenario set and improve future pre-build planning.</p>
+            </section>
+
+            <section id="mistakes">
+                <h2>Common Mistakes</h2>
+                <ul>
+                    <li>Treating evals as something to add after the prototype works.</li>
+                    <li>Writing only happy-path examples.</li>
+                    <li>Confusing format correctness with task correctness.</li>
+                    <li>Leaving ambiguous cases unspecified.</li>
+                    <li>Ignoring tool failure and recovery behavior.</li>
+                    <li>Defining quality with vague language such as helpful or natural without measurable criteria.</li>
+                    <li>Failing to distinguish between pre-build planning, build-time testing, and runtime monitoring.</li>
+                </ul>
+            </section>
+
+            <section id="conclusion">
+                <h2>Final Thought</h2>
+                <p>The point of pre-build evals is not to predict every failure before implementation. That is impossible. The point is to force precision early enough that the team builds the right system, with the right constraints, for the right behaviors.</p>
+                <p>If you wait until prompts are written and tools are integrated before deciding how the agent should be evaluated, the implementation will start shaping the requirements. Pre-build evals reverse that order. They make requirements shape the implementation.</p>
+            </section>
+
+            <section id="related-content">
+                <h2>Related Reading</h2>
+                <ul class="related-links">
+                    <li><a href="agenticai.html">Agentic AI</a></li>
+                    <li><a href="agenticsystems.html">What Are Agentic Systems?</a></li>
+                    <li><a href="../genai/structuredoutput.html">Structured Output</a></li>
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <br><br><br><br><br>
+
+    <div id="footer"></div>
+    <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+</body>
+</html>
