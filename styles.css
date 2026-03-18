@@ -206,6 +206,19 @@ a:focus {
     border-color: transparent;
 }
 
+.site-shell-nav .nav-subscribe {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--shell-green) 0%, var(--shell-blue) 100%);
+    border-color: transparent;
+    box-shadow: 0 10px 22px rgba(15, 93, 68, 0.18);
+}
+
+.site-shell-nav .nav-subscribe:hover,
+.site-shell-nav .nav-subscribe:focus {
+    color: #ffffff;
+    border-color: transparent;
+}
+
 /* Navigation Styles */
 nav ul {
     list-style-type: none;
