@@ -2,65 +2,703 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ZBXY60BLWE');
-    </script>
-    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZBXY60BLWE');
+  </script>
+  <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Startups - Founder Guides, Funding, and Mentorship | Vikas Goyal</title>
+  <meta name="description" content="A practical hub for startup founders covering founder mindset, funding stages, and structured mentorship frameworks.">
+  <meta name="keywords" content="startups, founders, startup funding, mentorship, entrepreneurship, venture capital, AI startups">
+  <meta name="author" content="Vikas Goyal">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vikasgoyal.github.io/startups/">
+  <meta property="og:title" content="Startups - Founder Guides, Funding, and Mentorship">
+  <meta property="og:description" content="A practical hub for startup founders covering founder mindset, funding stages, and structured mentorship frameworks.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vikasgoyal.github.io/startups/">
+  <meta property="og:site_name" content="Vikas Goyal">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Startups - Founder Guides, Funding, and Mentorship">
+  <meta name="twitter:description" content="A practical hub for startup founders covering founder mindset, funding stages, and structured mentorship frameworks.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "name": "Startups - Founder Guides, Funding, and Mentorship",
+        "description": "A practical hub for startup founders covering founder mindset, funding stages, and structured mentorship frameworks.",
+        "author": {
+          "@type": "Person",
+          "name": "Vikas Goyal",
+          "url": "https://www.linkedin.com/in/vikasgoyal/"
+        },
+        "url": "https://vikasgoyal.github.io/startups/"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vikasgoyal.github.io/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Startups",
+            "item": "https://vikasgoyal.github.io/startups/"
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "name": "Featured startup resources",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://vikasgoyal.github.io/startups/youngfounders.html",
+            "name": "Amplify, Don't Replace: A Manifesto for the Next Generation of AI Startup Founders"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "https://vikasgoyal.github.io/startups/startupfundingstages.html",
+            "name": "Guide to Startup Funding Stages: A Beginner's Guide for Founders"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "https://vikasgoyal.github.io/startups/firstmeetingstartups.html",
+            "name": "A Guide for Mentors: Using a Structured Framework to Conduct Productive First Meetings with Startups"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
-    <!-- Basic Meta Tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <!-- SEO Meta Tags -->
-    <title>Startups - Vikas Goyal</title>
-    <meta name="description" content="Insights and guides for startup founders covering funding stages, mentorship, and building successful ventures.">
-    <meta name="keywords" content="startups, founders, funding stages, mentorship, entrepreneurship, venture capital">
-    <meta name="author" content="Vikas Goyal">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://vikasgoyal.github.io/startups/">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Startups">
-    <meta property="og:description" content="Insights and guides for startup founders covering funding stages, mentorship, and building successful ventures.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vikasgoyal.github.io/startups/">
-    <meta property="og:site_name" content="Vikas Goyal">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Startups">
-    <meta name="twitter:description" content="Insights and guides for startup founders covering funding stages, mentorship, and building successful ventures.">
-    
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="../styles.css">
+    :root {
+      --ink: #121212;
+      --ink-soft: #505050;
+      --paper: #f7f2ea;
+      --surface: rgba(255, 255, 255, 0.88);
+      --line: rgba(18, 18, 18, 0.10);
+      --green: #0f5d44;
+      --green-deep: #0a3f30;
+      --gold: #b8892f;
+      --blue: #173c73;
+      --terracotta: #a54a2a;
+      --shadow: 0 22px 60px rgba(18, 18, 18, 0.10);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --content-width: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      width: 100%;
+      min-height: 100vh;
+      padding: 0;
+      font-family: 'Manrope', 'Segoe UI', sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15, 93, 68, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(184, 137, 47, 0.12), transparent 22%),
+        linear-gradient(180deg, #fcfbf8 0%, var(--paper) 44%, #ffffff 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    .page-shell {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 24px 20px 72px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1 1 420px;
+      min-width: 280px;
+    }
+
+    .brand-name {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-tagline {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+
+    .topnav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 0 1 auto;
+    }
+
+    .topnav a {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.88rem;
+      white-space: nowrap;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.56);
+      transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .topnav a:hover,
+    .topnav a:focus {
+      color: var(--ink);
+      border-color: rgba(18, 18, 18, 0.26);
+      transform: translateY(-1px);
+    }
+
+    .topnav .nav-highlight {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--terracotta) 100%);
+      border-color: transparent;
+      box-shadow: 0 12px 24px rgba(23, 60, 115, 0.18);
+    }
+
+    .topnav .nav-highlight:hover,
+    .topnav .nav-highlight:focus {
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      margin-bottom: 26px;
+    }
+
+    .hero-panel,
+    .signal-card,
+    .section-card,
+    .feature-card,
+    .topic-card,
+    .footer-card {
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      padding: 42px;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(15, 93, 68, 0.11), transparent 45%),
+        linear-gradient(315deg, rgba(165, 74, 42, 0.12), transparent 38%);
+      pointer-events: none;
+    }
+
+    .eyebrow,
+    .card-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(23, 60, 115, 0.07);
+      color: var(--blue);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h1,
+    .section-heading h2,
+    .feature-card h3,
+    .topic-card h3,
+    .footer-card h2,
+    .footer-card h3 {
+      margin: 0;
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .hero h1 {
+      position: relative;
+      max-width: 12ch;
+      margin-top: 16px;
+      font-size: clamp(2.6rem, 5vw, 4.9rem);
+    }
+
+    .hero-copy,
+    .section-heading p,
+    .feature-card p,
+    .topic-card p,
+    .footer-card p,
+    .topic-links a {
+      position: relative;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .hero-copy {
+      max-width: 72ch;
+      margin: 18px 0 0;
+      font-size: 1.04rem;
+    }
+
+    .hero-actions {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .button,
+    .card-link,
+    .footer-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button:hover,
+    .card-link:hover,
+    .footer-links a:hover,
+    .button:focus,
+    .card-link:focus,
+    .footer-links a:focus {
+      transform: translateY(-1px);
+    }
+
+    .button-primary,
+    .card-link {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--green) 0%, var(--blue) 100%);
+      box-shadow: 0 14px 30px rgba(15, 93, 68, 0.18);
+    }
+
+    .button-secondary,
+    .footer-links a {
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .hero-metrics,
+    .signal-grid,
+    .feature-grid,
+    .topic-grid,
+    .footer-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero-metrics {
+      position: relative;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 28px;
+    }
+
+    .metric,
+    .signal-card,
+    .feature-card,
+    .topic-card,
+    .footer-card {
+      border-radius: var(--radius-lg);
+    }
+
+    .metric {
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(18, 18, 18, 0.08);
+    }
+
+    .metric-label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--green-deep);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+
+    .signal-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 26px;
+    }
+
+    .signal-card {
+      padding: 22px;
+    }
+
+    .signal-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+
+    .signal-card p {
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.75;
+    }
+
+    .section-card {
+      border-radius: var(--radius-xl);
+      padding: 34px;
+      margin-bottom: 26px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+    }
+
+    .section-heading p {
+      max-width: 58ch;
+      margin: 0;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .feature-card,
+    .topic-card {
+      padding: 24px;
+    }
+
+    .feature-card h3,
+    .topic-card h3,
+    .footer-card h2,
+    .footer-card h3 {
+      margin-top: 16px;
+      font-size: 1.45rem;
+    }
+
+    .feature-card p,
+    .topic-card p,
+    .footer-card p {
+      margin: 14px 0 0;
+    }
+
+    .card-link {
+      margin-top: 18px;
+      width: fit-content;
+    }
+
+    .topic-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .topic-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .topic-links a {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .topic-links a::before {
+      content: "•";
+      color: var(--terracotta);
+    }
+
+    .footer-grid {
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+    }
+
+    .footer-card {
+      padding: 28px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .note {
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-metrics,
+      .signal-grid,
+      .feature-grid,
+      .topic-grid,
+      .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        padding: 16px 14px 48px;
+      }
+
+      .topbar,
+      .section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-panel,
+      .section-card,
+      .footer-card {
+        padding: 22px;
+      }
+
+      .hero-metrics,
+      .signal-grid,
+      .feature-grid,
+      .topic-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        max-width: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div id="header"></div>
-    <main class="container-lg px-3 my-5 markdown-body">
-      <article>
-        <header>
-          <h1>Startups</h1>
-        </header>
-        
-        <section>
-          <ul>
-            <li><a href="./youngfounders.html">A Manifesto for the Next Generation of AI Startup Founders</a></li>
-            <li><a href="./startupfundingstages.html">Guide to Startup Funding Stages: A Beginner's Guide for Founders</a></li>
-            <li><a href="./firstmeetingstartups.html">A Guide for Mentors: Using a Structured Framework to Conduct Productive First Meetings with Startups</a></li>
-          </ul>
-        </section>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-name">Vikas Goyal</div>
+        <div class="brand-tagline">A practical guide for founders navigating startup judgment, capital, and mentorship.</div>
+      </div>
+      <nav class="topnav" aria-label="Primary">
+        <a href="../">Home</a>
+        <a href="../agentic/">Agentic AI</a>
+        <a href="../industries/">Industries AI</a>
+        <a class="nav-highlight" href="./">Startups</a>
+        <a href="../ecp/">Career Guidance</a>
+        <a href="../blog/">All Writing</a>
+        <a href="https://aistartupscareer.substack.com/" target="_blank" rel="noopener noreferrer">Subscribe</a>
+        <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-panel">
+        <div class="eyebrow">Startup Hub</div>
+        <h1 id="hero-title">Startup writing for founders, mentors, and early-stage builders.</h1>
+        <p class="hero-copy">
+          This page brings together the startup pieces on the site: a founder manifesto for AI builders, a practical guide to startup funding stages, and a structured framework for mentors running first conversations with startups.
+          It is designed as a clear starting point for people who want sharper judgment on building, financing, and advising young companies.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#featured">Start with the featured guides</a>
+          <a class="button button-secondary" href="#topics">Browse by topic</a>
+        </div>
+        <div class="hero-metrics" aria-label="Collection signals">
+          <div class="metric">
+            <span class="metric-label">Founder mindset</span>
+            <strong>Principles for building AI startups that amplify people instead of reducing the work to replacement logic.</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Capital literacy</span>
+            <strong>A practical map of funding stages so founders can reason clearly about what money means at each phase.</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Mentor frameworks</span>
+            <strong>Structured questions and conversation design for mentors, advisors, and first meetings with startups.</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="signal-grid" aria-label="What this collection covers">
+      <article class="signal-card">
+        <strong>Early-stage judgment</strong>
+        <p>How founders frame the problem, define the company they want to build, and avoid shallow narratives about AI and work.</p>
       </article>
-    </main>
-    
-    <br><br><br><br><br>
-    <div id="footer"></div>
-    <script src="../headerfooter.js"></script>
+      <article class="signal-card">
+        <strong>Funding decisions</strong>
+        <p>How rounds, investor expectations, and stage-specific trade-offs shape what a company can responsibly do next.</p>
+      </article>
+      <article class="signal-card">
+        <strong>Mentorship quality</strong>
+        <p>How first meetings become more useful when questions are structured around motivation, challenges, growth, and vision.</p>
+      </article>
+      <article class="signal-card">
+        <strong>AI startup perspective</strong>
+        <p>How to think about product direction when the temptation is to chase automation rhetoric instead of real value creation.</p>
+      </article>
+    </section>
+
+    <section class="section-card" id="featured" aria-labelledby="featured-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="featured-title">Start Here</h2>
+        </div>
+        <p>These are the core startup pieces on the site and the best entry points for founders, mentors, and builders looking for practical guidance.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="card-tag">Founders</div>
+          <h3>Amplify, Don&apos;t Replace</h3>
+          <p>A manifesto for AI startup founders on building products that strengthen human capability rather than treating replacement as the product strategy.</p>
+          <a class="card-link" href="./youngfounders.html">Read the article</a>
+        </article>
+        <article class="feature-card">
+          <div class="card-tag">Funding</div>
+          <h3>Guide to Startup Funding Stages</h3>
+          <p>A practical breakdown of startup financing from pre-seed to IPO, useful for first-time founders trying to understand what changes at each stage.</p>
+          <a class="card-link" href="./startupfundingstages.html">Read the article</a>
+        </article>
+        <article class="feature-card">
+          <div class="card-tag">Mentorship</div>
+          <h3>Productive First Meetings with Startups</h3>
+          <p>A structured framework mentors can use to quickly understand a startup&apos;s motivation, context, constraints, and immediate need for guidance.</p>
+          <a class="card-link" href="./firstmeetingstartups.html">Read the article</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-card" id="topics" aria-labelledby="topics-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="topics-title">Browse by Topic</h2>
+        </div>
+        <p>Organized by the kinds of questions founders and mentors usually have when they are trying to build, finance, or evaluate an early-stage company.</p>
+      </div>
+      <div class="topic-grid">
+        <article class="topic-card">
+          <div class="card-tag">Principles</div>
+          <h3>Founder Mindset</h3>
+          <p>Start here if the immediate question is what kind of company to build and what stance to take on AI, value creation, and human outcomes.</p>
+          <div class="topic-links">
+            <a href="./youngfounders.html">Amplify, Don&apos;t Replace: A Manifesto for the Next Generation of AI Startup Founders</a>
+          </div>
+        </article>
+
+        <article class="topic-card">
+          <div class="card-tag">Capital</div>
+          <h3>Funding and Growth Stages</h3>
+          <p>Use this when the problem is understanding capital strategy, fundraising language, and how different stages shape company expectations.</p>
+          <div class="topic-links">
+            <a href="./startupfundingstages.html">Guide to Startup Funding Stages: A Beginner&apos;s Guide for Founders</a>
+          </div>
+        </article>
+
+        <article class="topic-card">
+          <div class="card-tag">Advisory</div>
+          <h3>Mentor Conversations</h3>
+          <p>Use this when you need a better first-meeting framework for understanding the founders, the company, and where advice can actually help.</p>
+          <div class="topic-links">
+            <a href="./firstmeetingstartups.html">A Guide for Mentors: Using a Structured Framework to Conduct Productive First Meetings with Startups</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="footer-grid" aria-label="About and site notes">
+      <article class="footer-card">
+        <h2>What You Will Find Here</h2>
+        <p>
+          This collection is focused on startup judgment rather than startup theater. The emphasis is on practical founder thinking, clearer funding literacy, and mentor conversations that help young companies move forward with better questions and decisions.
+        </p>
+        <div class="footer-links">
+          <a href="../">Back to home</a>
+          <a href="../blog/">Explore the blog</a>
+          <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+        </div>
+      </article>
+      <article class="footer-card">
+        <h3>Site Notes</h3>
+        <p class="note">This site has been co-created with GitHub Copilot and other LLMs.</p>
+        <p class="note" style="margin-top: 14px;">These views are mine alone and not those of my employer.</p>
+      </article>
+    </section>
+  </div>
+
+  <script src="../headerfooter.js"></script>
 </body>
 </html>
