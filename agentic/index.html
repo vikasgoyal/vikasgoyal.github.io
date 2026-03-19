@@ -13,12 +13,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Agentic AI - Systems, Architectures, and Design Patterns | Vikas Goyal</title>
-  <meta name="description" content="A practical hub for agentic AI: systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.">
+  <meta name="description" content="A practical hub for agentic AI organized by practice area: strategy, foundations, architecture, multi-agent systems, learning, evaluation, and human-AI collaboration.">
   <meta name="author" content="Vikas Goyal">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://vikasgoyal.github.io/agentic/">
   <meta property="og:title" content="Agentic AI - Systems, Architectures, and Design Patterns">
-  <meta property="og:description" content="A practical hub for agentic AI: systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.">
+  <meta property="og:description" content="A practical hub for agentic AI organized by practice area: strategy, foundations, architecture, multi-agent systems, learning, evaluation, and human-AI collaboration.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://vikasgoyal.github.io/agentic/">
   <meta property="og:site_name" content="Vikas Goyal">
@@ -26,7 +26,7 @@
   <meta property="og:image:alt" content="Reference architecture for agentic systems">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Agentic AI - Systems, Architectures, and Design Patterns">
-  <meta name="twitter:description" content="A practical hub for agentic AI: systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.">
+  <meta name="twitter:description" content="A practical hub for agentic AI organized by practice area: strategy, foundations, architecture, multi-agent systems, learning, evaluation, and human-AI collaboration.">
   <meta name="twitter:image" content="https://vikasgoyal.github.io/agentic/assets/refarchagentic.png">
   <meta name="twitter:image:alt" content="Reference architecture for agentic systems">
   <script type="application/ld+json">
@@ -36,7 +36,7 @@
       {
         "@type": "CollectionPage",
         "name": "Agentic AI - Systems, Architectures, and Design Patterns",
-        "description": "A practical hub for agentic AI covering systems thinking, multi-agent architectures, design patterns, enterprise applications, and research references.",
+        "description": "A practical hub for agentic AI organized by practice area, covering strategy, foundations, architectures, multi-agent systems, evaluation, and collaboration.",
         "author": {
           "@type": "Person",
           "name": "Vikas Goyal",
@@ -355,10 +355,43 @@
     .signal-grid,
     .feature-grid,
     .topic-grid,
+    .practice-nav,
     .resource-grid,
     .footer-grid {
       display: grid;
       gap: 20px;
+    }
+
+    .practice-nav {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 26px;
+    }
+
+    .practice-jump {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(18, 18, 18, 0.08);
+      box-shadow: 0 14px 28px rgba(18, 18, 18, 0.06);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .practice-jump:hover,
+    .practice-jump:focus {
+      transform: translateY(-2px);
+      border-color: rgba(18, 18, 18, 0.18);
+    }
+
+    .practice-jump strong {
+      font-size: 1rem;
+    }
+
+    .practice-jump span {
+      color: var(--ink-soft);
+      line-height: 1.6;
     }
 
     .signal-grid {
@@ -465,6 +498,10 @@
       margin-top: 16px;
     }
 
+    .topic-links + .topic-links {
+      margin-top: 14px;
+    }
+
     .topic-links a,
     .resource-links a,
     .footer-links a {
@@ -553,7 +590,8 @@
 
       .signal-grid,
       .feature-grid,
-      .topic-grid {
+      .topic-grid,
+      .practice-nav {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -578,7 +616,8 @@
       .hero-metrics,
       .signal-grid,
       .feature-grid,
-      .topic-grid {
+      .topic-grid,
+      .practice-nav {
         grid-template-columns: 1fr;
       }
 
@@ -611,48 +650,45 @@
         <div class="eyebrow">Agentic AI Hub</div>
         <h1 id="hero-title">Agentic AI: systems thinking, architectures, and design patterns.</h1>
         <p class="hero-copy">
-          This page organizes the core ideas behind agentic AI: what agentic behavior means, how multi-agent systems are structured, what agentic AI architecture looks like, and where design choices matter in real software systems.
-          It is a practical starting point for understanding enterprise AI agents, orchestration patterns, and multi-agent system design without reducing the topic to tooling alone.
+          A curated guide to agentic AI, from foundations and multi-agent systems to architecture, evaluation, learning, and human-AI collaboration.
         </p>
         <div class="hero-actions">
           <a class="button button-primary" href="#featured">Start with the featured pieces</a>
-          <a class="button button-secondary" href="#topics">Browse by topic</a>
-        </div>
-        <div class="hero-metrics" aria-label="Topic signals">
-          <div class="metric">
-            <span class="metric-label">Foundations</span>
-            <strong>Definitions, mental models, and the shift from prompt-response behavior to purposeful systems.</strong>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Architectures</span>
-            <strong>Reference designs, orchestration patterns, and system boundaries for production-grade agentic software.</strong>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Applications</span>
-            <strong>Use cases, query-handling patterns, and enterprise implications of deploying agentic capabilities.</strong>
-          </div>
+          <a class="button button-secondary" href="#practice-areas">Browse by practice area</a>
         </div>
       </div>
 
     </section>
 
-    <section class="signal-grid" aria-label="What this collection covers">
-      <article class="signal-card">
-        <strong>Agentic behavior</strong>
-        <p>How autonomy, intentionality, and goal-directed action differ from ordinary automation.</p>
-      </article>
-      <article class="signal-card">
-        <strong>Multi-agent coordination</strong>
-        <p>How roles, control loops, and communication patterns shape the behavior of teams of agents.</p>
-      </article>
-      <article class="signal-card">
-        <strong>System design</strong>
-        <p>How memory, tools, orchestration, and evaluation fit together in software that must actually work.</p>
-      </article>
-      <article class="signal-card">
-        <strong>Enterprise implications</strong>
-        <p>Where agentic patterns start changing product design, user expectations, and organizational choices.</p>
-      </article>
+    <section class="practice-nav" id="practice-areas" aria-label="Practice area navigation">
+      <a class="practice-jump" href="#strategy-adoption">
+        <strong>Strategy and Adoption</strong>
+        <span>Timing, maturity, and ecosystem signals.</span>
+      </a>
+      <a class="practice-jump" href="#foundations-behavior">
+        <strong>Foundations</strong>
+        <span>Definitions, behavior models, and task types.</span>
+      </a>
+      <a class="practice-jump" href="#architecture-platforms">
+        <strong>Architecture</strong>
+        <span>Reference designs, platforms, and protocols.</span>
+      </a>
+      <a class="practice-jump" href="#multi-agent-coordination">
+        <strong>Multi-Agent Systems</strong>
+        <span>Coordination patterns and MAS design.</span>
+      </a>
+      <a class="practice-jump" href="#learning-personalization">
+        <strong>Learning</strong>
+        <span>Memory, teachability, and personalization.</span>
+      </a>
+      <a class="practice-jump" href="#evaluation-reliability">
+        <strong>Evaluation</strong>
+        <span>Evals, robustness, and structured outputs.</span>
+      </a>
+      <a class="practice-jump" href="#human-ai-collaboration">
+        <strong>Human-AI Collaboration</strong>
+        <span>Work design, co-creation, and cognitive UX.</span>
+      </a>
     </section>
 
     <section class="section-card" id="featured" aria-labelledby="featured-title">
@@ -660,7 +696,7 @@
         <div>
           <h2 id="featured-title">Start Here</h2>
         </div>
-        <p>These pieces are the strongest entry points for understanding where agentic systems are heading and what design choices matter most.</p>
+        <p>Four strong entry points for understanding agentic systems and building them well.</p>
       </div>
       <div class="feature-grid">
         <article class="feature-card">
@@ -677,7 +713,7 @@
         </article>
         <article class="feature-card">
           <div class="card-tag">Architecture</div>
-          <h3>Agentic Systems - Reference Architecture</h3>
+          <h3>Reference Architecture for Agentic AI</h3>
           <p>A system-level view of orchestration, tools, control, and interaction patterns for production-minded implementations.</p>
           <a class="card-link" href="./refarchagentic.html">Read the article</a>
         </article>
@@ -693,80 +729,95 @@
     <section class="section-card" id="topics" aria-labelledby="topics-title">
       <div class="section-heading">
         <div>
-          <h2 id="topics-title">Browse by Topic</h2>
+          <h2 id="topics-title">Browse by Practice Area</h2>
         </div>
-        <p>Organized by the kinds of questions architects and builders usually have when evaluating or designing agentic systems.</p>
+        <p>Explore the collection by the kind of problem or design decision you are working on.</p>
       </div>
-      <p style="margin: 0 0 22px; color: var(--ink-soft); line-height: 1.8; max-width: 72ch;">
-        Use these topic clusters to move from definitions and mental models into agentic AI architecture, multi-agent systems, enterprise use cases, and design patterns that hold up in production settings.
-      </p>
       <div class="topic-grid">
-        <article class="topic-card">
-          <div class="card-tag">Foundations</div>
-          <h3>Core Concepts</h3>
-          <p>Start here if the question is what agentic systems are and how they differ from earlier AI or software patterns.</p>
+        <article class="topic-card" id="strategy-adoption">
+          <div class="card-tag">Practice Area 1</div>
+          <h3>Strategy, Adoption, and Ecosystem Signals</h3>
+          <p>Why agentic AI matters now, how adoption is evolving, and how leaders can frame the opportunity.</p>
           <div class="topic-links">
-            <a href="../genai/agenticthinking.html">What is Agentic Thinking?</a>
-            <a href="../genai/agenticsystems.html">What are Agentic Systems?</a>
-            <a href="./whynowagentic.html">Agentic Systems - Why now?</a>
-            <a href="../genai/languageagenticsystems.html">Language-based reasoning versus earlier generations</a>
-            <a href="../genai/agenticness.html">Agenticness of AI systems</a>
+            <a href="./agenticai.html">Agentic AI: A Strategic Overview for CXOs</a>
+            <a href="./whynowagentic.html">Why Are AI Agentic Systems Becoming So Popular Now?</a>
+            <a href="./agenticailatest.html">Agentic AI Intelligence Report - Practitioner Edition</a>
+            <a href="../genai/AdoptionMaturityModel.html">Generative AI Adoption Maturity Model</a>
           </div>
         </article>
 
-        <article class="topic-card">
-          <div class="card-tag">Coordination</div>
-          <h3>Multi-Agent Systems</h3>
-          <p>Use these when the problem is role design, coordination, decomposition, or supervisory control across multiple agents.</p>
+        <article class="topic-card" id="foundations-behavior">
+          <div class="card-tag">Practice Area 2</div>
+          <h3>Agent Foundations and Behavior Models</h3>
+          <p>Core definitions, behavior models, and task framing for agentic systems.</p>
+          <div class="topic-links">
+            <a href="./actionmodels.html">The Evolution of Machine Learning Models: From LLMs to Action Models</a>
+            <a href="./reactivedeliberativeagents.html">Reactive and Deliberative AI Agents</a>
+            <a href="../genai/agenticness.html">Agenticness of AI Systems</a>
+            <a href="../genai/agenticsystems.html">What are Agentic Systems in LLMs and Generative AI?</a>
+            <a href="../genai/agenticthinking.html">What is Agentic Thinking?</a>
+            <a href="../genai/aitech.html">Understanding AI Technologies: LLMs, Search, and ChatGPT</a>
+            <a href="../genai/tasktypes.html">3 types of tasks suitable for Generative AI Applications</a>
+          </div>
+        </article>
+
+        <article class="topic-card" id="architecture-platforms">
+          <div class="card-tag">Practice Area 3</div>
+          <h3>Architecture, Platforms, and Protocol Engineering</h3>
+          <p>Reference designs, system boundaries, platforms, and interoperability.</p>
+          <div class="topic-links">
+            <a href="./agenticsystems.html">Embracing Agentic Systems: Revolutionizing Enterprise Software Development</a>
+            <a href="./mcpfoundation.html">MCP as a foundational layer of the AI-native internet</a>
+            <a href="./refarchagentic.html">Reference Architecture for Agentic AI</a>
+            <a href="../genai/languageagenticsystems.html">Language-Native Agentic Systems vs Early Generations</a>
+          </div>
+        </article>
+
+        <article class="topic-card" id="multi-agent-coordination">
+          <div class="card-tag">Practice Area 4</div>
+          <h3>Multi-Agent Coordination and Orchestration</h3>
+          <p>Role design, coordination patterns, decomposition, and supervisory control.</p>
           <div class="topic-links">
             <a href="./mas.html">What are Multi-Agent Systems (MAS)?</a>
-            <a href="./refarchmas.html">Multi-Agent Systems - Reference Architecture</a>
-            <a href="./masterslavepattern.html">Master Slave Pattern</a>
+            <a href="./masterslavepattern.html">Master-Slave Multi-Agent System Interaction Pattern</a>
+            <a href="./refarchmas.html">Multi-Agent Systems (MAS) Reference Architecture</a>
           </div>
         </article>
 
-        <article class="topic-card">
-          <div class="card-tag">Architecture</div>
-          <h3>Architecture and Design</h3>
-          <p>Start here if the immediate question is how to structure behavior, control loops, memory, and decision pathways.</p>
-          <div class="topic-links">
-            <a href="./refarchagentic.html">Agentic Systems - Reference Architecture</a>
-            <a href="./prebuildevals.html">Pre-Build Evals for AI Agents</a>
-            <a href="./reactivedeliberativeagents.html">Reactive and Deliberative AI agents</a>
-            <a href="../genai/timeline.html">Timeline of shifts in software design</a>
-            <a href="../genai/cognitive.html">The software design is about to change ... forever.</a>
-          </div>
-        </article>
-
-        <article class="topic-card">
-          <div class="card-tag">Applications</div>
-          <h3>Applications and Use Cases</h3>
-          <p>These pieces show where agentic thinking becomes concrete in products, enterprise software, and interaction models.</p>
-          <div class="topic-links">
-            <a href="./chatbotquerytypes.html">Handling a variety of query types</a>
-            <a href="./agenticsystems.html">Agentic systems in enterprise software development</a>
-            <a href="./personalization.html">Personalization maturity model</a>
-          </div>
-        </article>
-
-        <article class="topic-card">
-          <div class="card-tag">Advanced</div>
-          <h3>Learning and Adaptation</h3>
-          <p>Use these if the question is how systems learn, get taught, or evolve after deployment rather than staying fixed.</p>
+        <article class="topic-card" id="learning-personalization">
+          <div class="card-tag">Practice Area 5</div>
+          <h3>Learning, Memory, and Personalization</h3>
+          <p>Memory, adaptation, personalization, and teachable systems.</p>
           <div class="topic-links">
             <a href="./learning.html">The Role of Learning in Agentic AI</a>
-            <a href="./teachableagents.html">Teachable AI Agents</a>
+            <a href="./personalization.html">Personalization Maturity Model for Agentic Conversational AI</a>
+            <a href="./teachableagents.html">Teachable AI Agents: Revolutionizing AI Development and Adaptability</a>
           </div>
         </article>
 
-        <article class="topic-card">
-          <div class="card-tag">Momentum</div>
-          <h3>Recent Agentic Writing</h3>
-          <p>Recent posts and adjacent writing that sharpen the strategic case for why agentic systems matter right now.</p>
+        <article class="topic-card" id="evaluation-reliability">
+          <div class="card-tag">Practice Area 6</div>
+          <h3>Evaluation, Reliability, and Interaction Robustness</h3>
+          <p>Evals, failure modes, brittle outputs, and production readiness.</p>
+          <div class="topic-links">
+            <a href="./chatbotquerytypes.html">Designing a Robust Chatbot: Handling 17 Types of Query Variations</a>
+            <a href="./prebuildevals.html">Pre-Build Evals for AI Agents</a>
+            <a href="../genai/structuredoutput.html">LLM Structured Outputs: Anti-Patterns</a>
+          </div>
+        </article>
+
+        <article class="topic-card" id="human-ai-collaboration">
+          <div class="card-tag">Practice Area 7</div>
+          <h3>Work Design, Cognitive UX, and Human-AI Collaboration</h3>
+          <p>How agentic systems reshape knowledge work, interface design, and collaboration with AI.</p>
+          <div class="topic-links">
+            <a href="./agneticadvantage.html">The Agentic Advantage: How AI Agents Transform Knowledge Work</a>
+            <a href="../genai/cocreating.html">Co-creating with LLMs: Cognitive Industrial Revolution or Cheating?</a>
+            <a href="../genai/cognitive.html">Agentic Software Development: A Paradigm Shift in Cognitive Design</a>
+            <a href="../genai/timeline.html">Timeline of Significant Shifts in Software Design to Decrease Cognitive Load</a>
+          </div>
           <div class="topic-links">
             <a href="../blog/2026/01/agentic-advantage-new-leverage.html">The Agentic Advantage: A New Form of Leverage</a>
-            <a href="./agneticadvantage.html">The Agentic Advantage</a>
-            <a href="./agenticai.html">Agentic AI</a>
             <a href="../ecp/ai-delegation-vs-collaboration.html">Working with AI: Delegation or Collaboration</a>
           </div>
         </article>
@@ -778,7 +829,7 @@
         <div>
           <h2 id="resources-title">Frameworks and Research</h2>
         </div>
-        <p>Once the conceptual model is clear, these external references help connect the topic to implementation ecosystems and current research surveys.</p>
+        <p>External references for implementation ecosystems and broader research context.</p>
       </div>
       <div class="resource-grid">
         <article class="resource-card">
@@ -806,7 +857,7 @@
         <div>
           <h2 id="newsletter-title">Subscribe</h2>
         </div>
-        <p>Get new writing on agentic systems, architectures, evals, and adjacent startup or career ideas without having to check the site manually.</p>
+        <p>Get new writing on agentic systems, architectures, and evaluation.</p>
       </div>
       <div class="resource-grid newsletter-grid">
         <article class="resource-card newsletter-copy">
@@ -829,22 +880,17 @@
       </div>
     </section>
 
-    <section class="footer-grid" aria-label="About and site notes">
+    <section class="footer-grid" aria-label="About this collection">
       <article class="footer-card">
         <h2>What You Will Find Here</h2>
         <p>
-          This collection focuses on agentic behavior, multi-agent coordination, system design, and the enterprise implications of building with AI agents. The goal is practical clarity rather than exhaustive coverage.
+          This collection focuses on agentic behavior, multi-agent coordination, system design, and enterprise use.
         </p>
         <div class="footer-links">
           <a href="../">Back to home</a>
           <a href="../blog/">Explore the blog</a>
           <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
         </div>
-      </article>
-      <article class="footer-card">
-        <h3>Site Notes</h3>
-        <p class="note">This site has been co-created with GitHub Copilot and other LLMs.</p>
-        <p class="note" style="margin-top: 14px;">These views are mine alone and not those of my employer.</p>
       </article>
     </section>
   </div>
