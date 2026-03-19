@@ -331,6 +331,67 @@
             gap: 20px;
         }
 
+        .newsletter-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+            gap: 20px;
+            align-items: center;
+        }
+
+        .newsletter-copy ul {
+            margin: 18px 0 0;
+            padding-left: 20px;
+            color: var(--ink-soft);
+            line-height: 1.8;
+        }
+
+        .newsletter-copy li + li {
+            margin-top: 8px;
+        }
+
+        .newsletter-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .newsletter-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            transition: transform 0.2s ease;
+        }
+
+        .newsletter-button:hover,
+        .newsletter-button:focus {
+            transform: translateY(-2px);
+        }
+
+        .newsletter-button.primary {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--agentic-primary) 0%, #0f766e 100%);
+            box-shadow: 0 12px 24px rgba(30, 58, 138, 0.18);
+        }
+
+        .newsletter-button.secondary {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid var(--line);
+        }
+
+        .newsletter-frame {
+            width: 100%;
+            min-height: 240px;
+            border: 1px solid rgba(15, 23, 42, 0.10);
+            border-radius: var(--radius-lg);
+            background: #ffffff;
+        }
+
         .report-card {
             position: relative;
             overflow: hidden;
@@ -580,6 +641,7 @@
                 <a class="nav-highlight" href="./">Industry AI</a>
                 <a href="../startups/">Startups</a>
                 <a href="../blog/">All Writing</a>
+                <a href="#newsletter">Subscribe</a>
                 <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </nav>
         </header>
@@ -767,6 +829,34 @@
                         <span class="topic-chip">Digital Health</span>
                     </div>
                     <a class="card-cta" href="./healthcare/healthcareailatest.html">Read latest report</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-card" id="newsletter" aria-labelledby="newsletter-title">
+            <div class="section-heading">
+                <div>
+                    <h2 id="newsletter-title">Subscribe</h2>
+                </div>
+                <p>Get new intelligence reports and broader writing on agentic AI, operating patterns, and industry shifts delivered without having to monitor every archive page.</p>
+            </div>
+            <div class="newsletter-grid">
+                <article class="report-card newsletter-copy">
+                    <div class="card-kicker">Newsletter</div>
+                    <h3 class="card-title">Follow the cross-industry signal</h3>
+                    <p class="card-desc">The newsletter is the easiest way to keep up with new reports, architecture thinking, and adjacent essays on software, startups, and leadership.</p>
+                    <ul>
+                        <li>New industry intelligence reports as they are published</li>
+                        <li>Cross-sector agentic AI patterns and implementation takeaways</li>
+                        <li>Selected essays that connect technology shifts to operating decisions</li>
+                    </ul>
+                    <div class="newsletter-actions">
+                        <a class="newsletter-button primary" href="https://aistartupscareer.substack.com/" target="_blank" rel="noopener noreferrer">Open on Substack</a>
+                        <a class="newsletter-button secondary" href="../blog/">Browse recent writing</a>
+                    </div>
+                </article>
+                <article class="report-card">
+                    <iframe class="newsletter-frame" src="https://aistartupscareer.substack.com/embed" frameborder="0" scrolling="no" title="Subscribe to the AI Startups Career newsletter" loading="lazy"></iframe>
                 </article>
             </div>
         </section>

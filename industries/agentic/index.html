@@ -17,6 +17,13 @@
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 700px; margin: 60px auto; padding: 0 24px; color: #1e293b; }
     h1 { font-size: 1.8rem; margin-bottom: 8px; }
     p.sub { color: #64748b; margin-bottom: 32px; }
+    .subscribe-card { margin: 0 0 32px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px; background: #f8fafc; }
+    .subscribe-card h2 { font-size: 1.15rem; margin-bottom: 10px; }
+    .subscribe-card p { color: #475569; margin-bottom: 16px; line-height: 1.7; }
+    .subscribe-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .subscribe-actions a { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 16px; border-radius: 999px; font-weight: 600; text-decoration: none; }
+    .subscribe-actions .primary { background: #1d4ed8; color: #ffffff; }
+    .subscribe-actions .secondary { border: 1px solid #cbd5e1; color: #1e293b; background: #ffffff; }
     ul { list-style: none; padding: 0; }
     li { border-bottom: 1px solid #e2e8f0; }
     li a { display: block; padding: 14px 0; color: #2563eb; text-decoration: none; font-size: 1rem; }
@@ -27,6 +34,14 @@
 <body>
   <h1>Agentic AI Intelligence Report</h1>
   <p class="sub">Weekly insights on agentic AI &mdash; browse all editions below.</p>
+  <section class="subscribe-card" aria-labelledby="subscribe-title">
+    <h2 id="subscribe-title">Subscribe for future editions</h2>
+    <p>New reports and related essays are also published through the newsletter, which is the fastest way to catch fresh agentic AI analysis without checking the archive manually.</p>
+    <div class="subscribe-actions">
+      <a class="primary" href="https://aistartupscareer.substack.com/" target="_blank" rel="noopener noreferrer">Open on Substack</a>
+      <a class="secondary" href="../">Industry AI home</a>
+    </div>
+  </section>
   <ul>
     <li><a href="agentic-ai-2026-03-18.html">March 18, 2026 <span class="latest">latest</span></a></li>
   </ul>

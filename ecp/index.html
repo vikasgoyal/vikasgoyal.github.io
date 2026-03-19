@@ -477,6 +477,37 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
+    .newsletter-grid {
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+      align-items: center;
+    }
+
+    .newsletter-copy ul {
+      margin: 18px 0 0;
+      padding-left: 20px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .newsletter-copy li + li {
+      margin-top: 8px;
+    }
+
+    .newsletter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .newsletter-frame {
+      width: 100%;
+      min-height: 240px;
+      border: 1px solid rgba(18, 18, 18, 0.10);
+      border-radius: var(--radius-lg);
+      background: #ffffff;
+    }
+
     .footer-grid {
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     }
@@ -564,6 +595,7 @@
         <a class="nav-highlight" href="../industries/">Industries AI</a>
         <a href="../startups/">Startups</a>
         <a href="../blog/">All Writing</a>
+        <a href="#newsletter">Subscribe</a>
         <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </nav>
     </header>
@@ -754,6 +786,34 @@
             <a href="../industries/">Industry-specific AI perspectives</a>
             <a href="../blog/">All writing and archive</a>
           </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-card" id="newsletter" aria-labelledby="newsletter-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="newsletter-title">Subscribe</h2>
+        </div>
+        <p>Get new writing on career judgment, software habits, AI collaboration, and the ideas that help early careers compound faster.</p>
+      </div>
+      <div class="resource-grid newsletter-grid">
+        <article class="resource-card newsletter-copy">
+          <div class="card-tag">Newsletter</div>
+          <h3>Useful writing for builders at the start of the curve</h3>
+          <p>The newsletter combines practical career guidance with essays on software, AI, and the judgment that becomes more valuable over time.</p>
+          <ul>
+            <li>Career advice rooted in real workplace trade-offs</li>
+            <li>Software and AI pieces that sharpen judgment, not just technique</li>
+            <li>Occasional founder and leadership notes when they connect to growth</li>
+          </ul>
+          <div class="newsletter-actions">
+            <a class="button button-primary" href="https://aistartupscareer.substack.com/" target="_blank" rel="noopener noreferrer">Open on Substack</a>
+            <a class="button button-secondary" href="../blog/">Browse recent writing</a>
+          </div>
+        </article>
+        <article class="resource-card">
+          <iframe class="newsletter-frame" src="https://aistartupscareer.substack.com/embed" frameborder="0" scrolling="no" title="Subscribe to the AI Startups Career newsletter" loading="lazy"></iframe>
         </article>
       </div>
     </section>
