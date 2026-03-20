@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</title>
+		<meta name="description" content="A practical comparison of deterministic software testing and AI evals, including where they overlap, where they differ, and how to use both in one quality system.">
+		<meta name="keywords" content="testing vs evals, AI testing, deterministic testing, AI evals, LLM evaluation, agent testing, software quality">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/evalstesting.html">
+
+		<meta property="og:title" content="Testing vs Evals: How AI Quality Differs from Deterministic Software Quality">
+		<meta property="og:description" content="Why AI systems need both deterministic tests and evals, and how each one catches different classes of failure.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/evalstesting.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Testing vs Evals: How AI Quality Differs from Deterministic Software Quality">
+		<meta name="twitter:description" content="A practical comparison of deterministic testing and AI evals, with examples from copilots, RAG systems, and agents.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Testing vs Evals: How AI Quality Differs from Deterministic Software Quality",
+			"description": "A practical comparison of deterministic software testing and AI evals, including where they overlap, where they differ, and how to use both in one quality system.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-20",
+			"dateModified": "2026-03-20",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/evalstesting.html"
+			},
+			"keywords": "testing vs evals, AI testing, deterministic testing, AI evals, agent testing"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--compare-ink: #182131;
+				--compare-slate: #4b5565;
+				--compare-border: #d8dde6;
+				--compare-panel: #f8fafc;
+				--compare-blue: #1d4ed8;
+				--compare-blue-soft: #dbeafe;
+				--compare-red: #b91c1c;
+				--compare-red-soft: #fee2e2;
+				--compare-green: #0f766e;
+				--compare-green-soft: #ccfbf1;
+				--compare-amber: #92400e;
+				--compare-amber-soft: #fef3c7;
+			}
+
+			.compare-article {
+				color: var(--compare-ink);
+			}
+
+			.compare-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #fff7ed 52%, #ffffff 100%);
+				border: 1px solid #e2e8f0;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.compare-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--compare-panel);
+				border: 1px solid var(--compare-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.compare-article h1,
+			.compare-article h2,
+			.compare-article h3 {
+				color: #0f172a;
+			}
+
+			.compare-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.compare-article p {
+				margin-bottom: 0.9em;
+				color: var(--compare-slate);
+				line-height: 1.76;
+			}
+
+			.compare-article strong {
+				color: #0f172a;
+			}
+
+			.summary-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				background: linear-gradient(135deg, var(--compare-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+				border-radius: 14px;
+			}
+
+			.summary-box p,
+			.takeaway-box p {
+				margin: 0;
+			}
+
+			.summary-box p {
+				color: #1e3a8a;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--compare-green-soft);
+				color: var(--compare-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.comparison-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.comparison-table th,
+			.comparison-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.comparison-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.comparison-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.lens-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1em;
+			}
+
+			.lens-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--compare-border);
+				border-radius: 14px;
+			}
+
+			.lens-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.lens-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.lens-card.testing {
+				background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+				border-color: #bfdbfe;
+			}
+
+			.lens-card.evals {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			.series-links li,
+			.compare-article li {
+				margin-bottom: 0.65em;
+				color: var(--compare-slate);
+				line-height: 1.7;
+			}
+
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				background: linear-gradient(135deg, var(--compare-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+				border-radius: 14px;
+			}
+
+			.takeaway-box p {
+				color: #78350f;
+			}
+
+			@media (max-width: 768px) {
+				.compare-article header,
+				.compare-article section,
+				.lens-card,
+				.comparison-table th,
+				.comparison-table td {
+					padding: 1.05em;
+				}
+
+				.lens-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="compare-article">
+				<header>
+					<h1>Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</h1>
+					<p style="font-style: italic;">AI products still need testing, but testing alone cannot tell you whether the intelligence in the system is actually good enough.</p>
+					<div class="summary-box">
+						<p><strong>Short version:</strong> deterministic tests verify software behavior against explicit specifications, while evals judge whether probabilistic AI behavior is useful, safe, grounded, and reliable enough for the task.</p>
+					</div>
+				</header>
+
+				<section id="why-comparison-matters">
+					<div class="section-kicker">Quality Lens</div>
+					<h2>Why this comparison matters</h2>
+					<p>Many teams treat evals as if they were simply a new name for testing. That framing is too loose to be useful. It causes engineering teams to assume existing QA methods are enough, and it causes AI teams to undervalue the rigor that software testing already provides. The right mental model is more precise: <strong>testing and evals overlap, but they answer different questions</strong>.</p>
+					<p>Traditional software tests ask whether the system behaved according to a defined contract. If an endpoint is supposed to return a schema, if a permission check should block unauthorized access, or if a workflow should transition from one state to another, those expectations can be written down clearly and checked deterministically. AI systems add another layer. They may satisfy the contract of the software and still fail the job the user actually cares about.</p>
+					<p>A support copilot can return valid JSON, render cleanly in the interface, and pass every API test while still giving the wrong refund advice. A retrieval system can successfully call the search layer and attach citations while retrieving the wrong policy document. An agent can invoke a tool with syntactically correct arguments and still choose the wrong tool entirely. That is why AI quality cannot be reduced to classical pass-fail testing alone.</p>
+				</section>
+
+				<section id="ai-is-different">
+					<div class="section-kicker">What Makes AI Unique</div>
+					<h2>AI applications are probabilistic, contextual, and judgment-laden</h2>
+					<p>What makes AI applications unique is not that they use models. It is that they produce behavior that is often <strong>non-deterministic and interpretation-heavy</strong>. The same prompt can yield multiple acceptable outputs. Small wording changes can alter reasoning. Retrieved context can shift as the corpus changes. Agents can take different action paths depending on tool responses, intermediate observations, and user clarifications.</p>
+					<p>Those dynamics are not bugs by default. They are part of how AI systems create value. But they mean teams must evaluate qualities that deterministic testing does not naturally capture: factuality, usefulness, groundedness, planning quality, calibration, refusal behavior, and policy alignment. An AI app succeeds not only when it executes, but when it makes acceptable decisions inside a messy real-world task.</p>
+					<p>Examples make the gap obvious. In a document summarizer, the software may work perfectly while the summary omits the one legal clause that matters. In an extraction pipeline, the schema may validate while the extracted date is subtly wrong. In an agentic workflow, every microservice call may succeed while the overall plan remains poor and the user goal goes unmet. This is the core reason traditional testing methods are necessary but insufficient.</p>
+				</section>
+
+				<section id="where-they-overlap">
+					<div class="section-kicker">Common Ground</div>
+					<h2>Where testing and evals are similar</h2>
+					<p>They are similar in one important sense: both are attempts to make quality explicit before problems reach users. Both rely on examples, expected outcomes, repeatability, baselines, and regression detection. Both improve when the team turns vague aspirations into concrete checks. Both are much more useful when tied to actual product risk rather than generic benchmarks.</p>
+					<div class="lens-grid">
+						<div class="lens-card testing">
+							<h3>Testing contributes rigor</h3>
+							<p>It gives AI systems stable foundations: permissions, schemas, APIs, orchestration logic, guardrail wiring, retries, state transitions, and tool interfaces still need deterministic validation.</p>
+						</div>
+						<div class="lens-card evals">
+							<h3>Evals contribute judgment</h3>
+							<p>They assess whether the model-driven parts of the system behaved well enough in context, especially where there is more than one plausible output or path.</p>
+						</div>
+					</div>
+					<p>In other words, both are quality disciplines. The difference is that one is optimized for <strong>explicit contracts</strong> and the other for <strong>probabilistic performance under ambiguity</strong>.</p>
+				</section>
+
+				<section id="comparative-analysis">
+					<div class="section-kicker">Comparative Analysis</div>
+					<h2>Testing vs evals</h2>
+					<p>The clearest way to understand the distinction is to compare what each one is trying to establish.</p>
+					<table class="comparison-table">
+						<thead>
+							<tr>
+								<th>Dimension</th>
+								<th>Deterministic Testing</th>
+								<th>AI Evals</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Primary question</td>
+								<td>Did the system behave according to the specified contract?</td>
+								<td>Did the AI behave usefully, safely, and correctly enough for the task?</td>
+							</tr>
+							<tr>
+								<td>Nature of expected output</td>
+								<td>Usually exact or tightly bounded.</td>
+								<td>Often multiple acceptable outputs or action paths.</td>
+							</tr>
+							<tr>
+								<td>Typical oracle</td>
+								<td>Code assertions, snapshots, schemas, contracts, mocks.</td>
+								<td>Rubrics, human judgment, model judges, heuristics, outcome measures.</td>
+							</tr>
+							<tr>
+								<td>Main failure modes caught</td>
+								<td>Broken logic, integration failures, state bugs, invalid responses, missing permissions.</td>
+								<td>Hallucination, poor reasoning, weak retrieval, wrong tool choice, unsafe or low-value behavior.</td>
+							</tr>
+							<tr>
+								<td>Stability expectation</td>
+								<td>High repeatability across runs.</td>
+								<td>Measured consistency with some tolerated variation.</td>
+							</tr>
+							<tr>
+								<td>Best suited for</td>
+								<td>Software infrastructure and deterministic workflow guarantees.</td>
+								<td>Model quality, agent behavior, task success, and real-world usefulness.</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>That table also explains why teams get into trouble when they use one discipline to do the other’s job. If you force AI behavior into only deterministic assertions, you miss many meaningful failures. If you use evals as a substitute for testing, you end up hand-waving over infrastructure defects that should have been caught mechanically.</p>
+				</section>
+
+				<section id="practical-split">
+					<div class="section-kicker">Practical Split</div>
+					<h2>What should be tested and what should be evaluated?</h2>
+					<p>A useful rule is this: <strong>test the scaffolding, evaluate the intelligence</strong>. Test whether a prompt template is assembled correctly, whether a tool schema is valid, whether the retry policy triggers, whether the correct user context reaches the model, and whether the audit trail is stored. Evaluate whether the answer is grounded, whether the summary preserved the important facts, whether the plan was sensible, and whether the agent escalated when it should have.</p>
+					<p>That split is especially important in retrieval and agentic systems. You can test whether a search call returned documents, but you need evals to judge whether they were the right documents. You can test whether a tool invocation happened, but you need evals to judge whether the tool should have been called in the first place. You can test whether the orchestration loop terminated, but you need evals to judge whether the agent’s path to completion was robust and policy-compliant.</p>
+					<p>In mature systems, these are not competing activities. They sit in the same release discipline. Deterministic tests keep the platform from breaking. Evals keep the AI behavior from drifting into uselessness, fragility, or unsafe confidence.</p>
+				</section>
+
+				<section id="agents">
+					<div class="section-kicker">Agents</div>
+					<h2>Agentic systems make the distinction more obvious</h2>
+					<p>Agents make the testing-versus-evals distinction unavoidable because they are compositional systems. An agent is not one model call. It is a bundle of components that observe, decide, retrieve, call tools, remember state, and recover from failures. Each component can be mechanically tested, but the overall behavior still needs evaluation.</p>
+					<p>This is where teams often over-trust end-to-end testing. If an agent successfully books travel once, resolves a support issue once, or completes a document workflow once, that success may conceal a weak planner, a brittle retrieval stage, poor recovery logic, or tool-selection errors that happened not to surface in that scenario. End-to-end tests are useful, but they can smooth over subsystem fragility. Subsystem evals make the hidden weaknesses visible.</p>
+					<p>The correct pattern is layered quality: deterministic tests for infrastructure, evals for model and subsystem behavior, and end-to-end scenarios for real user outcomes. The more agentic the system becomes, the more important that layering becomes.</p>
+				</section>
+
+				<section id="operating-model">
+					<div class="section-kicker">Operating Model</div>
+					<h2>How strong teams use both together</h2>
+					<p>Strong teams do not debate whether testing or evals matter more. They define a pipeline where each one plays its part. Deterministic tests run early and often. They gate merges, deployments, and platform changes. Evals run on curated scenarios, production-like datasets, and failure-focused slices to detect behavioral regressions before rollout. Production monitoring then extends both disciplines with live signals, sampled reviews, and incident learning.</p>
+					<p>That model works because it maps to the actual anatomy of an AI product. Some parts are software contracts. Some parts are judgment systems. A reliable product needs both treated seriously.</p>
+					<div class="takeaway-box">
+						<p><strong>Bottom line:</strong> testing asks whether the system ran correctly; evals ask whether the intelligence behaved well enough. AI quality depends on answering both questions, not choosing one over the other.</p>
+					</div>
+				</section>
+
+				<section id="related-reading">
+					<div class="section-kicker">Evaluation Series</div>
+					<h2>Related reading</h2>
+					<ul class="series-links">
+						<li><a href="whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="../prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<div id="footer"></div>
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>
+

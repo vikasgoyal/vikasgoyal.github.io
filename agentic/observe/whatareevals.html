@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>What Are Evals? A Practical Introduction to Evaluating AI Systems</title>
+		<meta name="description" content="A practical introduction to evals for AI systems: why AI requires more than traditional testing, what evaluation dimensions matter, who evaluates AI, and why subsystem evals are essential for agentic systems.">
+		<meta name="keywords" content="AI evals, LLM evaluation, agent evaluation, AI testing, model evaluation, agentic systems, AI quality, AI reliability">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/whatareevals.html">
+
+		<meta property="og:title" content="What Are Evals? A Practical Introduction to Evaluating AI Systems">
+		<meta property="og:description" content="Understand what evals are, why deterministic tests are not enough for AI, how to think about evaluators, and why agentic systems need subsystem evals as well as end-to-end checks.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/whatareevals.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="What Are Evals? A Practical Introduction to Evaluating AI Systems">
+		<meta name="twitter:description" content="Why AI systems need evals, what dimensions to measure, who evaluates AI, and how to evaluate compositional agentic systems.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "What Are Evals? A Practical Introduction to Evaluating AI Systems",
+			"description": "A practical introduction to evals for AI systems: why AI requires more than traditional testing, what evaluation dimensions matter, who evaluates AI, and why subsystem evals are essential for agentic systems.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-20",
+			"dateModified": "2026-03-20",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/whatareevals.html"
+			},
+			"keywords": "AI evals, LLM evaluation, agent evaluation, AI testing, model evaluation, agentic systems"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--eval-ink: #172033;
+				--eval-slate: #445166;
+				--eval-border: #d6dee8;
+				--eval-panel: #f7fafc;
+				--eval-blue: #1d4ed8;
+				--eval-blue-soft: #dbeafe;
+				--eval-green: #0f766e;
+				--eval-green-soft: #ccfbf1;
+				--eval-amber: #b45309;
+				--eval-amber-soft: #fef3c7;
+			}
+
+			.eval-article {
+				color: var(--eval-ink);
+			}
+
+			.eval-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 52%, #ecfeff 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.eval-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--eval-panel);
+				border: 1px solid var(--eval-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.eval-article h1,
+			.eval-article h2,
+			.eval-article h3 {
+				color: #0f172a;
+			}
+
+			.eval-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.eval-article p {
+				margin-bottom: 0.9em;
+				color: var(--eval-slate);
+				line-height: 1.76;
+			}
+
+			.eval-article p:last-child,
+			.eval-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.eval-article strong {
+				color: #0f172a;
+			}
+
+			.summary-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				background: linear-gradient(135deg, var(--eval-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+				border-radius: 14px;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--eval-green-soft);
+				color: var(--eval-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.dimension-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.15em;
+			}
+
+			.dimension-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--eval-border);
+				border-radius: 14px;
+			}
+
+			.dimension-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.dimension-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.dimension-card.accent {
+				background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
+				border-color: #99f6e4;
+			}
+
+			.dimension-card.warning {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				background: linear-gradient(135deg, var(--eval-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+				border-radius: 14px;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			.eval-article ul {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.eval-article li {
+				margin-bottom: 0.65em;
+				color: var(--eval-slate);
+				line-height: 1.7;
+			}
+
+			@media (max-width: 768px) {
+				.eval-article header,
+				.eval-article section,
+				.dimension-card {
+					padding: 1.05em;
+				}
+
+				.dimension-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="eval-article">
+				<header>
+					<h1>What Are Evals? A Practical Introduction to Evaluating AI Systems</h1>
+					<p style="font-style: italic;">Why AI systems need a different quality discipline than traditional software.</p>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> evals are the disciplined practice of measuring whether an AI system behaves usefully, safely, and consistently enough for the job it is supposed to do.</p>
+					</div>
+				</header>
+
+				<section id="why-ai-needs-evals">
+					<div class="section-kicker">Why This Is Different</div>
+					<h2>AI applications do not fail like traditional software</h2>
+					<p>Traditional software testing assumes a fairly stable relationship between input and output. If a user clicks a button, submits a form, or calls an API with a known payload, the expected result is usually deterministic. We can write unit tests, integration tests, contract tests, and regression suites around that assumption. The system either behaves as specified or it does not. For decades, this has been a strong and effective model for software quality.</p>
+					<p>AI systems break that neat contract. A language model can produce different responses to the same prompt, a retrieval pipeline can surface different evidence as documents change, and an agent can take different action paths depending on what it sees in the environment. That does not mean the system is broken. It means the system is <strong>probabilistic, context-sensitive, and adaptive</strong>. Those properties are exactly what make AI useful, but they also make quality harder to define and measure.</p>
+					<p>Consider a customer support copilot. A deterministic test can verify that the UI loads, the ticket ID is passed correctly, and the escalation button works. It cannot, by itself, tell you whether the generated reply is accurate, whether it cites the right refund policy, or whether it sounds confident while being subtly wrong. In a claims-processing assistant, the interface may work perfectly while the model extracts the wrong injury code from a physician note. In a coding assistant, the generated code may compile and still violate a security requirement or ignore an edge case hidden in the prompt. These are not failures that traditional testing catches reliably, because the problem is not only whether the software ran. The problem is whether the AI made a <strong>good judgment</strong>.</p>
+					<p>This is why AI applications require more than conventional testing. Deterministic tests still matter. You still need them for business logic, permissions, APIs, schemas, and workflows. But they are not sufficient for judging model quality, retrieval quality, planning quality, tool-use quality, or user-perceived usefulness. That gap is where evals come in.</p>
+				</section>
+
+				<section id="definition">
+					<div class="section-kicker">Definition</div>
+					<h2>What are evals?</h2>
+					<p>Evals are systematic methods for assessing how well an AI system performs against the behaviors, outcomes, and risks that matter for a real use case. Instead of asking only, “did the program execute correctly?”, evals ask broader questions: did the model answer correctly, did it follow instructions, did it use the right evidence, did it choose the right tool, did it complete the task, did it stay within policy, and did it do so consistently enough to trust?</p>
+					<p>In practice, an eval usually combines <strong>a dataset, a task, a rubric, and a scoring method</strong>. The dataset may contain prompts, documents, conversations, workflows, tool traces, or production examples. The rubric defines what good looks like. The scorer may be a human reviewer, a programmatic checker, another model acting as a judge, or some combination of the three. The output is not merely pass or fail. It is a structured signal about system quality.</p>
+					<p>That is the important shift. Traditional testing is mostly about correctness against explicit specifications. Evals are about <strong>fitness for purpose under uncertainty</strong>. They help teams decide whether an AI system is good enough to ship, safe enough to scale, and stable enough to change without causing regressions.</p>
+				</section>
+
+				<section id="dimensions">
+					<div class="section-kicker">Dimensions</div>
+					<h2>What exactly do we evaluate?</h2>
+					<p>There is no single score that captures whether an AI system is good. Different use cases require different dimensions, and many of them trade off against one another. A model can be helpful but too slow. It can be fluent but ungrounded. It can complete tasks but overuse tools. It can be accurate on average and still fail badly on critical edge cases. That is why mature teams define a set of evaluators or evaluation dimensions rather than chasing one headline metric.</p>
+
+					<div class="dimension-grid">
+						<div class="dimension-card accent">
+							<h3>Task Quality</h3>
+							<p>Did the system actually solve the user’s problem? This includes correctness, completeness, relevance, and whether the response or action was useful in context.</p>
+						</div>
+						<div class="dimension-card">
+							<h3>Groundedness</h3>
+							<p>Was the output supported by the supplied evidence, retrieved documents, or tool results, or did the system fabricate unsupported claims?</p>
+						</div>
+						<div class="dimension-card">
+							<h3>Instruction Following</h3>
+							<p>Did the model follow the requested format, constraints, tone, policy, or workflow, especially when the prompt included nontrivial rules?</p>
+						</div>
+						<div class="dimension-card warning">
+							<h3>Safety and Policy</h3>
+							<p>Did the system avoid unsafe behavior, privacy leaks, disallowed content, biased outcomes, and actions outside approved boundaries?</p>
+						</div>
+						<div class="dimension-card">
+							<h3>Tool Use and Planning</h3>
+							<p>For agents, did it choose the right tool, call it with the right inputs, interpret the result correctly, and follow a sensible plan?</p>
+						</div>
+						<div class="dimension-card accent">
+							<h3>Operational Fitness</h3>
+							<p>Was the behavior reliable enough in production terms, including latency, cost, consistency, fallbacks, and resilience under messy real inputs?</p>
+						</div>
+					</div>
+
+					<p>These evaluators can be implemented in several ways. Some are deterministic, such as exact-match checks, schema validation, citation presence, or tool-call correctness. Some are human, such as rating answer quality or comparing two outputs. Some are model-based, where a stronger model grades helpfulness, groundedness, or rubric adherence. Most serious evaluation programs use a mix, because each evaluator catches a different class of failure.</p>
+				</section>
+
+				<section id="who-evaluates">
+					<div class="section-kicker">Ownership</div>
+					<h2>Who evaluates AI?</h2>
+					<p>The short answer is: <strong>more people than in traditional software</strong>. AI quality is not owned by engineering alone because many of the most important judgments are not purely technical. Whether an answer is helpful, whether a recommendation is fair, whether a generated explanation is acceptable for a regulated workflow, and whether an action is safe to automate all require multiple perspectives.</p>
+					<p>Users evaluate AI every time they decide whether to trust it. Domain experts evaluate it when they judge correctness in medicine, law, finance, support, or operations. Product teams evaluate it when they ask whether it improves the task outcome or merely adds novelty. Safety teams and policy owners evaluate it for compliance, abuse resistance, and failure severity. Engineers evaluate the mechanics: prompt quality, retrieval quality, model selection, orchestration, and regressions. In many cases, another model also evaluates AI by acting as a judge or triaging large datasets before humans review the highest-risk cases.</p>
+					<p>That is why AI evaluation is inherently socio-technical. It sits at the intersection of model behavior, product intent, operational risk, and human expectations. A technically impressive system can still fail if the domain experts do not trust it or if the business cannot explain when it should be used and when it should not.</p>
+				</section>
+
+				<section id="what-it-takes">
+					<div class="section-kicker">Practice</div>
+					<h2>What it takes to evaluate AI well</h2>
+					<p>Evaluating AI is not a one-time benchmark. It is an operating discipline. Teams need representative datasets, clear rubrics, baseline versions, repeatable execution, and a way to compare changes over time. That sounds obvious, but it is where many teams fail. They run a few prompts manually, like what they see, and mistake that for evidence. Reliable AI evaluation starts when examples become curated, scoring becomes explicit, and regressions become visible.</p>
+					<p>Good evals also require realism. Synthetic prompts can help expand coverage, but they should not replace production-like scenarios. The system should be tested on messy language, vague requests, conflicting instructions, poor source documents, adversarial cases, and long-tail examples that reflect the actual environment. If the system will be used by thousands of people, the eval set should not look like a demo prepared by the build team.</p>
+					<p>Finally, teams need feedback loops. Pre-release evals are necessary, but they are not enough because AI systems drift as prompts change, models are swapped, retrieval corpora evolve, and user behavior shifts. Production monitoring, sampled human review, incident analysis, and regression gates are all part of the evaluation system. In other words, evaluating AI takes <strong>test assets, judgment assets, and operational discipline</strong>.</p>
+					<ul>
+						<li><strong>Representative examples:</strong> prompts, documents, tool traces, and real edge cases that match the product’s usage.</li>
+						<li><strong>Clear rubrics:</strong> explicit criteria for quality, safety, and task success so scoring does not collapse into vague opinion.</li>
+						<li><strong>Layered evaluators:</strong> deterministic checks, human review, and model-based graders used where each is strongest.</li>
+						<li><strong>Regression infrastructure:</strong> the ability to compare model, prompt, retrieval, and orchestration changes before shipping them broadly.</li>
+						<li><strong>Production learning loops:</strong> telemetry, spot-checking, escalation analysis, and failure review after deployment.</li>
+					</ul>
+				</section>
+
+				<section id="agentic-systems">
+					<div class="section-kicker">Agentic Systems</div>
+					<h2>Why subsystem evals matter even more for agents</h2>
+					<p>Agentic systems raise the bar because they are <strong>compositional systems</strong>. They are built from interacting parts: prompt templates, planners, retrievers, tools, memory, policies, model calls, execution loops, and escalation logic. When an agent succeeds end to end, that success can hide fragility inside one or more of those parts. A lucky retrieval hit, a forgiving user request, or a narrow tool path can make the whole flow look stable even when an individual subsystem is brittle.</p>
+					<p>This is why end-to-end testing alone is dangerous for agentic systems. End-to-end tests are still useful because they tell you whether the assembled system can complete realistic tasks. But they also smooth over the reasons it worked. If an agent completes a travel-booking workflow, was the plan sound, was the tool selection correct, did it ground its decisions in reliable evidence, did it recover from tool failures, and did it escalate when confidence dropped? End-to-end success does not answer those questions cleanly.</p>
+					<p>Subsystem evals do. You can evaluate retrieval quality separately from answer quality. You can test whether the planner decomposes tasks well before you measure overall task completion. You can inspect whether tool arguments are correct even when the final user-visible output looks plausible. You can stress-test memory contamination, fallback behavior, and policy enforcement without needing the whole agent loop to run perfectly. This layered view is how teams identify root causes instead of only observing symptoms.</p>
+					<p>The practical lesson is simple: <strong>evaluate the parts and the whole</strong>. Use subsystem evals to find brittle links early, and use end-to-end evals to validate user outcomes under realistic conditions. If you skip subsystem evals, end-to-end tests can give a false sense of confidence. If you skip end-to-end evals, strong components may still combine into a poor product experience. Agentic systems require both.</p>
+					<div class="takeaway-box">
+						<p><strong>Bottom line:</strong> for AI, especially for agents, quality is not just whether the software runs. It is whether a probabilistic, compositional system behaves well enough, often enough, under the conditions that matter.</p>
+					</div>
+				</section>
+
+				<section id="related-reading">
+					<div class="section-kicker">Evaluation Series</div>
+					<h2>Related reading</h2>
+					<ul class="series-links">
+						<li><a href="evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="../prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<div id="footer"></div>
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>
