@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Runtime Evals and Observability for Agentic Systems</title>
+		<meta name="description" content="A practical guide to runtime evals and observability for agentic systems: telemetry, traces, behavioral drift, anomaly detection, feedback loops, post-incident review, and how to evaluate AI systems after deployment.">
+		<meta name="keywords" content="runtime evals, AI observability, agent observability, telemetry, behavioral drift, AI monitoring, agent tracing, production AI evaluation">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/runtime-evals-observability.html">
+
+		<meta property="og:title" content="Runtime Evals and Observability for Agentic Systems">
+		<meta property="og:description" content="How to monitor and evaluate agentic AI systems in production using telemetry, traces, feedback loops, and drift detection.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/runtime-evals-observability.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Runtime Evals and Observability for Agentic Systems">
+		<meta name="twitter:description" content="A practical guide to evaluating AI systems after deployment through runtime signals, traces, and operational controls.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Runtime Evals and Observability for Agentic Systems",
+			"description": "A practical guide to runtime evals and observability for agentic systems: telemetry, traces, behavioral drift, anomaly detection, feedback loops, post-incident review, and how to evaluate AI systems after deployment.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-22",
+			"dateModified": "2026-03-22",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/runtime-evals-observability.html"
+			},
+			"keywords": "runtime evals, AI observability, agent observability, telemetry, production AI evaluation"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--run-ink: #172033;
+				--run-slate: #475569;
+				--run-border: #d7dfea;
+				--run-panel: #f8fafc;
+				--run-blue-soft: #dbeafe;
+				--run-green: #0f766e;
+				--run-green-soft: #ccfbf1;
+				--run-amber-soft: #fef3c7;
+				--run-rose-soft: #ffe4e6;
+				--run-lime-soft: #ecfccb;
+			}
+
+			.run-article {
+				color: var(--run-ink);
+			}
+
+			.run-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 52%, #fff7ed 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.run-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--run-panel);
+				border: 1px solid var(--run-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.run-article h1,
+			.run-article h2,
+			.run-article h3 {
+				color: #0f172a;
+			}
+
+			.run-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.run-article p {
+				margin-bottom: 0.9em;
+				color: var(--run-slate);
+				line-height: 1.76;
+			}
+
+			.run-article strong {
+				color: #0f172a;
+			}
+
+			.run-article p:last-child,
+			.run-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--run-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--run-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--run-green-soft);
+				color: var(--run-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.signal-grid,
+			.risk-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.1em;
+			}
+
+			.signal-card,
+			.risk-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--run-border);
+				border-radius: 14px;
+			}
+
+			.signal-card h3,
+			.risk-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.signal-card p,
+			.risk-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.signal-card.highlight {
+				background: linear-gradient(135deg, #ffffff 0%, var(--run-lime-soft) 100%);
+				border-color: #bef264;
+			}
+
+			.risk-card.warning {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.risk-card.risk {
+				background: linear-gradient(135deg, #ffffff 0%, var(--run-rose-soft) 100%);
+				border-color: #fecdd3;
+			}
+
+			table.run-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.run-table th,
+			.run-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.run-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.run-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.run-article ul,
+			.run-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.run-article li {
+				margin-bottom: 0.65em;
+				color: var(--run-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 768px) {
+				.run-article header,
+				.run-article section,
+				.signal-card,
+				.risk-card,
+				.run-table th,
+				.run-table td {
+					padding: 1.05em;
+				}
+
+				.signal-grid,
+				.risk-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="run-article">
+				<header>
+					<h1>Runtime Evals and Observability for Agentic Systems</h1>
+					<p style="font-style: italic;">Pre-release evaluation matters, but once an AI system is live, the question changes from “did it pass the benchmark?” to “how is it actually behaving under real conditions?”</p>
+					<div style="margin-top: 0.95em;">
+						<a href="/agentic/observe/eval-content-map.html" style="display: inline-flex; align-items: center; padding: 0.5em 0.85em; border-radius: 999px; background: rgba(255, 255, 255, 0.88); border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; font-weight: 600;">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> runtime evals extend evaluation into production by combining telemetry, traces, user feedback, anomaly detection, and post-incident review so teams can detect drift, unsafe behavior, and operational regressions after deployment.</p>
+					</div>
+				</header>
+
+				<section id="why-runtime-evals-exist">
+					<div class="section-kicker">Why Production Is Different</div>
+					<h2>Why offline success does not guarantee production success</h2>
+					<p>Offline evals and build-time evals are necessary, but they are still controlled approximations. Production introduces distribution shift, new user phrasing, new documents, changing policies, degraded tools, strange workflow combinations, and operational pressures that benchmarks rarely capture in full.</p>
+					<p>That is especially true for agentic systems. Once agents are allowed to call tools, maintain memory, coordinate across steps, and adapt to their environment, many of the most important risks become execution-time risks. A system can pass the test suite and still drift into bad habits, overuse tools, escalate too rarely, retry too aggressively, or behave differently under real traffic than it did in staging.</p>
+					<p>Runtime evals exist to close that gap. They are the disciplined practice of evaluating live behavior through production signals rather than relying only on pre-deployment confidence.</p>
+				</section>
+
+				<section id="observability-vs-evals">
+					<div class="section-kicker">Distinction</div>
+					<h2>Observability is necessary, but it is not the whole evaluation system</h2>
+					<p>Observability gives you visibility: traces, logs, tool calls, state transitions, prompt versions, response timing, cost, and outcomes. Runtime evals use that visibility to answer evaluative questions: is behavior degrading, is policy compliance slipping, are specific workflows becoming unreliable, and do incidents reveal a pattern the offline benchmark missed?</p>
+					<p>In other words, observability is the instrumentation layer. Runtime evaluation is the judgment layer built on top of it. Without observability, runtime evals are blind. Without runtime evals, observability becomes a pile of signals with no decision logic.</p>
+				</section>
+
+				<section id="signals">
+					<div class="section-kicker">Signals</div>
+					<h2>The runtime signals teams should monitor</h2>
+
+					<div class="signal-grid">
+						<div class="signal-card highlight">
+							<h3>Behavioral outcomes</h3>
+							<p>Task success, escalation frequency, abandonment, retries, rollback events, and downstream workflow completion.</p>
+						</div>
+						<div class="signal-card">
+							<h3>Trace-level telemetry</h3>
+							<p>Reasoning steps, tool selection, parameters, memory access, retrieval context, and handoff behavior across multi-step flows.</p>
+						</div>
+						<div class="signal-card">
+							<h3>User and operator feedback</h3>
+							<p>Explicit thumbs up or down, support escalations, manual overrides, and annotations from reviewers or operators.</p>
+						</div>
+						<div class="signal-card highlight">
+							<h3>Risk and anomaly indicators</h3>
+							<p>Unusual tool usage, policy triggers, sudden behavior shifts, missing traces, or output patterns that correlate with incidents.</p>
+						</div>
+					</div>
+
+					<div class="takeaway-box">
+						<p><strong>Operational principle:</strong> traditional MELT metrics alone are not enough. Agentic systems need decision-level telemetry, action traces, and behavior-specific signals, not just infrastructure health.</p>
+					</div>
+				</section>
+
+				<section id="what-to-evaluate">
+					<div class="section-kicker">Evaluation Focus</div>
+					<h2>What runtime evals should actually evaluate</h2>
+					<p>Runtime evaluation should target the patterns that only become visible after deployment.</p>
+
+					<table class="run-table">
+						<thead>
+							<tr>
+								<th>Area</th>
+								<th>Representative questions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Behavioral drift</td>
+								<td>Is the system becoming less accurate, less grounded, or more aggressive over time as data, prompts, or user traffic shift?</td>
+							</tr>
+							<tr>
+								<td>Operational reliability</td>
+								<td>Are tool retries increasing, workflows stalling, or escalations clustering around certain task types?</td>
+							</tr>
+							<tr>
+								<td>Safety and policy behavior</td>
+								<td>Are guardrails firing correctly, are refusals degrading, and are risky actions happening without sufficient review?</td>
+							</tr>
+							<tr>
+								<td>Cost and latency behavior</td>
+								<td>Are token usage, runtime length, or tool cost increasing in ways that change system viability?</td>
+							</tr>
+							<tr>
+								<td>Human override patterns</td>
+								<td>Where are humans stepping in, correcting outputs, or bypassing the agent because trust has eroded?</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section id="drift-and-anomalies">
+					<div class="section-kicker">Detection</div>
+					<h2>Drift and anomaly detection should focus on behavior, not just volume</h2>
+					<p>Many teams monitor latency, throughput, and error rates but miss the more important question: has the agent started behaving differently in ways that matter? Runtime AI evaluation should include behavioral drift detection, not just infrastructure monitoring.</p>
+					<p>Examples include a support agent that suddenly asks more clarifying questions, a research agent that cites fewer sources than before, a planning agent that overuses expensive tools, or a compliance workflow that begins escalating too little after a prompt change. None of these are conventional uptime problems, but all of them are production quality problems.</p>
+					<ul>
+						<li><strong>Watch for distribution changes:</strong> new task mixes, new document sets, or new user populations.</li>
+						<li><strong>Watch for policy drift:</strong> guardrail decisions, escalation thresholds, and approval behavior changing over time.</li>
+						<li><strong>Watch for interaction drift:</strong> longer loops, more retries, more handoffs, or deteriorating completion behavior.</li>
+					</ul>
+				</section>
+
+				<section id="feedback-loops">
+					<div class="section-kicker">Feedback</div>
+					<h2>User feedback is useful, but only if it is tied back to traces</h2>
+					<p>Runtime evaluation should absolutely use user feedback, but raw thumbs up and thumbs down are not enough. A downvote without context is a weak signal. The stronger pattern is to connect user feedback to the exact trace, prompt version, retrieval context, tool sequence, and outcome that produced it.</p>
+					<p>That linkage turns subjective feedback into diagnosable evidence. It lets teams ask better questions: did users dislike the tone, or was the answer wrong? Was the workflow too slow, or did the agent retrieve the wrong evidence? Did the system technically succeed while still creating a poor experience?</p>
+					<p>When possible, operator corrections, manual overrides, and support escalations should be treated as first-class evaluation artifacts rather than loose comments.</p>
+				</section>
+
+				<section id="incident-review">
+					<div class="section-kicker">Post-Incident Learning</div>
+					<h2>Production incidents should become evaluation assets</h2>
+					<p>One of the most important jobs of runtime evals is feeding production reality back into the broader evaluation program. Every serious incident, dangerous near-miss, or repeated operator correction should result in one or more reusable artifacts:</p>
+					<ul>
+						<li>a new regression case for build-time evaluation,</li>
+						<li>a new adversarial or edge-case scenario for the broader dataset,</li>
+						<li>a refined runtime alert or anomaly detector,</li>
+						<li>or an updated policy or escalation rule.</li>
+					</ul>
+					<p>If incidents are investigated once and forgotten, the runtime evaluation loop is incomplete. Production learning needs to harden the future benchmark.</p>
+				</section>
+
+				<section id="common-risks">
+					<div class="section-kicker">Blind Spots</div>
+					<h2>The most common runtime evaluation failures</h2>
+
+					<div class="risk-grid">
+						<div class="risk-card warning">
+							<h3>Missing action traces</h3>
+							<p>Teams log final outputs but not the decisions, tools, or evidence that produced them, making diagnosis slow and sometimes impossible.</p>
+						</div>
+						<div class="risk-card risk">
+							<h3>Monitoring only infrastructure</h3>
+							<p>Latency and uptime look fine while behavior quality degrades in ways that users notice before engineers do.</p>
+						</div>
+						<div class="risk-card warning">
+							<h3>Ignoring human overrides</h3>
+							<p>Manual corrections and operator workarounds often reveal trust failures long before formal incident reports do.</p>
+						</div>
+						<div class="risk-card risk">
+							<h3>No feedback into offline evals</h3>
+							<p>Production failures are handled operationally but never translated into new regression cases or new evaluation scenarios.</p>
+						</div>
+					</div>
+
+					<div class="takeaway-box">
+						<p><strong>Production rule:</strong> treat missing observability for agent decisions as a reliability defect, not just a tooling inconvenience. Unobservable behavior becomes unmanageable behavior.</p>
+					</div>
+				</section>
+
+				<section id="practical-start">
+					<div class="section-kicker">Action</div>
+					<h2>How teams should start in practice</h2>
+					<ol>
+						<li>Instrument traces for prompts, tool calls, retrieval context, policy checks, and major decisions.</li>
+						<li>Define a small set of behavior-oriented production metrics such as task success, escalation rate, unsafe action rate, or groundedness review rate.</li>
+						<li>Capture user feedback and operator corrections with trace IDs and scenario tags.</li>
+						<li>Alert on behavioral anomalies, not just uptime or latency.</li>
+						<li>Convert serious incidents into new build-time and offline eval cases.</li>
+					</ol>
+					<p>That is enough to start a real runtime evaluation loop without pretending the system is fully instrumented on day one.</p>
+				</section>
+
+				<section id="series-links">
+					<div class="section-kicker">Related Reading</div>
+					<h2>Part of the evals series</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design for AI Evals</a></li>
+						<li><a href="/agentic/observe/build-time-evals.html">Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems</a></li>
+						<li><a href="/agentic/observe/rag-evals.html">RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity</a></li>
+						<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>

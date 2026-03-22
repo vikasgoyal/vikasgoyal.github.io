@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity</title>
+		<meta name="description" content="A practical guide to evaluating RAG systems by separating retrieval quality, grounding quality, citation fidelity, and final answer behavior so teams can diagnose failures instead of hiding them inside one score.">
+		<meta name="keywords" content="RAG evals, retrieval evaluation, grounding evaluation, citation fidelity, RAG quality, AI evals, retrieval augmented generation">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/rag-evals.html">
+
+		<meta property="og:title" content="RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity">
+		<meta property="og:description" content="How to evaluate RAG systems without collapsing retrieval, grounding, and final-answer quality into one misleading score.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/rag-evals.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity">
+		<meta name="twitter:description" content="A practical guide to evaluating retrieval-augmented generation systems with the right decomposition and failure analysis.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity",
+			"description": "A practical guide to evaluating RAG systems by separating retrieval quality, grounding quality, citation fidelity, and final answer behavior so teams can diagnose failures instead of hiding them inside one score.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-22",
+			"dateModified": "2026-03-22",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/rag-evals.html"
+			},
+			"keywords": "RAG evals, retrieval evaluation, grounding evaluation, citation fidelity, AI evals"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--rag-ink: #172033;
+				--rag-slate: #475569;
+				--rag-border: #d7dfea;
+				--rag-panel: #f8fafc;
+				--rag-blue-soft: #dbeafe;
+				--rag-green: #0f766e;
+				--rag-green-soft: #ccfbf1;
+				--rag-amber-soft: #fef3c7;
+				--rag-rose-soft: #ffe4e6;
+				--rag-sky-soft: #e0f2fe;
+			}
+
+			.rag-article {
+				color: var(--rag-ink);
+			}
+
+			.rag-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #ecfeff 52%, #fff7ed 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.rag-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--rag-panel);
+				border: 1px solid var(--rag-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.rag-article h1,
+			.rag-article h2,
+			.rag-article h3 {
+				color: #0f172a;
+			}
+
+			.rag-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.rag-article p {
+				margin-bottom: 0.9em;
+				color: var(--rag-slate);
+				line-height: 1.76;
+			}
+
+			.rag-article strong {
+				color: #0f172a;
+			}
+
+			.rag-article p:last-child,
+			.rag-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--rag-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--rag-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--rag-green-soft);
+				color: var(--rag-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.dimension-grid,
+			.failure-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.1em;
+			}
+
+			.dimension-card,
+			.failure-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--rag-border);
+				border-radius: 14px;
+			}
+
+			.dimension-card h3,
+			.failure-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.dimension-card p,
+			.failure-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.dimension-card.retrieval {
+				background: linear-gradient(135deg, #ffffff 0%, var(--rag-sky-soft) 100%);
+				border-color: #bae6fd;
+			}
+
+			.dimension-card.grounding {
+				background: linear-gradient(135deg, #ffffff 0%, #ecfeff 100%);
+				border-color: #a5f3fc;
+			}
+
+			.failure-card.warning {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.failure-card.risk {
+				background: linear-gradient(135deg, #ffffff 0%, var(--rag-rose-soft) 100%);
+				border-color: #fecdd3;
+			}
+
+			table.rag-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.rag-table th,
+			.rag-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.rag-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.rag-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.rag-article ul,
+			.rag-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.rag-article li {
+				margin-bottom: 0.65em;
+				color: var(--rag-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 768px) {
+				.rag-article header,
+				.rag-article section,
+				.dimension-card,
+				.failure-card,
+				.rag-table th,
+				.rag-table td {
+					padding: 1.05em;
+				}
+
+				.dimension-grid,
+				.failure-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="rag-article">
+				<header>
+					<h1>RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity</h1>
+					<p style="font-style: italic;">A retrieval-augmented system can fail even when the final answer sounds plausible, so the evaluation has to separate where the failure actually happened.</p>
+					<div style="margin-top: 0.95em;">
+						<a href="/agentic/observe/eval-content-map.html" style="display: inline-flex; align-items: center; padding: 0.5em 0.85em; border-radius: 999px; background: rgba(255, 255, 255, 0.88); border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; font-weight: 600;">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> do not score RAG as one blended behavior. Evaluate retrieval quality, grounding quality, citation quality, and answer quality separately so you can tell whether the problem is the corpus, the retriever, the generator, or the interface between them.</p>
+					</div>
+				</header>
+
+				<section id="why-rag-needs-decomposition">
+					<div class="section-kicker">Decomposition</div>
+					<h2>Why RAG evaluation breaks when teams use one score</h2>
+					<p>Retrieval-augmented generation systems are compositional. They depend on the corpus, chunking strategy, metadata, ranking, context assembly, prompt design, model behavior, and answer formatting. When teams ask only “was the final answer correct?” they lose the ability to diagnose where failure started.</p>
+					<p>A wrong answer may reflect bad retrieval, but it may also reflect correct retrieval combined with poor grounding. A confident answer with citations may still be misleading if the citations do not actually support the claim being made. A low answer score may even hide a corpus problem rather than a model problem. Treating all of that as one metric leads to vague fixes and repeated regressions.</p>
+					<p>The solution is to evaluate RAG as a small system, not as a single response surface.</p>
+				</section>
+
+				<section id="core-dimensions">
+					<div class="section-kicker">Dimensions</div>
+					<h2>The four evaluation layers that matter most</h2>
+
+					<div class="dimension-grid">
+						<div class="dimension-card retrieval">
+							<h3>Retrieval relevance</h3>
+							<p>Did the system fetch the right documents or passages for the question, including the evidence needed to answer correctly?</p>
+						</div>
+						<div class="dimension-card grounding">
+							<h3>Grounding quality</h3>
+							<p>Did the answer stay faithful to the retrieved material, or did the model add unsupported claims, guesses, or synthesis errors?</p>
+						</div>
+						<div class="dimension-card retrieval">
+							<h3>Citation fidelity</h3>
+							<p>Do the cited passages actually support the specific claims they are attached to, and are the citations complete enough for verification?</p>
+						</div>
+						<div class="dimension-card grounding">
+							<h3>Answer usefulness</h3>
+							<p>Even if the answer is grounded, is it complete, clear, appropriately scoped, and helpful for the user’s real task?</p>
+						</div>
+					</div>
+
+					<div class="takeaway-box">
+						<p><strong>Practical rule:</strong> if you cannot tell whether a failure came from retrieval, grounding, or final answer composition, your RAG evaluation is too collapsed to guide engineering work.</p>
+					</div>
+				</section>
+
+				<section id="what-to-measure">
+					<div class="section-kicker">Metrics</div>
+					<h2>What teams should actually measure</h2>
+					<p>Not every team needs the same exact metric set, but most serious RAG programs need evaluators across the layers below.</p>
+
+					<table class="rag-table">
+						<thead>
+							<tr>
+								<th>Layer</th>
+								<th>Useful questions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Corpus coverage</td>
+								<td>Does the source material contain the needed answer at all, or is the system being asked to solve impossible questions?</td>
+							</tr>
+							<tr>
+								<td>Chunk and document retrieval</td>
+								<td>Were the right passages retrieved, ranked, and included in context for this query?</td>
+							</tr>
+							<tr>
+								<td>Grounded response generation</td>
+								<td>Did the model answer using the retrieved evidence rather than unsupported prior knowledge or invention?</td>
+							</tr>
+							<tr>
+								<td>Citation fidelity</td>
+								<td>Do the references point to text that genuinely supports the exact statement being made?</td>
+							</tr>
+							<tr>
+								<td>Failure behavior</td>
+								<td>When evidence is missing, conflicting, or weak, does the system abstain, clarify, or overstate confidence?</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section id="failure-types">
+					<div class="section-kicker">Failure Analysis</div>
+					<h2>The RAG failure modes worth isolating</h2>
+					<p>Strong RAG evals are built around concrete failure modes rather than abstract scoreboards.</p>
+
+					<div class="failure-grid">
+						<div class="failure-card">
+							<h3>Missed evidence</h3>
+							<p>The correct information exists in the corpus but the retriever fails to surface it.</p>
+						</div>
+						<div class="failure-card warning">
+							<h3>Distracting evidence</h3>
+							<p>The retriever returns passages that look relevant but actually push the answer toward the wrong interpretation.</p>
+						</div>
+						<div class="failure-card risk">
+							<h3>Ungrounded synthesis</h3>
+							<p>The answer mixes retrieved facts with unsupported claims, invented constraints, or overconfident interpolation.</p>
+						</div>
+						<div class="failure-card warning">
+							<h3>Bad citations</h3>
+							<p>The answer cites text that is adjacent to the claim, only partially supportive, or unrelated to the exact statement.</p>
+						</div>
+					</div>
+
+					<p>These categories matter because each one points to a different engineering response. Missed evidence may require better chunking, metadata, or ranking. Ungrounded synthesis may require a stricter generation prompt or a different rubric. Bad citations may reflect answer formatting logic rather than retrieval quality.</p>
+				</section>
+
+				<section id="dataset-design">
+					<div class="section-kicker">Dataset Design</div>
+					<h2>What a RAG eval dataset should include</h2>
+					<p>RAG datasets should not consist only of question-answer pairs. They should also preserve what evidence should be available, what evidence should not be used, and how the system should behave when the corpus is incomplete.</p>
+					<ul>
+						<li><strong>Answerable queries:</strong> cases where the corpus clearly contains the answer.</li>
+						<li><strong>Unanswerable queries:</strong> cases where the system should say the corpus does not support a definitive answer.</li>
+						<li><strong>Conflicting evidence:</strong> cases where documents disagree and the system must reflect uncertainty or explain the discrepancy.</li>
+						<li><strong>Near-match traps:</strong> cases where documents look related but answer a different question.</li>
+						<li><strong>Citation-sensitive cases:</strong> claims where precise source mapping matters, especially in policy, legal, medical, or enterprise knowledge settings.</li>
+					</ul>
+					<p>This is one reason RAG evaluation depends heavily on the dataset design discipline described in the eval data article. Without well-structured scenarios, retrieval results are hard to interpret.</p>
+				</section>
+
+				<section id="example">
+					<div class="section-kicker">Example</div>
+					<h2>A concrete RAG eval example</h2>
+					<p>Imagine an internal policy assistant answering benefits questions from an enterprise handbook corpus. A user asks whether unused leave can be carried over into next year.</p>
+
+					<table class="rag-table">
+						<thead>
+							<tr>
+								<th>Field</th>
+								<th>Example</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Query</td>
+								<td>"Can I carry over my unused leave balance into next year?"</td>
+							</tr>
+							<tr>
+								<td>Required evidence</td>
+								<td>The leave policy section defining carryover limits, expiration timing, and any regional exceptions.</td>
+							</tr>
+							<tr>
+								<td>Retrieval expectation</td>
+								<td>The system should retrieve the relevant policy section rather than general PTO descriptions or unrelated holiday rules.</td>
+							</tr>
+							<tr>
+								<td>Grounding expectation</td>
+								<td>The answer should state the carryover rule exactly as written and note exceptions only if they are documented in the retrieved material.</td>
+							</tr>
+							<tr>
+								<td>Citation expectation</td>
+								<td>The cited passage should specifically contain the carryover rule, not just a nearby section from the same handbook.</td>
+							</tr>
+							<tr>
+								<td>Failure behavior</td>
+								<td>If region-specific information is missing, the system should say so rather than inventing an exception policy.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<p>This one case can reveal several different system weaknesses. The value of the eval is not just the score. The value is the ability to isolate which layer failed.</p>
+				</section>
+
+				<section id="common-mistakes">
+					<div class="section-kicker">Pitfalls</div>
+					<h2>Common RAG eval mistakes</h2>
+					<ul>
+						<li><strong>Using answer correctness as the only metric:</strong> this hides whether the problem was retrieval, grounding, or citation quality.</li>
+						<li><strong>Ignoring unanswerable cases:</strong> good RAG systems must know when the corpus does not justify an answer.</li>
+						<li><strong>Scoring citations loosely:</strong> document-level overlap is often too weak when claim-level support is what matters.</li>
+						<li><strong>Evaluating only ideal queries:</strong> real users ask vague, incomplete, or poorly phrased questions that stress retrieval differently.</li>
+						<li><strong>Blaming the model for corpus gaps:</strong> some failures should trigger corpus improvement rather than prompt iteration.</li>
+					</ul>
+					<div class="takeaway-box">
+						<p><strong>Useful discipline:</strong> every failed RAG case should lead to one of four diagnoses: corpus problem, retrieval problem, grounding problem, or answer-presentation problem. If the diagnosis is always vague, the eval design needs work.</p>
+					</div>
+				</section>
+
+				<section id="how-to-start">
+					<div class="section-kicker">Action</div>
+					<h2>How teams should start evaluating RAG in practice</h2>
+					<ol>
+						<li>Identify the highest-value question types users actually ask.</li>
+						<li>Create labeled cases with expected evidence, not just expected answers.</li>
+						<li>Separate retrieval, grounding, and citation scoring.</li>
+						<li>Add unanswerable and conflicting-evidence scenarios early.</li>
+						<li>Review failures by layer so engineering effort goes to the real source of error.</li>
+					</ol>
+					<p>Teams do not need a perfect benchmark on day one. They do need a benchmark that reflects how RAG systems actually fail.</p>
+				</section>
+
+				<section id="series-links">
+					<div class="section-kicker">Related Reading</div>
+					<h2>Part of the evals series</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design for AI Evals</a></li>
+						<li><a href="/agentic/observe/build-time-evals.html">Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems</a></li>
+						<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>

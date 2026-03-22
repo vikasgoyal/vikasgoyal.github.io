@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems</title>
+		<meta name="description" content="A practical guide to build-time evals for AI systems: regression suites, prompt and workflow iteration, CI/CD integration, release gates, failure triage, and how to keep changes measurable during development.">
+		<meta name="keywords" content="build-time evals, AI regression testing, CI/CD for AI, release gates, LLM evaluation, agent evaluation, eval workflows">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/build-time-evals.html">
+
+		<meta property="og:title" content="Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems">
+		<meta property="og:description" content="How teams should run evals during development so prompt, retrieval, and agent changes are judged against stable datasets instead of demos and intuition.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/build-time-evals.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems">
+		<meta name="twitter:description" content="A practical guide to running evals during AI development using regression suites, CI/CD checks, and release gates.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems",
+			"description": "A practical guide to build-time evals for AI systems: regression suites, prompt and workflow iteration, CI/CD integration, release gates, failure triage, and how to keep changes measurable during development.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-22",
+			"dateModified": "2026-03-22",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/build-time-evals.html"
+			},
+			"keywords": "build-time evals, AI regression testing, CI/CD for AI, release gates, agent evaluation"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--build-ink: #182131;
+				--build-slate: #4b5565;
+				--build-border: #d8dde6;
+				--build-panel: #f8fafc;
+				--build-blue-soft: #dbeafe;
+				--build-green: #166534;
+				--build-green-soft: #dcfce7;
+				--build-amber: #92400e;
+				--build-amber-soft: #fef3c7;
+				--build-red-soft: #fee2e2;
+			}
+
+			.build-article {
+				color: var(--build-ink);
+			}
+
+			.build-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 50%, #fff7ed 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.build-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--build-panel);
+				border: 1px solid var(--build-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.build-article h1,
+			.build-article h2,
+			.build-article h3 {
+				color: #0f172a;
+			}
+
+			.build-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.build-article p {
+				margin-bottom: 0.9em;
+				color: var(--build-slate);
+				line-height: 1.76;
+			}
+
+			.build-article strong {
+				color: #0f172a;
+			}
+
+			.build-article p:last-child,
+			.build-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--build-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--build-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--build-green-soft);
+				color: var(--build-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.workflow-grid,
+			.risk-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.1em;
+			}
+
+			.workflow-card,
+			.risk-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--build-border);
+				border-radius: 14px;
+			}
+
+			.workflow-card h3,
+			.risk-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.workflow-card p,
+			.risk-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.workflow-card.highlight {
+				background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+				border-color: #bfdbfe;
+			}
+
+			.risk-card.warning {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.risk-card.danger {
+				background: linear-gradient(135deg, #ffffff 0%, var(--build-red-soft) 100%);
+				border-color: #fca5a5;
+			}
+
+			table.build-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.build-table th,
+			.build-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.build-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.build-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.build-article ul,
+			.build-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.build-article li {
+				margin-bottom: 0.65em;
+				color: var(--build-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 768px) {
+				.build-article header,
+				.build-article section,
+				.workflow-card,
+				.risk-card,
+				.build-table th,
+				.build-table td {
+					padding: 1.05em;
+				}
+
+				.workflow-grid,
+				.risk-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="build-article">
+				<header>
+					<h1>Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems</h1>
+					<p style="font-style: italic;">The right moment to discover quality regressions is during development, not after the system has already reached users.</p>
+					<div style="margin-top: 0.95em;">
+						<a href="/agentic/observe/eval-content-map.html" style="display: inline-flex; align-items: center; padding: 0.5em 0.85em; border-radius: 999px; background: rgba(255, 255, 255, 0.88); border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; font-weight: 600;">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> build-time evals turn AI development into a measurable engineering process by checking prompts, retrieval, tools, workflows, and agent behavior against stable datasets before release.</p>
+					</div>
+				</header>
+
+				<section id="why-build-time-evals-exist">
+					<div class="section-kicker">Lifecycle</div>
+					<h2>What build-time evals are really for</h2>
+					<p>Pre-build evals define what good should look like. Runtime evals tell you how the live system behaves under real traffic. Build-time evals sit between those two moments. Their job is to determine whether changes made during development actually improve the system or quietly make it worse.</p>
+					<p>This matters because AI systems are unusually sensitive to change. A prompt revision can improve tone while degrading accuracy. A retrieval tweak can increase recall while reducing grounding. A new tool policy can improve autonomy but introduce silent failures. If teams rely on demos or subjective inspection, they will often ship regressions without realizing it.</p>
+					<p>Build-time evals create a disciplined loop: make a change, run the evaluation suite, inspect where quality moved, and decide whether the change is worth keeping. That is how AI development becomes engineering rather than trial and error.</p>
+				</section>
+
+				<section id="what-they-answer">
+					<div class="section-kicker">Questions</div>
+					<h2>The questions build-time evals should answer</h2>
+					<div class="workflow-grid">
+						<div class="workflow-card highlight">
+							<h3>Did this change improve the target behavior?</h3>
+							<p>Quality should be judged on the intended dimensions such as correctness, groundedness, tool use, or task completion, not just on subjective impressions.</p>
+						</div>
+						<div class="workflow-card">
+							<h3>What did it break elsewhere?</h3>
+							<p>Every material change should be checked against regression cases and critical task families so local gains do not produce hidden losses.</p>
+						</div>
+						<div class="workflow-card">
+							<h3>Is the improvement stable enough to merge?</h3>
+							<p>The point is not merely to win one cherry-picked example. The point is to improve the broader evaluation set with acceptable variance.</p>
+						</div>
+						<div class="workflow-card highlight">
+							<h3>Should release be blocked?</h3>
+							<p>Some failures are cosmetic. Some affect business-critical or policy-sensitive behavior. Build-time evals should support explicit release gates based on risk.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="what-to-run">
+					<div class="section-kicker">Scope</div>
+					<h2>What should be evaluated during development</h2>
+					<p>Teams often think only about prompt testing, but build-time evals should cover the full implementation surface that can change system behavior.</p>
+					<ul>
+						<li><strong>Prompt and instruction changes:</strong> output quality, instruction following, refusal behavior, and format compliance.</li>
+						<li><strong>Retrieval changes:</strong> relevance, grounding quality, citation fidelity, and failure behavior when evidence is weak or conflicting.</li>
+						<li><strong>Tooling changes:</strong> tool selection, parameter extraction, sequencing, retries, and recovery from tool errors.</li>
+						<li><strong>Workflow changes:</strong> orchestration logic, planner-executor handoffs, routing, and escalation conditions.</li>
+						<li><strong>Model changes:</strong> accuracy, consistency, latency, cost, and behavioral drift across task families.</li>
+					</ul>
+					<p>If a change can alter user-visible behavior or operational risk, it belongs inside the build-time evaluation discipline.</p>
+				</section>
+
+				<section id="suite-shape">
+					<div class="section-kicker">Regression Suite</div>
+					<h2>How to structure the evaluation suite</h2>
+					<p>A useful build-time suite should not be one giant bucket of examples. Different sets serve different decision speeds.</p>
+
+					<table class="build-table">
+						<thead>
+							<tr>
+								<th>Suite</th>
+								<th>Purpose</th>
+								<th>When to run</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Smoke evals</td>
+								<td>Catch obvious breakage in critical flows quickly.</td>
+								<td>On every local change or pull request.</td>
+							</tr>
+							<tr>
+								<td>Golden set regressions</td>
+								<td>Protect business-critical behavior and known fragile cases.</td>
+								<td>On pull request and before merge.</td>
+							</tr>
+							<tr>
+								<td>Broader scenario suite</td>
+								<td>Measure wider quality movement across task families and long-tail scenarios.</td>
+								<td>Nightly, pre-release, or for major changes.</td>
+							</tr>
+							<tr>
+								<td>Adversarial and policy suite</td>
+								<td>Check red-flag behaviors such as unsafe outputs, prompt injection susceptibility, or policy bypass.</td>
+								<td>Before release and on security-sensitive changes.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="takeaway-box">
+						<p><strong>Practical pattern:</strong> fast suites keep development moving, while broader suites provide confidence before release. Trying to use one suite for both goals usually produces either slow iteration or weak protection.</p>
+					</div>
+				</section>
+
+				<section id="ci-cd">
+					<div class="section-kicker">Workflow</div>
+					<h2>How build-time evals fit into CI/CD</h2>
+					<p>Build-time evals should be treated like a normal part of the software delivery pipeline rather than an optional offline exercise. A strong workflow usually looks like this:</p>
+					<ol>
+						<li>A developer changes a prompt, retrieval configuration, tool policy, model, or orchestration rule.</li>
+						<li>The pull request triggers a targeted evaluation suite.</li>
+						<li>Results are compared against the previous baseline or approved benchmark.</li>
+						<li>Failures are grouped by scenario, dimension, and severity.</li>
+						<li>Merge or release is blocked when critical thresholds fail.</li>
+						<li>Approved changes update the benchmark only through explicit review rather than silent baseline drift.</li>
+					</ol>
+					<p>This process does not need to be heavy on day one. The important point is that evaluation becomes part of the delivery contract, not an afterthought left to occasional manual review.</p>
+				</section>
+
+				<section id="release-gates">
+					<div class="section-kicker">Governance</div>
+					<h2>Release gates should be risk-based, not score-obsessed</h2>
+					<p>One of the most common mistakes in AI evaluation is reducing release decisions to a single number. A system may have a high overall score and still fail on the handful of scenarios that matter most. That is why release gates should be designed around risk tiers and critical behaviors rather than only average performance.</p>
+					<p>A practical release policy might allow minor regressions in low-risk style or wording tasks while blocking any change that harms policy compliance, tool correctness, financial accuracy, or safety-sensitive behavior. This is closer to how mature engineering teams treat incidents and SLAs: not all failures carry the same weight.</p>
+					<div class="risk-grid">
+						<div class="risk-card">
+							<h3>Low-risk gates</h3>
+							<p>Formatting, style consistency, or minor verbosity changes that do not alter core outcomes.</p>
+						</div>
+						<div class="risk-card warning">
+							<h3>Medium-risk gates</h3>
+							<p>Task completion quality, grounding quality, or moderate workflow regressions that degrade usefulness but do not violate policy.</p>
+						</div>
+						<div class="risk-card danger">
+							<h3>High-risk gates</h3>
+							<p>Unsafe outputs, policy violations, wrong tool execution, privilege mistakes, or failures in regulated or customer-visible workflows.</p>
+						</div>
+						<div class="risk-card">
+							<h3>Executive gates</h3>
+							<p>Cost, latency, and operational viability checks that determine whether the proposed design can scale sustainably.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="failure-triage">
+					<div class="section-kicker">Diagnosis</div>
+					<h2>How teams should triage failed evals</h2>
+					<p>Failed evals are useful only if they lead to the right fix. That requires classifying the source of failure rather than treating every failure as a generic model problem.</p>
+					<ul>
+						<li><strong>Prompt failures:</strong> unclear instructions, missing constraints, or prompt conflicts.</li>
+						<li><strong>Retrieval failures:</strong> missing evidence, poor chunking, bad ranking, or grounding mistakes.</li>
+						<li><strong>Tool failures:</strong> wrong tool choice, bad parameters, missing retries, or error handling gaps.</li>
+						<li><strong>Workflow failures:</strong> poor routing, bad handoffs, missing clarifications, or escalation logic flaws.</li>
+						<li><strong>Evaluation failures:</strong> ambiguous rubric, bad labels, unstable judge behavior, or stale datasets.</li>
+					</ul>
+					<p>That last category matters more than many teams expect. Sometimes the system is not what is broken. The evaluation setup is.</p>
+				</section>
+
+				<section id="example">
+					<div class="section-kicker">Example</div>
+					<h2>A practical build-time evaluation loop</h2>
+					<p>Imagine a team improving a support agent that uses retrieval plus tools. They revise the retrieval prompt, add a clarification rule, and tighten ticket-creation logic. A healthy build-time process would not stop at “the new demo feels better.” It would run the change against several sets:</p>
+					<ul>
+						<li>Critical outage and billing cases from the golden set.</li>
+						<li>Known regressions where the agent previously hallucinated status or skipped a required lookup.</li>
+						<li>Adversarial cases that try to trigger unsupported actions.</li>
+						<li>Broader scenario cases to check whether the clarification rule now over-fires on ordinary queries.</li>
+					</ul>
+					<p>If grounding improves but clarification prompts spike unnecessarily, the team has a real engineering tradeoff to manage. That is exactly what build-time evals are supposed to expose.</p>
+				</section>
+
+				<section id="common-mistakes">
+					<div class="section-kicker">Pitfalls</div>
+					<h2>Common build-time eval mistakes</h2>
+					<ul>
+						<li><strong>Using only demos:</strong> this creates false confidence and hides regressions on long-tail or messy inputs.</li>
+						<li><strong>Running only one big suite:</strong> it slows iteration and encourages people to skip evals during development.</li>
+						<li><strong>Letting baselines drift silently:</strong> benchmark updates should be reviewed, versioned, and explained.</li>
+						<li><strong>Treating average score as the decision:</strong> critical-path failures must carry more weight than cosmetic wins.</li>
+						<li><strong>Ignoring latency and cost:</strong> quality improvements that destroy response time or operating cost may not be shippable.</li>
+					</ul>
+					<div class="takeaway-box">
+						<p><strong>Build-time discipline:</strong> the goal is not to prove the system is perfect. The goal is to make quality movement visible enough that teams can change the system intentionally rather than accidentally.</p>
+					</div>
+				</section>
+
+				<section id="series-links">
+					<div class="section-kicker">Related Reading</div>
+					<h2>Part of the evals series</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design for AI Evals</a></li>
+						<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>

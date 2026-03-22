@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Datasets, Golden Sets, and Scenario Design for AI Evals</title>
+		<meta name="description" content="A practical guide to designing evaluation datasets for AI systems: golden sets, scenario libraries, edge cases, adversarial cases, dataset versioning, and how to build eval data that reflects real work.">
+		<meta name="keywords" content="AI eval datasets, golden sets, scenario design, eval data, LLM evaluation, agent evaluation, RAG evaluation, dataset versioning">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/data-design-evals.html">
+
+		<meta property="og:title" content="Datasets, Golden Sets, and Scenario Design for AI Evals">
+		<meta property="og:description" content="How to design evaluation datasets that reflect real AI work: golden sets, scenario libraries, edge cases, adversarial coverage, and dataset versioning.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/data-design-evals.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Datasets, Golden Sets, and Scenario Design for AI Evals">
+		<meta name="twitter:description" content="A practical guide to building eval datasets for AI systems that measure real performance instead of demo quality.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Datasets, Golden Sets, and Scenario Design for AI Evals",
+			"description": "A practical guide to designing evaluation datasets for AI systems: golden sets, scenario libraries, edge cases, adversarial cases, dataset versioning, and how to build eval data that reflects real work.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-22",
+			"dateModified": "2026-03-22",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/data-design-evals.html"
+			},
+			"keywords": "AI eval datasets, golden sets, scenario design, eval data, LLM evaluation, agent evaluation"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--data-ink: #182131;
+				--data-slate: #4b5565;
+				--data-border: #d8dde6;
+				--data-panel: #f8fafc;
+				--data-blue: #0f4c81;
+				--data-blue-soft: #dbeafe;
+				--data-green: #0f766e;
+				--data-green-soft: #ccfbf1;
+				--data-amber: #92400e;
+				--data-amber-soft: #fef3c7;
+				--data-rose-soft: #ffe4e6;
+			}
+
+			.data-article {
+				color: var(--data-ink);
+			}
+
+			.data-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #ecfeff 50%, #fff7ed 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.data-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--data-panel);
+				border: 1px solid var(--data-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.data-article h1,
+			.data-article h2,
+			.data-article h3 {
+				color: #0f172a;
+			}
+
+			.data-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.data-article p {
+				margin-bottom: 0.9em;
+				color: var(--data-slate);
+				line-height: 1.76;
+			}
+
+			.data-article strong {
+				color: #0f172a;
+			}
+
+			.data-article p:last-child,
+			.data-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--data-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--data-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--data-green-soft);
+				color: var(--data-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.principle-grid,
+			.case-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.1em;
+			}
+
+			.principle-card,
+			.case-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--data-border);
+				border-radius: 14px;
+			}
+
+			.principle-card h3,
+			.case-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.principle-card p,
+			.case-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.principle-card.highlight {
+				background: linear-gradient(135deg, #ffffff 0%, #ecfeff 100%);
+				border-color: #a5f3fc;
+			}
+
+			.case-card.warning {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.case-card.risk {
+				background: linear-gradient(135deg, #ffffff 0%, var(--data-rose-soft) 100%);
+				border-color: #fecdd3;
+			}
+
+			table.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.data-table th,
+			.data-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.data-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.data-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.data-article ul,
+			.data-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.data-article li {
+				margin-bottom: 0.65em;
+				color: var(--data-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 768px) {
+				.data-article header,
+				.data-article section,
+				.principle-card,
+				.case-card,
+				.data-table th,
+				.data-table td {
+					padding: 1.05em;
+				}
+
+				.principle-grid,
+				.case-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="data-article">
+				<header>
+					<h1>Datasets, Golden Sets, and Scenario Design for AI Evals</h1>
+					<p style="font-style: italic;">If you do not design the evaluation data carefully, your evals will measure demo performance instead of production readiness.</p>
+					<div style="margin-top: 0.95em;">
+						<a href="/agentic/observe/eval-content-map.html" style="display: inline-flex; align-items: center; padding: 0.5em 0.85em; border-radius: 999px; background: rgba(255, 255, 255, 0.88); border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; font-weight: 600;">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> an eval is only as good as the data behind it. Strong AI evaluation starts with well-designed scenario sets, representative examples, edge cases, and versioned golden datasets that reflect real work.</p>
+					</div>
+				</header>
+
+				<section id="why-data-design-matters">
+					<div class="section-kicker">Foundation</div>
+					<h2>Why data design is the real foundation of eval quality</h2>
+					<p>Teams often jump too quickly to scorers, dashboards, and pass rates. Those matter, but they sit on top of a simpler question: what examples are you using to judge the system in the first place? If the evaluation set is too easy, too clean, too synthetic, or too narrow, the resulting score will create false confidence.</p>
+					<p>A weak dataset usually reflects what was convenient to collect rather than what the live system will actually face. That leads to familiar failure modes. The model performs well on curated prompts but struggles with vague or messy inputs. Retrieval quality looks strong on idealized examples but breaks on sparse evidence or conflicting documentation. An agent appears reliable until multi-step cases, exception handling, or policy boundaries show up in production.</p>
+					<p>The practical lesson is simple: eval data is not clerical setup work. It is part of product design, risk management, and system architecture. A well-designed dataset makes quality measurable. A poorly designed one makes quality look measurable.</p>
+				</section>
+
+				<section id="what-a-good-set-does">
+					<div class="section-kicker">Purpose</div>
+					<h2>What a good eval dataset should do</h2>
+					<p>A useful dataset should do more than provide examples. It should act as a compact representation of the work, failure modes, and risk boundaries that matter for the system.</p>
+
+					<div class="principle-grid">
+						<div class="principle-card highlight">
+							<h3>Reflect reality</h3>
+							<p>Use examples that resemble live traffic, real documents, authentic user phrasing, and actual operational constraints rather than polished demo inputs.</p>
+						</div>
+						<div class="principle-card">
+							<h3>Represent diversity</h3>
+							<p>Include easy cases, hard cases, ambiguous cases, rare but critical cases, and cases that expose boundary conditions.</p>
+						</div>
+						<div class="principle-card">
+							<h3>Enable diagnosis</h3>
+							<p>Structure each item so teams can tell whether failure came from intent detection, retrieval, reasoning, tool use, or final response generation.</p>
+						</div>
+						<div class="principle-card highlight">
+							<h3>Support iteration</h3>
+							<p>Keep the dataset versioned and extensible so new incidents, regressions, and emerging use cases can be added without losing historical comparability.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="golden-sets">
+					<div class="section-kicker">Golden Sets</div>
+					<h2>What a golden set is and what it is not</h2>
+					<p>A golden set is a trusted evaluation subset that represents the most important scenarios for judging whether a system is good enough to ship or safe enough to scale. It should not be confused with the entire evaluation corpus. The full corpus may be broad and evolving. The golden set is the smaller, higher-confidence subset used for stable comparison and regression decisions.</p>
+					<p>In practice, a good golden set usually contains examples that are business-critical, user-visible, and historically fragile. It should include tasks where correctness matters, policy-sensitive cases, and representative failure modes that teams never want to reintroduce.</p>
+					<div class="takeaway-box">
+						<p><strong>Rule of thumb:</strong> the golden set is for trust and release decisions. The larger scenario library is for discovery, diagnosis, and broad system understanding.</p>
+					</div>
+				</section>
+
+				<section id="scenario-types">
+					<div class="section-kicker">Coverage</div>
+					<h2>The scenario types every serious eval program needs</h2>
+					<p>Many teams over-sample the happy path because those examples are easier to collect and easier to score. That creates a false sense of coverage. Strong datasets deliberately combine multiple scenario types.</p>
+
+					<div class="case-grid">
+						<div class="case-card">
+							<h3>Representative cases</h3>
+							<p>Common tasks and common user phrasing. These tell you whether the system performs well on mainstream traffic.</p>
+						</div>
+						<div class="case-card warning">
+							<h3>Edge cases</h3>
+							<p>Rare formats, incomplete information, mixed intents, or awkward inputs that often break brittle prompt or parsing logic.</p>
+						</div>
+						<div class="case-card risk">
+							<h3>Adversarial cases</h3>
+							<p>Prompt injection attempts, policy evasion, manipulative instructions, and cases designed to induce unsafe or non-compliant behavior.</p>
+						</div>
+						<div class="case-card">
+							<h3>Regression cases</h3>
+							<p>Real failures that have already occurred in testing or production. These should become permanent members of the dataset unless the product has fundamentally changed.</p>
+						</div>
+					</div>
+
+					<p>For agentic systems, scenario design should also include <strong>trajectory-sensitive cases</strong>: tasks where the path matters, not just the final answer. For RAG systems, it should include cases with missing evidence, conflicting evidence, and evidence that appears relevant but should not be used.</p>
+				</section>
+
+				<section id="dataset-schema">
+					<div class="section-kicker">Structure</div>
+					<h2>What fields each eval item should carry</h2>
+					<p>If every example is just a raw prompt and an expected answer, teams will struggle to diagnose failures or reuse the data across evaluation methods. Eval items should carry enough metadata to support filtering, scoring, and analysis.</p>
+
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>Field</th>
+								<th>Why it matters</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Scenario ID</td>
+								<td>Provides a stable identifier for regression tracking, failure discussion, and version history.</td>
+							</tr>
+							<tr>
+								<td>Task or intent label</td>
+								<td>Allows comparison across task families such as search, extraction, routing, summarization, or tool invocation.</td>
+							</tr>
+							<tr>
+								<td>Input payload</td>
+								<td>Stores the actual prompt, conversation turn, document set, or tool context used for evaluation.</td>
+							</tr>
+							<tr>
+								<td>Expected behavior</td>
+								<td>Defines what the system should do, not only what it should say. This is especially important for agents and RAG systems.</td>
+							</tr>
+							<tr>
+								<td>Rubric or checks</td>
+								<td>Specifies how the example will be judged: exact match, rubric, judge model, tool trace inspection, or human review.</td>
+							</tr>
+							<tr>
+								<td>Risk level</td>
+								<td>Helps separate high-impact failures from cosmetic ones and supports weighted reporting.</td>
+							</tr>
+							<tr>
+								<td>Source</td>
+								<td>Captures whether the case came from design review, production logs, customer support incidents, or synthetic generation.</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section id="where-data-comes-from">
+					<div class="section-kicker">Sourcing</div>
+					<h2>Where good eval data comes from</h2>
+					<p>The strongest datasets typically combine several sources rather than relying on one. Product and domain teams contribute expected workflows and policy-sensitive cases. Production logs contribute realism and frequency. Incident reviews contribute regressions and adversarial examples. Synthetic generation can extend coverage, but it should usually follow human-defined scenario templates rather than replace them.</p>
+					<p>A useful hierarchy is to trust sources differently. Real production cases often have the highest realism. Domain expert-designed cases often have the clearest intent and policy framing. Synthetic cases are best used to expand combinatorial coverage or stress specific dimensions after the team already understands the live problem space.</p>
+					<ul>
+						<li><strong>Product and operations:</strong> bring business-critical tasks and workflow expectations.</li>
+						<li><strong>Support and incident history:</strong> reveal where users actually get confused and where the system has already failed.</li>
+						<li><strong>Telemetry and logs:</strong> provide authentic phrasing, distribution patterns, and long-tail cases.</li>
+						<li><strong>Synthetic generation:</strong> helps expand coverage, but should be constrained by real scenario design.</li>
+					</ul>
+				</section>
+
+				<section id="versioning">
+					<div class="section-kicker">Lifecycle</div>
+					<h2>Version datasets like you version code</h2>
+					<p>Evaluation data changes for legitimate reasons. The product changes. Policies change. New tools are added. User behavior shifts. Production incidents reveal missing cases. That means dataset versioning is not optional if you want evaluation results to remain interpretable over time.</p>
+					<p>At minimum, teams should track when cases were added, removed, or re-labeled, and why. If a golden set changes, release comparisons should clearly state whether the system improved or whether the benchmark changed. Without that discipline, score trends become hard to trust.</p>
+					<p>A practical approach is to keep three layers:</p>
+					<ol>
+						<li>A stable golden set for release and regression decisions.</li>
+						<li>An expanding broader scenario library for discovery and diagnosis.</li>
+						<li>A quarantine area for newly collected production failures that still need cleanup, labeling, or rubric definition.</li>
+					</ol>
+				</section>
+
+				<section id="example">
+					<div class="section-kicker">Example</div>
+					<h2>A concrete example of a useful eval item</h2>
+					<p>Consider an enterprise support agent that can answer product questions, retrieve account status, and open tickets through tools. A useful eval item for that system should capture more than the wording of the user request.</p>
+
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>Field</th>
+								<th>Example</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Scenario ID</td>
+								<td>GS-024</td>
+							</tr>
+							<tr>
+								<td>User request</td>
+								<td>"Our analytics dashboard has been down since this morning. Can you check whether there is an active incident on our account and open a severity-one ticket if needed?"</td>
+							</tr>
+							<tr>
+								<td>Expected behavior</td>
+								<td>Identify incident-check intent, call the incident lookup tool with the correct account, ask a clarifying question only if account identity is missing, and open a severity-one ticket only when the conditions in policy are satisfied.</td>
+							</tr>
+							<tr>
+								<td>Failure modes to watch</td>
+								<td>Skipping the lookup, hallucinating incident status, opening a ticket prematurely, or failing to explain the decision.</td>
+							</tr>
+							<tr>
+								<td>Scoring</td>
+								<td>Programmatic checks for tool selection and parameters, plus rubric scoring for explanation quality and policy adherence.</td>
+							</tr>
+							<tr>
+								<td>Risk level</td>
+								<td>High, because incorrect escalation can create operational noise or compliance issues.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<p>This kind of item supports deeper analysis than a plain question-answer pair. It can reveal whether the failure came from intent classification, parameter extraction, tool policy, or final explanation.</p>
+				</section>
+
+				<section id="common-mistakes">
+					<div class="section-kicker">Pitfalls</div>
+					<h2>Common dataset design mistakes</h2>
+					<ul>
+						<li><strong>Using only ideal prompts:</strong> this measures best-case behavior rather than user reality.</li>
+						<li><strong>Over-relying on synthetic data:</strong> synthetic coverage can help, but it often misses real ambiguity and real-world messiness.</li>
+						<li><strong>Mixing scoring goals:</strong> not every item needs the same scoring method, but every item should have a clear evaluation intent.</li>
+						<li><strong>Ignoring distribution shift:</strong> datasets must evolve when products, users, documents, or policies change.</li>
+						<li><strong>Failing to preserve regressions:</strong> once a bug is found, its scenario should usually stay in the evaluation set permanently.</li>
+					</ul>
+					<div class="takeaway-box">
+						<p><strong>Practical warning:</strong> a clean benchmark that avoids ambiguity may be easier to score, but it often measures the wrong thing. Production systems fail in the messy middle, not only on neat benchmark prompts.</p>
+					</div>
+				</section>
+
+				<section id="how-to-start">
+					<div class="section-kicker">Action</div>
+					<h2>How teams should start in practice</h2>
+					<p>Most teams do not need a massive dataset on day one. They need a useful first version. A practical starting sequence is to identify the most important task families, collect representative and failure-prone scenarios, define expected behavior at the scenario level, and create a small golden set before expanding outward.</p>
+					<ol>
+						<li>List the top task types the system must perform well.</li>
+						<li>Collect real examples from product teams, logs, and known failures.</li>
+						<li>Group them into representative, edge, adversarial, and regression categories.</li>
+						<li>Define expected behavior and scoring strategy per scenario.</li>
+						<li>Freeze a small golden set for stable release decisions.</li>
+						<li>Expand the broader library continuously as incidents and new use cases appear.</li>
+					</ol>
+					<p>This approach creates momentum without pretending the dataset is finished. The point is not to achieve completeness immediately. The point is to create a disciplined, extensible evaluation substrate.</p>
+				</section>
+
+				<section id="series-links">
+					<div class="section-kicker">Related Reading</div>
+					<h2>Part of the evals series</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>

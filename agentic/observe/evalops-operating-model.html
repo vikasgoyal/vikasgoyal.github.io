@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>EvalOps: Operating Model, Ownership, and Evaluation Drift</title>
+		<meta name="description" content="A practical guide to EvalOps for AI systems: ownership, evaluation artifacts, versioning, sign-off, promotion gates, auditability, and how teams manage evaluation drift over time.">
+		<meta name="keywords" content="EvalOps, AI governance, evaluation drift, evaluation artifacts, sign-off, AI release gates, eval operating model, AI quality operations">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/evalops-operating-model.html">
+
+		<meta property="og:title" content="EvalOps: Operating Model, Ownership, and Evaluation Drift">
+		<meta property="og:description" content="How teams turn evaluation from a technique into an operating model with ownership, versioned artifacts, sign-off, and drift management.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/evalops-operating-model.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="EvalOps: Operating Model, Ownership, and Evaluation Drift">
+		<meta name="twitter:description" content="A practical guide to the operating discipline behind AI evaluation programs.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "EvalOps: Operating Model, Ownership, and Evaluation Drift",
+			"description": "A practical guide to EvalOps for AI systems: ownership, evaluation artifacts, versioning, sign-off, promotion gates, auditability, and how teams manage evaluation drift over time.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-22",
+			"dateModified": "2026-03-22",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/evalops-operating-model.html"
+			},
+			"keywords": "EvalOps, AI governance, evaluation drift, evaluation artifacts, release gates"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--ops-ink: #172033;
+				--ops-slate: #475569;
+				--ops-border: #d7dfea;
+				--ops-panel: #f8fafc;
+				--ops-blue-soft: #dbeafe;
+				--ops-green: #0f766e;
+				--ops-green-soft: #ccfbf1;
+				--ops-amber-soft: #fef3c7;
+				--ops-lime-soft: #ecfccb;
+				--ops-rose-soft: #ffe4e6;
+			}
+
+			.ops-article {
+				color: var(--ops-ink);
+			}
+
+			.ops-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 52%, #ecfeff 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.ops-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--ops-panel);
+				border: 1px solid var(--ops-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.ops-article h1,
+			.ops-article h2,
+			.ops-article h3 {
+				color: #0f172a;
+			}
+
+			.ops-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.ops-article p {
+				margin-bottom: 0.9em;
+				color: var(--ops-slate);
+				line-height: 1.76;
+			}
+
+			.ops-article strong {
+				color: #0f172a;
+			}
+
+			.ops-article p:last-child,
+			.ops-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--ops-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--ops-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--ops-green-soft);
+				color: var(--ops-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.ops-grid,
+			.risk-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.1em;
+			}
+
+			.ops-card,
+			.risk-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--ops-border);
+				border-radius: 14px;
+			}
+
+			.ops-card h3,
+			.risk-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.ops-card p,
+			.risk-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.ops-card.highlight {
+				background: linear-gradient(135deg, #ffffff 0%, var(--ops-lime-soft) 100%);
+				border-color: #bef264;
+			}
+
+			.risk-card.warning {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.risk-card.risk {
+				background: linear-gradient(135deg, #ffffff 0%, var(--ops-rose-soft) 100%);
+				border-color: #fecdd3;
+			}
+
+			table.ops-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.ops-table th,
+			.ops-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.ops-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.ops-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.ops-article ul,
+			.ops-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.ops-article li {
+				margin-bottom: 0.65em;
+				color: var(--ops-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 768px) {
+				.ops-article header,
+				.ops-article section,
+				.ops-card,
+				.risk-card,
+				.ops-table th,
+				.ops-table td {
+					padding: 1.05em;
+				}
+
+				.ops-grid,
+				.risk-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="ops-article">
+				<header>
+					<h1>EvalOps: Operating Model, Ownership, and Evaluation Drift</h1>
+					<p style="font-style: italic;">An evaluation program stops being fragile only when it becomes an operating discipline rather than a collection of one-off benchmarks.</p>
+					<div style="margin-top: 0.95em;">
+						<a href="/agentic/observe/eval-content-map.html" style="display: inline-flex; align-items: center; padding: 0.5em 0.85em; border-radius: 999px; background: rgba(255, 255, 255, 0.88); border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; font-weight: 600;">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> EvalOps is the operating model around AI evaluation. It defines who owns evaluation decisions, what artifacts are versioned, how promotion and sign-off work, how drift is handled, and how evaluation evidence becomes auditable enough for real deployment decisions.</p>
+					</div>
+				</header>
+
+				<section id="why-evalops-exists">
+					<div class="section-kicker">Operating Model</div>
+					<h2>Why good eval techniques still fail without EvalOps</h2>
+					<p>Many teams can design a decent dataset, define useful rubrics, and run a benchmark. The harder problem begins later. Who approves changes to the benchmark? Which score counts as the release baseline? Who signs off when a model improves on average but regresses on a critical scenario? When a prompt, tool, or corpus changes, who decides whether the evaluation set should also change?</p>
+					<p>Without clear answers, evaluation becomes inconsistent and political. Scores drift because baselines change silently. Teams overfit to the benchmark because no one owns benchmark health. Release decisions become subjective because no one has authority over critical gates. In practice, the technical eval may exist, but the operating discipline around it does not.</p>
+					<p>EvalOps fills that gap. It turns evaluation from a method into a managed system of ownership, artifacts, review, and traceable decision-making.</p>
+				</section>
+
+				<section id="what-evalops-owns">
+					<div class="section-kicker">Scope</div>
+					<h2>What EvalOps actually owns</h2>
+					<div class="ops-grid">
+						<div class="ops-card highlight">
+							<h3>Evaluation artifacts</h3>
+							<p>Datasets, golden sets, rubrics, judge prompts, scoring logic, baselines, and threshold definitions.</p>
+						</div>
+						<div class="ops-card">
+							<h3>Promotion rules</h3>
+							<p>What must pass before changes move from development to staging to production, and what requires explicit exception approval.</p>
+						</div>
+						<div class="ops-card">
+							<h3>Ownership and sign-off</h3>
+							<p>Who can change the benchmark, who can approve riskier promotions, and who is accountable for evaluation quality in each workflow.</p>
+						</div>
+						<div class="ops-card highlight">
+							<h3>Drift management</h3>
+							<p>How teams detect benchmark staleness, model drift, tool drift, corpus drift, and policy drift without losing historical comparability.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="artifacts">
+					<div class="section-kicker">Artifacts</div>
+					<h2>The evaluation artifacts that should be treated like first-class system assets</h2>
+					<p>One of the clearest signs of EvalOps maturity is whether evaluation assets are treated with the same seriousness as code and infrastructure. If benchmark logic lives in notebooks, reviewers cannot tell what changed, and release gates rely on screenshots or ad hoc commentary, the system is not operationally stable.</p>
+
+					<table class="ops-table">
+						<thead>
+							<tr>
+								<th>Artifact</th>
+								<th>Why it matters</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Datasets and golden sets</td>
+								<td>Define what behavior is being judged and must be versioned when scenarios are added, removed, or relabeled.</td>
+							</tr>
+							<tr>
+								<td>Rubrics and scorer logic</td>
+								<td>Determine how quality is measured and must be stable enough that score changes remain interpretable.</td>
+							</tr>
+							<tr>
+								<td>Baselines and thresholds</td>
+								<td>Define what counts as acceptable and prevent silent movement of release standards.</td>
+							</tr>
+							<tr>
+								<td>Promotion records</td>
+								<td>Capture what changed, what passed, what regressed, and why the release was approved anyway.</td>
+							</tr>
+							<tr>
+								<td>Incident-linked eval cases</td>
+								<td>Turn production failures into permanent evaluation assets rather than one-time lessons.</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section id="ownership">
+					<div class="section-kicker">Responsibility</div>
+					<h2>Ownership should be explicit at three levels</h2>
+					<p>EvalOps often fails because ownership is too vague. “The AI team owns it” is not enough. Mature evaluation programs usually separate ownership into at least three layers.</p>
+					<ol>
+						<li><strong>Workflow owner:</strong> the person accountable for whether the AI behavior is acceptable for the actual business workflow.</li>
+						<li><strong>Evaluation owner:</strong> the person or team responsible for benchmark quality, dataset hygiene, rubric stability, and score interpretation.</li>
+						<li><strong>Release authority:</strong> the person or committee that decides whether a change can move forward when tradeoffs or risks remain.</li>
+					</ol>
+					<p>Sometimes one team plays multiple roles. The important thing is not organizational purity. The important thing is that the decision rights are explicit before the release pressure arrives.</p>
+				</section>
+
+				<section id="signoff-and-gates">
+					<div class="section-kicker">Promotion</div>
+					<h2>Release sign-off should be tied to evaluation evidence, not intuition</h2>
+					<p>EvalOps is where technical evaluation becomes a release discipline. A promotion decision should answer a clear chain of questions: what changed, what evaluation suites ran, which critical cases improved or regressed, which thresholds passed, what residual risks remain, and who accepted them.</p>
+					<p>That does not mean every release needs a large committee. It means approval should be evidence-based and repeatable. If the only release logic is “the demo looked good,” the organization does not have EvalOps. It has optimism.</p>
+					<div class="takeaway-box">
+						<p><strong>Useful default:</strong> require stronger sign-off as autonomy, blast radius, or regulatory sensitivity increase. A low-risk summarization change and a high-risk tool-execution change should not follow the same promotion standard.</p>
+					</div>
+				</section>
+
+				<section id="drift">
+					<div class="section-kicker">Drift</div>
+					<h2>Evaluation drift is an operating problem, not just a model problem</h2>
+					<p>Teams often talk about model drift, but evaluation drift matters just as much. Evaluation drift happens when the benchmark stops representing the real problem, when judge behavior changes, when corpus or tool changes make old cases misleading, or when teams quietly reshape thresholds to preserve a comforting score.</p>
+					<p>That means EvalOps needs drift controls across multiple layers:</p>
+					<ul>
+						<li><strong>Dataset drift:</strong> the scenario mix no longer reflects real traffic or current risk.</li>
+						<li><strong>Scorer drift:</strong> model-as-judge behavior changes or rubric interpretation becomes unstable.</li>
+						<li><strong>System drift:</strong> prompts, tools, models, retrieval sources, or policies change enough that old baselines become misleading.</li>
+						<li><strong>Governance drift:</strong> sign-off rules weaken over time and exceptions become routine.</li>
+					</ul>
+					<p>The point is not to freeze the benchmark forever. The point is to evolve it deliberately, with traceability.</p>
+				</section>
+
+				<section id="auditability">
+					<div class="section-kicker">Auditability</div>
+					<h2>Why auditable evidence matters</h2>
+					<p>As AI systems become more consequential, teams need to explain not just what the system did, but why it was considered acceptable to deploy. That requires auditable evaluation evidence. For some teams this is about internal governance. For others it is about compliance, customer trust, or incident response. In all cases, the discipline is similar: preserve the benchmark definition, the scoring logic, the promotion decision, and the rationale behind exceptions.</p>
+					<p>Auditable does not necessarily mean bureaucratic. It means someone reviewing a future incident can reconstruct what the organization believed at release time and what evidence supported that judgment.</p>
+				</section>
+
+				<section id="common-failures">
+					<div class="section-kicker">Failure Modes</div>
+					<h2>The most common EvalOps breakdowns</h2>
+
+					<div class="risk-grid">
+						<div class="risk-card warning">
+							<h3>Silent benchmark changes</h3>
+							<p>Cases are added, removed, or relabeled without enough explanation to preserve comparability.</p>
+						</div>
+						<div class="risk-card risk">
+							<h3>Unowned release gates</h3>
+							<p>Everyone assumes someone else will decide whether a risky regression is acceptable.</p>
+						</div>
+						<div class="risk-card warning">
+							<h3>Exception sprawl</h3>
+							<p>Temporary waivers become the normal path, weakening the credibility of the entire evaluation program.</p>
+						</div>
+						<div class="risk-card risk">
+							<h3>No feedback loop from incidents</h3>
+							<p>Production failures are handled operationally but never converted into permanent evaluation assets.</p>
+						</div>
+					</div>
+
+					<div class="takeaway-box">
+						<p><strong>Useful test:</strong> if you cannot answer who owns the benchmark, which version is current, what changed last week, and why a recent release was approved, then EvalOps is still immature.</p>
+					</div>
+				</section>
+
+				<section id="how-to-start">
+					<div class="section-kicker">Action</div>
+					<h2>How teams should start in practice</h2>
+					<ol>
+						<li>Define explicit owners for benchmark quality, workflow risk, and release sign-off.</li>
+						<li>Version datasets, rubrics, scorer logic, baselines, and thresholds.</li>
+						<li>Record promotion decisions with the evaluation evidence used to justify them.</li>
+						<li>Review benchmark drift on a regular cadence rather than only after incidents.</li>
+						<li>Feed production failures and overrides back into the evaluation asset base.</li>
+					</ol>
+					<p>That is enough to establish a real operating model even before the tooling is perfect.</p>
+				</section>
+
+				<section id="series-links">
+					<div class="section-kicker">Related Reading</div>
+					<h2>Part of the evals series</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design for AI Evals</a></li>
+						<li><a href="/agentic/observe/build-time-evals.html">Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems</a></li>
+						<li><a href="/agentic/observe/rag-evals.html">RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity</a></li>
+						<li><a href="/agentic/observe/runtime-evals-observability.html">Runtime Evals and Observability for Agentic Systems</a></li>
+						<li><a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming for AI Agents</a></li>
+						<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>

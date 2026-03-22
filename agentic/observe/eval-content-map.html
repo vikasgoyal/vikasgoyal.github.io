@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>AI Evals Content Map</title>
+		<meta name="description" content="A professional content map for the AI evals section, with a structured reading path across fundamentals, datasets, build-time evals, RAG evals, runtime evals, safety, EvalOps, and business metrics.">
+		<meta name="keywords" content="AI evals content map, evals guide, agent evaluation, RAG evals, EvalOps, runtime evals, business metrics">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/eval-content-map.html">
+
+		<meta property="og:title" content="AI Evals Content Map">
+		<meta property="og:description" content="A structured guide to the evals content cluster, linking the full series from fundamentals through business outcomes.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/eval-content-map.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="AI Evals Content Map">
+		<meta name="twitter:description" content="A structured reading map for the AI evals series.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "CollectionPage",
+			"headline": "AI Evals Content Map",
+			"description": "A professional content map for the AI evals section, with a structured reading path across fundamentals, datasets, build-time evals, RAG evals, runtime evals, safety, EvalOps, and business metrics.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-22",
+			"dateModified": "2026-03-22",
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/eval-content-map.html"
+			}
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--map-ink: #162133;
+				--map-slate: #475569;
+				--map-border: #d8e2ec;
+				--map-panel: rgba(255, 255, 255, 0.78);
+			}
+
+			body {
+				background:
+					radial-gradient(circle at top left, rgba(219, 234, 254, 0.9), transparent 30%),
+					radial-gradient(circle at top right, rgba(236, 253, 245, 0.85), transparent 28%),
+					linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+			}
+
+			.map-page {
+				color: var(--map-ink);
+			}
+
+			.map-page header {
+				position: relative;
+				overflow: hidden;
+				margin-bottom: 1.8em;
+				padding: 2em 1.7em;
+				background: linear-gradient(140deg, rgba(239, 246, 255, 0.96) 0%, rgba(255, 247, 237, 0.92) 50%, rgba(236, 253, 245, 0.96) 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 24px;
+				box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+			}
+
+			.map-page header::after {
+				content: "";
+				position: absolute;
+				inset: auto -4rem -4rem auto;
+				width: 14rem;
+				height: 14rem;
+				background: radial-gradient(circle, rgba(29, 78, 216, 0.14) 0%, rgba(29, 78, 216, 0) 72%);
+				pointer-events: none;
+			}
+
+			.map-page section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--map-panel);
+				backdrop-filter: blur(10px);
+				border: 1px solid var(--map-border);
+				border-radius: 18px;
+				box-shadow: 0 14px 36px rgba(15, 23, 42, 0.05);
+			}
+
+			.map-page h1,
+			.map-page h2,
+			.map-page h3 {
+				color: #0f172a;
+			}
+
+			.map-page p,
+			.map-page li {
+				color: var(--map-slate);
+				line-height: 1.75;
+			}
+
+			.map-page a {
+				color: #0f3ea8;
+			}
+
+			.kicker {
+				display: inline-block;
+				margin-bottom: 0.75em;
+				padding: 0.28em 0.7em;
+				border-radius: 999px;
+				background: #dbeafe;
+				color: #1e3a8a;
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.hero-grid,
+			.path-grid,
+			.cluster-grid,
+			.quick-grid {
+				display: grid;
+				gap: 1em;
+			}
+
+			.hero-grid {
+				grid-template-columns: 1.4fr 0.9fr;
+				align-items: start;
+			}
+
+			.path-grid {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				margin-top: 1.2em;
+			}
+
+			.cluster-grid {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+				margin-top: 1em;
+			}
+
+			.quick-grid {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+				margin-top: 1em;
+			}
+
+			.hero-panel,
+			.path-card,
+			.cluster-card,
+			.quick-card,
+			.signal-card {
+				padding: 1.05em;
+				background: rgba(255, 255, 255, 0.9);
+				border: 1px solid var(--map-border);
+				border-radius: 16px;
+			}
+
+			.hero-panel {
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(239, 246, 255, 0.85) 100%);
+			}
+
+			.signal-stack {
+				display: grid;
+				gap: 0.8em;
+			}
+
+			.signal-card strong {
+				display: block;
+				margin-bottom: 0.25em;
+				color: #0f172a;
+			}
+
+			.path-card {
+				position: relative;
+				padding-top: 1.2em;
+			}
+
+			.path-card .step {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 2rem;
+				height: 2rem;
+				margin-bottom: 0.7em;
+				border-radius: 999px;
+				background: #e0f2fe;
+				color: #075985;
+				font-weight: 700;
+			}
+
+			.path-card.foundation .step { background: #dbeafe; color: #1e3a8a; }
+			.path-card.design .step { background: #dcfce7; color: #166534; }
+			.path-card.runtime .step { background: #fef3c7; color: #92400e; }
+			.path-card.business .step { background: #ffe4e6; color: #9f1239; }
+
+			table.map-table {
+				width: 100%;
+				margin-top: 1em;
+				border-collapse: collapse;
+				background: rgba(255, 255, 255, 0.95);
+				border-radius: 16px;
+				overflow: hidden;
+			}
+
+			.map-table th,
+			.map-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.map-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.map-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.map-page ul {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.map-page li {
+				margin-bottom: 0.55em;
+			}
+
+			.inline-tag {
+				display: inline-block;
+				padding: 0.2em 0.55em;
+				border-radius: 999px;
+				background: #ecfeff;
+				color: #155e75;
+				font-size: 0.8em;
+				font-weight: 700;
+			}
+
+			.link-list {
+				margin-top: 0.7em;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 900px) {
+				.hero-grid,
+				.cluster-grid,
+				.quick-grid,
+				.path-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.map-page header,
+				.map-page section,
+				.hero-panel,
+				.path-card,
+				.cluster-card,
+				quick-card,
+				signal-card,
+				.map-table th,
+				.map-table td {
+					padding: 1.05em;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="map-page">
+				<header>
+					<div class="kicker">Series Guide</div>
+					<div class="hero-grid">
+						<div>
+							<h1>AI Evals Content Map</h1>
+							<p style="font-style: italic;">A structured path through the evals cluster, from core concepts to deployment operations and business value.</p>
+							<p>This page is the front door to the evals section. It organizes the material by reading order and by operating concern so a reader can move from fundamentals into datasets, engineering workflow, production measurement, safety, governance, and executive outcomes without losing the thread.</p>
+						</div>
+						<div class="hero-panel">
+							<h2 style="margin-top: 0; font-size: 1.05em;">What this section covers</h2>
+							<div class="signal-stack">
+								<div class="signal-card">
+									<strong>Quality foundations</strong>
+									<span>What evals are, how they differ from testing, and how evaluation dimensions get defined.</span>
+								</div>
+								<div class="signal-card">
+									<strong>Operational practice</strong>
+									<span>How teams design datasets, run build-time checks, evaluate RAG, and monitor live systems.</span>
+								</div>
+								<div class="signal-card">
+									<strong>Control and value</strong>
+									<span>How safety, EvalOps, and business metrics turn evaluation into a real operating discipline.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</header>
+
+				<section id="reading-path">
+					<div class="kicker">Reading Order</div>
+					<h2>Recommended path through the series</h2>
+					<p>If someone is new to the topic, this sequence builds the right mental model first, then moves into implementation and production discipline.</p>
+					<div class="path-grid">
+						<div class="path-card foundation">
+							<div class="step">1</div>
+							<h3><a href="/agentic/observe/whatareevals.html">What Are Evals?</a></h3>
+							<p>The entry point for the whole cluster. It explains why AI quality requires more than deterministic testing and introduces the main evaluation dimensions.</p>
+						</div>
+						<div class="path-card foundation">
+							<div class="step">2</div>
+							<h3><a href="/agentic/observe/evalstesting.html">Testing vs Evals</a></h3>
+							<p>Clarifies where conventional testing stops and where probabilistic evaluation starts, so the rest of the series has sharper boundaries.</p>
+						</div>
+						<div class="path-card design">
+							<div class="step">3</div>
+							<h3><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></h3>
+							<p>Frames evaluation as a design-time activity. This is where teams define behaviors, scenarios, rubrics, and failure modes before implementation begins.</p>
+						</div>
+						<div class="path-card design">
+							<div class="step">4</div>
+							<h3><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design</a></h3>
+							<p>Explains the substrate of good evals: representative examples, edge cases, adversarial cases, and versioned golden sets.</p>
+						</div>
+						<div class="path-card design">
+							<div class="step">5</div>
+							<h3><a href="/agentic/observe/build-time-evals.html">Build-Time Evals</a></h3>
+							<p>Connects evaluation to engineering workflow through regression suites, CI/CD, release gates, and change review.</p>
+						</div>
+						<div class="path-card design">
+							<div class="step">6</div>
+							<h3><a href="/agentic/observe/rag-evals.html">RAG Evals</a></h3>
+							<p>Separates retrieval relevance, grounding, citation fidelity, and answer quality so RAG failures are diagnosable rather than hidden.</p>
+						</div>
+						<div class="path-card runtime">
+							<div class="step">7</div>
+							<h3><a href="/agentic/observe/runtime-evals-observability.html">Runtime Evals and Observability</a></h3>
+							<p>Moves the discussion into production behavior, traces, drift detection, anomalies, and learning from real usage.</p>
+						</div>
+						<div class="path-card runtime">
+							<div class="step">8</div>
+							<h3><a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming</a></h3>
+							<p>Shows how to pressure-test systems for prompt injection, policy bypass, data leakage, unsafe tool use, and adversarial behavior.</p>
+						</div>
+						<div class="path-card business">
+							<div class="step">9</div>
+							<h3><a href="/agentic/observe/evalops-operating-model.html">EvalOps</a></h3>
+							<p>Turns evaluation into an organizational operating model with ownership, versioned artifacts, sign-off, and drift management.</p>
+						</div>
+						<div class="path-card business">
+							<div class="step">10</div>
+							<h3><a href="/agentic/observe/business-metrics-evals.html">Business Metrics for Evals</a></h3>
+							<p>Closes the loop by connecting evaluation to SLA adherence, cost-to-serve, productivity, CSAT, and ROI.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="by-cluster">
+					<div class="kicker">By Topic</div>
+					<h2>How the content clusters together</h2>
+					<div class="cluster-grid">
+						<div class="cluster-card">
+							<h3>Foundations</h3>
+							<span class="inline-tag">Conceptual base</span>
+							<ul class="link-list">
+								<li><a href="/agentic/observe/whatareevals.html">What Are Evals?</a></li>
+								<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals</a></li>
+								<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+							</ul>
+						</div>
+						<div class="cluster-card">
+							<h3>Design and Engineering</h3>
+							<span class="inline-tag">Build the right system</span>
+							<ul class="link-list">
+								<li><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design</a></li>
+								<li><a href="/agentic/observe/build-time-evals.html">Build-Time Evals</a></li>
+								<li><a href="/agentic/observe/rag-evals.html">RAG Evals</a></li>
+							</ul>
+						</div>
+						<div class="cluster-card">
+							<h3>Operations and Control</h3>
+							<span class="inline-tag">Run and govern it well</span>
+							<ul class="link-list">
+								<li><a href="/agentic/observe/runtime-evals-observability.html">Runtime Evals and Observability</a></li>
+								<li><a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming</a></li>
+								<li><a href="/agentic/observe/evalops-operating-model.html">EvalOps</a></li>
+								<li><a href="/agentic/observe/business-metrics-evals.html">Business Metrics for Evals</a></li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section id="coverage-map">
+					<div class="kicker">Coverage</div>
+					<h2>What the current cluster now covers</h2>
+					<p>The section now covers the full eval lifecycle with a practical bias toward agentic systems and enterprise deployment.</p>
+					<table class="map-table">
+						<thead>
+							<tr>
+								<th>Area</th>
+								<th>Primary article</th>
+								<th>What it helps answer</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Evals fundamentals</td>
+								<td><a href="/agentic/observe/whatareevals.html">What Are Evals?</a></td>
+								<td>What evaluation is, why it exists, and which quality dimensions matter for AI systems.</td>
+							</tr>
+							<tr>
+								<td>Testing versus evaluation</td>
+								<td><a href="/agentic/observe/evalstesting.html">Testing vs Evals</a></td>
+								<td>Which problems deterministic tests catch and which ones require probabilistic or rubric-based evaluation.</td>
+							</tr>
+							<tr>
+								<td>Evaluation design before build</td>
+								<td><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></td>
+								<td>How to define scenarios, acceptance criteria, and failure modes before implementation starts shaping the requirements.</td>
+							</tr>
+							<tr>
+								<td>Datasets and scenario design</td>
+								<td><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design</a></td>
+								<td>How to build representative, versioned, and risk-aware evaluation sets.</td>
+							</tr>
+							<tr>
+								<td>Build-time workflow</td>
+								<td><a href="/agentic/observe/build-time-evals.html">Build-Time Evals</a></td>
+								<td>How teams turn evals into engineering workflow with regression checks, release gates, and triage.</td>
+							</tr>
+							<tr>
+								<td>RAG-specific evaluation</td>
+								<td><a href="/agentic/observe/rag-evals.html">RAG Evals</a></td>
+								<td>How to separate retrieval failure from grounding failure and final-answer failure.</td>
+							</tr>
+							<tr>
+								<td>Production behavior</td>
+								<td><a href="/agentic/observe/runtime-evals-observability.html">Runtime Evals and Observability</a></td>
+								<td>How to detect drift, learn from traces, and evaluate performance after release.</td>
+							</tr>
+							<tr>
+								<td>Adversarial and safety pressure testing</td>
+								<td><a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming</a></td>
+								<td>How to test guardrails, prompt injection resistance, policy robustness, and unsafe tool behavior.</td>
+							</tr>
+							<tr>
+								<td>Governance and operating model</td>
+								<td><a href="/agentic/observe/evalops-operating-model.html">EvalOps</a></td>
+								<td>How teams own, version, approve, and review evaluation artifacts over time.</td>
+							</tr>
+							<tr>
+								<td>Business value</td>
+								<td><a href="/agentic/observe/business-metrics-evals.html">Business Metrics for Evals</a></td>
+								<td>How evaluation connects to cost, productivity, SLA adherence, containment, CSAT, and ROI.</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section id="quick-starts">
+					<div class="kicker">Quick Starts</div>
+					<h2>Fast entry points for different readers</h2>
+					<div class="quick-grid">
+						<div class="quick-card">
+							<h3>If you are new to evals</h3>
+							<ul>
+								<li><a href="/agentic/observe/whatareevals.html">Start with fundamentals</a></li>
+								<li><a href="/agentic/observe/evalstesting.html">Then clarify testing vs evals</a></li>
+								<li><a href="/agentic/prebuildevals.html">Then move into design-time evaluation</a></li>
+							</ul>
+						</div>
+						<div class="quick-card">
+							<h3>If you are building AI systems</h3>
+							<ul>
+								<li><a href="/agentic/observe/data-design-evals.html">Design the eval data</a></li>
+								<li><a href="/agentic/observe/build-time-evals.html">Operationalize it in development</a></li>
+								<li><a href="/agentic/observe/rag-evals.html">Use the RAG guide when retrieval is involved</a></li>
+							</ul>
+						</div>
+						<div class="quick-card">
+							<h3>If you run production or governance</h3>
+							<ul>
+								<li><a href="/agentic/observe/runtime-evals-observability.html">Track live behavior</a></li>
+								<li><a href="/agentic/observe/safety-evals-red-teaming.html">Pressure-test safety assumptions</a></li>
+								<li><a href="/agentic/observe/evalops-operating-model.html">Formalize EvalOps</a></li>
+								<li><a href="/agentic/observe/business-metrics-evals.html">Tie the program to business outcomes</a></li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>
