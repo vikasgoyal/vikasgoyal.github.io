@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Enterprise QA Teams Need Evals, Not Just Tests</title>
+		<meta name="description" content="Why enterprise QA teams need to extend deterministic testing with evals, datasets, rubrics, slices, safety review, and release evidence for AI systems.">
+		<meta name="keywords" content="QA evals, enterprise QA, AI testing, eval teams, quality assurance for AI, LLM evals, AI release readiness">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/evals-for-qa-testing-teams.html">
+
+		<meta property="og:title" content="Enterprise QA Teams Need Evals, Not Just Tests">
+		<meta property="og:description" content="A practical guide for QA leaders shifting from deterministic-only assurance to evidence-based evaluation for AI systems.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/evals-for-qa-testing-teams.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Enterprise QA Teams Need Evals, Not Just Tests">
+		<meta name="twitter:description" content="How QA teams can stay rigorous while expanding into evals, datasets, rubrics, failure analysis, and AI release evidence.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Enterprise QA Teams Need Evals, Not Just Tests",
+			"description": "Why enterprise QA teams need to extend deterministic testing with evals, datasets, rubrics, slices, safety review, and release evidence for AI systems.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-03-22",
+			"dateModified": "2026-03-22",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/evals-for-qa-testing-teams.html"
+			},
+			"keywords": "QA evals, enterprise QA, AI testing, eval teams, AI release readiness"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--qa-ink: #172033;
+				--qa-slate: #475569;
+				--qa-border: #d7dfea;
+				--qa-panel: #f8fafc;
+				--qa-blue-soft: #dbeafe;
+				--qa-green-soft: #dcfce7;
+				--qa-amber-soft: #fef3c7;
+				--qa-rose-soft: #ffe4e6;
+				--qa-sky-soft: #e0f2fe;
+			}
+
+			.qaeval-article {
+				color: var(--qa-ink);
+			}
+
+			.qaeval-article header {
+				margin-bottom: 1.6em;
+				padding: 1.9em 1.65em;
+				background: linear-gradient(135deg, #eff6ff 0%, #ecfeff 52%, #f0fdf4 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 22px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.qaeval-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--qa-panel);
+				border: 1px solid var(--qa-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.qaeval-article h1,
+			.qaeval-article h2,
+			.qaeval-article h3 {
+				color: #0f172a;
+			}
+
+			.qaeval-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.qaeval-article p {
+				margin-bottom: 0.9em;
+				color: var(--qa-slate);
+				line-height: 1.76;
+			}
+
+			.qaeval-article strong {
+				color: #0f172a;
+			}
+
+			.qaeval-article p:last-child,
+			.qaeval-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--qa-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--qa-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--qa-green-soft);
+				color: #166534;
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.shift-grid,
+			.type-grid,
+			.fail-grid,
+			.plan-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1em;
+			}
+
+			.type-grid,
+			.plan-grid {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+			}
+
+			.shift-card,
+			.type-card,
+			.fail-card,
+			.plan-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--qa-border);
+				border-radius: 14px;
+			}
+
+			.shift-card h3,
+			.type-card h3,
+			.fail-card h3,
+			.plan-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.shift-card p,
+			.type-card p,
+			.fail-card p,
+			.plan-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.shift-card.highlight,
+			.type-card.highlight,
+			.plan-card.highlight {
+				background: linear-gradient(135deg, #ffffff 0%, var(--qa-sky-soft) 100%);
+				border-color: #bae6fd;
+			}
+
+			.fail-card.warning {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.fail-card.risk {
+				background: linear-gradient(135deg, #ffffff 0%, var(--qa-rose-soft) 100%);
+				border-color: #fecdd3;
+			}
+
+			table.qa-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.qa-table th,
+			.qa-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.qa-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.qa-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.qaeval-article ul,
+			.qaeval-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.qaeval-article li {
+				margin-bottom: 0.65em;
+				color: var(--qa-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 900px) {
+				.type-grid,
+				.plan-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.qaeval-article header,
+				.qaeval-article section,
+				.shift-card,
+				.type-card,
+				.fail-card,
+				.plan-card,
+				.qa-table th,
+				.qa-table td {
+					padding: 1.05em;
+				}
+
+				.shift-grid,
+				.type-grid,
+				.fail-grid,
+				.plan-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="qaeval-article">
+				<header>
+					<h1>Enterprise QA Teams Need Evals, Not Just Tests</h1>
+					<p style="font-style: italic;">QA does not lose its rigor in AI systems. It extends that rigor into a new evidence model built for variability, judgment, and risk.</p>
+					<div style="margin-top: 0.95em;">
+						<a href="/agentic/observe/eval-content-map.html" style="display: inline-flex; align-items: center; padding: 0.5em 0.85em; border-radius: 999px; background: rgba(255, 255, 255, 0.88); border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; font-weight: 600;">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> enterprise QA teams should keep deterministic testing for deterministic system parts and add evals for variable, contextual, and judgment-based behavior. The shift is not from rigor to experimentation. It is from one form of rigor to another.</p>
+					</div>
+				</header>
+
+				<section id="why-qa-must-expand">
+					<div class="section-kicker">Transition</div>
+					<h2>Why enterprise QA has to expand its evidence model</h2>
+					<p>Enterprise QA teams are being handed a new kind of system to assure: one that can be useful, impressive, unsafe, inconsistent, and wrong in ways that do not fit neatly into a pass-fail model. As more products absorb LLMs and other non-deterministic components, QA can no longer stop at deterministic verification. It has to expand into evals.</p>
+					<p>The old discipline is not being replaced. Requirements, acceptance criteria, reproducibility, regression coverage, traceability, and release confidence still matter. But as explained in <a href="/agentic/observe/evalstesting.html">Testing vs Evals</a>, AI systems break the assumption that the same input should always yield the same behavior. Behavior can vary across runs, prompts, models, retrieval context, tools, and surrounding product changes.</p>
+					<p>The QA job is no longer only to find deterministic defects. It is to measure quality, characterize failure modes, and produce enough evidence that product, engineering, governance, and release teams can make sound decisions.</p>
+				</section>
+
+				<section id="mental-model">
+					<div class="section-kicker">Mental Model</div>
+					<h2>The mental model that makes evals click for QA teams</h2>
+					<p>For enterprise QA teams, the cleanest framing is simple:</p>
+					<div class="shift-grid">
+						<div class="shift-card highlight">
+							<h3>Tests ask whether a known behavior passed</h3>
+							<p>They verify explicit software contracts such as APIs, permissions, calculations, UI behavior, and policy enforcement logic.</p>
+						</div>
+						<div class="shift-card">
+							<h3>Evals ask how well the system performs</h3>
+							<p>They measure quality across a class of behaviors using rubrics, slices, thresholds, and failure distributions.</p>
+						</div>
+						<div class="shift-card">
+							<h3>Tests usually compare to fixed expectations</h3>
+							<p>Exact outputs, schemas, role checks, and deterministic state transitions still matter.</p>
+						</div>
+						<div class="shift-card highlight">
+							<h3>Evals compare to quality criteria</h3>
+							<p>Accuracy, groundedness, task completion, refusal quality, and risk thresholds matter when outputs are variable.</p>
+						</div>
+					</div>
+					<p>That framing is fully consistent with <a href="/agentic/observe/whatareevals.html">What Are Evals?</a>. QA is not abandoning test discipline. It is extending it into a domain where pass-fail alone cannot tell the team enough.</p>
+				</section>
+
+				<section id="why-testing-logic-stops">
+					<div class="section-kicker">Why Pass-Fail Stops Being Enough</div>
+					<h2>Why testing logic alone stops being sufficient</h2>
+					<p>The first mistake many teams make is treating evals as a renamed regression suite. Evals overlap with testing, but they answer a different set of questions: how good is the system across a meaningful distribution of cases, where does it fail, how badly does it fail, and how much uncertainty remains in the measurement?</p>
+					<p>AI products rarely fail in one clean binary way. They fail on gradients: an answer is plausible but wrong, a summary is mostly right but omits a critical fact, an agent completes the task but uses an unsafe path, or a workflow works for common inputs but collapses under ambiguity. This is exactly the territory where QA discipline has to evolve from defect counting into evaluation evidence.</p>
+					<div class="takeaway-box">
+						<p><strong>Important distinction:</strong> enterprise QA strengths still transfer directly. Structured thinking, edge cases, severity assessment, traceability, and release readiness remain core. What changes is the assumption that pass or fail is enough.</p>
+					</div>
+				</section>
+
+				<section id="qa-charter">
+					<div class="section-kicker">Role</div>
+					<h2>QA's new charter in AI products</h2>
+					<p>An eval-capable QA team should not be reduced to a group that runs prompts and scores outputs. It becomes the group that produces trusted quality evidence for AI systems.</p>
+					<ol>
+						<li>Define quality in measurable terms.</li>
+						<li>Build and maintain representative eval datasets.</li>
+						<li>Run repeatable offline and online evals.</li>
+						<li>Investigate regressions and failure clusters.</li>
+						<li>Advise release decisions with explicit evidence and uncertainty.</li>
+					</ol>
+					<p>In enterprise environments, this function often becomes the bridge between product, engineering, security, risk, legal, support, and domain experts. That operating role aligns closely with the model in <a href="/agentic/observe/evalops-operating-model.html">EvalOps</a>.</p>
+				</section>
+
+				<section id="mindset-shifts">
+					<div class="section-kicker">Mindset Shifts</div>
+					<h2>The shifts that matter most</h2>
+					<div class="shift-grid">
+						<div class="shift-card">
+							<h3>Stop looking for one source of truth</h3>
+							<p>Many AI tasks allow multiple acceptable outputs or paths, so exact string matching is rarely enough.</p>
+						</div>
+						<div class="shift-card highlight">
+							<h3>Think in distributions, not examples</h3>
+							<p>A single good response proves almost nothing. Representative sampling and slicing are what make measurements credible.</p>
+						</div>
+						<div class="shift-card">
+							<h3>Replace certainty with calibrated confidence</h3>
+							<p>Eval results are measurements, not guarantees. Trend lines, slices, and confidence matter more than false precision.</p>
+						</div>
+						<div class="shift-card highlight">
+							<h3>Treat failures as signals</h3>
+							<p>Failures should feed root-cause analysis across prompts, retrieval, tools, product UX, and governance.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="quality-model">
+					<div class="section-kicker">Quality Model</div>
+					<h2>Quality has to be defined before it can be measured</h2>
+					<p>Most enterprise QA teams need a quality model before they need more tooling. Without one, teams collect examples but cannot make decisions. A practical AI quality model usually fits into the six buckets below.</p>
+					<table class="qa-table">
+						<thead>
+							<tr>
+								<th>Bucket</th>
+								<th>What it asks</th>
+								<th>Examples</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Capability</td>
+								<td>Can the system do the task at all?</td>
+								<td>Answer correctly, summarize accurately, extract fields, choose the right tool, complete a workflow.</td>
+							</tr>
+							<tr>
+								<td>Reliability</td>
+								<td>How often does it succeed across realistic variation?</td>
+								<td>Prompt phrasing changes, missing context, long inputs, noisy documents, session carry-over.</td>
+							</tr>
+							<tr>
+								<td>Safety and policy</td>
+								<td>Does it avoid disallowed or non-compliant behavior?</td>
+								<td>Unsafe advice, injection compliance, data leakage, policy bypasses.</td>
+							</tr>
+							<tr>
+								<td>Groundedness</td>
+								<td>Does it stay tied to evidence when evidence is required?</td>
+								<td>Uses retrieved content correctly, avoids fabricated sources, signals uncertainty.</td>
+							</tr>
+							<tr>
+								<td>User experience</td>
+								<td>Is the output useful in context?</td>
+								<td>Clarity, tone, actionability, useful recovery paths, refusal quality.</td>
+							</tr>
+							<tr>
+								<td>Operational quality</td>
+								<td>Is the system practical to run in production?</td>
+								<td>Latency, cost per task, tool failure recovery, observability, rate-limit behavior.</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>This structure lines up with the broader series: <a href="/agentic/observe/safety-evals-red-teaming.html">safety evals</a>, <a href="/agentic/observe/rag-evals.html">RAG evals</a>, <a href="/agentic/observe/runtime-evals-observability.html">runtime evals</a>, and <a href="/agentic/observe/business-metrics-evals.html">business metrics</a> each deepen one part of the model.</p>
+				</section>
+
+				<section id="eval-types">
+					<div class="section-kicker">Practical Evals</div>
+					<h2>The eval types QA teams usually need in practice</h2>
+					<div class="type-grid">
+						<div class="type-card highlight">
+							<h3>Smoke evals</h3>
+							<p>Small, fast checks for major capability, severe safety issues, and core workflows that must not break quietly.</p>
+						</div>
+						<div class="type-card">
+							<h3>Regression evals</h3>
+							<p>Stable sets built from key journeys, historical failures, and policy-critical cases.</p>
+						</div>
+						<div class="type-card">
+							<h3>Benchmark evals</h3>
+							<p>Broader scorecards used to compare versions over time and assess movement across slices.</p>
+						</div>
+						<div class="type-card">
+							<h3>Exploratory and adversarial evals</h3>
+							<p>Human-led probing for hallucinations, prompt injection, unsafe behavior, and odd agent actions.</p>
+						</div>
+						<div class="type-card highlight">
+							<h3>Online evals</h3>
+							<p>Production sampling, user feedback, escalation analysis, and live behavior review.</p>
+						</div>
+						<div class="type-card">
+							<h3>Golden sets</h3>
+							<p>The high-trust subset inside those eval types, especially for release and regression decisions.</p>
+						</div>
+					</div>
+					<p>That structure maps directly to <a href="/agentic/observe/data-design-evals.html">datasets and golden sets</a>, <a href="/agentic/observe/build-time-evals.html">build-time evals</a>, <a href="/agentic/observe/safety-evals-red-teaming.html">safety evals</a>, and <a href="/agentic/observe/runtime-evals-observability.html">runtime evaluation</a>.</p>
+				</section>
+
+				<section id="datasets-and-rubrics">
+					<div class="section-kicker">Coverage and Judgment</div>
+					<h2>Datasets are the new coverage model, and rubrics are the new acceptance criteria</h2>
+					<p>For enterprise QA teams, dataset construction is usually the least familiar part of the shift. In classical QA, cases come from requirements, workflows, and bug history. In evals, the same sources still matter, but they must now represent the messy spread of real user behavior. The easiest way to think about it is that an eval dataset is a risk-weighted coverage model for probabilistic behavior.</p>
+					<p>Strong datasets usually combine real traffic, support tickets, domain expert cases, incidents, and carefully controlled synthetic expansion. Metadata matters because slicing is how teams find the truth behind average scores. That discipline is covered more deeply in <a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design</a>.</p>
+					<p>Rubrics are the other half of the system. For QA teams, a rubric is not mysterious. It is the AI-era equivalent of making acceptance criteria operational. Requirements become evaluation dimensions, acceptance criteria become rubric checks, severity becomes risk weighting, regression packs become curated eval sets, and defect taxonomies become failure taxonomies.</p>
+					<div class="takeaway-box">
+						<p><strong>Useful rule:</strong> if a reviewer cannot explain exactly why an output is good or bad, the rubric is probably too vague to support release decisions.</p>
+					</div>
+				</section>
+
+				<section id="humans-and-graders">
+					<div class="section-kicker">Scoring</div>
+					<h2>Human judgment still matters, even when graders are automated</h2>
+					<p>Most teams eventually use both human review and automated grading. The mistake is assuming automation removes the need for judgment. Human review remains essential for ambiguous tasks, policy edge cases, first-pass rubric design, high-risk releases, and audit workflows. Automated graders are useful for fast iteration, structured criteria, trend detection, and triage before human review.</p>
+					<p>The right model is not human or automated. It is automate what you can verify, and use humans where judgment or risk demands it. Whenever model grading is used, the team should validate it periodically against human labels. Enterprise QA teams should treat graders like any other test asset: useful, but not above verification.</p>
+				</section>
+
+				<section id="different-system-types">
+					<div class="section-kicker">System Types</div>
+					<h2>Different AI systems fail in different ways</h2>
+					<ul>
+						<li><strong>Single-turn systems:</strong> focus on factuality, completeness, instruction following, and format compliance.</li>
+						<li><strong>Retrieval systems:</strong> score retrieval quality separately from answer quality, or you will miss where failure starts. That is the core idea in <a href="/agentic/observe/rag-evals.html">RAG Evals</a>.</li>
+						<li><strong>Tool-using agents:</strong> inspect the path, not just the final answer. Tool choice, parameters, retries, and unsafe actions matter.</li>
+						<li><strong>Conversational systems:</strong> measure consistency, memory use, recovery after misunderstanding, and multi-turn safety.</li>
+					</ul>
+				</section>
+
+				<section id="operating-loop">
+					<div class="section-kicker">Operating Loop</div>
+					<h2>Evals need an operating loop, not a dashboard</h2>
+					<p>An effective eval program is not just a dashboard. It is an operating loop that fits inside release and governance rhythms rather than living as a side experiment.</p>
+					<ol>
+						<li>Define the release or rollout question.</li>
+						<li>Select the relevant datasets and slices.</li>
+						<li>Run the candidate system against them.</li>
+						<li>Review overall scores, slice results, and failure clusters.</li>
+						<li>Investigate root causes with engineering, product, and domain experts.</li>
+						<li>Fix prompts, retrieval, tools, policy logic, UX, or model configuration.</li>
+						<li>Re-run targeted and broad evals.</li>
+						<li>Decide whether the remaining risk is acceptable.</li>
+					</ol>
+					<p>This is the same basic operating logic behind <a href="/agentic/observe/build-time-evals.html">build-time evals</a>, <a href="/agentic/observe/runtime-evals-observability.html">runtime feedback loops</a>, and <a href="/agentic/observe/evalops-operating-model.html">EvalOps</a>.</p>
+				</section>
+
+				<section id="release-gates-and-metrics">
+					<div class="section-kicker">Release Readiness</div>
+					<h2>Release gates and metrics have to become more nuanced</h2>
+					<p>Classical release gates often depend on clean binary pass rates. AI release gates need more nuance. A useful gate might include no regression beyond an agreed threshold on the core benchmark, no regression on high-severity safety cases, minimum performance on critical journeys, acceptable latency and cost envelopes, explicit review of unresolved failure clusters, and owner sign-off for known limitations.</p>
+					<p>Different risk classes need different bars. A writing assistant and a high-stakes decision support tool should not share the same threshold. This is also why metrics should not be reported only as one average score. Teams should report overall results, important slices, and movement over time. The business layer of that logic is developed further in <a href="/agentic/observe/business-metrics-evals.html">Business Metrics for Evals</a>.</p>
+				</section>
+
+				<section id="recurring-failures">
+					<div class="section-kicker">Failure Analysis</div>
+					<h2>The failure modes QA teams will see again and again</h2>
+					<div class="fail-grid">
+						<div class="fail-card warning">
+							<h3>Hallucination and misgrounding</h3>
+							<p>The system invents facts, sources, states, or actions, or it misreads relevant evidence.</p>
+						</div>
+						<div class="fail-card risk">
+							<h3>Instruction and policy failure</h3>
+							<p>The system ignores format, role, policy, or task constraints, or it under-refuses where it should block.</p>
+						</div>
+						<div class="fail-card warning">
+							<h3>Tool misuse and fragility</h3>
+							<p>The agent calls the wrong tool, uses weak parameters, or degrades sharply under small phrasing changes.</p>
+						</div>
+						<div class="fail-card risk">
+							<h3>Silent failure</h3>
+							<p>The response looks confident enough that users may trust it even though it is wrong.</p>
+						</div>
+					</div>
+					<p>Those classes are why root-cause analysis cannot stop at “the model failed.” Teams have to trace whether the real problem was prompt design, retrieval quality, tool schema, orchestration, policy layers, data quality, or UX over-trust.</p>
+				</section>
+
+				<section id="rollout-plan">
+					<div class="section-kicker">Rollout</div>
+					<h2>A practical rollout plan for enterprise QA</h2>
+					<div class="plan-grid">
+						<div class="plan-card highlight">
+							<h3>First 30 days</h3>
+							<p>Align on high-risk AI workflows, define the top product tasks, create initial rubrics, collect a seed dataset, and establish a repeatable eval run.</p>
+						</div>
+						<div class="plan-card">
+							<h3>Days 30 to 60</h3>
+							<p>Expand the dataset with real traffic and failures, add metadata and slicing, separate smoke, regression, and benchmark sets, and define initial thresholds.</p>
+						</div>
+						<div class="plan-card highlight">
+							<h3>Days 60 to 90</h3>
+							<p>Add online sampling, validate automated graders against human labels, define failure taxonomies, and document sign-off expectations and escalation paths.</p>
+						</div>
+					</div>
+					<p>The goal is not to turn every QA engineer into an ML researcher. It is to help the QA function stay credible and effective in an AI product environment.</p>
+				</section>
+
+				<section id="bottom-line">
+					<div class="section-kicker">Bottom Line</div>
+					<h2>What good looks like</h2>
+					<p>A strong eval-capable QA team does not claim the AI system is perfect. It does something more valuable. It can explain what quality means for this product, how quality is being measured, where the system is strong, where it is weak, what changed between versions, what risks remain, and whether those risks are acceptable for release.</p>
+					<p>The future QA-led eval team still cares about bugs, but it also cares about distributions, rubrics, ambiguity, safety, confidence, and product usefulness under uncertainty. Enterprise QA does not become less rigorous. It applies rigor in a form that matches AI systems.</p>
+				</section>
+
+				<section id="related-reading">
+					<div class="section-kicker">Evaluation Series</div>
+					<h2>Related reading</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+						<li><a href="/agentic/observe/data-design-evals.html">Datasets, Golden Sets, and Scenario Design for AI Evals</a></li>
+						<li><a href="/agentic/observe/build-time-evals.html">Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems</a></li>
+						<li><a href="/agentic/observe/rag-evals.html">RAG Evals: Retrieval Relevance, Grounding, and Citation Fidelity</a></li>
+						<li><a href="/agentic/observe/runtime-evals-observability.html">Runtime Evals and Observability for Agentic Systems</a></li>
+						<li><a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming for AI Agents</a></li>
+						<li><a href="/agentic/observe/evalops-operating-model.html">EvalOps: Operating Model, Ownership, and Evaluation Drift</a></li>
+						<li><a href="/agentic/observe/business-metrics-evals.html">Business Metrics for Evals: ROI, Cost-to-Serve, and Outcome Quality</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>
