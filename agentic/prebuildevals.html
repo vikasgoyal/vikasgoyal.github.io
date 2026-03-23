@@ -101,6 +101,127 @@
             font-size: 1.05rem;
         }
 
+        .workflow-steps {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .workflow-steps li {
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            gap: 0.9rem;
+            align-items: start;
+            padding: 1rem;
+            background: #fbfcfb;
+            border: 1px solid #d9e3dc;
+            border-radius: 10px;
+        }
+
+        .workflow-step-number {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: #0d6233;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .workflow-step-copy h3 {
+            margin: 0 0 0.35rem;
+            font-size: 1.02rem;
+        }
+
+        .workflow-step-copy p {
+            margin: 0;
+        }
+
+        .workflow-step-copy p + p {
+            margin-top: 0.45rem;
+        }
+
+        .workflow-output-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .workflow-output-table th,
+        .workflow-output-table td {
+            padding: 0.85rem 0.95rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .workflow-output-table th {
+            background: #f2f7f3;
+            color: #0d6233;
+        }
+
+        .workflow-output-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .workflow-diagram {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.85rem;
+            margin: 1.25rem 0 1rem;
+        }
+
+        .workflow-diagram-card {
+            position: relative;
+            padding: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f7faf8 100%);
+            border: 1px solid #d9e3dc;
+            border-radius: 12px;
+            min-height: 138px;
+        }
+
+        .workflow-diagram-card:not(:last-child)::after {
+            content: "->";
+            position: absolute;
+            top: 50%;
+            right: -0.72rem;
+            transform: translateY(-50%);
+            color: #0d6233;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .workflow-diagram-phase {
+            display: inline-block;
+            margin-bottom: 0.55rem;
+            padding: 0.22rem 0.55rem;
+            border-radius: 999px;
+            background: #e8f3ec;
+            color: #0d6233;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .workflow-diagram-card h3 {
+            margin: 0 0 0.4rem;
+            font-size: 1rem;
+        }
+
+        .workflow-diagram-card p {
+            margin: 0;
+            font-size: 0.94rem;
+        }
+
         .related-links li {
             margin-bottom: 0.6rem;
         }
@@ -108,6 +229,22 @@
         @media (max-width: 768px) {
             .article-lead {
                 font-size: 1rem;
+            }
+
+            .workflow-steps li {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-diagram-card:not(:last-child)::after {
+                content: "v";
+                top: auto;
+                right: 50%;
+                bottom: -0.95rem;
+                transform: translateX(50%);
             }
         }
     </style>
@@ -233,6 +370,136 @@
                     <li><strong>Tool selection:</strong> Does it know when tool use is mandatory, optional, or prohibited?</li>
                     <li><strong>Response generation:</strong> Does the final answer remain accurate, grounded, complete, clear, and policy compliant?</li>
                 </ul>
+            </section>
+
+            <section id="workflow">
+                <h2>What the Pre-Build Eval Workflow Looks Like</h2>
+                <p>If you assign pre-build evals to an evaluation team, the work should follow a repeatable workflow rather than an ad hoc brainstorming exercise. The team is not trying to tune prompts yet. It is producing the behavioral specification that builders will later implement against.</p>
+                <div class="workflow-diagram" aria-label="Pre-build eval workflow diagram">
+                    <div class="workflow-diagram-card">
+                        <span class="workflow-diagram-phase">Frame</span>
+                        <h3>Scope the use case</h3>
+                        <p>Clarify goals, users, constraints, non-goals, and the failures that matter most.</p>
+                    </div>
+                    <div class="workflow-diagram-card">
+                        <span class="workflow-diagram-phase">Design</span>
+                        <h3>Define behaviors and scenarios</h3>
+                        <p>Break the future agent into testable behaviors and write representative scenarios.</p>
+                    </div>
+                    <div class="workflow-diagram-card">
+                        <span class="workflow-diagram-phase">Specify</span>
+                        <h3>Set rubrics and thresholds</h3>
+                        <p>Write expected behavior, pass-fail rules, severity levels, and acceptance criteria.</p>
+                    </div>
+                    <div class="workflow-diagram-card">
+                        <span class="workflow-diagram-phase">Transition</span>
+                        <h3>Review and hand off</h3>
+                        <p>Version the eval pack, get sign-off, and map it into build-time evaluation.</p>
+                    </div>
+                </div>
+                <ol class="workflow-steps">
+                    <li>
+                        <span class="workflow-step-number">1</span>
+                        <div class="workflow-step-copy">
+                            <h3>Frame the use case and risk</h3>
+                            <p>Start by clarifying the system goal, target users, task boundaries, and business or policy risks. This is where the eval team decides what kinds of mistakes matter most and which failures are merely inconvenient versus unacceptable.</p>
+                            <p><strong>Output:</strong> Use-case scope, non-goals, and a first risk register.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="workflow-step-number">2</span>
+                        <div class="workflow-step-copy">
+                            <h3>Break the job into behaviors</h3>
+                            <p>Decompose the future agent into behaviors that can later be evaluated: intent recognition, data extraction, tool choice, multi-turn handling, grounding, refusal behavior, escalation, and final response quality.</p>
+                            <p><strong>Output:</strong> A behavior map showing what the system must do end to end and at each subsystem boundary.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="workflow-step-number">3</span>
+                        <div class="workflow-step-copy">
+                            <h3>Collect representative scenarios</h3>
+                            <p>Write scenarios across happy paths, edge cases, ambiguous requests, adversarial inputs, multi-turn conversations, and tool-dependent tasks. The point is coverage, not volume.</p>
+                            <p><strong>Output:</strong> A draft scenario set organized by category and severity.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="workflow-step-number">4</span>
+                        <div class="workflow-step-copy">
+                            <h3>Define expected behavior for each scenario</h3>
+                            <p>For every scenario, specify expected intent, required extracted data, allowed and disallowed tool behavior, grounding rules, response expectations, and failure conditions. This is where vague requirements become testable requirements.</p>
+                            <p><strong>Output:</strong> Scenario specifications with explicit expected behavior.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="workflow-step-number">5</span>
+                        <div class="workflow-step-copy">
+                            <h3>Write the rubric and pass-fail logic</h3>
+                            <p>Define how quality will be judged. Some checks may be binary, such as whether tool use was mandatory. Others may be rubric-based, such as clarity, completeness, or groundedness. Critical failures should be separated from minor quality issues.</p>
+                            <p><strong>Output:</strong> Rubrics, severity levels, and acceptance thresholds.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="workflow-step-number">6</span>
+                        <div class="workflow-step-copy">
+                            <h3>Run cross-functional review</h3>
+                            <p>The eval team should review the scenario set with product, domain experts, engineering, security, policy, and operations as needed. This prevents the eval set from reflecting only one team’s mental model of the system.</p>
+                            <p><strong>Output:</strong> A reviewed and corrected eval design with stakeholder sign-off.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="workflow-step-number">7</span>
+                        <div class="workflow-step-copy">
+                            <h3>Freeze the initial eval pack</h3>
+                            <p>Once reviewed, the team should version the scenarios, rubrics, and acceptance criteria so implementation has a stable target. If the target keeps moving informally, build-time evals will be impossible to interpret.</p>
+                            <p><strong>Output:</strong> Versioned baseline eval pack for development.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="workflow-step-number">8</span>
+                        <div class="workflow-step-copy">
+                            <h3>Hand off to build-time evaluation</h3>
+                            <p>Map each pre-build scenario into the datasets, automated checks, human review loops, or release gates that will be used during development. The pre-build phase ends only when the team has made the transition into measurable build-time execution clear.</p>
+                            <p><strong>Output:</strong> Traceability from pre-build expectations to build-time eval execution.</p>
+                        </div>
+                    </li>
+                </ol>
+                <p>In practice, that workflow usually produces a small set of durable artifacts that the rest of the project depends on.</p>
+                <table class="workflow-output-table">
+                    <thead>
+                        <tr>
+                            <th>Artifact</th>
+                            <th>What it contains</th>
+                            <th>Why it matters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Use-case brief</td>
+                            <td>Goals, constraints, users, non-goals, and risk context.</td>
+                            <td>Prevents the eval set from drifting into generic examples.</td>
+                        </tr>
+                        <tr>
+                            <td>Scenario library</td>
+                            <td>Representative prompts, conversations, and task situations.</td>
+                            <td>Creates coverage across realistic and difficult conditions.</td>
+                        </tr>
+                        <tr>
+                            <td>Behavior spec</td>
+                            <td>Expected intent, extraction, tool behavior, and response rules per scenario.</td>
+                            <td>Turns product intent into testable requirements.</td>
+                        </tr>
+                        <tr>
+                            <td>Rubric and thresholds</td>
+                            <td>Pass-fail rules, scoring dimensions, and severity definitions.</td>
+                            <td>Makes quality decisions consistent instead of subjective.</td>
+                        </tr>
+                        <tr>
+                            <td>Build-time mapping</td>
+                            <td>How scenarios will be executed during development and release review.</td>
+                            <td>Connects planning work to actual engineering practice.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <section id="example">
