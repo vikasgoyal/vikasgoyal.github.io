@@ -283,7 +283,7 @@
 				<section id="why-business-metrics-matter">
 					<div class="section-kicker">Why This Matters</div>
 					<h2>Why technical quality is not the same as business value</h2>
-					<p>AI teams often begin with the right instinct: measure accuracy, groundedness, policy compliance, latency, and cost. But the business ultimately cares about a different layer of truth. Did response time improve enough to protect the SLA? Did containment increase without hurting CSAT? Did cost-to-serve actually fall, or did human review overhead erase the savings? Did automation increase throughput while preserving resolution quality?</p>
+					<p>AI teams often begin with the right instinct: measure accuracy, groundedness, policy compliance, latency, and cost. But the business ultimately cares about a different layer of truth. Did response time improve enough to protect the SLA? Did containment increase without hurting CSAT? Did cost-to-serve actually fall, or did human review overhead erase the savings? Did automation increase throughput while preserving resolution quality? The technical side of that stack is introduced in <a href="/agentic/observe/whatareevals.html">What Are Evals?</a> and made operational through <a href="/agentic/observe/runtime-evals-observability.html">runtime evaluation</a>.</p>
 					<p>Those questions matter because organizations do not deploy AI for benchmark beauty. They deploy it to change the economics or quality of a real workflow. If evaluation never connects to that level, teams can end up optimizing the wrong things: perfecting outputs that do not change outcomes, or reducing model cost while increasing operational rework.</p>
 					<p>The purpose of business-aligned evals is not to replace technical metrics. It is to connect them to the operational outcomes that justify deployment, scaling, and continued investment.</p>
 				</section>
@@ -291,7 +291,7 @@
 				<section id="metric-layers">
 					<div class="section-kicker">Metric Stack</div>
 					<h2>Think in layers, not in one dashboard number</h2>
-					<p>The strongest approach is to stack metrics across layers rather than collapsing everything into one score.</p>
+					<p>The strongest approach is to stack metrics across layers rather than collapsing everything into one score. That layered view also mirrors the split between technical evals, production behavior, and governance in <a href="/agentic/observe/evalops-operating-model.html">EvalOps</a>.</p>
 
 					<div class="metric-grid">
 						<div class="metric-card highlight">
@@ -367,7 +367,7 @@
 						<li><strong>Leading indicators:</strong> containment rate, handle time, retry rate, escalation rate, first-response speed, operator overrides.</li>
 						<li><strong>Lagging indicators:</strong> quarterly savings, revenue lift, churn reduction, sustained SLA improvement, long-term CSAT or NPS movement.</li>
 					</ul>
-					<p>The evaluation program should connect those layers. Leading indicators help teams iterate faster. Lagging indicators validate whether the system is actually worth scaling.</p>
+					<p>The evaluation program should connect those layers. Leading indicators help teams iterate faster. Lagging indicators validate whether the system is actually worth scaling. In practice, the leading signals often come from <a href="/agentic/observe/build-time-evals.html">build-time evals</a> and <a href="/agentic/observe/runtime-evals-observability.html">runtime observability</a>.</p>
 				</section>
 
 				<section id="example">

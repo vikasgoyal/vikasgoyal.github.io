@@ -288,7 +288,7 @@
 				<section id="why-rag-needs-decomposition">
 					<div class="section-kicker">Decomposition</div>
 					<h2>Why RAG evaluation breaks when teams use one score</h2>
-					<p>Retrieval-augmented generation systems are compositional. They depend on the corpus, chunking strategy, metadata, ranking, context assembly, prompt design, model behavior, and answer formatting. When teams ask only “was the final answer correct?” they lose the ability to diagnose where failure started.</p>
+					<p>Retrieval-augmented generation systems are compositional. They depend on the corpus, chunking strategy, metadata, ranking, context assembly, prompt design, model behavior, and answer formatting. When teams ask only “was the final answer correct?” they lose the ability to diagnose where failure started. That is also why <a href="/agentic/observe/data-design-evals.html">dataset design</a> matters so much for RAG.</p>
 					<p>A wrong answer may reflect bad retrieval, but it may also reflect correct retrieval combined with poor grounding. A confident answer with citations may still be misleading if the citations do not actually support the claim being made. A low answer score may even hide a corpus problem rather than a model problem. Treating all of that as one metric leads to vague fixes and repeated regressions.</p>
 					<p>The solution is to evaluate RAG as a small system, not as a single response surface.</p>
 				</section>
@@ -382,7 +382,7 @@
 						</div>
 					</div>
 
-					<p>These categories matter because each one points to a different engineering response. Missed evidence may require better chunking, metadata, or ranking. Ungrounded synthesis may require a stricter generation prompt or a different rubric. Bad citations may reflect answer formatting logic rather than retrieval quality.</p>
+					<p>These categories matter because each one points to a different engineering response. Missed evidence may require better chunking, metadata, or ranking. Ungrounded synthesis may require a stricter generation prompt or a different rubric. Bad citations may reflect answer formatting logic rather than retrieval quality. Those fixes typically enter the delivery loop through <a href="/agentic/observe/build-time-evals.html">build-time evals</a>.</p>
 				</section>
 
 				<section id="dataset-design">

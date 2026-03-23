@@ -134,7 +134,7 @@
                 <h2>Start With Evaluation, Not Implementation</h2>
                 <p>Most teams build AI agents backwards. They start with prompts, tools, frameworks, and demos. Only later do they try to define what the system was actually supposed to do, what kinds of failures matter, and how quality should be judged.</p>
                 <p>That sequence creates confusion. A prompt that looks impressive in a demo may fail on an edge case the team never wrote down. A workflow that seems useful in development may quietly violate a policy requirement that no one translated into an eval scenario. By the time these problems are visible, the implementation is already shaping the requirements.</p>
-                <p>Pre-build evals reverse that order. They force a team to decide what success looks like before writing prompts, wiring tools, building orchestration logic, or integrating retrieval. They are the AI equivalent of specifying tests before building the system, except the focus is not just on deterministic software behavior. It is on expected agent behavior under ambiguity, imperfect instructions, safety boundaries, and tool interactions.</p>
+                <p>Pre-build evals reverse that order. They force a team to decide what success looks like before writing prompts, wiring tools, building orchestration logic, or integrating retrieval. They are the AI equivalent of specifying tests before building the system, except the focus is not just on deterministic software behavior. It is on expected agent behavior under ambiguity, imperfect instructions, safety boundaries, and tool interactions, which is why they sit naturally between <a href="/agentic/observe/whatareevals.html">eval fundamentals</a> and <a href="/agentic/observe/build-time-evals.html">build-time eval execution</a>.</p>
                 <div class="article-note">
                     <strong>Working definition:</strong> Pre-build evals are evaluation design activities done before implementation starts. They define behaviors, scenarios, failure modes, rubrics, and acceptance criteria while the team is still clarifying requirements.
                 </div>
@@ -164,7 +164,7 @@
                         <p>Monitor real-world behavior after release using production signals, feedback, and incidents.</p>
                     </div>
                 </div>
-                <p>These stages serve different purposes. Pre-build evals answer what the system should do. Build-time evals answer whether the implementation satisfies those expectations. Runtime evals answer how the live system behaves under real traffic, real users, and real distribution shift.</p>
+                <p>These stages serve different purposes. Pre-build evals answer what the system should do. <a href="/agentic/observe/build-time-evals.html">Build-time evals</a> answer whether the implementation satisfies those expectations. <a href="/agentic/observe/runtime-evals-observability.html">Runtime evals</a> answer how the live system behaves under real traffic, real users, and real distribution shift.</p>
                 <p>If you skip pre-build evals, build-time evaluation becomes reactive. If you skip build-time evals, production becomes the test environment. And if you skip runtime evals, you never learn how the system behaves outside the lab.</p>
             </section>
 
@@ -211,6 +211,7 @@
                     <li><strong>Relevance expectations:</strong> What does a good retrieval result look like?</li>
                     <li><strong>Grounding behavior:</strong> When must the system answer only from retrieved content?</li>
                 </ul>
+                <p>Those retrieval expectations should later become concrete checks in <a href="/agentic/observe/rag-evals.html">RAG evals</a> rather than staying as design-time intentions only.</p>
 
                 <h3>Token and Cost Estimation</h3>
                 <ul>
@@ -290,7 +291,7 @@
                 <h2>How To Use This In a Real Project</h2>
                 <p>An effective pre-build eval set does not need to be huge. It needs to be representative. Start with happy paths, edge cases, ambiguous cases, adversarial or policy-sensitive cases, multi-turn cases, and tool-dependent cases.</p>
                 <p>For each scenario, define the user input, expected intent, required extracted fields, expected tool behavior, allowed and disallowed response characteristics, and a clear pass-fail rule. If a team cannot write these expectations down, it is usually not ready to build the agent.</p>
-                <p>Once development starts, use the same scenarios to run build-time evals against prompts, tools, and workflows. After release, use production failures and real-user feedback to expand the scenario set and improve future pre-build planning.</p>
+                <p>Once development starts, use the same scenarios to run <a href="/agentic/observe/build-time-evals.html">build-time evals</a> against prompts, tools, and workflows. After release, use production failures and real-user feedback from <a href="/agentic/observe/runtime-evals-observability.html">runtime evaluation</a> to expand the scenario set and improve future pre-build planning.</p>
             </section>
 
             <section id="mistakes">

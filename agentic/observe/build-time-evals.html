@@ -283,7 +283,7 @@
 				<section id="why-build-time-evals-exist">
 					<div class="section-kicker">Lifecycle</div>
 					<h2>What build-time evals are really for</h2>
-					<p>Pre-build evals define what good should look like. Runtime evals tell you how the live system behaves under real traffic. Build-time evals sit between those two moments. Their job is to determine whether changes made during development actually improve the system or quietly make it worse.</p>
+					<p><a href="/agentic/prebuildevals.html">Pre-build evals</a> define what good should look like. <a href="/agentic/observe/runtime-evals-observability.html">Runtime evals</a> tell you how the live system behaves under real traffic. Build-time evals sit between those two moments. Their job is to determine whether changes made during development actually improve the system or quietly make it worse.</p>
 					<p>This matters because AI systems are unusually sensitive to change. A prompt revision can improve tone while degrading accuracy. A retrieval tweak can increase recall while reducing grounding. A new tool policy can improve autonomy but introduce silent failures. If teams rely on demos or subjective inspection, they will often ship regressions without realizing it.</p>
 					<p>Build-time evals create a disciplined loop: make a change, run the evaluation suite, inspect where quality moved, and decide whether the change is worth keeping. That is how AI development becomes engineering rather than trial and error.</p>
 				</section>
@@ -317,7 +317,7 @@
 					<p>Teams often think only about prompt testing, but build-time evals should cover the full implementation surface that can change system behavior.</p>
 					<ul>
 						<li><strong>Prompt and instruction changes:</strong> output quality, instruction following, refusal behavior, and format compliance.</li>
-						<li><strong>Retrieval changes:</strong> relevance, grounding quality, citation fidelity, and failure behavior when evidence is weak or conflicting.</li>
+						<li><strong>Retrieval changes:</strong> relevance, grounding quality, citation fidelity, and failure behavior when evidence is weak or conflicting, which should be judged with the decomposition used in <a href="/agentic/observe/rag-evals.html">RAG evals</a>.</li>
 						<li><strong>Tooling changes:</strong> tool selection, parameter extraction, sequencing, retries, and recovery from tool errors.</li>
 						<li><strong>Workflow changes:</strong> orchestration logic, planner-executor handoffs, routing, and escalation conditions.</li>
 						<li><strong>Model changes:</strong> accuracy, consistency, latency, cost, and behavioral drift across task families.</li>
@@ -356,7 +356,7 @@
 							</tr>
 							<tr>
 								<td>Adversarial and policy suite</td>
-								<td>Check red-flag behaviors such as unsafe outputs, prompt injection susceptibility, or policy bypass.</td>
+								<td>Check red-flag behaviors such as unsafe outputs, prompt injection susceptibility, or policy bypass, often using the scenarios described in <a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming</a>.</td>
 								<td>Before release and on security-sensitive changes.</td>
 							</tr>
 						</tbody>
@@ -386,7 +386,7 @@
 					<div class="section-kicker">Governance</div>
 					<h2>Release gates should be risk-based, not score-obsessed</h2>
 					<p>One of the most common mistakes in AI evaluation is reducing release decisions to a single number. A system may have a high overall score and still fail on the handful of scenarios that matter most. That is why release gates should be designed around risk tiers and critical behaviors rather than only average performance.</p>
-					<p>A practical release policy might allow minor regressions in low-risk style or wording tasks while blocking any change that harms policy compliance, tool correctness, financial accuracy, or safety-sensitive behavior. This is closer to how mature engineering teams treat incidents and SLAs: not all failures carry the same weight.</p>
+					<p>A practical release policy might allow minor regressions in low-risk style or wording tasks while blocking any change that harms policy compliance, tool correctness, financial accuracy, or safety-sensitive behavior. This is closer to how mature engineering teams treat incidents and SLAs: not all failures carry the same weight, and the operating discipline behind those gates is part of <a href="/agentic/observe/evalops-operating-model.html">EvalOps</a>.</p>
 					<div class="risk-grid">
 						<div class="risk-card">
 							<h3>Low-risk gates</h3>

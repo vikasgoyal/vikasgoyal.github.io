@@ -283,7 +283,7 @@
 				<section id="why-evalops-exists">
 					<div class="section-kicker">Operating Model</div>
 					<h2>Why good eval techniques still fail without EvalOps</h2>
-					<p>Many teams can design a decent dataset, define useful rubrics, and run a benchmark. The harder problem begins later. Who approves changes to the benchmark? Which score counts as the release baseline? Who signs off when a model improves on average but regresses on a critical scenario? When a prompt, tool, or corpus changes, who decides whether the evaluation set should also change?</p>
+					<p>Many teams can design a decent dataset, define useful rubrics, and run a benchmark. The harder problem begins later. Who approves changes to the benchmark? Which score counts as the release baseline? Who signs off when a model improves on average but regresses on a critical scenario? When a prompt, tool, or corpus changes, who decides whether the evaluation set should also change? Those problems sit on top of the work described in <a href="/agentic/observe/data-design-evals.html">dataset design</a> and <a href="/agentic/observe/build-time-evals.html">build-time eval workflow</a>.</p>
 					<p>Without clear answers, evaluation becomes inconsistent and political. Scores drift because baselines change silently. Teams overfit to the benchmark because no one owns benchmark health. Release decisions become subjective because no one has authority over critical gates. In practice, the technical eval may exist, but the operating discipline around it does not.</p>
 					<p>EvalOps fills that gap. It turns evaluation from a method into a managed system of ownership, artifacts, review, and traceable decision-making.</p>
 				</section>
@@ -373,7 +373,7 @@
 				<section id="drift">
 					<div class="section-kicker">Drift</div>
 					<h2>Evaluation drift is an operating problem, not just a model problem</h2>
-					<p>Teams often talk about model drift, but evaluation drift matters just as much. Evaluation drift happens when the benchmark stops representing the real problem, when judge behavior changes, when corpus or tool changes make old cases misleading, or when teams quietly reshape thresholds to preserve a comforting score.</p>
+					<p>Teams often talk about model drift, but evaluation drift matters just as much. Evaluation drift happens when the benchmark stops representing the real problem, when judge behavior changes, when corpus or tool changes make old cases misleading, or when teams quietly reshape thresholds to preserve a comforting score. The live signals that expose this often surface first in <a href="/agentic/observe/runtime-evals-observability.html">runtime evals</a>.</p>
 					<p>That means EvalOps needs drift controls across multiple layers:</p>
 					<ul>
 						<li><strong>Dataset drift:</strong> the scenario mix no longer reflects real traffic or current risk.</li>

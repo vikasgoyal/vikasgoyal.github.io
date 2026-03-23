@@ -283,7 +283,7 @@
 				<section id="why-runtime-evals-exist">
 					<div class="section-kicker">Why Production Is Different</div>
 					<h2>Why offline success does not guarantee production success</h2>
-					<p>Offline evals and build-time evals are necessary, but they are still controlled approximations. Production introduces distribution shift, new user phrasing, new documents, changing policies, degraded tools, strange workflow combinations, and operational pressures that benchmarks rarely capture in full.</p>
+					<p>Offline evals and <a href="/agentic/observe/build-time-evals.html">build-time evals</a> are necessary, but they are still controlled approximations. Production introduces distribution shift, new user phrasing, new documents, changing policies, degraded tools, strange workflow combinations, and operational pressures that benchmarks rarely capture in full.</p>
 					<p>That is especially true for agentic systems. Once agents are allowed to call tools, maintain memory, coordinate across steps, and adapt to their environment, many of the most important risks become execution-time risks. A system can pass the test suite and still drift into bad habits, overuse tools, escalate too rarely, retry too aggressively, or behave differently under real traffic than it did in staging.</p>
 					<p>Runtime evals exist to close that gap. They are the disciplined practice of evaluating live behavior through production signals rather than relying only on pre-deployment confidence.</p>
 				</section>
@@ -346,11 +346,11 @@
 							</tr>
 							<tr>
 								<td>Safety and policy behavior</td>
-								<td>Are guardrails firing correctly, are refusals degrading, and are risky actions happening without sufficient review?</td>
+								<td>Are guardrails firing correctly, are refusals degrading, and are risky actions happening without sufficient review, as described in <a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming</a>?</td>
 							</tr>
 							<tr>
 								<td>Cost and latency behavior</td>
-								<td>Are token usage, runtime length, or tool cost increasing in ways that change system viability?</td>
+								<td>Are token usage, runtime length, or tool cost increasing in ways that change system viability, which later feeds into <a href="/agentic/observe/business-metrics-evals.html">business-metrics evaluation</a>?</td>
 							</tr>
 							<tr>
 								<td>Human override patterns</td>
@@ -385,9 +385,10 @@
 					<h2>Production incidents should become evaluation assets</h2>
 					<p>One of the most important jobs of runtime evals is feeding production reality back into the broader evaluation program. Every serious incident, dangerous near-miss, or repeated operator correction should result in one or more reusable artifacts:</p>
 					<ul>
-						<li>a new regression case for build-time evaluation,</li>
+						<li>a new regression case for <a href="/agentic/observe/build-time-evals.html">build-time evaluation</a>,</li>
 						<li>a new adversarial or edge-case scenario for the broader dataset,</li>
 						<li>a refined runtime alert or anomaly detector,</li>
+						<li>and an auditable record inside the broader <a href="/agentic/observe/evalops-operating-model.html">EvalOps</a> process.</li>
 						<li>or an updated policy or escalation rule.</li>
 					</ul>
 					<p>If incidents are investigated once and forgotten, the runtime evaluation loop is incomplete. Production learning needs to harden the future benchmark.</p>

@@ -266,7 +266,7 @@
 				<section id="why-comparison-matters">
 					<div class="section-kicker">Quality Lens</div>
 					<h2>Why this comparison matters</h2>
-					<p>Many teams treat evals as if they were simply a new name for testing. That framing is too loose to be useful. It causes engineering teams to assume existing QA methods are enough, and it causes AI teams to undervalue the rigor that software testing already provides. The right mental model is more precise: <strong>testing and evals overlap, but they answer different questions</strong>.</p>
+					<p>Many teams treat evals as if they were simply a new name for testing. That framing is too loose to be useful. It causes engineering teams to assume existing QA methods are enough, and it causes AI teams to undervalue the rigor that software testing already provides. The right mental model is more precise: <strong>testing and evals overlap, but they answer different questions</strong>. If you want the broader framing first, start with <a href="/agentic/observe/whatareevals.html">What Are Evals?</a>.</p>
 					<p>Traditional software tests ask whether the system behaved according to a defined contract. If an endpoint is supposed to return a schema, if a permission check should block unauthorized access, or if a workflow should transition from one state to another, those expectations can be written down clearly and checked deterministically. AI systems add another layer. They may satisfy the contract of the software and still fail the job the user actually cares about.</p>
 					<p>A support copilot can return valid JSON, render cleanly in the interface, and pass every API test while still giving the wrong refund advice. A retrieval system can successfully call the search layer and attach citations while retrieving the wrong policy document. An agent can invoke a tool with syntactically correct arguments and still choose the wrong tool entirely. That is why AI quality cannot be reduced to classical pass-fail testing alone.</p>
 				</section>
@@ -293,7 +293,7 @@
 							<p>They assess whether the model-driven parts of the system behaved well enough in context, especially where there is more than one plausible output or path.</p>
 						</div>
 					</div>
-					<p>In other words, both are quality disciplines. The difference is that one is optimized for <strong>explicit contracts</strong> and the other for <strong>probabilistic performance under ambiguity</strong>.</p>
+					<p>In other words, both are quality disciplines. The difference is that one is optimized for <strong>explicit contracts</strong> and the other for <strong>probabilistic performance under ambiguity</strong>. That distinction becomes operational in <a href="/agentic/prebuildevals.html">pre-build evals</a> and <a href="/agentic/observe/build-time-evals.html">build-time evals</a>.</p>
 				</section>
 
 				<section id="comparative-analysis">

@@ -285,7 +285,7 @@
 					<div class="section-kicker">Foundation</div>
 					<h2>Why data design is the real foundation of eval quality</h2>
 					<p>Teams often jump too quickly to scorers, dashboards, and pass rates. Those matter, but they sit on top of a simpler question: what examples are you using to judge the system in the first place? If the evaluation set is too easy, too clean, too synthetic, or too narrow, the resulting score will create false confidence.</p>
-					<p>A weak dataset usually reflects what was convenient to collect rather than what the live system will actually face. That leads to familiar failure modes. The model performs well on curated prompts but struggles with vague or messy inputs. Retrieval quality looks strong on idealized examples but breaks on sparse evidence or conflicting documentation. An agent appears reliable until multi-step cases, exception handling, or policy boundaries show up in production.</p>
+					<p>A weak dataset usually reflects what was convenient to collect rather than what the live system will actually face. That leads to familiar failure modes. The model performs well on curated prompts but struggles with vague or messy inputs. <a href="/agentic/observe/rag-evals.html">Retrieval quality</a> looks strong on idealized examples but breaks on sparse evidence or conflicting documentation. An agent appears reliable until multi-step cases, exception handling, or policy boundaries show up in <a href="/agentic/observe/runtime-evals-observability.html">production evaluation</a>.</p>
 					<p>The practical lesson is simple: eval data is not clerical setup work. It is part of product design, risk management, and system architecture. A well-designed dataset makes quality measurable. A poorly designed one makes quality look measurable.</p>
 				</section>
 
@@ -348,7 +348,7 @@
 						</div>
 					</div>
 
-					<p>For agentic systems, scenario design should also include <strong>trajectory-sensitive cases</strong>: tasks where the path matters, not just the final answer. For RAG systems, it should include cases with missing evidence, conflicting evidence, and evidence that appears relevant but should not be used.</p>
+					<p>For agentic systems, scenario design should also include <strong>trajectory-sensitive cases</strong>: tasks where the path matters, not just the final answer. For RAG systems, it should include cases with missing evidence, conflicting evidence, and evidence that appears relevant but should not be used, which later feeds directly into <a href="/agentic/observe/rag-evals.html">RAG-specific evaluation</a> and <a href="/agentic/observe/safety-evals-red-teaming.html">safety and adversarial testing</a>.</p>
 				</section>
 
 				<section id="dataset-schema">
@@ -413,7 +413,7 @@
 					<div class="section-kicker">Lifecycle</div>
 					<h2>Version datasets like you version code</h2>
 					<p>Evaluation data changes for legitimate reasons. The product changes. Policies change. New tools are added. User behavior shifts. Production incidents reveal missing cases. That means dataset versioning is not optional if you want evaluation results to remain interpretable over time.</p>
-					<p>At minimum, teams should track when cases were added, removed, or re-labeled, and why. If a golden set changes, release comparisons should clearly state whether the system improved or whether the benchmark changed. Without that discipline, score trends become hard to trust.</p>
+					<p>At minimum, teams should track when cases were added, removed, or re-labeled, and why. If a golden set changes, release comparisons should clearly state whether the system improved or whether the benchmark changed. Without that discipline, score trends become hard to trust, which is exactly the governance problem that <a href="/agentic/observe/evalops-operating-model.html">EvalOps</a> is meant to solve.</p>
 					<p>A practical approach is to keep three layers:</p>
 					<ol>
 						<li>A stable golden set for release and regression decisions.</li>

@@ -283,7 +283,7 @@
 				<section id="why-safety-evals-are-different">
 					<div class="section-kicker">Why This Matters</div>
 					<h2>Safety evals are not just another quality check</h2>
-					<p>Ordinary evals ask whether the system is accurate, useful, grounded, and reliable enough for the job. Safety evals ask a different class of question: what happens when the system is pressured, manipulated, confused, or pushed toward prohibited behavior?</p>
+					<p><a href="/agentic/observe/whatareevals.html">Ordinary evals</a> ask whether the system is accurate, useful, grounded, and reliable enough for the job. Safety evals ask a different class of question: what happens when the system is pressured, manipulated, confused, or pushed toward prohibited behavior?</p>
 					<p>That matters because AI systems often fail in asymmetrical ways. A model that behaves well on normal traffic may still disclose sensitive information when phrased differently, obey malicious instructions embedded in retrieved content, or take unsafe actions when given ambiguous authority. These failures are not captured well by happy-path evaluation.</p>
 					<p>Red teaming makes those weaknesses visible on purpose. It is the practice of systematically generating and testing adversarial cases that try to break the system's policies, trust boundaries, and operational safeguards.</p>
 				</section>
@@ -359,7 +359,7 @@
 				<section id="guardrails-versus-red-teaming">
 					<div class="section-kicker">Controls</div>
 					<h2>Guardrails and red teaming play different roles</h2>
-					<p>Guardrails are the controls. Red teaming is the pressure test. Teams often confuse the two. A guardrail is a refusal rule, policy engine, classifier, runtime enforcement layer, or permission boundary. Red teaming is the process used to see whether those controls actually hold up under realistic attack patterns.</p>
+					<p>Guardrails are the controls. Red teaming is the pressure test. Teams often confuse the two. A guardrail is a refusal rule, policy engine, classifier, runtime enforcement layer, or permission boundary. Red teaming is the process used to see whether those controls actually hold up under realistic attack patterns, while <a href="/agentic/observe/runtime-evals-observability.html">runtime evals and observability</a> show whether those controls keep holding under live traffic.</p>
 					<div class="guardrail-grid">
 						<div class="guardrail-card highlight">
 							<h3>Guardrails</h3>
@@ -383,7 +383,7 @@
 				<section id="dataset-design">
 					<div class="section-kicker">Scenario Design</div>
 					<h2>Safety datasets should include boundary cases, not just obvious attacks</h2>
-					<p>A weak safety set contains only blatant malicious prompts. A stronger one includes ambiguous or borderline cases where the correct response is not just “block.” For example, a medical assistant may need to refuse diagnosis but still provide safe next steps. A support agent may need to reject an unauthorized request while still offering a valid escalation path.</p>
+					<p>A weak safety set contains only blatant malicious prompts. A stronger one includes ambiguous or borderline cases where the correct response is not just “block.” For example, a medical assistant may need to refuse diagnosis but still provide safe next steps. A support agent may need to reject an unauthorized request while still offering a valid escalation path. The mechanics of building those scenario libraries overlap directly with <a href="/agentic/observe/data-design-evals.html">dataset and scenario design</a>.</p>
 					<p>That is why safety evaluation should include:</p>
 					<ul>
 						<li>clear disallowed cases,</li>
