@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agentic AI Intelligence Report - Archive</title>
   <meta name="description" content="Agentic AI Intelligence Report archive. Browse all past editions.">
+  <link rel="canonical" href="https://vikasgoyal.github.io/industries/agentic/">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
   <script>
@@ -13,38 +14,192 @@
     gtag('js', new Date());
     gtag('config', 'G-ZBXY60BLWE');
   </script>
+  <link rel="stylesheet" href="../../styles.css">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 700px; margin: 60px auto; padding: 0 24px; color: #1e293b; }
-    h1 { font-size: 1.8rem; margin-bottom: 8px; }
-    p.sub { color: #64748b; margin-bottom: 32px; }
-    .subscribe-card { margin: 0 0 32px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px; background: #f8fafc; }
-    .subscribe-card h2 { font-size: 1.15rem; margin-bottom: 10px; }
-    .subscribe-card p { color: #475569; margin-bottom: 16px; line-height: 1.7; }
-    .subscribe-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-    .subscribe-actions a { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 16px; border-radius: 999px; font-weight: 600; text-decoration: none; }
-    .subscribe-actions .primary { background: #1d4ed8; color: #ffffff; }
-    .subscribe-actions .secondary { border: 1px solid #cbd5e1; color: #1e293b; background: #ffffff; }
-    ul { list-style: none; padding: 0; }
-    li { border-bottom: 1px solid #e2e8f0; }
-    li a { display: block; padding: 14px 0; color: #2563eb; text-decoration: none; font-size: 1rem; }
-    li a:hover { color: #1d4ed8; text-decoration: underline; }
-    .latest { font-size: 0.75rem; background: #dcfce7; color: #166534; border-radius: 4px; padding: 2px 8px; margin-left: 8px; }
+    body {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 20px 0 56px;
+      background:
+        radial-gradient(circle at top left, rgba(23, 60, 115, 0.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(15, 93, 68, 0.08), transparent 24%),
+        linear-gradient(180deg, #fcfdff 0%, #f8fafc 48%, #ffffff 100%);
+      color: #121212;
+    }
+
+    .archive-shell {
+      margin-top: 0.5rem;
+    }
+
+    .archive-card {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2rem;
+      border: 1px solid rgba(18, 18, 18, 0.10);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 18px 44px rgba(18, 18, 18, 0.10);
+      backdrop-filter: blur(12px);
+    }
+
+    .archive-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(23, 60, 115, 0.08);
+      color: #173c73;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    p.sub {
+      color: #505050;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+      max-width: 60ch;
+    }
+
+    .subscribe-card {
+      margin: 0 0 2rem;
+      padding: 1.4rem;
+      border: 1px solid rgba(18, 18, 18, 0.08);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(23, 60, 115, 0.06), rgba(15, 93, 68, 0.08));
+    }
+
+    .subscribe-card h2 {
+      font-size: 1.15rem;
+      margin: 0 0 0.75rem;
+    }
+
+    .subscribe-card p {
+      color: #505050;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .subscribe-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .subscribe-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .subscribe-actions .primary {
+      background: linear-gradient(135deg, #173c73 0%, #0f5d44 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 22px rgba(23, 60, 115, 0.18);
+    }
+
+    .subscribe-actions .secondary {
+      border: 1px solid rgba(18, 18, 18, 0.10);
+      color: #173c73;
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .archive-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .archive-list li {
+      margin: 0;
+      border-bottom: 1px solid rgba(18, 18, 18, 0.10);
+    }
+
+    .archive-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+      color: #173c73;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .archive-list a:hover,
+    .archive-list a:focus {
+      color: #0f5d44;
+      text-decoration: none;
+    }
+
+    .latest {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #dcfce7;
+      color: #166534;
+      border-radius: 999px;
+      padding: 0.28rem 0.6rem;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        width: calc(100% - 24px);
+        padding-bottom: 40px;
+      }
+
+      .archive-card {
+        padding: 1.35rem;
+        border-radius: 22px;
+      }
+
+      .archive-list a {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Agentic AI Intelligence Report</h1>
-  <p class="sub">Weekly insights on agentic AI &mdash; browse all editions below.</p>
-  <section class="subscribe-card" aria-labelledby="subscribe-title">
-    <h2 id="subscribe-title">Subscribe for future editions</h2>
-    <p>New reports and related essays are also published through the newsletter, which is the fastest way to catch fresh agentic AI analysis without checking the archive manually.</p>
-    <div class="subscribe-actions">
-      <a class="primary" href="https://aistartupscareer.substack.com/" target="_blank" rel="noopener noreferrer">Open on Substack</a>
-      <a class="secondary" href="../">Industry AI home</a>
-    </div>
-  </section>
-  <ul>
-    <li><a href="agentic-ai-2026-03-18.html">March 18, 2026 <span class="latest">latest</span></a></li>
-  </ul>
-  <script src="/headerfooter.js"></script>
+  <div id="header"></div>
+  <main class="archive-shell">
+    <article class="archive-card">
+      <span class="archive-eyebrow">Industries AI</span>
+      <h1>Agentic AI Intelligence Report</h1>
+      <p class="sub">Periodic insights on agentic AI, operating models, and industry shifts. Browse every published edition below.</p>
+      <section class="subscribe-card" aria-labelledby="subscribe-title">
+        <h2 id="subscribe-title">Subscribe for future editions</h2>
+        <p>New reports and related essays are also published through the newsletter, which is the fastest way to catch fresh agentic AI analysis without checking the archive manually.</p>
+        <div class="subscribe-actions">
+          <a class="primary" href="https://aistartupscareer.substack.com/" target="_blank" rel="noopener noreferrer">Open on Substack</a>
+          <a class="secondary" href="../">Industry AI home</a>
+        </div>
+      </section>
+      <ul class="archive-list">
+        <li><a href="agentic-ai-2026-03-18.html"><span>March 18, 2026</span> <span class="latest">Latest</span></a></li>
+      </ul>
+    </article>
+  </main>
+  <div id="footer"></div>
+  <script src="../../headerfooter.js"></script>
 </body>
 </html>
