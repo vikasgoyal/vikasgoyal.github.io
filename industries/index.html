@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Industry AI Intelligence Reports | Vikas Goyal</title>
-    <meta name="description" content="Industry AI intelligence reports covering agentic AI, retail, legal, and healthcare. Practitioner-grade briefings for builders, operators, and decision-makers.">
+    <meta name="description" content="Industry AI intelligence reports covering agentic AI, retail, legal, healthcare, and AI startups. Practitioner-grade briefings for builders, operators, and decision-makers.">
     <link rel="canonical" href="https://vikasgoyal.github.io/industries/">
     <meta property="og:title" content="Industry AI Intelligence Reports | Vikas Goyal">
     <meta property="og:description" content="Practitioner-grade intelligence on how AI and agentic systems are reshaping industries, from cross-sector briefings to vertical deep dives.">
@@ -52,6 +52,10 @@
             --health-primary: #15803d;
             --health-secondary: #4ade80;
             --health-surface: #f0fdf4;
+
+            --startups-primary: #0f5d44;
+            --startups-secondary: #173c73;
+            --startups-surface: #f7f2ea;
         }
 
         * {
@@ -551,6 +555,19 @@
         .card-healthcare .detail-box { background: var(--health-surface); color: var(--health-primary); }
         .card-healthcare .card-cta { background: var(--health-primary); color: #ffffff; }
 
+        .card-startups {
+            background: linear-gradient(180deg, rgba(247, 242, 234, 0.96) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .card-startups .card-kicker { color: var(--startups-primary); }
+        .card-startups .card-icon { background: var(--startups-surface); color: var(--startups-secondary); }
+        .card-startups .topic-chip,
+        .card-startups .detail-box { background: var(--startups-surface); color: var(--startups-secondary); }
+        .card-startups .card-cta {
+            background: linear-gradient(135deg, var(--startups-secondary) 0%, var(--startups-primary) 100%);
+            color: #ffffff;
+        }
+
         .footer-grid {
             display: grid;
             grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
@@ -829,6 +846,41 @@
                         <span class="topic-chip">Digital Health</span>
                     </div>
                     <a class="card-cta" href="./healthcare/index.html">Read latest report</a>
+                </article>
+
+                <article class="report-card card-startups">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-kicker">Founders and Venture</div>
+                            <h3 class="card-title">AI Startups Intelligence Report</h3>
+                        </div>
+                        <div class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 3c3 2 5 5.4 5 8.7 0 4-2.4 6.9-5 9.3-2.6-2.4-5-5.3-5-9.3C7 8.4 9 5 12 3z"></path>
+                                <path d="M12 10l2 2"></path>
+                                <path d="M10 12l4-4"></path>
+                                <path d="M9 18h6"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="card-desc">A startup-focused archive page for periodic AI briefings on AI-native product strategy, founder execution, venture signals, and the operating patterns shaping early-stage companies.</p>
+                    <div class="card-detail-row">
+                        <div class="detail-box">
+                            <strong>Best For</strong>
+                            Founders, operators, and investors tracking AI startup execution and market movement.
+                        </div>
+                        <div class="detail-box">
+                            <strong>Lens</strong>
+                            Product strategy, GTM leverage, defensibility, funding, and startup operating models.
+                        </div>
+                    </div>
+                    <div class="card-topics">
+                        <span class="topic-chip">AI-Native Products</span>
+                        <span class="topic-chip">Founder Execution</span>
+                        <span class="topic-chip">Venture Signals</span>
+                        <span class="topic-chip">Defensibility</span>
+                    </div>
+                    <a class="card-cta" href="./startups/index.html">Browse archive</a>
                 </article>
             </div>
         </section>
