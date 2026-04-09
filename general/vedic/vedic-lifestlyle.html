@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vedic Living Reference</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <h1>Vedic time, daily rhythm, and seasonal living.</h1>
+          <p class="hero-copy">
+            This page uses the selected city to compute sunrise locally in the
+            browser, then layers a Vedic clock, time-of-day guidance, and
+            season-based lifestyle notes on top of the live Gregorian day.
+          </p>
+        </div>
+
+        <form class="controls" id="city-form">
+          <label class="control-label" for="city-select">City</label>
+          <select id="city-select" name="city"></select>
+
+          <div class="city-meta">
+            <span id="city-timezone"></span>
+            <span id="city-coordinates"></span>
+          </div>
+        </form>
+      </header>
+
+      <main class="clock-grid">
+        <section class="clock-card gregorian-card">
+          <div class="card-header">
+            <p class="card-kicker">Gregorian clock</p>
+            <p class="card-context" id="gregorian-date"></p>
+          </div>
+
+          <div class="clock-face clock-face-split">
+            <div class="clock-face-main">
+              <p class="clock-value" id="gregorian-time">--:--:--</p>
+              <p class="clock-caption" id="gregorian-zone">Loading timezone...</p>
+            </div>
+            <div class="donut-panel">
+              <div class="donut-ring gregorian-ring" id="gregorian-ring">
+                <div class="donut-inner">
+                  <span class="donut-value" id="gregorian-progress-value">0%</span>
+                  <span class="donut-label">day complete</span>
+                </div>
+              </div>
+              <p class="donut-caption" id="gregorian-progress-caption">Tracking local day progress</p>
+            </div>
+          </div>
+
+          <dl class="detail-list">
+            <div>
+              <dt>Current date</dt>
+              <dd id="gregorian-long-date"></dd>
+            </div>
+            <div>
+              <dt>Day progress</dt>
+              <dd id="day-progress"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="clock-card vedic-card">
+          <div class="card-header">
+            <p class="card-kicker">Vedic clock</p>
+            <p class="card-context">Sunrise-anchored ghati / pala / vipala</p>
+          </div>
+
+          <div class="clock-face clock-face-split">
+            <div class="clock-face-main">
+              <p class="clock-value" id="vedic-time">-- : -- : --</p>
+              <p class="clock-caption" id="vedic-caption">Calculating sunrise anchor...</p>
+            </div>
+            <div class="donut-panel">
+              <div class="donut-ring vedic-ring" id="vedic-ring">
+                <div class="donut-inner">
+                  <span class="donut-value" id="vedic-progress-value">0.0</span>
+                  <span class="donut-label">ghatis</span>
+                </div>
+              </div>
+              <p class="donut-caption" id="vedic-progress-caption">Tracking the sunrise-to-sunrise cycle</p>
+            </div>
+          </div>
+
+          <dl class="detail-list">
+            <div>
+              <dt>Sunrise</dt>
+              <dd id="sunrise-time"></dd>
+            </div>
+            <div>
+              <dt>Sunset</dt>
+              <dd id="sunset-time"></dd>
+            </div>
+            <div>
+              <dt>Elapsed since sunrise</dt>
+              <dd id="elapsed-sunrise"></dd>
+            </div>
+            <div>
+              <dt>Clock model</dt>
+              <dd>1 full day-night cycle = 60 ghatis. 1 ghati = 24 minutes, 1 ghati = 60 palas, 1 pala = 24 seconds, and 1 pala = 60 vipalas.</dd>
+            </div>
+          </dl>
+        </section>
+      </main>
+
+      <section class="notes-panel daylight-panel">
+        <div class="daylight-head">
+          <div>
+            <p class="notes-title">Solar Arc</p>
+            <p class="notes-copy" id="daylight-summary">
+              Tracking the local movement from sunrise to sunset.
+            </p>
+          </div>
+        </div>
+        <div class="solar-arc-shell">
+          <div class="solar-arc" id="solar-arc">
+            <div class="solar-stars" aria-hidden="true">
+              <span class="star"></span>
+              <span class="star"></span>
+              <span class="star"></span>
+              <span class="star"></span>
+              <span class="star"></span>
+              <span class="star"></span>
+            </div>
+            <div class="solar-arc-track"></div>
+            <div class="solar-arc-progress"></div>
+            <div class="solar-horizon"></div>
+            <div class="solar-marker" id="solar-marker">
+              <span class="solar-core"></span>
+            </div>
+          </div>
+          <div class="arc-label arc-label-start">
+            <span>Sunrise</span>
+            <strong id="arc-sunrise-label">--:--</strong>
+          </div>
+          <div class="arc-label arc-label-mid">
+            <span>Solar noon</span>
+            <strong id="arc-noon-label">--:--</strong>
+          </div>
+          <div class="arc-label arc-label-end">
+            <span>Sunset</span>
+            <strong id="arc-sunset-label">--:--</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="notes-panel lifestyle-panel">
+        <p class="notes-title">Vedic Living Now</p>
+        <div class="summary-grid">
+          <article class="summary-card emphasis-card">
+            <p class="summary-kicker" id="phase-badge">Current phase</p>
+            <h2 id="phase-title">Loading current rhythm...</h2>
+            <p class="summary-window" id="phase-window"></p>
+            <p class="summary-text" id="phase-focus"></p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-kicker">Food cue</p>
+            <p class="summary-text" id="phase-food"></p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-kicker">Avoid or reduce</p>
+            <p class="summary-text" id="phase-avoid"></p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-kicker">Rest cue</p>
+            <p class="summary-text" id="phase-sleep"></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="notes-panel rhythm-panel">
+        <p class="notes-title">Daily Rhythm</p>
+        <p class="notes-copy">
+          These phases are a simplified dinacharya-style reading of the local
+          day. They use sunrise and sunset as anchors so the reference stays
+          connected to natural light rather than only to the wall clock.
+        </p>
+        <div class="timeline-header">
+          <p class="timeline-caption">Sunrise-anchored rhythm line</p>
+          <p class="timeline-active" id="timeline-active-label">Loading active phase...</p>
+        </div>
+        <div class="rhythm-grid" id="day-phase-cards"></div>
+      </section>
+
+      <section class="notes-panel season-panel">
+        <p class="notes-title">Seasonal Living</p>
+        <div class="season-spotlight">
+          <div>
+            <p class="summary-kicker" id="season-name">Current ritu</p>
+            <h2 id="season-title">Loading seasonal profile...</h2>
+            <p class="notes-copy" id="season-summary"></p>
+          </div>
+
+          <dl class="season-details">
+            <div>
+              <dt>Traditional window</dt>
+              <dd id="season-window"></dd>
+            </div>
+            <div>
+              <dt>Seasonal qualities</dt>
+              <dd id="season-qualities"></dd>
+            </div>
+            <div>
+              <dt>Foods to prefer</dt>
+              <dd id="season-foods"></dd>
+            </div>
+            <div>
+              <dt>Foods to reduce</dt>
+              <dd id="season-reduce"></dd>
+            </div>
+            <div>
+              <dt>Activity emphasis</dt>
+              <dd id="season-activity"></dd>
+            </div>
+            <div>
+              <dt>Sleep guidance</dt>
+              <dd id="season-sleep"></dd>
+            </div>
+          </dl>
+        </div>
+        <div class="season-grid" id="season-cards"></div>
+      </section>
+
+      <section class="notes-panel guidance-panel">
+        <p class="notes-title">Food And Sleep</p>
+        <div class="guide-grid">
+          <article class="guide-card">
+            <h2>Eating rhythm</h2>
+            <div class="guide-points">
+              <p id="meal-timing"></p>
+              <p id="dinner-timing"></p>
+            </div>
+          </article>
+
+          <article class="guide-card">
+            <h2>Sleep rhythm</h2>
+            <div class="guide-points">
+              <p id="wake-timing"></p>
+              <p id="rest-timing"></p>
+            </div>
+          </article>
+        </div>
+        <p class="notes-copy guide-footnote" id="guidance-footnote"></p>
+      </section>
+
+      <section class="notes-panel muhurta-panel">
+        <p class="notes-title">Muhurta And Sandhya Reference</p>
+        <p class="notes-copy">
+          These windows are simplified practical markers built from today’s
+          local sunrise, solar noon, and sunset. They are meant as a living
+          reference for pause points, not as a strict ritual calendar.
+        </p>
+        <div class="muhurta-grid" id="muhurta-cards"></div>
+      </section>
+
+      <section class="notes-panel month-panel">
+        <p class="notes-title">Month-By-Month Seasonal Food Table</p>
+        <p class="notes-copy" id="month-table-caption">
+          A practical Gregorian-month guide that keeps the six-season rhythm in
+          view while making food choices easier to scan.
+        </p>
+        <div class="month-grid" id="month-food-cards"></div>
+      </section>
+
+      <section class="notes-panel">
+        <p class="notes-title">How To Read This Page</p>
+        <p class="notes-copy">
+          The city determines latitude, longitude, and timezone. Sunrise and
+          sunset are calculated in the browser using a standard solar-position
+          approximation, the Vedic clock starts counting from the most recent
+          local sunrise, and the lifestyle sections interpret that day through
+          a simplified hybrid of dinacharya and ritucharya guidance.
+        </p>
+      </section>
+
+      <section class="notes-panel vedic-guide">
+        <p class="notes-title">Reading The Vedic Clock</p>
+        <div class="guide-grid">
+          <article class="guide-card">
+            <h2>Units of time</h2>
+            <p>
+              In this model, the day is expressed through ghati, pala, and
+              vipala. The display starts from sunrise rather than midnight,
+              which is why the Vedic clock and the Gregorian clock do not share
+              the same zero point.
+            </p>
+            <dl class="guide-list">
+              <div>
+                <dt>Ghati</dt>
+                <dd>1 ghati = 24 modern minutes. 60 ghatis make one full day-night cycle.</dd>
+              </div>
+              <div>
+                <dt>Pala</dt>
+                <dd>1 pala = 24 seconds. 60 palas make 1 ghati.</dd>
+              </div>
+              <div>
+                <dt>Vipala</dt>
+                <dd>1 vipala = 0.4 seconds. 60 vipalas make 1 pala.</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="guide-card">
+            <h2>Traditional daily rhythm</h2>
+            <p>
+              In traditional Hindu practice, time is often treated as
+              qualitative as well as numerical. A sunrise-based clock supports
+              a day structure in which activities are aligned to natural light,
+              ritual windows, and disciplined repetition.
+            </p>
+            <div class="guide-points">
+              <p><strong>Before and near sunrise:</strong> commonly associated with prayer, meditation, chanting, study, and preparation for the day.</p>
+              <p><strong>Morning daylight:</strong> often regarded as suitable for focused learning, teaching, planning, and disciplined work.</p>
+              <p><strong>Midday and afternoon:</strong> more commonly linked with worldly duties, administration, trade, travel, craft, and household responsibilities.</p>
+              <p><strong>Sunset period:</strong> traditionally treated as another transition point for pause, prayer, reflection, and resetting the rhythm of the household.</p>
+              <p><strong>Night:</strong> often reserved for lighter obligations, family, contemplation, and rest, rather than extending intense activity deep into the night.</p>
+            </div>
+          </article>
+        </div>
+        <p class="notes-copy guide-footnote">
+          These descriptions are broad cultural patterns, not strict universal
+          rules. Different regions, traditions, and lineages interpret daily
+          timing differently, especially when concepts such as muhurtas,
+          sandhya periods, dosha-based routines, or temple schedules are used
+          in more detail.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>
