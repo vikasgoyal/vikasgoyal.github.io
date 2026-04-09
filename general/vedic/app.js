@@ -471,15 +471,15 @@ function renderLifestyle(now, city, solarContext) {
   }
 
   const phaseContext = getPhaseContext(now, city, solarContext);
-  const season = getSeasonProfile(solarContext.today);
+  const season = getSeasonProfile(solarContext.today, city.latitude);
 
   renderCurrentGuidance(phaseContext, season);
   renderDaylightArc(now, city, solarContext, phaseContext);
   renderDayRhythm(phaseContext);
-  renderSeasonalLiving(season);
+  renderSeasonalLiving(season, city.latitude);
   renderFoodAndSleep(season, solarContext, city);
   renderMuhurtas(now, city, solarContext);
-  renderMonthFoodTable(solarContext.zonedNow.month, season);
+  renderMonthFoodTable(solarContext.zonedNow.month, season, city.latitude);
 }
 
 function renderUnavailableLifestyle() {
@@ -598,11 +598,11 @@ function getPhaseIconMarkup(key, className) {
   return `<span class="${className}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">${icon}</svg></span>`;
 }
 
-function renderSeasonalLiving(season) {
+function renderSeasonalLiving(season, latitude) {
   elements.seasonName.textContent = `Current ritu · ${season.name}`;
   elements.seasonTitle.textContent = season.title;
   elements.seasonSummary.textContent = season.summary;
-  elements.seasonWindow.textContent = season.window;
+  elements.seasonWindow.textContent = getSeasonWindowForLatitude(season, latitude);
   elements.seasonQualities.textContent = season.qualities.join(", ");
   elements.seasonFoods.textContent = season.prefer.join(", ");
   elements.seasonReduce.textContent = season.reduce.join(", ");
@@ -612,7 +612,7 @@ function renderSeasonalLiving(season) {
     .map(
       (profile) => `
         <article class="season-card ${profile.key === season.key ? "is-active" : ""}">
-          <p class="season-card-title">${profile.window}</p>
+          <p class="season-card-title">${getSeasonWindowForLatitude(profile, latitude)}</p>
           <h3>${profile.name}</h3>
           <p class="season-copy">${profile.summary}</p>
         </article>
@@ -661,18 +661,22 @@ function renderMuhurtas(now, city, solarContext) {
     .join("");
 }
 
-function renderMonthFoodTable(currentMonth, season) {
+function renderMonthFoodTable(currentMonth, season, latitude) {
   elements.monthTableCaption.textContent = `The selected city is currently in ${season.title}. The current local month is highlighted below so seasonal food shifts are easier to track through the year.`;
   elements.monthFoodCards.innerHTML = monthFoodProfiles
     .map(
-      (profile) => `
+      (profile) => {
+        const seasonalProfile = getMonthFoodProfileForLatitude(profile.month, latitude);
+
+        return `
         <article class="month-card ${profile.month === currentMonth ? "is-active" : ""}">
-          <p class="month-kicker">${profile.seasonLabel}</p>
+          <p class="month-kicker">${seasonalProfile.seasonLabel}</p>
           <h3>${profile.name}</h3>
-          <p class="month-copy"><strong>Favor:</strong> ${profile.favor}</p>
-          <p class="month-copy"><strong>Reduce:</strong> ${profile.reduce}</p>
+          <p class="month-copy"><strong>Favor:</strong> ${seasonalProfile.favor}</p>
+          <p class="month-copy"><strong>Reduce:</strong> ${seasonalProfile.reduce}</p>
         </article>
-      `
+      `;
+      }
     )
     .join("");
 }
@@ -894,30 +898,76 @@ function buildDayPhaseSchedule(solarContext, timeZone) {
   return schedule;
 }
 
-function getSeasonProfile(dateParts) {
+function getSeasonProfile(dateParts, latitude = 0) {
   const monthDay = (dateParts.month * 100) + dateParts.day;
+  const northernSeasonKey = getNorthernSeasonKey(monthDay);
+  const seasonKey = latitude < 0 ? getSouthernSeasonKey(northernSeasonKey) : northernSeasonKey;
 
+  return seasonProfiles.find((profile) => profile.key === seasonKey);
+}
+
+function getNorthernSeasonKey(monthDay) {
   if (monthDay >= 1116 || monthDay <= 113) {
-    return seasonProfiles.find((profile) => profile.key === "hemanta");
+    return "hemanta";
   }
 
   if (monthDay <= 314) {
-    return seasonProfiles.find((profile) => profile.key === "shishira");
+    return "shishira";
   }
 
   if (monthDay <= 514) {
-    return seasonProfiles.find((profile) => profile.key === "vasanta");
+    return "vasanta";
   }
 
   if (monthDay <= 715) {
-    return seasonProfiles.find((profile) => profile.key === "grishma");
+    return "grishma";
   }
 
   if (monthDay <= 915) {
-    return seasonProfiles.find((profile) => profile.key === "varsha");
+    return "varsha";
   }
 
-  return seasonProfiles.find((profile) => profile.key === "sharad");
+  return "sharad";
+}
+
+function getSouthernSeasonKey(northernSeasonKey) {
+  const shiftedKeys = {
+    hemanta: "grishma",
+    shishira: "varsha",
+    vasanta: "sharad",
+    grishma: "hemanta",
+    varsha: "shishira",
+    sharad: "vasanta",
+  };
+
+  return shiftedKeys[northernSeasonKey] || northernSeasonKey;
+}
+
+function getSeasonWindowForLatitude(profile, latitude = 0) {
+  if (latitude >= 0) {
+    return profile.window;
+  }
+
+  const southernWindows = {
+    hemanta: "May 16 - Jul 15",
+    shishira: "Jul 16 - Sep 15",
+    vasanta: "Sep 16 - Nov 15",
+    grishma: "Nov 16 - Jan 13",
+    varsha: "Jan 14 - Mar 14",
+    sharad: "Mar 15 - May 14",
+  };
+
+  return southernWindows[profile.key] || profile.window;
+}
+
+function getMonthFoodProfileForLatitude(month, latitude = 0) {
+  const sourceMonth = latitude < 0 ? shiftMonth(month, 6) : month;
+
+  return monthFoodProfiles.find((profile) => profile.month === sourceMonth);
+}
+
+function shiftMonth(month, offset) {
+  return ((((month - 1) + offset) % 12) + 12) % 12 + 1;
 }
 
 function toVedicUnits(elapsedMs) {
