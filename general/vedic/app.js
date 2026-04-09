@@ -339,6 +339,7 @@ const elements = {
   muhurtaCards: document.querySelector("#muhurta-cards"),
   monthFoodCards: document.querySelector("#month-food-cards"),
   monthTableCaption: document.querySelector("#month-table-caption"),
+  reportLastUpdated: document.querySelector("#report-last-updated"),
 };
 
 let selectedCity = cities.find((city) => city.id === "chicago") || cities[0];
@@ -347,6 +348,7 @@ let timerId = null;
 function init() {
   populateCities();
   updateStaticCityMeta(selectedCity);
+  updateReportLastUpdated();
   render();
 
   elements.citySelect.addEventListener("change", (event) => {
@@ -386,6 +388,15 @@ function render() {
   renderGregorian(now, selectedCity);
   renderVedic(now, selectedCity, solarContext);
   renderLifestyle(now, selectedCity, solarContext);
+}
+
+function updateReportLastUpdated() {
+  const parsedLastModified = document.lastModified ? new Date(document.lastModified) : null;
+  const lastUpdated = parsedLastModified && !Number.isNaN(parsedLastModified.getTime())
+    ? parsedLastModified
+    : new Date();
+
+  elements.reportLastUpdated.textContent = `Last updated: ${formatReportDateTime(lastUpdated)}`;
 }
 
 function renderGregorian(now, city) {
@@ -1187,6 +1198,20 @@ function formatElapsed(elapsedMs) {
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
   return `${pad2(hours)}h ${pad2(minutes)}m ${pad2(seconds)}s`;
+}
+
+function formatReportDateTime(date) {
+  const formattedDateTime = new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+  const timeZone = new Intl.DateTimeFormat(undefined, {
+    timeZoneName: "short",
+  })
+    .formatToParts(date)
+    .find((part) => part.type === "timeZoneName")?.value;
+
+  return timeZone ? `${formattedDateTime} ${timeZone}` : formattedDateTime;
 }
 
 function clampRatio(value) {

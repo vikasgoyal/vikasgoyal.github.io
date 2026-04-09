@@ -921,6 +921,11 @@ select {
   max-width: 75ch;
 }
 
+.report-meta {
+  margin: 1rem auto 0;
+  text-align: center;
+}
+
 @keyframes ring-drift {
   0%,
   100% {
