@@ -1,1 +1,360 @@
-ata home
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Accounting, Tax and Advisory AI Intelligence Report Archive</title>
+	<meta name="description" content="Accounting, Tax and Advisory AI Intelligence Report archive with practitioner-grade briefings on firm operations, client service workflows, compliance, and AI adoption.">
+	<link rel="canonical" href="https://vikasgoyal.github.io/industries/ata/">
+	<meta property="og:title" content="Accounting, Tax and Advisory AI Intelligence Report Archive | Vikas Goyal">
+	<meta property="og:description" content="Browse archived editions of the Accounting, Tax and Advisory AI Intelligence Report covering firm operations, tax workflows, compliance, and AI adoption.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://vikasgoyal.github.io/industries/ata/">
+	<meta property="og:site_name" content="Vikas Goyal">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Accounting, Tax and Advisory AI Intelligence Report Archive | Vikas Goyal">
+	<meta name="twitter:description" content="Archived briefings on AI in accounting, tax, audit, advisory, and firm operations.">
+	<link rel="stylesheet" href="/styles.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+	</script>
+	<style>
+		body {
+			width: min(100%, 1240px);
+			margin: 0 auto;
+			padding: 20px;
+			background:
+				radial-gradient(circle at top left, rgba(0, 0, 0, 0.08), transparent 24%),
+				radial-gradient(circle at top right, rgba(120, 120, 120, 0.10), transparent 20%),
+				linear-gradient(180deg, #f2f2f2 0%, #e6e6e6 46%, #ffffff 100%);
+			color: #121212;
+		}
+
+		.ata-archive-page {
+			display: grid;
+			gap: 22px;
+		}
+
+		.ata-hero,
+		.ata-sidebar-card,
+		.ata-archive-card {
+			background: rgba(255, 255, 255, 0.88);
+			border: 1px solid rgba(18, 18, 18, 0.10);
+			box-shadow: 0 18px 44px rgba(18, 18, 18, 0.10);
+			backdrop-filter: blur(12px);
+		}
+
+		.ata-hero {
+			position: relative;
+			overflow: hidden;
+			border-radius: 34px;
+			padding: 28px 32px;
+			background:
+				radial-gradient(circle at top right, rgba(255, 255, 255, 0.10), transparent 28%),
+				linear-gradient(135deg, #000000 0%, #2b2b2b 58%, #555555 100%);
+			color: #ffffff;
+		}
+
+		.ata-hero::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background:
+				radial-gradient(circle at left center, rgba(255, 255, 255, 0.09), transparent 24%),
+				linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+			pointer-events: none;
+		}
+
+		.ata-eyebrow,
+		.archive-card-label,
+		.coming-soon {
+			display: inline-flex;
+			align-items: center;
+			width: fit-content;
+			border-radius: 999px;
+			text-transform: uppercase;
+			letter-spacing: 0.09em;
+			font-weight: 800;
+		}
+
+		.ata-eyebrow {
+			position: relative;
+			margin-bottom: 14px;
+			padding: 7px 12px;
+			background: rgba(255, 255, 255, 0.12);
+			color: rgba(255, 255, 255, 0.82);
+			font-size: 0.74rem;
+		}
+
+		.ata-hero h1 {
+			position: relative;
+			margin: 0 0 12px;
+			font-size: clamp(2rem, 4vw, 3.6rem);
+			line-height: 0.98;
+			letter-spacing: -0.05em;
+			max-width: 11ch;
+			color: #ffffff;
+		}
+
+		.ata-hero-copy {
+			position: relative;
+			max-width: 60ch;
+			margin-bottom: 0;
+			color: rgba(255, 255, 255, 0.80);
+			font-size: 0.98rem;
+			line-height: 1.65;
+		}
+
+		.ata-hero-actions {
+			position: relative;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px;
+			margin-top: 18px;
+		}
+
+		.ata-hero-actions a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 42px;
+			padding: 0 16px;
+			border-radius: 999px;
+			font-weight: 700;
+			text-decoration: none;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		.ata-hero-actions a:hover,
+		.ata-hero-actions a:focus {
+			text-decoration: none;
+			transform: translateY(-2px);
+		}
+
+		.ata-hero-actions .secondary {
+			border: 1px solid rgba(255, 255, 255, 0.18);
+			background: rgba(255, 255, 255, 0.08);
+			color: #ffffff;
+		}
+
+		.ata-content-grid {
+			display: grid;
+			grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+			gap: 22px;
+			align-items: start;
+		}
+
+		.ata-archive-card {
+			border-radius: 30px;
+			padding: 30px;
+		}
+
+		.archive-card-label {
+			margin-bottom: 14px;
+			padding: 8px 14px;
+			background: rgba(0, 0, 0, 0.08);
+			color: #1f1f1f;
+			font-size: 0.76rem;
+		}
+
+		.ata-archive-card h2,
+		.ata-sidebar-card h2,
+		.ata-sidebar-card h3 {
+			margin: 0 0 10px;
+			line-height: 1.2;
+		}
+
+		.ata-archive-card h2 {
+			font-size: 2rem;
+			letter-spacing: -0.03em;
+		}
+
+		.archive-intro {
+			margin: 0 0 24px;
+			color: #505050;
+			max-width: 62ch;
+		}
+
+		.archive-list {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.archive-entry {
+			display: grid;
+			gap: 12px;
+			padding: 20px 22px;
+			border-radius: 24px;
+			border: 1px solid rgba(18, 18, 18, 0.08);
+			background: linear-gradient(135deg, rgba(234, 234, 234, 0.96) 0%, rgba(255, 255, 255, 0.98) 100%);
+		}
+
+		.archive-entry p {
+			margin: 0;
+			color: #505050;
+			line-height: 1.7;
+		}
+
+		.coming-soon {
+			justify-content: center;
+			min-height: 28px;
+			padding: 0 10px;
+			background: linear-gradient(135deg, #111111 0%, #4a4a4a 100%);
+			color: #ffffff;
+			font-size: 0.72rem;
+		}
+
+		.ata-sidebar {
+			display: grid;
+			gap: 18px;
+		}
+
+		.ata-sidebar-card {
+			border-radius: 26px;
+			padding: 24px;
+		}
+
+		.ata-sidebar-card p,
+		.ata-sidebar-card li {
+			color: #505050;
+			line-height: 1.7;
+		}
+
+		.ata-sidebar-card p:last-child {
+			margin-bottom: 0;
+		}
+
+		.sidebar-list {
+			margin: 12px 0 0;
+			padding-left: 18px;
+		}
+
+		.sidebar-list li + li {
+			margin-top: 10px;
+		}
+
+		.sidebar-links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 16px;
+		}
+
+		.sidebar-links a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 40px;
+			padding: 0 14px;
+			border-radius: 999px;
+			border: 1px solid rgba(18, 18, 18, 0.10);
+			background: rgba(255, 255, 255, 0.72);
+			color: #111111;
+			font-weight: 700;
+			text-decoration: none;
+		}
+
+		.sidebar-links a:hover,
+		.sidebar-links a:focus {
+			text-decoration: none;
+			border-color: rgba(18, 18, 18, 0.22);
+		}
+
+		.sidebar-links .primary-link {
+			background: linear-gradient(135deg, #111111 0%, #4a4a4a 100%);
+			border-color: transparent;
+			color: #ffffff;
+		}
+
+		@media (max-width: 960px) {
+			body {
+				width: 100%;
+			}
+
+			.ata-content-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 720px) {
+			body {
+				padding: 14px;
+			}
+
+			.ata-hero,
+			.ata-archive-card,
+			.ata-sidebar-card {
+				border-radius: 24px;
+			}
+
+			.ata-hero {
+				padding: 22px 20px;
+			}
+
+			.ata-archive-card,
+			.ata-sidebar-card {
+				padding: 22px 18px;
+			}
+
+			.ata-hero h1 {
+				max-width: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div id="header"></div>
+	<main class="ata-archive-page">
+		<section class="ata-hero" aria-labelledby="page-title">
+			<span class="ata-eyebrow">Industry Intelligence Archive</span>
+			<h1 id="page-title">Accounting, Tax and Advisory AI Intelligence Report</h1>
+			<p class="ata-hero-copy">Periodic briefings on how AI is reshaping audit preparation, tax workflows, client delivery, compliance operations, and advisory firm economics.</p>
+			<div class="ata-hero-actions">
+				<a class="secondary" href="/industries/">Explore all Industries AI reports</a>
+			</div>
+		</section>
+
+		<section class="ata-content-grid" aria-label="Accounting, Tax and Advisory archive content">
+			<article class="ata-archive-card">
+				<span class="archive-card-label">Report Archive</span>
+				<h2>Browse archived editions</h2>
+				<p class="archive-intro">This archive will track published ATA briefings covering AI-enabled firm operations, delivery model changes, compliance work, and workflow automation across accounting, tax, and advisory practices.</p>
+				<ul class="archive-list">
+					<li>
+						<article class="archive-entry">
+							<span class="coming-soon">Coming soon</span>
+							<p>The first edition will cover how firms are applying AI across tax prep, audit support, research workflows, document handling, and client service operations.</p>
+						</article>
+					</li>
+				</ul>
+			</article>
+
+			<aside class="ata-sidebar" aria-label="Accounting, Tax and Advisory archive context">
+				<section class="ata-sidebar-card">
+					<h2>What these reports track</h2>
+					<ul class="sidebar-list">
+						<li>How firms use AI to compress research, preparation, review, and documentation cycles.</li>
+						<li>Where automation changes tax, audit, compliance, and advisory workflow design.</li>
+						<li>How pricing, talent leverage, risk controls, and client expectations shift as AI adoption matures.</li>
+					</ul>
+				</section>
+
+				<section class="ata-sidebar-card">
+					<h3>Who this is for</h3>
+					<p>Designed for leaders in accounting, tax, audit, and advisory firms who need to understand where AI changes service delivery, internal operations, and client value creation.</p>
+					<div class="sidebar-links">
+						<a class="primary-link" href="/industries/">Industries AI</a>
+					</div>
+				</section>
+			</aside>
+		</section>
+	</main>
+	<div id="footer"></div>
+	<script src="/headerfooter.js"></script>
+</body>
+</html>
