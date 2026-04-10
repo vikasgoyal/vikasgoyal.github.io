@@ -204,78 +204,6 @@ body::after {
   background: radial-gradient(circle at 35% 35%, #f7fbff, #dfe8ff 60%, #a9bad7);
   box-shadow: 0 0 0 8px rgba(223, 232, 255, 0.1), 0 0 22px rgba(206, 222, 255, 0.2);
 }
-
-.solar-arc[data-sky="day"] .solar-stars {
-  opacity: 0;
-}
-}
-
-.eyebrow,
-.card-kicker,
-.notes-title {
-  color: var(--accent);
-
-@keyframes star-twinkle {
-  0%,
-  100% {
-    opacity: 0.25;
-    transform: scale(0.85);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
-}
-}
-
-h1 {
-  margin: 0.45rem 0 0.9rem;
-  max-width: 14ch;
-  font-family: "Palatino Linotype", "Book Antiqua", Garamond, serif;
-  font-size: clamp(2.6rem, 5vw, 4.8rem);
-  line-height: 0.96;
-  font-weight: 700;
-}
-
-.hero-copy,
-.notes-copy,
-.card-context,
-.city-meta,
-.clock-caption,
-.detail-list dt,
-.detail-list dd {
-  color: var(--muted);
-}
-
-.hero-copy,
-.notes-copy {
-  max-width: 62ch;
-  margin: 0;
-  line-height: 1.6;
-  font-size: 1rem;
-}
-
-.controls {
-  display: grid;
-  gap: 0.75rem;
-  align-self: stretch;
-  padding: 1rem;
-  border-radius: 22px;
-  background: rgba(255, 252, 247, 0.9);
-  border: 1px solid rgba(13, 107, 97, 0.12);
-}
-
-select {
-  width: 100%;
-  padding: 0.95rem 1rem;
-  border: 1px solid rgba(44, 36, 24, 0.14);
-  border-radius: 16px;
-  font: inherit;
-  color: var(--ink);
-  background: white;
-}
-
 .city-meta {
   display: grid;
   gap: 0.35rem;
@@ -284,35 +212,11 @@ select {
 }
 
 .clock-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.4rem;
-  margin-top: 1.4rem;
-}
-
-.summary-grid,
-.rhythm-grid,
-.season-grid,
-.muhurta-grid,
 .month-grid {
   display: grid;
-  gap: 1rem;
 }
 
 .summary-grid {
-  grid-template-columns: 1.35fr repeat(3, minmax(0, 1fr));
-}
-
-.clock-card {
-  display: grid;
-  gap: 1.4rem;
-  padding: 1.6rem;
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  background: linear-gradient(180deg, var(--panel), rgba(255, 248, 236, 0.88));
-  animation: fade-up 0.9s ease both;
-}
-
 .gregorian-card,
 .vedic-card {
   position: relative;
@@ -1000,6 +904,17 @@ select {
 }
 
 @media (max-width: 640px) {
+  body {
+    background: linear-gradient(180deg, #f7eddc 0%, #efdec1 100%);
+  }
+
+  body::before,
+  body::after,
+  .gregorian-card::after,
+  .vedic-card::after {
+    display: none;
+  }
+
   .page-shell {
     width: min(100% - 1rem, 1180px);
     padding-top: 1rem;
@@ -1010,6 +925,63 @@ select {
   .notes-panel {
     padding: 1.1rem;
     border-radius: 22px;
+    backdrop-filter: none;
+    box-shadow: 0 12px 28px rgba(87, 59, 26, 0.1);
+  }
+
+  .hero,
+  .clock-card,
+  .notes-panel,
+  .controls,
+  .clock-face,
+  .daylight-bar-panel,
+  .detail-list div,
+  .summary-card,
+  .rhythm-card,
+  .season-card,
+  .season-details div,
+  .muhurta-card,
+  .month-card,
+  .guide-card,
+  .guide-list div,
+  .guide-points p {
+    background: rgba(255, 249, 239, 0.94);
+  }
+
+  .hero,
+  .clock-card,
+  .notes-panel,
+  .summary-card,
+  .rhythm-card,
+  .season-card,
+  .muhurta-card,
+  .month-card,
+  .guide-card {
+    border-color: rgba(44, 36, 24, 0.08);
+  }
+
+  .emphasis-card,
+  .rhythm-card.is-active,
+  .season-card.is-active,
+  .muhurta-card.is-active,
+  .month-card.is-active {
+    background: rgba(245, 238, 224, 0.98);
+  }
+
+  .clock-face {
+    border-color: rgba(44, 36, 24, 0.08);
+  }
+
+  .daylight-bar-fill {
+    box-shadow: 0 0 0 1px rgba(207, 111, 46, 0.08);
+  }
+
+  .daylight-bar-marker {
+    box-shadow: 0 0 0 4px rgba(248, 178, 63, 0.12), 0 0 10px rgba(248, 178, 63, 0.14);
+  }
+
+  .donut-ring {
+    animation: none;
   }
 
   .detail-list,
