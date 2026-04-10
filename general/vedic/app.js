@@ -490,11 +490,10 @@ function renderUnavailableLifestyle() {
   elements.phaseFood.textContent = "Unavailable";
   elements.phaseAvoid.textContent = "Unavailable";
   elements.phaseSleep.textContent = "Unavailable";
-  elements.daylightSummary.textContent = "Solar arc unavailable.";
-  elements.solarArc.style.setProperty("--sun-progress", "0.5");
-  elements.solarArc.style.setProperty("--sun-height", "0");
+  elements.daylightSummary.textContent = "Daylight data unavailable.";
   elements.solarArc.style.setProperty("--daylight-progress", "0");
-  elements.solarArc.dataset.sky = "day";
+  elements.solarArc.style.setProperty("--marker-position", "0");
+  elements.solarArc.dataset.state = "unavailable";
   elements.arcSunriseLabel.textContent = "--:--";
   elements.arcNoonLabel.textContent = "--:--";
   elements.arcSunsetLabel.textContent = "--:--";
@@ -558,28 +557,25 @@ function renderDaylightArc(now, city, solarContext, phaseContext) {
     : now.getTime() < sunrise.getTime()
       ? 0
       : 1;
-  const skyState = isDaylight
+  const barState = isDaylight
     ? "day"
     : now.getTime() >= dawnStart.getTime() && now.getTime() < sunrise.getTime()
-      ? "dawn"
+      ? "before-sunrise"
       : now.getTime() > sunset.getTime() && now.getTime() <= duskEnd.getTime()
-        ? "dusk"
+        ? "after-sunset"
         : "night";
-  const sunProgress = isDaylight ? daylightRatio : now.getTime() < sunrise.getTime() ? 0 : 1;
-  const sunHeight = isDaylight ? Math.sin(daylightRatio * Math.PI) : 0;
 
-  elements.solarArc.dataset.sky = skyState;
-  elements.solarArc.style.setProperty("--sun-progress", sunProgress.toFixed(4));
-  elements.solarArc.style.setProperty("--sun-height", sunHeight.toFixed(4));
+  elements.solarArc.dataset.state = barState;
   elements.solarArc.style.setProperty("--daylight-progress", daylightRatio.toFixed(4));
+  elements.solarArc.style.setProperty("--marker-position", daylightRatio.toFixed(4));
   elements.arcSunriseLabel.textContent = formatShortTime(sunrise, city.timeZone);
   elements.arcNoonLabel.textContent = formatShortTime(solarNoon, city.timeZone);
   elements.arcSunsetLabel.textContent = formatShortTime(sunset, city.timeZone);
   elements.daylightSummary.textContent = isDaylight
-    ? `${(daylightRatio * 100).toFixed(1)}% of today's daylight has passed in ${city.label}. Current phase: ${phaseContext.current.title}.`
+    ? `${(daylightRatio * 100).toFixed(1)}% daylight complete in ${city.label}. ${phaseContext.current.title}.`
     : now.getTime() < sunrise.getTime()
-      ? `Before sunrise in ${city.label}. Sunrise is at ${formatShortTime(sunrise, city.timeZone)}.`
-      : `After sunset in ${city.label}. Today's daylight ended at ${formatShortTime(sunset, city.timeZone)}.`;
+      ? `${city.label}: before sunrise. Sunrise ${formatShortTime(sunrise, city.timeZone)}.`
+      : `${city.label}: after sunset. Sunset ${formatShortTime(sunset, city.timeZone)}.`;
 }
 
 function getPhaseIconMarkup(key, className) {

@@ -118,40 +118,36 @@
       <section class="notes-panel daylight-panel">
         <div class="daylight-head">
           <div>
-            <p class="notes-title">Solar Arc</p>
+            <p class="notes-title">Daylight Progress</p>
             <p class="notes-copy" id="daylight-summary">
               Tracking the local movement from sunrise to sunset.
             </p>
           </div>
         </div>
-        <div class="solar-arc-shell">
-          <div class="solar-arc" id="solar-arc">
-            <div class="solar-stars" aria-hidden="true">
-              <span class="star"></span>
-              <span class="star"></span>
-              <span class="star"></span>
-              <span class="star"></span>
-              <span class="star"></span>
-              <span class="star"></span>
-            </div>
-            <div class="solar-arc-track"></div>
-            <div class="solar-arc-progress"></div>
-            <div class="solar-horizon"></div>
-            <div class="solar-marker" id="solar-marker">
-              <span class="solar-core"></span>
+        <div class="daylight-bar-shell">
+          <div class="daylight-bar-panel">
+            <div class="solar-arc" id="solar-arc">
+              <div class="daylight-bar-track"></div>
+              <div class="daylight-bar-fill"></div>
+              <div class="daylight-bar-marker"></div>
+              <span class="daylight-bar-tick daylight-bar-tick-start" aria-hidden="true"></span>
+              <span class="daylight-bar-tick daylight-bar-tick-mid" aria-hidden="true"></span>
+              <span class="daylight-bar-tick daylight-bar-tick-end" aria-hidden="true"></span>
             </div>
           </div>
-          <div class="arc-label arc-label-start">
-            <span>Sunrise</span>
-            <strong id="arc-sunrise-label">--:--</strong>
-          </div>
-          <div class="arc-label arc-label-mid">
-            <span>Solar noon</span>
-            <strong id="arc-noon-label">--:--</strong>
-          </div>
-          <div class="arc-label arc-label-end">
-            <span>Sunset</span>
-            <strong id="arc-sunset-label">--:--</strong>
+          <div class="daylight-metrics">
+            <div class="arc-label arc-label-start">
+              <span>Sunrise</span>
+              <strong id="arc-sunrise-label">--:--</strong>
+            </div>
+            <div class="arc-label arc-label-mid">
+              <span>Solar noon</span>
+              <strong id="arc-noon-label">--:--</strong>
+            </div>
+            <div class="arc-label arc-label-end">
+              <span>Sunset</span>
+              <strong id="arc-sunset-label">--:--</strong>
+            </div>
           </div>
         </div>
       </section>
@@ -342,7 +338,7 @@
       </section>
 
       <p class="notes-copy guide-footnote report-meta" id="report-last-updated">
-        Last updated: Apr 9, 2026, 6:23 PM UTC-05:00
+        Last updated: Apr 9, 2026, 7:06 PM UTC-05:00
       </p>
     </div>
   </body>

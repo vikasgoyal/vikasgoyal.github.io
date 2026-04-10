@@ -511,97 +511,98 @@ select {
   font-size: 0.73rem;
 }
 
-.solar-arc-shell {
-  position: relative;
+.daylight-bar-shell {
+  display: grid;
+  gap: 0.9rem;
   margin-top: 1rem;
-  padding: 0.4rem 0 0.9rem;
+}
+
+.daylight-bar-panel {
+  padding: 1rem 1rem 0.95rem;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.9), rgba(250, 242, 228, 0.78));
+  border: 1px solid rgba(44, 36, 24, 0.06);
 }
 
 .solar-arc {
-  --sun-progress: 0.5;
-  --sun-height: 0.92;
   --daylight-progress: 0;
+  --marker-position: 0;
   position: relative;
-  height: 8.2rem;
-  border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(204, 216, 219, 0.18), rgba(255, 247, 234, 0.48) 52%, rgba(255, 248, 236, 0.22));
-  border: 1px solid rgba(44, 36, 24, 0.04);
-  overflow: hidden;
+  height: 1rem;
 }
 
-.solar-arc-track,
-.solar-arc-progress {
+.daylight-bar-track,
+.daylight-bar-fill {
   position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 1.25rem;
-  height: 6rem;
-  border-top-left-radius: 999px;
-  border-top-right-radius: 999px;
-  border-left: 2px solid rgba(44, 36, 24, 0.06);
-  border-top: 2px solid rgba(44, 36, 24, 0.06);
-  border-right: 2px solid rgba(44, 36, 24, 0.06);
-  border-bottom: 0;
+  top: 50%;
+  left: 0;
+  height: 0.7rem;
+  border-radius: 999px;
+  transform: translateY(-50%);
 }
 
-.solar-arc-progress {
-  width: calc((84% * var(--daylight-progress)) + 16%);
-  right: auto;
-  border-left-color: rgba(207, 111, 46, 0.16);
-  border-top-color: rgba(207, 111, 46, 0.42);
-  border-right-color: rgba(207, 111, 46, 0.42);
+.daylight-bar-track {
+  width: 100%;
+  background: linear-gradient(90deg, rgba(186, 195, 203, 0.34), rgba(198, 205, 212, 0.16));
+}
+
+.daylight-bar-fill {
+  width: calc(100% * var(--daylight-progress));
+  background: linear-gradient(90deg, rgba(248, 178, 63, 0.68), rgba(207, 111, 46, 0.9));
+  box-shadow: 0 0 0 1px rgba(207, 111, 46, 0.08), 0 6px 18px rgba(207, 111, 46, 0.14);
   transition: width 600ms ease;
 }
 
-.solar-horizon {
+.daylight-bar-marker {
   position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 1.25rem;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(44, 36, 24, 0.08), rgba(44, 36, 24, 0.18), rgba(44, 36, 24, 0.08));
-}
-
-.solar-marker {
-  position: absolute;
-  left: calc(8% + (84% * var(--sun-progress)));
-  bottom: calc(1.25rem + (6rem * var(--sun-height)));
-  transform: translate(-50%, 50%);
-  transition: left 600ms ease, bottom 600ms ease, opacity 260ms ease;
-  animation: none;
-}
-
-.solar-core {
-  display: block;
-  width: 0.95rem;
-  height: 0.95rem;
+  left: calc(100% * var(--marker-position));
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff7c8, #f8b23f 62%, #cf6f2e);
-  box-shadow: 0 0 0 6px rgba(248, 178, 63, 0.12), 0 0 14px rgba(248, 178, 63, 0.24);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 35%, #fff6c6, #f7b13d 60%, #cf6f2e);
+  box-shadow: 0 0 0 5px rgba(248, 178, 63, 0.14), 0 0 18px rgba(248, 178, 63, 0.22);
+  transition: left 600ms ease, background 260ms ease, box-shadow 260ms ease;
 }
 
-.solar-stars {
-  display: none;
+.solar-arc[data-state="before-sunrise"] .daylight-bar-marker,
+.solar-arc[data-state="after-sunset"] .daylight-bar-marker,
+.solar-arc[data-state="night"] .daylight-bar-marker,
+.solar-arc[data-state="unavailable"] .daylight-bar-marker {
+  background: radial-gradient(circle at 35% 35%, #f8fbff, #dde5ef 62%, #b8c3d3);
+  box-shadow: 0 0 0 5px rgba(221, 229, 239, 0.12), 0 0 14px rgba(184, 195, 211, 0.16);
 }
 
-.solar-arc[data-sky="night"],
-.solar-arc[data-sky="dawn"],
-.solar-arc[data-sky="dusk"] {
-  background:
-    linear-gradient(180deg, rgba(196, 204, 212, 0.18), rgba(255, 247, 234, 0.42) 52%, rgba(255, 248, 236, 0.22));
+.daylight-bar-tick {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: 1.3rem;
+  border-radius: 999px;
+  background: rgba(44, 36, 24, 0.16);
+  transform: translate(-50%, -50%);
 }
 
-.solar-arc[data-sky="night"] .solar-core,
-.solar-arc[data-sky="dawn"] .solar-core,
-.solar-arc[data-sky="dusk"] .solar-core {
-  background: radial-gradient(circle at 35% 35%, #f9fbff, #e3eaf5 62%, #b8c3d3);
-  box-shadow: 0 0 0 5px rgba(227, 234, 245, 0.08), 0 0 10px rgba(184, 195, 211, 0.12);
+.daylight-bar-tick-start {
+  left: 0;
+}
+
+.daylight-bar-tick-mid {
+  left: 50%;
+}
+
+.daylight-bar-tick-end {
+  left: 100%;
+}
+
+.daylight-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
 }
 
 .arc-label {
-  position: absolute;
-  bottom: 0;
   display: grid;
   gap: 0.1rem;
   color: var(--muted);
@@ -619,18 +620,11 @@ select {
   color: var(--ink);
 }
 
-.arc-label-start {
-  left: 0;
-}
-
 .arc-label-mid {
-  left: 50%;
-  transform: translateX(-50%);
   text-align: center;
 }
 
 .arc-label-end {
-  right: 0;
   text-align: right;
 }
 
@@ -1036,17 +1030,19 @@ select {
     width: 118px;
   }
 
-  .solar-arc {
-    height: 7.4rem;
+  .daylight-bar-panel {
+    padding: 0.95rem 0.85rem 0.9rem;
   }
 
-  .solar-arc-track,
-  .solar-arc-progress {
-    height: 5.2rem;
+  .daylight-metrics {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
   }
 
-  .solar-marker {
-    bottom: calc(1.25rem + (5.2rem * var(--sun-height)));
+  .arc-label,
+  .arc-label-end,
+  .arc-label-mid {
+    text-align: left;
   }
 
   .summary-card h2,
