@@ -63,6 +63,27 @@ body::after {
   padding: 2rem 0 3rem;
 }
 
+.home-line {
+  margin: 0 0 0.9rem;
+}
+
+.home-line a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-line a:hover,
+.home-line a:focus-visible {
+  text-decoration: underline;
+}
+
 .hero,
 .clock-card,
 .notes-panel {
@@ -906,6 +927,10 @@ select {
   .page-shell {
     width: min(100% - 1rem, 1180px);
     padding-top: 1rem;
+  }
+
+  .home-line {
+    margin-bottom: 0.75rem;
   }
 
   .hero,
