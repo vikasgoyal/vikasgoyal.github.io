@@ -77,9 +77,6 @@
 			}
 
 			body {
-				width: 100%;
-				margin: 0;
-				padding: 0;
 				color: var(--hack-ink);
 				background:
 					radial-gradient(circle at top left, rgba(245, 183, 0, 0.18), transparent 24%),
@@ -88,9 +85,8 @@
 			}
 
 			.hackathon-page {
-				max-width: 1180px;
-				margin: 0 auto;
-				padding: 32px 20px 72px;
+				max-width: 100%;
+				padding: 0;
 			}
 
 			.hero {
@@ -357,7 +353,7 @@
 
 			@media (max-width: 760px) {
 				.hackathon-page {
-					padding: 20px 14px 48px;
+					padding: 0;
 				}
 
 				.hero,
@@ -384,9 +380,11 @@
 	</head>
 
 	<body>
+		<!-- Dynamic Header Navigation -->
 		<div id="header"></div>
 
-		<main class="hackathon-page markdown-body">
+		<!-- Main Content Container -->
+		<main class="container-lg px-3 my-5 markdown-body hackathon-page">
 			<article>
 				<header class="hero">
 					<div class="eyebrow">No-Code Student Event Design</div>
@@ -752,8 +750,10 @@
 			</article>
 		</main>
 
+		<!-- Dynamic Footer -->
 		<div id="footer"></div>
 
+		<!-- Load Header/Footer Script -->
 		<script src="https://vikasgoyal.github.io/headerfooter.js"></script>
 	</body>
 </html>
