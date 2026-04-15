@@ -5,7 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Retail AI Intelligence Report - Archive</title>
   <meta name="description" content="Weekly Retail AI Intelligence Report archive. Browse all past editions.">
-  <!-- Google tag (gtag.js) -->
+  <link rel="canonical" href="https://vikasgoyal.github.io/industries/retail/">
+  <meta property="og:title" content="Retail AI Intelligence Report Archive | Vikas Goyal">
+  <meta property="og:description" content="Browse archived editions of the Retail AI Intelligence Report covering merchandising, customer experience, store operations, and retail platform shifts.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vikasgoyal.github.io/industries/retail/">
+  <meta property="og:site_name" content="Vikas Goyal">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Retail AI Intelligence Report Archive | Vikas Goyal">
+  <meta name="twitter:description" content="Archived briefings on AI in retail operations, merchandising, customer journeys, and competitive change.">
+  <link rel="stylesheet" href="/styles.css">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -14,24 +23,384 @@
     gtag('config', 'G-ZBXY60BLWE');
   </script>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 700px; margin: 60px auto; padding: 0 24px; color: #1e293b; }
-    h1 { font-size: 1.8rem; margin-bottom: 8px; }
-    p.sub { color: #64748b; margin-bottom: 32px; }
-    ul { list-style: none; padding: 0; }
-    li { border-bottom: 1px solid #e2e8f0; }
-    li a { display: block; padding: 14px 0; color: #2563eb; text-decoration: none; font-size: 1rem; }
-    li a:hover { color: #1d4ed8; text-decoration: underline; }
-    .latest { font-size: 0.75rem; background: #dcfce7; color: #166534; border-radius: 4px; padding: 2px 8px; margin-left: 8px; }
+    body {
+      width: min(100%, 1240px);
+      margin: 0 auto;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top left, rgba(15, 93, 68, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(184, 137, 47, 0.12), transparent 20%),
+        linear-gradient(180deg, #fcfbf8 0%, #f7f2ea 46%, #ffffff 100%);
+      color: #121212;
+    }
+
+    .retail-archive-page {
+      display: grid;
+      gap: 22px;
+    }
+
+    .retail-hero,
+    .retail-sidebar-card,
+    .retail-archive-card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(18, 18, 18, 0.10);
+      box-shadow: 0 18px 44px rgba(18, 18, 18, 0.10);
+      backdrop-filter: blur(12px);
+    }
+
+    .retail-hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      padding: 28px 32px;
+      background:
+        radial-gradient(circle at top right, rgba(184, 137, 47, 0.20), transparent 28%),
+        linear-gradient(135deg, #0a3f30 0%, #0f5d44 58%, #173c73 100%);
+      color: #ffffff;
+    }
+
+    .retail-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at left center, rgba(255, 255, 255, 0.09), transparent 24%),
+        linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+      pointer-events: none;
+    }
+
+    .retail-eyebrow,
+    .archive-card-label,
+    .archive-date {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 800;
+    }
+
+    .retail-eyebrow {
+      position: relative;
+      margin-bottom: 14px;
+      padding: 7px 12px;
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.74rem;
+    }
+
+    .retail-hero h1 {
+      position: relative;
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      max-width: 10ch;
+      color: #ffffff;
+    }
+
+    .retail-hero-copy {
+      position: relative;
+      max-width: 58ch;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.80);
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+
+    .retail-hero-actions {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .retail-hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .retail-hero-actions a:hover,
+    .retail-hero-actions a:focus {
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+
+    .retail-hero-actions .secondary {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    .retail-content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .retail-archive-card {
+      border-radius: 30px;
+      padding: 30px;
+    }
+
+    .archive-card-label {
+      margin-bottom: 14px;
+      padding: 8px 14px;
+      background: rgba(15, 93, 68, 0.10);
+      color: #0f5d44;
+      font-size: 0.76rem;
+    }
+
+    .retail-archive-card h2,
+    .retail-sidebar-card h2,
+    .retail-sidebar-card h3 {
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+
+    .retail-archive-card h2 {
+      font-size: 2rem;
+      letter-spacing: -0.03em;
+    }
+
+    .archive-intro {
+      margin: 0 0 24px;
+      color: #505050;
+      max-width: 62ch;
+    }
+
+    .archive-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .archive-list li {
+      margin: 0;
+    }
+
+    .archive-entry {
+      display: grid;
+      gap: 12px;
+      padding: 20px 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(18, 18, 18, 0.08);
+      background: linear-gradient(135deg, rgba(247, 242, 234, 0.96) 0%, rgba(255, 255, 255, 0.98) 100%);
+    }
+
+    .archive-entry-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .archive-entry a {
+      color: #173c73;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .archive-entry a:hover,
+    .archive-entry a:focus {
+      text-decoration: underline;
+    }
+
+    .archive-entry p {
+      margin: 0;
+      color: #505050;
+      line-height: 1.7;
+    }
+
+    .archive-date {
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 10px;
+      background: linear-gradient(135deg, #173c73 0%, #0f5d44 100%);
+      color: #ffffff;
+      font-size: 0.72rem;
+    }
+
+    .retail-sidebar {
+      display: grid;
+      gap: 18px;
+    }
+
+    .retail-sidebar-card {
+      border-radius: 26px;
+      padding: 24px;
+    }
+
+    .retail-sidebar-card p,
+    .retail-sidebar-card li {
+      color: #505050;
+      line-height: 1.7;
+    }
+
+    .retail-sidebar-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .sidebar-list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+
+    .sidebar-list li + li {
+      margin-top: 10px;
+    }
+
+    .sidebar-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .sidebar-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(18, 18, 18, 0.10);
+      background: rgba(255, 255, 255, 0.72);
+      color: #173c73;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .sidebar-links a:hover,
+    .sidebar-links a:focus {
+      text-decoration: none;
+      border-color: rgba(18, 18, 18, 0.22);
+    }
+
+    .sidebar-links .primary-link {
+      background: linear-gradient(135deg, #173c73 0%, #0f5d44 100%);
+      border-color: transparent;
+      color: #ffffff;
+    }
+
+    @media (max-width: 960px) {
+      body {
+        width: 100%;
+      }
+
+      .retail-content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 14px;
+      }
+
+      .retail-hero,
+      .retail-archive-card,
+      .retail-sidebar-card {
+        border-radius: 24px;
+      }
+
+      .retail-hero {
+        padding: 22px 20px;
+      }
+
+      .retail-archive-card,
+      .retail-sidebar-card {
+        padding: 22px 18px;
+      }
+
+      .retail-hero h1 {
+        max-width: none;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Retail AI Intelligence Report</h1>
-  <p class="sub">Weekly insights on AI in retail &mdash; browse all editions below.</p>
-  <ul>
-    <li><a href="retail_ai_2026-03-11.html">March 11, 2026 <span class="latest">latest</span></a></li>
-    <li><a href="retail_ai_2026-02-26.html">February 26, 2026</a></li>
-    <li><a href="retail_ai_2026-02-21.html">February 21, 2026</a></li>
-  </ul>
+  <div id="header"></div>
+  <main class="retail-archive-page">
+    <section class="retail-hero" aria-labelledby="page-title">
+      <span class="retail-eyebrow">Industry Intelligence Archive</span>
+      <h1 id="page-title">Retail AI Intelligence Report</h1>
+      <p class="retail-hero-copy">Weekly insights on merchandising, customer journeys, store operations, and platform shifts across retail.</p>
+      <div class="retail-hero-actions">
+        <a class="secondary" href="/industries/">Explore all Industries AI reports</a>
+      </div>
+    </section>
+
+    <section class="retail-content-grid" aria-label="Retail AI archive content">
+      <article class="retail-archive-card">
+        <span class="archive-card-label">Report Archive</span>
+        <h2>Browse archived editions</h2>
+        <p class="archive-intro">Every edition tracks how retailers are deploying AI across planning, commerce, service, and operational execution.</p>
+        <ul class="archive-list">
+          <li>
+            <article class="archive-entry">
+              <div class="archive-entry-top">
+                <a href="retail_ai_2026-03-11.html">March 11, 2026</a>
+                <span class="archive-date">Latest</span>
+              </div>
+              <p>Coverage of the latest retail AI signals across customer experience, operations, merchandising, and competitive movement.</p>
+            </article>
+          </li>
+          <li>
+            <article class="archive-entry">
+              <div class="archive-entry-top">
+                <a href="retail_ai_2026-02-26.html">February 26, 2026</a>
+              </div>
+              <p>Retail-focused briefing on execution patterns, platform adoption, and changes shaping how stores and commerce teams operate.</p>
+            </article>
+          </li>
+          <li>
+            <article class="archive-entry">
+              <div class="archive-entry-top">
+                <a href="retail_ai_2026-02-21.html">February 21, 2026</a>
+              </div>
+              <p>Earlier archive edition covering AI activity in retail workflows, shopper engagement, and frontline productivity.</p>
+            </article>
+          </li>
+        </ul>
+      </article>
+
+      <aside class="retail-sidebar" aria-label="Retail AI archive context">
+        <section class="retail-sidebar-card">
+          <h2>What these reports track</h2>
+          <ul class="sidebar-list">
+            <li>How retailers are applying AI to merchandising, pricing, inventory, and promotions.</li>
+            <li>Shifts in customer experience across search, discovery, personalization, and service.</li>
+            <li>Operational changes in store, supply chain, and commerce execution driven by AI.</li>
+          </ul>
+        </section>
+
+        <section class="retail-sidebar-card">
+          <h3>Related paths</h3>
+          <p>The retail archive sits inside the broader Industries AI section and connects retail-specific reporting with the rest of the industry landscape.</p>
+          <div class="sidebar-links">
+            <a class="primary-link" href="/industries/">Industries AI</a>
+            <a href="/industries/startups/">Startups archive</a>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+  <div id="footer"></div>
   <script src="/headerfooter.js"></script>
 </body>
 </html>
