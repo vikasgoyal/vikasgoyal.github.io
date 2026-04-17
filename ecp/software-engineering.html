@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-ZBXY60BLWE');
+	</script>
+	<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>The Software Engineer Is Changing. Engineering Isn't. | Vikas Goyal</title>
+	<meta name="description" content="Why AI-assisted software development changes the engineer's role but not the need for systems thinking, risk judgment, design review, and operational discipline.">
+	<meta name="keywords" content="software engineering, AI-assisted development, engineering judgment, system design, technical leadership, agentic software development">
+	<meta name="author" content="Vikas Goyal">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="https://vikasgoyal.github.io/ecp/software-engineering.html">
+	<meta property="og:title" content="The Software Engineer Is Changing. Engineering Isn't.">
+	<meta property="og:description" content="In an era of abundant code, engineering discipline becomes scarcer and more valuable.">
+	<meta property="og:type" content="article">
+	<meta property="og:url" content="https://vikasgoyal.github.io/ecp/software-engineering.html">
+	<meta property="og:site_name" content="Vikas Goyal">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="The Software Engineer Is Changing. Engineering Isn't.">
+	<meta name="twitter:description" content="Why engineering judgment matters more, not less, as AI makes code cheaper.">
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@graph": [
+			{
+				"@type": "Article",
+				"headline": "The Software Engineer Is Changing. Engineering Isn't.",
+				"description": "Why AI-assisted software development changes the engineer's role but not the need for systems thinking, risk judgment, design review, and operational discipline.",
+				"author": {
+					"@type": "Person",
+					"name": "Vikas Goyal",
+					"url": "https://www.linkedin.com/in/vikasgoyal/"
+				},
+				"publisher": {
+					"@type": "Person",
+					"name": "Vikas Goyal"
+				},
+				"mainEntityOfPage": {
+					"@type": "WebPage",
+					"@id": "https://vikasgoyal.github.io/ecp/software-engineering.html"
+				},
+				"keywords": "software engineering, AI-assisted development, engineering judgment, system design, technical leadership"
+			},
+			{
+				"@type": "BreadcrumbList",
+				"itemListElement": [
+					{
+						"@type": "ListItem",
+						"position": 1,
+						"name": "Home",
+						"item": "https://vikasgoyal.github.io/"
+					},
+					{
+						"@type": "ListItem",
+						"position": 2,
+						"name": "Career Guidance",
+						"item": "https://vikasgoyal.github.io/ecp/"
+					},
+					{
+						"@type": "ListItem",
+						"position": 3,
+						"name": "The Software Engineer Is Changing. Engineering Isn't.",
+						"item": "https://vikasgoyal.github.io/ecp/software-engineering.html"
+					}
+				]
+			}
+		]
+	}
+	</script>
+	<link rel="stylesheet" href="../styles.css">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+		:root {
+			--essay-ink: #121212;
+			--essay-ink-soft: #505050;
+			--essay-paper: #f6f4ee;
+			--essay-surface: rgba(255, 255, 255, 0.9);
+			--essay-line: rgba(18, 18, 18, 0.1);
+			--essay-green: #0f5d44;
+			--essay-green-deep: #0a3f30;
+			--essay-blue: #173c73;
+			--essay-gold: #b8892f;
+			--essay-shadow: 0 22px 60px rgba(18, 18, 18, 0.1);
+			--essay-radius-xl: 34px;
+			--essay-radius-lg: 24px;
+			--essay-radius-md: 18px;
+			--essay-width: 980px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			width: auto;
+			margin: 0;
+			padding: 24px 20px 72px;
+			font-family: 'Manrope', 'Segoe UI', sans-serif;
+			color: var(--essay-ink);
+			background:
+				radial-gradient(circle at top left, rgba(15, 93, 68, 0.14), transparent 24%),
+				radial-gradient(circle at top right, rgba(184, 137, 47, 0.12), transparent 22%),
+				linear-gradient(180deg, #fbfaf6 0%, var(--essay-paper) 42%, #ffffff 100%);
+		}
+
+		.page-shell {
+			max-width: var(--essay-width);
+			margin: 0 auto;
+		}
+
+		.article-shell {
+			display: grid;
+			gap: 1.25rem;
+			padding-top: 0.25rem;
+		}
+
+		.essay-hero,
+		.essay-section,
+		.essay-summary,
+		.essay-related {
+			background: var(--essay-surface);
+			border: 1px solid var(--essay-line);
+			border-radius: var(--essay-radius-lg);
+			box-shadow: var(--essay-shadow);
+		}
+
+		.essay-hero {
+			padding: 2rem;
+			margin-top: 0;
+			background:
+				linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 244, 238, 0.94) 100%),
+				linear-gradient(135deg, rgba(23, 60, 115, 0.08) 0%, rgba(15, 93, 68, 0.08) 100%);
+		}
+
+		.eyebrow {
+			display: inline-flex;
+			padding: 0.45rem 0.8rem;
+			border-radius: 999px;
+			background: rgba(15, 93, 68, 0.1);
+			color: var(--essay-green-deep);
+			font-size: 0.78rem;
+			font-weight: 800;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			margin-bottom: 1rem;
+		}
+
+		.essay-hero h1 {
+			margin: 0;
+			font-family: 'Libre Baskerville', Georgia, serif;
+			font-size: clamp(2.2rem, 4vw, 3.4rem);
+			line-height: 1.08;
+			letter-spacing: -0.03em;
+		}
+
+		.essay-dek {
+			margin: 1rem 0 0;
+			font-size: 1.18rem;
+			line-height: 1.72;
+			color: var(--essay-ink-soft);
+			max-width: 52rem;
+		}
+
+		.essay-summary {
+			padding: 1.25rem 1.4rem;
+			border-left: 6px solid var(--essay-green);
+		}
+
+		.essay-summary p {
+			margin: 0;
+			color: var(--essay-green-deep);
+			font-weight: 600;
+			line-height: 1.7;
+		}
+
+		article {
+			max-width: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.essay-section {
+			padding: 1.6rem 1.65rem;
+			margin: 0;
+		}
+
+		.essay-section h2,
+		.essay-section h3 {
+			margin-top: 0;
+			color: var(--essay-ink);
+		}
+
+		.essay-section h2 {
+			font-size: clamp(1.5rem, 2.6vw, 2rem);
+		}
+
+		.essay-section h3 {
+			font-size: 1.15rem;
+			letter-spacing: -0.01em;
+			color: var(--essay-blue);
+		}
+
+		.essay-section p,
+		.essay-section li {
+			color: var(--essay-ink-soft);
+			line-height: 1.82;
+			font-size: 1.04rem;
+		}
+
+		.essay-section p:last-child,
+		.essay-section ul:last-child,
+		.essay-section ol:last-child {
+			margin-bottom: 0;
+		}
+
+		.essay-section ul,
+		.essay-section ol {
+			margin: 1rem 0 0 1.25rem;
+			padding: 0;
+		}
+
+		.essay-section li + li {
+			margin-top: 0.65rem;
+		}
+
+		.essay-divider {
+			height: 1px;
+			margin: 0.35rem 0;
+			background: linear-gradient(90deg, rgba(18, 18, 18, 0), rgba(18, 18, 18, 0.14), rgba(18, 18, 18, 0));
+		}
+
+		.essay-related {
+			padding: 1.5rem;
+		}
+
+		.essay-related h2 {
+			margin-top: 0;
+			margin-bottom: 0.9rem;
+			font-size: 1.35rem;
+		}
+
+		.related-links {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.85rem;
+		}
+
+		.related-links a {
+			display: block;
+			padding: 1rem 1.05rem;
+			border: 1px solid var(--essay-line);
+			border-radius: var(--essay-radius-md);
+			background: rgba(255, 255, 255, 0.72);
+			color: var(--essay-blue);
+			font-weight: 700;
+			text-decoration: none;
+			transition: transform 0.2s ease, border-color 0.2s ease;
+		}
+
+		.related-links a:hover,
+		.related-links a:focus {
+			border-color: rgba(18, 18, 18, 0.22);
+			transform: translateY(-1px);
+			text-decoration: none;
+		}
+
+		em {
+			color: var(--essay-ink);
+		}
+
+		strong {
+			color: var(--essay-ink);
+		}
+
+		@media (max-width: 768px) {
+			body {
+				padding: 16px 14px 56px;
+			}
+
+			.essay-hero,
+			.essay-section,
+			.essay-summary,
+			.essay-related {
+				border-radius: 20px;
+			}
+
+			.essay-hero {
+				padding: 1.4rem;
+			}
+
+			.essay-section,
+			.essay-related {
+				padding: 1.2rem;
+			}
+
+			.related-links {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="page-shell">
+		<div id="header"></div>
+
+		<main class="article-shell">
+			<article>
+				<header class="essay-hero">
+					<div class="eyebrow">Engineering</div>
+					<h1>The Software Engineer Is Changing. Engineering Isn't.</h1>
+					<p class="essay-dek"><em>In an era where code is abundant, engineering discipline becomes the true scarcity.</em></p>
+				</header>
+
+				<section class="essay-summary" aria-label="Article summary">
+					<p>The faster AI makes code generation, the more valuable systems thinking, risk judgment, explicit quality bars, and human ownership become. The role is shifting. The discipline underneath it is not.</p>
+				</section>
+
+				<section class="essay-section" id="two-week-rewrite">
+					<h2>The Two-Week Rewrite</h2>
+					<p>A team I know recently rewrote a legacy billing service. The old system had taken eighteen months to build and had accumulated six years of patches. The rewrite took two weeks.</p>
+					<p>The code was clean. Tests passed. Coverage was higher than the original. Continuous integration turned green on the first try. A staff engineer reviewed the diff and approved it in an afternoon. The team celebrated, shipped, and moved on to the next project.</p>
+					<p>Three months later, a downstream payment provider had a brief latency spike. The new service's async retry logic, generated, reviewed, and deployed without anyone modeling its behavior under sustained backpressure, entered a retry storm. Twelve thousand customers were charged twice. Some were charged four times. The incident took nine hours to contain and six weeks to fully reconcile.</p>
+					<p>The post-mortem was instructive. No one had written bad code. The tests that existed all passed. The assistant had produced a textbook implementation of exponential backoff. What was missing was not code. What was missing was the question nobody asked: <em>what happens to this system when its dependencies misbehave for longer than we expect?</em></p>
+					<p>The timeline from idea to deployed code had compressed from months to days. The timeline required to understand a system's operational boundaries had not compressed at all. When those two timelines diverge, the gap fills with incidents.</p>
+					<p>This is the pattern underneath every conversation about AI-assisted software development. Coding assistants, copilots, and autonomous agents are reshaping <em>how</em> software gets written. They are not reshaping what it means to engineer it. Organizations that confuse the two will accumulate risk faster than they accumulate velocity.</p>
+					<p>The software engineer is changing. Engineering is not. And the distinction matters more every quarter.</p>
+				</section>
+
+				<div class="essay-divider" aria-hidden="true"></div>
+
+				<section class="essay-section" id="what-is-changing">
+					<h2>What Is Actually Changing</h2>
+
+					<h3>From Typist to Orchestrator</h3>
+					<p>The observable shift is in where engineers spend their time. Manual code construction, the activity that defined the craft for fifty years, is giving way to intent specification, constraint definition, validation, and integration. Keyboard time is down. Reading time is up. The bottleneck has moved from fingers to judgment.</p>
+					<p>This is not a cosmetic change. An engineer who previously spent six hours writing a service and one hour thinking about it now spends one hour producing the code and, if they are disciplined, six hours thinking about whether it is the right code. If they are not disciplined, they spend one hour producing code and ship it. The median case, across the industry, is closer to the second pattern than the first.</p>
+
+					<h3>The Skill Compression Effect</h3>
+					<p>Tasks that used to differentiate junior, mid-level, and senior engineers, CRUD endpoints, data transformations, test scaffolding, glue code, have collapsed into commodities. The implications are uneven.</p>
+					<p>Entry is easier. A motivated beginner can stand up a working service in an afternoon. This is good for the pipeline and good for access to the profession.</p>
+					<p>Mediocrity is more dangerous. A mid-level engineer who previously wrote slow but functional code now ships architecturally unsound systems at ten times the previous rate. The blast radius of poor judgment scales with productivity. A team full of fast-but-shallow engineers produces systems that look healthy in demos, pass code review, and collapse under production load.</p>
+					<p>Excellence is more valuable. The engineer who knows what <em>not</em> to build, who can smell a bad abstraction before it metastasizes, who understands failure modes, that person was always useful. Now they are the bottleneck, because everything downstream of their judgment has been accelerated and everything upstream has not.</p>
+					<p>The curve has not flattened. It has steepened at the top.</p>
+
+					<h3>What Defines an Effective Engineer Now</h3>
+					<p>In a world of cheap code, strong engineers are defined less by syntax mastery and more by four qualities:</p>
+					<ul>
+						<li><strong>Systems thinking.</strong> Seeing the whole, not just the ticket. Understanding how a change propagates through services, teams, and incident channels.</li>
+						<li><strong>Risk awareness.</strong> Anticipating the failure modes that an assistant will never surface on its own, because assistants optimize for plausibility, not survival.</li>
+						<li><strong>Context management.</strong> Maintaining coherence across a system's lifetime, across the people who will inherit it, and across the decisions that were made three years ago for reasons nobody wrote down.</li>
+						<li><strong>Decision quality under uncertainty.</strong> Choosing well with incomplete information, and being able to explain the choice afterward.</li>
+					</ul>
+					<p>None of these are new. All of them are now the whole job.</p>
+				</section>
+
+				<div class="essay-divider" aria-hidden="true"></div>
+
+				<section class="essay-section" id="dangerous-illusion">
+					<h2>The Dangerous Illusion</h2>
+					<p>The error that organizations make, sometimes at the team level, sometimes at the strategy level, is the inference that if code is easy, engineering must be easy too.</p>
+					<p>It is a natural mistake. For most of the industry's history, code volume was a rough proxy for progress. Lines shipped, tickets closed, PRs merged, these correlated, imperfectly but usefully, with value delivered. That correlation has broken. More code no longer means more value. Faster delivery no longer means better outcomes. Fewer surface-level bugs no longer means a safer system. Velocity without discipline accelerates technical and operational debt; it does not reduce it.</p>
+
+					<h3>Accidental Architects</h3>
+					<p>When implementation is cheap, architecture stops being a deliberate activity and becomes an emergent one. People build systems without realizing they are designing them. Services get stood up without anyone modeling scale. Data flows get established without anyone asking about ownership. Async boundaries get introduced without anyone mapping the failure modes.</p>
+					<p>Architecture does not disappear when nobody is doing it on purpose. It gets encoded, silently, in the assumptions of whoever wrote the first draft. Those assumptions then harden into constraints that nobody remembers choosing.</p>
+
+					<h3>The Review Bandwidth Collapse</h3>
+					<p>Assistants-as-tools were manageable because a human remained in the loop for each unit of work. Agents-as-teammates break that model. When a single engineer supervises three agents producing forty pull requests a day, meaningful review is no longer possible at the diff level. Humans cannot read that much code with real attention, and they certainly cannot hold the whole system in their head while doing so.</p>
+					<p>The review function does not vanish. It migrates, up to design, down to runtime monitoring, and sideways into specifications and contracts. Teams that do not consciously make that migration end up doing less review while believing they are doing more.</p>
+
+					<h3>The Supply Chain Problem</h3>
+					<p>Assistants pull in dependencies, patterns, and snippets with no provenance awareness. They recommend libraries because those libraries appear frequently in training data, not because those libraries are maintained, secure, or appropriate for the context. They generate authentication flows that look correct and occasionally leak tokens. They replicate anti-patterns at scale, because the anti-patterns are well-represented in the corpus.</p>
+					<p>Secure-by-default is a property of the <em>system</em> around the assistant, not the assistant itself. Teams that rely on the assistant's judgment for dependency choice, secret handling, or input validation are delegating decisions that the assistant was never designed to make.</p>
+
+					<h3>The Pressure Problem</h3>
+					<p>The most uncomfortable effect of cheap code is not technical. It is organizational. When building is fast, stakeholders expect it to be fast. The engineer who asks for a design review before writing code now faces a harder argument than before, because the perceived cost of just building the thing has dropped to near zero.</p>
+					<p>Engineering discipline matters most exactly when it is hardest to justify. Saying we need two days to think before we build was a reasonable request when building took a month. It sounds like obstruction when building takes an afternoon.</p>
+					<p>This makes organizational willingness to slow down a form of engineering investment, not overhead. The teams that preserve design time under stakeholder pressure are not being cautious. They are the only ones still doing the job.</p>
+				</section>
+
+				<div class="essay-divider" aria-hidden="true"></div>
+
+				<section class="essay-section" id="what-is-not-changing">
+					<h2>What Is Not Changing</h2>
+					<p>Everything above is about how the practice is shifting. The underlying discipline is not.</p>
+					<p>Engineering remains the activity of choosing consciously among trade-offs that no tool can dissolve: performance against readability, speed against correctness, flexibility against simplicity, autonomy against control. Assistants do not escape these tensions. They generate within them, usually by picking a default that looks reasonable and moving on. Engineers decide which default is actually appropriate for the system they own.</p>
+					<p>Good systems are still shaped less by what they <em>can</em> do and more by what surrounds them: regulatory boundaries, data sensitivity, operational failure modes, human workflows, the shape of the team that will maintain the code for the next five years. Assistants do not see those boundaries. Engineers define them, communicate them, and enforce them.</p>
+					<p>And systems still fail in the same ways they always have, through undefined ownership, implicit assumptions, hidden coupling, poor observability, and unclear rollback paths. No copilot fixes an unclear mental model. A fast assistant attached to a confused team produces confused code faster.</p>
+
+					<h3>A Fair Counter-Argument</h3>
+					<p>It is worth acknowledging what <em>might</em> actually be changing at the level of the discipline itself, not just the role. Formal methods are becoming more accessible. Specifications are starting to be treated as first-class artifacts rather than documentation debt. Property-based testing and runtime verification are moving from research edges into mainstream tooling. If assistants make it economical to write and maintain formal specs alongside code, the nature of engineering rigor could genuinely shift over the next decade.</p>
+					<p>That shift, if it comes, will reinforce the thesis rather than refute it. A world where specs and proofs matter more is a world where judgment about <em>what to specify</em> matters more, not less. The scarce skill moves up the stack. It does not disappear.</p>
+				</section>
+
+				<div class="essay-divider" aria-hidden="true"></div>
+
+				<section class="essay-section" id="practices">
+					<h2>Practices That Matter More Now</h2>
+					<p>The response to all of this is not new practices invented for the AI era. It is old practices taken more seriously, because the cost of skipping them has gone up.</p>
+
+					<h3>Frame Problems Before Prompting Them</h3>
+					<p>Assistants amplify ambiguity. A vague prompt produces plausible code that solves a problem adjacent to the real one, and the adjacency is often invisible until production. Before any non-trivial work begins, the team should be able to answer three questions in writing: what problem are we <em>not</em> solving, what invariants must never break, and what is the acceptable failure mode when something does break.</p>
+					<p>These questions are cheap to ask and expensive to skip. They are also the questions assistants are worst at inferring.</p>
+
+					<h3>Review Designs, Not Just Diffs</h3>
+					<p>Code correctness is table stakes and increasingly automatable. The leverage has moved to design intent, interface contracts, data flow, threat models, and operational readiness. A team that spends forty-five minutes on a design review before a two-day build will catch issues that no amount of diff review will find afterward.</p>
+					<p>This is a hard shift culturally, because design review feels slower than code review even when it is radically faster in total time.</p>
+
+					<h3>Make Quality Bars Explicit</h3>
+					<p>Assistants optimize for what looks right, not what <em>is</em> right. Looks right is a moving target, and it drifts toward the training data's median. Teams that want quality above the median have to define it: acceptance criteria written down, test strategies documented, non-functional requirements named, observability expectations enforced in CI.</p>
+					<p>Implicit bars do not survive contact with a generator that can produce infinite plausible code.</p>
+
+					<h3>Keep Ownership Human</h3>
+					<p>An agent can write code. Only humans can own consequences. Who is on call for this service. Who approves changes to this interface. Who decides, at 2 a.m., whether to roll back or patch forward. These assignments must resolve to named people, not to the team and certainly not to the system. Accountability that routes through a generative process has no one to call when it fails.</p>
+				</section>
+
+				<div class="essay-divider" aria-hidden="true"></div>
+
+				<section class="essay-section" id="implications">
+					<h2>Implications for Teams and Leaders</h2>
+
+					<h3>Hire for Judgment, Not Speed</h3>
+					<p>Speed is now a commodity. Tool fluency is now a commodity. Prompt cleverness is already depreciating. The signals worth interviewing for are the ones that survive automation: can the candidate narrate a design decision and its alternatives, dissect a production failure down to the decisions that produced it, articulate why they chose <em>not</em> to build something?</p>
+					<p>The interview loop should surface judgment, not keystrokes. Most loops still do the opposite.</p>
+
+					<h3>Replace the Old Metrics</h3>
+					<p>Velocity, lines of code, PR count, and story points were never great measures. They are now actively misleading. A team shipping twice as many PRs with assistant help is not twice as productive; it may be producing twice the latent risk.</p>
+					<p>Better signals, in rough order of usefulness:</p>
+					<ul>
+						<li>time-to-detection for regressions</li>
+						<li>frequency of rollbacks and change-failure rate</li>
+						<li>mean time to recovery</li>
+						<li>ratio of design-review hours to build hours</li>
+						<li>proportion of incidents whose root cause was a decision nobody made explicitly</li>
+					</ul>
+					<p>None of these are perfect. All of them are harder to game than PR count. Leaders who do not update their dashboards will optimize their teams into exactly the failure mode this essay describes.</p>
+
+					<h3>Treat Process as Memory</h3>
+					<p>In fast-moving, agent-assisted teams, architecture documents, runbooks, and decision logs are not bureaucracy. They are the collective memory that keeps systems coherent across time and across generators. Without them, every new agent-produced component is a locally optimal, globally incoherent addition. With them, the system stays legible even as the code grows faster than any one human can read.</p>
+					<p>Write the decisions down. Not because it is tidy, because in six months, neither the humans nor the agents will remember why.</p>
+
+					<h3>Lead Strategically, Not Tactically</h3>
+					<p>Engineering leadership used to be about unblocking code. It is now about setting constraints, defining standards, teaching judgment, and managing systemic risk across a surface area that is growing faster than headcount. Leads who still measure themselves by PRs reviewed are doing the 2018 job in a 2026 environment.</p>
+				</section>
+
+				<div class="essay-divider" aria-hidden="true"></div>
+
+				<section class="essay-section" id="long-game">
+					<h2>The Long Game</h2>
+					<p>Coding assistants change how fast we move. They do not change what matters. The tools will keep getting better. Code will keep getting cheaper. Stakeholder pressure to ship will keep increasing. None of that alters the fundamental question every engineering organization now has to answer, more urgently than before: <em>do we have the discipline to match our velocity?</em></p>
+					<p>The software engineer is changing. Engineering is not. The teams that internalize the distinction will build systems that last. The rest will build systems that ship.</p>
+				</section>
+			</article>
+
+			<aside class="essay-related" aria-labelledby="related-reading-title">
+				<h2 id="related-reading-title">Related Reading</h2>
+				<div class="related-links">
+					<a href="/general/developermindset.html">The Evolution of a Software Developer's Mindset</a>
+					<a href="/ecp/ai-delegation-vs-collaboration.html">Working with AI: Delegation or Collaboration</a>
+					<a href="/general/smarthumans.html">Intelligent Agents Need Smart Humans</a>
+					<a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a>
+				</div>
+			</aside>
+		</main>
+
+		<div id="footer"></div>
+	</div>
+
+	<script src="../headerfooter.js"></script>
+</body>
+</html>
