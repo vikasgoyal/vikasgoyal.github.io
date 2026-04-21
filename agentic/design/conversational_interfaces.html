@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Designing Companion Conversational Interfaces | Vikas Goyal</title>
+		<meta name="description" content="How UX teams should design companion conversational interfaces for Teams and Copilot without shrinking dashboards into chat-shaped copies.">
+		<meta name="keywords" content="conversational interfaces, companion agents, Teams agents, Copilot UX, agentic AI, conversational design">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/design/conversational_interfaces.html">
+
+		<meta property="og:title" content="Designing Companion Conversational Interfaces">
+		<meta property="og:description" content="Why companion agents should answer one thing well, act proactively, and hand richer work back to the dashboard.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/design/conversational_interfaces.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Designing Companion Conversational Interfaces">
+		<meta name="twitter:description" content="A practical UX guide for building companion chat experiences in Teams and Copilot.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Designing Companion Conversational Interfaces",
+			"description": "How UX teams should design companion conversational interfaces for Teams and Copilot without shrinking dashboards into chat-shaped copies.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-04-20",
+			"dateModified": "2026-04-20",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/design/conversational_interfaces.html"
+			},
+			"keywords": "conversational interfaces, companion agents, Teams agents, Copilot UX, agentic AI, conversational design"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--essay-ink: #121212;
+				--essay-ink-soft: #505050;
+				--essay-paper: #f6f4ee;
+				--essay-surface: rgba(255, 255, 255, 0.92);
+				--essay-line: rgba(18, 18, 18, 0.10);
+				--essay-green: #0f5d44;
+				--essay-green-deep: #0a3f30;
+				--essay-blue: #173c73;
+				--essay-shadow: 0 20px 52px rgba(18, 18, 18, 0.10);
+				--essay-radius-xl: 32px;
+				--essay-radius-lg: 24px;
+			}
+
+			body {
+				width: auto;
+				margin: 0;
+				padding: 24px 20px 72px;
+				background:
+					radial-gradient(circle at top left, rgba(15, 93, 68, 0.12), transparent 24%),
+					radial-gradient(circle at top right, rgba(23, 60, 115, 0.10), transparent 22%),
+					linear-gradient(180deg, #fbfaf6 0%, var(--essay-paper) 42%, #ffffff 100%);
+			}
+
+			.page-shell {
+				max-width: 980px;
+				margin: 0 auto;
+			}
+
+			.article-shell {
+				display: grid;
+				gap: 1rem;
+				padding-top: 0.25rem;
+			}
+
+			article {
+				max-width: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			.essay-hero,
+			.essay-summary,
+			.essay-section,
+			.essay-related {
+				background: var(--essay-surface);
+				border: 1px solid var(--essay-line);
+				border-radius: var(--essay-radius-lg);
+				box-shadow: var(--essay-shadow);
+			}
+
+			.essay-hero {
+				padding: 2rem;
+				background:
+					linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 244, 238, 0.94) 100%),
+					linear-gradient(135deg, rgba(23, 60, 115, 0.08) 0%, rgba(15, 93, 68, 0.08) 100%);
+			}
+
+			.eyebrow {
+				display: inline-flex;
+				margin-bottom: 1rem;
+				padding: 0.45rem 0.8rem;
+				border-radius: 999px;
+				background: rgba(15, 93, 68, 0.10);
+				color: var(--essay-green-deep);
+				font-size: 0.78rem;
+				font-weight: 800;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+			}
+
+			.essay-hero h1 {
+				margin: 0;
+				font-size: clamp(2.1rem, 4vw, 3.3rem);
+				line-height: 1.08;
+				letter-spacing: -0.03em;
+			}
+
+			.article-meta {
+				margin-top: 0.9rem;
+				color: #6b7280;
+				font-size: 0.95rem;
+				font-style: normal;
+			}
+
+			.essay-dek {
+				margin: 1rem 0 0;
+				max-width: 52rem;
+				font-size: 1.15rem;
+				line-height: 1.72;
+				color: var(--essay-ink-soft);
+			}
+
+			.essay-summary {
+				padding: 1.2rem 1.35rem;
+			}
+
+			.essay-summary p {
+				margin: 0;
+				color: var(--essay-green-deep);
+				font-weight: 600;
+				line-height: 1.72;
+			}
+
+			.essay-section,
+			.essay-related {
+				padding: 1.55rem 1.65rem;
+			}
+
+			.essay-section + .essay-section,
+			.essay-related {
+				margin-top: 0;
+			}
+
+			.essay-section h2,
+			.essay-section h3,
+			.essay-related h3 {
+				margin-top: 0;
+			}
+
+			.essay-section h2 {
+				font-size: clamp(1.45rem, 2.5vw, 1.95rem);
+			}
+
+			.essay-section p,
+			.essay-section li,
+			.essay-related li {
+				color: var(--essay-ink-soft);
+				font-size: 1.03rem;
+				line-height: 1.8;
+			}
+
+			.essay-section p:last-child,
+			.essay-section ul:last-child,
+			.essay-section ol:last-child,
+			.essay-related ul:last-child {
+				margin-bottom: 0;
+			}
+
+			.principle-list {
+				margin-top: 1rem;
+			}
+
+			blockquote {
+				margin: 1.25rem 0;
+				padding: 1rem 1.15rem;
+				border: 1px solid rgba(23, 60, 115, 0.10);
+				border-radius: 16px;
+				background: rgba(23, 60, 115, 0.06);
+			}
+
+			blockquote p {
+				margin: 0;
+				color: #28476c;
+			}
+
+			.example-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1rem;
+				margin-top: 1rem;
+			}
+
+			.example-card {
+				padding: 1rem;
+				border-radius: 18px;
+				border: 1px solid rgba(18, 18, 18, 0.08);
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(246, 244, 238, 0.82) 100%);
+			}
+
+			.example-card h3 {
+				margin-bottom: 0.55rem;
+				color: var(--essay-blue);
+				font-size: 1.05rem;
+			}
+
+			.example-card p {
+				margin: 0;
+			}
+
+			@media (max-width: 720px) {
+				body {
+					padding: 16px 12px 56px;
+				}
+
+				.essay-hero,
+				.essay-summary,
+				.essay-section,
+				.essay-related {
+					padding: 1.25rem;
+					border-radius: 20px;
+				}
+
+				.example-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="page-shell">
+			<div id="header"></div>
+
+			<main class="article-shell" aria-label="Article content">
+				<article>
+					<header class="essay-hero">
+						<span class="eyebrow">Agentic AI Design</span>
+						<h1>Designing Companion Conversational Interfaces</h1>
+						<div class="article-meta">
+							<time datetime="2026-04-20">April 20, 2026</time>
+						</div>
+						<p class="essay-dek">Companion agents in Teams and Copilot should not be miniature dashboards. They should answer the one thing, surface the right nudge at the right time, and hand richer work back to the product surface built for scanning and control.</p>
+					</header>
+
+					<section class="essay-summary" aria-label="Summary">
+						<p>The mistake is treating the conversational surface as a shrunken UI. It is a different modality with different physics. The job is to design for what conversation does well, and let the dashboard keep doing what it already does well.</p>
+					</section>
+
+					<section class="essay-section" id="introduction">
+						<p>UX teams who spent a decade perfecting web and mobile apps are suddenly being asked to design chatbots, Teams agents, and Copilot experiences. Most of them reach for the tools they know best: grids, filters, tabs, navigation, and dense panels. The result is predictable: a cramped, worse version of the app that already exists, wearing a speech bubble as a costume.</p>
+						<p>Consider a familiar scenario. A sales rep has a web dashboard showing their leads, pipeline stages, call notes, and next actions. The product team decides to ship a <em>companion</em> experience in Microsoft Teams or M365 Copilot, not a replacement, a complement. The UX team gets the brief and starts sketching a list view with filter chips and a detail pane rendered as an Adaptive Card. A dashboard, but smaller. A dashboard, but worse.</p>
+						<blockquote>
+							<p>Conversation is not a compressed app shell. It is a sequential medium optimized for one question, one summary, one action, one moment.</p>
+						</blockquote>
+						<p>Here is how to think about it.</p>
+					</section>
+
+					<section class="essay-section" id="moments-not-screens">
+						<h2>1. Start From Moments, Not From Screens</h2>
+						<p>Do not inventory the dashboard's features and ask, "How do we put each one in chat?" Inventory the moments in the user's day when they do not want to open a dashboard at all.</p>
+						<ul class="principle-list">
+							<li>Between meetings, on mobile, walking down a hallway.</li>
+							<li>Inside a Teams thread where a colleague just asked, "What's the status of Contoso?"</li>
+							<li>At 8:55 AM, wanting a quick readout before a 9 AM call.</li>
+							<li>Right after a call ends, with one sentence of context they will forget in an hour.</li>
+						</ul>
+						<p>These moments are what the conversational surface is for. If a task requires scanning forty leads sorted by five columns, that is emphatically a dashboard job. Link to it. Do not rebuild it.</p>
+					</section>
+
+					<section class="essay-section" id="one-thing-vs-many-things">
+						<h2>2. Conversation Is For The One Thing</h2>
+						<p>A useful split is this: dashboards excel at comparison, scanning, multidimensional filtering, bulk editing, and visualization. They are spatial. They reward the eye. Conversation excels at a specific question, a specific record, a specific action, or a specific summary. It is sequential. It rewards brevity.</p>
+						<p>Every conversational response should feel like it answered <em>this</em> question for <em>this</em> lead right now, not like a paginated list waiting to be navigated with arrow keys.</p>
+					</section>
+
+					<section class="essay-section" id="proactive-not-just-responsive">
+						<h2>3. Proactive, Not Just Responsive</h2>
+						<p>A dashboard is pull. You go to it when you want something. A good companion is push, used sparingly, with judgment, and always with a clear reason.</p>
+						<ul class="principle-list">
+							<li>"Your 10 AM with Acme is in fifteen minutes. Last touchpoint was a pricing objection. Here's a two-line recap."</li>
+							<li>"Three leads you marked hot last week have gone silent. Want to draft follow-ups?"</li>
+						</ul>
+						<p>Proactivity is the single biggest differentiator between a companion agent and a dashboard, and it is the principle UX teams most often skip because it demands thinking about <em>when</em> to speak, not just <em>what</em> to show.</p>
+					</section>
+
+					<section class="essay-section" id="respect-the-host-surface">
+						<h2>4. Respect The Host Surface</h2>
+						<p>A companion agent in Teams or M365 Copilot lives next to human conversations, and that context dictates the rules of the room.</p>
+						<ul class="principle-list">
+							<li>Responses should read like a competent colleague's message, not like a form-filled template.</li>
+							<li>Adaptive Cards are a tool, not a default. Do not turn every reply into a card when a sentence will do the job better.</li>
+							<li>@mentions, threads, and message actions are already part of the vocabulary users know. Use them instead of inventing new affordances that only exist inside your agent.</li>
+						</ul>
+						<p>The agent is a guest in someone else's app. Act like it.</p>
+					</section>
+
+					<section class="essay-section" id="bridge-to-dashboard">
+						<h2>5. Always Leave A Bridge Back To The Dashboard</h2>
+						<p>The companion is not a silo, and pretending otherwise is how you build a frustrating one. Every substantive response should carry a contextual deep link such as <em>Open Acme in dashboard</em>. The agent handles the quick eighty percent of interactions; the dashboard handles the twenty percent that need richer tooling.</p>
+						<p>Users should never feel trapped in chat, trying to do in twelve turns something they could do in one click.</p>
+					</section>
+
+					<section class="essay-section" id="context-is-the-feature">
+						<h2>6. Context Is The Feature</h2>
+						<p>A conversational interface is only as good as what it already knows when you start typing. At minimum, the agent should be aware of who the user is, what their pipeline looks like, what was said in the previous turns of this conversation, what was said in previous sessions, and what is happening on the user's calendar and inbox where permissioned.</p>
+						<ul class="principle-list">
+							<li>Who the user is and what their pipeline looks like.</li>
+							<li>What was said in the previous turns of this conversation.</li>
+							<li>What was said in previous sessions: persistent memory of recent leads, preferences, and ongoing threads.</li>
+							<li>What is happening on the user's calendar and inbox, where permissioned.</li>
+						</ul>
+						<p>Without this, every turn becomes a re-authentication of intent. <em>Which lead? Which quarter? Which Acme?</em> That friction is one of the fastest ways to make the companion feel worse than the dashboard it was supposed to complement.</p>
+					</section>
+
+					<section class="essay-section" id="dialogue-flows-not-trees">
+						<h2>7. Design Dialogue Flows, Not Decision Trees</h2>
+						<p>The old chatbot world, "Press 1 for leads, 2 for accounts," was a world of rigid decision trees. LLM-era conversational UX is closer to writing a playbook for a capable new hire.</p>
+						<ul class="principle-list">
+							<li>What topics should they confidently handle end to end?</li>
+							<li>What should they gather more context on before acting?</li>
+							<li>When should they hand off to the dashboard, to a human, or to another agent?</li>
+							<li>What tone should they take? How verbose? How willing to speculate?</li>
+						</ul>
+						<p>This is prompt engineering practiced as UX craft. It is the conversational analog of interaction design, and it is where UX teams add the most value once they stop drawing wireframes and start writing instructions.</p>
+					</section>
+
+					<section class="essay-section" id="ground-facts">
+						<h2>8. Ground Every Factual Claim</h2>
+						<p>On a dashboard, a number is trusted because its provenance is implicit. In chat, that same number stated in prose can just as easily be a hallucination. Companion agents must cite the record, the field, and the timestamp when stating facts. They should say "I don't know" or "I couldn't find that" rather than confabulate a plausible answer, and they should prefer linking to the dashboard row over paraphrasing it when precision matters.</p>
+						<p>The fastest way to destroy trust in a companion agent is to be confidently wrong once. The second fastest is to be vaguely right in a way the user has to double-check every time.</p>
+					</section>
+
+					<section class="essay-section" id="reversible-actions">
+						<h2>9. Make Actions Reversible And Confirmable</h2>
+						<p>Conversation makes destructive actions dangerously easy. "Update the stage to Closed Lost." Done. One sentence, no confirmation dialog, no dragging a card across a board. Companion agents touching shared data must slow down irreversible actions without slowing down everything else.</p>
+						<ul class="principle-list">
+							<li>Explicit confirmation on writes, especially bulk or irreversible ones.</li>
+							<li>Undo as a first-class response: <em>Reverted. Anything else?</em></li>
+							<li>Previews before commit for anything that changes state others depend on.</li>
+						</ul>
+					</section>
+
+					<section class="essay-section" id="measure-different-things">
+						<h2>10. Measure Different Things</h2>
+						<p>Dashboard metrics such as daily active users, time on page, and clicks are misleading when applied to conversational UX. More time in chat is not better. More messages are not better. What matters instead is whether the companion quietly removes work.</p>
+						<ul class="principle-list">
+							<li>Task completion without escalation to the dashboard.</li>
+							<li>Turns per task, where fewer is usually better.</li>
+							<li>Acceptance rate on proactive messages.</li>
+							<li>Trust signals: does the user act on what the agent says or silently re-verify in the dashboard every time?</li>
+						</ul>
+					</section>
+
+					<section class="essay-section" id="in-practice">
+						<h2>What This Looks Like In Practice</h2>
+						<p>Return to the sales rep. A companion that takes these principles seriously probably shows up like this.</p>
+						<div class="example-grid">
+							<div class="example-card">
+								<h3>Morning Briefing</h3>
+								<p>Proactive, around 8:45 AM. Three meetings today. Here is a two-line recap and one open action for each, with a dashboard link when deeper prep is needed.</p>
+							</div>
+							<div class="example-card">
+								<h3>Lookup</h3>
+								<p>Reactive, in any Teams thread. What is the status of Contoso? One paragraph: last touch, next step, and a deep link.</p>
+							</div>
+							<div class="example-card">
+								<h3>Capture</h3>
+								<p>Reactive, right after a call. Log a note, summarize the discussion, confirm what will be saved, then link back to the record.</p>
+							</div>
+							<div class="example-card">
+								<h3>Nudge</h3>
+								<p>Proactive, throughout the week. Silent-lead reminders, stalled-deal alerts, and calendar-aware prep the night before.</p>
+							</div>
+						</div>
+						<p>What it should not try to be is a chat-shaped rendering of the pipeline grid.</p>
+					</section>
+
+					<section class="essay-section" id="one-line-version">
+						<h2>The One-Line Version</h2>
+						<p>A companion conversational interface succeeds when it does the things the dashboard is bad at: quick answers, proactive nudges, and in-context capture, then confidently hands off everything else back to the dashboard. The craft is knowing which is which.</p>
+					</section>
+
+					<section class="essay-related" id="related-content">
+						<h3>Related Articles</h3>
+						<ul>
+							<li><a href="/agentic/personalization.html">Personalization in Agentic Systems</a></li>
+							<li><a href="/agentic/teachableagents.html">Designing Teachable Agents</a></li>
+							<li><a href="/genai/languageagenticsystems.html">How Language-Native Agentic Systems Differ from Early Generations</a></li>
+						</ul>
+					</section>
+				</article>
+			</main>
+
+			<div id="footer"></div>
+		</div>
+
+		<script src="../../headerfooter.js"></script>
+	</body>
+</html>
