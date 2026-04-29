@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>CX Evals: Measuring Whether AI Interactions Help or Harm the Customer Moment</title>
+		<meta name="description" content="Why customer-experience evals matter for AI systems, including intent, context, monetization boundaries, fallback behavior, trust, and production regressions.">
+		<meta name="keywords" content="CX evals, customer experience evals, AI evaluation, LLM evals, support AI, agent evaluation, monetization boundaries">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/cx-evals.html">
+
+		<meta property="og:title" content="CX Evals: Measuring Whether AI Interactions Help or Harm the Customer Moment">
+		<meta property="og:description" content="A practical framework for evaluating whether AI assistants respond appropriately in context, preserve trust, and avoid turning support moments into product failures.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/cx-evals.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="CX Evals: Measuring Whether AI Interactions Help or Harm the Customer Moment">
+		<meta name="twitter:description" content="How to evaluate AI interactions for contextual appropriateness, trust, fallback quality, and support-safe monetization behavior.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "CX Evals: Measuring Whether AI Interactions Help or Harm the Customer Moment",
+			"description": "Why customer-experience evals matter for AI systems, including intent, context, monetization boundaries, fallback behavior, trust, and production regressions.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-04-29",
+			"dateModified": "2026-04-29",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/cx-evals.html"
+			},
+			"keywords": "CX evals, customer experience evals, AI evaluation, support AI, monetization boundaries"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--cx-ink: #172033;
+				--cx-slate: #4a5568;
+				--cx-border: #d7dee7;
+				--cx-panel: #f8fafc;
+				--cx-blue: #1d4ed8;
+				--cx-blue-soft: #dbeafe;
+				--cx-teal: #0f766e;
+				--cx-teal-soft: #ccfbf1;
+				--cx-amber: #92400e;
+				--cx-amber-soft: #fef3c7;
+				--cx-rose-soft: #ffe4e6;
+			}
+
+			.cx-article {
+				color: var(--cx-ink);
+			}
+
+			.cx-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 48%, #ecfeff 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.cx-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--cx-panel);
+				border: 1px solid var(--cx-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.cx-article h1,
+			.cx-article h2,
+			.cx-article h3 {
+				color: #0f172a;
+			}
+
+			.cx-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.cx-article p {
+				margin-bottom: 0.9em;
+				color: var(--cx-slate);
+				line-height: 1.76;
+			}
+
+			.cx-article strong {
+				color: #0f172a;
+			}
+
+			.cx-article p:last-child,
+			.cx-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.hero-actions {
+				margin-top: 0.95em;
+			}
+
+			.hero-actions a {
+				display: inline-flex;
+				align-items: center;
+				padding: 0.5em 0.85em;
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.88);
+				border: 1px solid #cbd5e1;
+				color: #0f172a;
+				text-decoration: none;
+				font-weight: 600;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--cx-teal-soft) 0%, #ffffff 100%);
+				border: 1px solid #99f6e4;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #134e4a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--cx-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--cx-blue-soft);
+				color: var(--cx-blue);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.case-study {
+				margin: 1.2em 0 0;
+				padding: 1.1em;
+				background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+				border: 1px solid var(--cx-border);
+				border-radius: 16px;
+			}
+
+			.case-study img {
+				display: block;
+				width: 100%;
+				max-width: 760px;
+				margin: 0 auto;
+				border-radius: 14px;
+				border: 1px solid #cbd5e1;
+				box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+			}
+
+			.case-study figcaption {
+				margin-top: 0.9em;
+				color: #64748b;
+				font-size: 0.95em;
+				text-align: center;
+			}
+
+			.eval-grid,
+			.addition-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.1em;
+			}
+
+			.eval-card,
+			.addition-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--cx-border);
+				border-radius: 14px;
+			}
+
+			.eval-card h3,
+			.addition-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.eval-card p,
+			.addition-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.eval-card.support {
+				background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+				border-color: #bfdbfe;
+			}
+
+			.eval-card.boundary {
+				background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+				border-color: #fed7aa;
+			}
+
+			.eval-card.trust {
+				background: linear-gradient(135deg, #ffffff 0%, var(--cx-rose-soft) 100%);
+				border-color: #fda4af;
+			}
+
+			table.cx-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1em;
+				background: #ffffff;
+				border-radius: 14px;
+				overflow: hidden;
+			}
+
+			.cx-table th,
+			.cx-table td {
+				padding: 0.95em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.cx-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.92em;
+			}
+
+			.cx-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.cx-article ul,
+			.cx-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.cx-article li {
+				margin-bottom: 0.65em;
+				color: var(--cx-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 768px) {
+				.cx-article header,
+				.cx-article section,
+				.eval-card,
+				.addition-card,
+				.cx-table th,
+				.cx-table td,
+				.case-study {
+					padding: 1.05em;
+				}
+
+				.eval-grid,
+				.addition-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="cx-article">
+				<header>
+					<h1>CX Evals: Measuring Whether AI Interactions Help or Harm the Customer Moment</h1>
+					<p style="font-style: italic;">Customer-facing AI should be judged not only on correctness, but on whether it responds appropriately for the user's situation, preserves trust, and keeps the journey moving.</p>
+					<div class="hero-actions">
+						<a href="/agentic/observe/eval-content-map.html">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> CX evals measure the gap between technically valid outputs and product-appropriate behavior, especially in moments where context, support intent, fallback quality, and monetization boundaries determine whether the experience earns or loses trust.</p>
+					</div>
+				</header>
+
+				<section id="failure-case">
+					<div class="section-kicker">Failure Case</div>
+					<h2>A simple failure that still breaks the customer moment</h2>
+					<p>The screenshot below is useful because nothing dramatic happened technically. The system did not crash, leak data, or produce harmful content. It simply answered the wrong job.</p>
+					<p>The user is in a branch titled "Bosch Dryer Lint Filter Warning Solution" and asks, "can u show a video". In that moment, the product is being experienced as a support assistant. The expected behavior is obvious: show an instructional video, link to a guide, summarize the steps, or admit no video is available and offer the next-best path. Instead, the assistant says: "If you upgrade your subscription, I can create that video for you today."</p>
+					<p>That is not a monetization miss. It is a customer-experience failure. A support intent was converted into an upsell. The response is probably defensible from a feature-gating perspective and indefensible from the user's perspective. That gap is exactly what customer-experience evals exist to measure.</p>
+					<figure class="case-study">
+						<img src="gemini.png" alt="Support conversation screenshot where an AI assistant responds to a repair request by suggesting a paid upgrade to create a video.">
+						<figcaption>When support intent is converted into an upsell, the product may remain technically compliant while still failing the user.</figcaption>
+					</figure>
+					<div class="takeaway-box">
+						<p><strong>Important distinction:</strong> many customer-facing AI failures are not catastrophic system failures. They are moments where the assistant chooses a behavior that is technically allowed but contextually wrong.</p>
+					</div>
+				</section>
+
+				<section id="why-standard-testing-misses-it">
+					<div class="section-kicker">Testing Gap</div>
+					<h2>Why standard testing misses this kind of problem</h2>
+					<p>Conventional tests could all pass on this response. Subscription gating works. No unsafe content was produced. No promise was made that the system cannot keep. Every deterministic check is green.</p>
+					<p>What is missing is a quality model that asks a different question: <strong>did the assistant do the right thing for this user in this moment?</strong> That question depends on intent, surrounding context, journey state, and tone, none of which a pass/fail unit test captures. CX evals score the experience boundary between technically valid and product-appropriate.</p>
+					<p>The harder product question is not whether teams should ever upsell. It is which signals make an upsell acceptable. In a creative workflow with no urgency, "I can generate that for you on the paid plan" may be fine. In an unresolved support task, the same sentence reads as opportunism. The evaluation system has to encode that difference.</p>
+				</section>
+
+				<section id="six-eval-types">
+					<div class="section-kicker">Scorecard</div>
+					<h2>The six eval types that would have caught it</h2>
+					<p>Each category below targets a specific dimension of the failure. Together they form a practical CX scorecard.</p>
+
+					<table class="cx-table">
+						<thead>
+							<tr>
+								<th>Input</th>
+								<th>Surface context</th>
+								<th>Expected intent</th>
+								<th>Acceptable behavior</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>"can u show a video"</td>
+								<td>Branch: lint filter warning</td>
+								<td>Request instructional content</td>
+								<td>Show or link a relevant video, summarize the steps, or admit none is available and offer the next-best support path</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="eval-grid">
+						<div class="eval-card support">
+							<h3>1. Intent and journey evals</h3>
+							<p>Classify what the user is trying to do, not just what they typed. Short casual phrases mean different things in a support branch than in a creative surface.</p>
+						</div>
+						<div class="eval-card support">
+							<h3>2. Contextual appropriateness evals</h3>
+							<p>Judge the reply against the surrounding state, including branch title, recent turns, and product surface, to confirm the answer uses available context and advances resolution.</p>
+						</div>
+						<div class="eval-card boundary">
+							<h3>3. Monetization boundary evals</h3>
+							<p>Make upsell behavior a first-class target with explicit rules, such as prohibiting paid-generation prompts during unresolved support unless the free path is exhausted.</p>
+						</div>
+						<div class="eval-card support">
+							<h3>4. Fallback and recovery evals</h3>
+							<p>Test what the system does when the ideal asset is unavailable. It should pivot to instructions, a guide, a clarifying question, or escalation rather than collapse into promotion.</p>
+						</div>
+						<div class="eval-card trust">
+							<h3>5. Trust and tone evals</h3>
+							<p>Use a rubric such as practical, non-promotional, context-aware, and honest about limitations to judge whether the reply sounds like help rather than sales pressure.</p>
+						</div>
+						<div class="eval-card support">
+							<h3>6. Regression evals from production incidents</h3>
+							<p>Once a failure is found, generalize it into a family of cases so the team protects the class of mistake rather than a single screenshot.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="operationalizing">
+					<div class="section-kicker">Operationalize</div>
+					<h2>How to turn these into usable evals</h2>
+					<p>Intent classification should be scored on a labeled set of real support phrasings, including casual, misspelled, and underspecified messages. A response should fail if it resolves the wrong intent, even if the answer is fluent.</p>
+					<p>Contextual appropriateness should be judged with the full interaction frame in prompt: branch title, recent turns, and product surface. The evaluator should score whether the reply uses available context and keeps the user moving toward resolution.</p>
+					<p>Monetization boundary tests should include support requests with paid features nearby and verify that the assistant attempts resolution first. A response like "I don't have a video for this exact model, but here are the steps" should pass. An upgrade-first response should fail.</p>
+					<p>Trust and tone require a light but explicit rubric, ideally judged by an LLM and spot-checked by humans on disagreement. The goal is not generic pleasantness. It is alignment with the user's situation.</p>
+				</section>
+
+				<section id="add-to-loop">
+					<div class="section-kicker">Operating Model</div>
+					<h2>Two things worth adding to the loop</h2>
+					<div class="addition-grid">
+						<div class="addition-card">
+							<h3>Online evals</h3>
+							<p>Offline sets only reflect what the team thought to test. Sample live traffic, score a fraction of production responses with the same rubrics, and correlate shifts with thumbs-downs, escalations, or "talk to a human" clicks.</p>
+						</div>
+						<div class="addition-card">
+							<h3>Decision power</h3>
+							<p>Evals matter only when they can block a release. If a model or pricing change increases upsells in support journeys, that should require explicit product approval rather than being buried in a release note.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="checklist">
+					<div class="section-kicker">Readiness</div>
+					<h2>A pre-launch checklist for support-facing AI</h2>
+					<ul>
+						<li>Can the assistant distinguish support intent from creative or generic intent?</li>
+						<li>Does it use page, branch, ticket, or conversation context correctly?</li>
+						<li>Does it prioritize existing support content before generation or upsell paths?</li>
+						<li>Does it avoid monetization prompts during unresolved support tasks?</li>
+						<li>Does it provide useful fallbacks when the ideal answer is unavailable?</li>
+						<li>Does it handle casual, misspelled, and underspecified user messages?</li>
+						<li>Does it preserve trust when it cannot complete the request?</li>
+						<li>Are known production failures represented in regression evals as generalized classes?</li>
+					</ul>
+					<div class="takeaway-box">
+						<p><strong>Useful standard:</strong> most AI quality programs are still stronger at checking compliance and correctness than at checking whether the product behaved well inside a customer moment. CX evals close that gap.</p>
+					</div>
+				</section>
+
+				<section id="takeaway">
+					<div class="section-kicker">Takeaway</div>
+					<h2>The point of CX evals</h2>
+					<p>AI quality is not only about intelligence. It is about judgment inside a product moment. The best evaluation programs do not stop at asking whether the answer was correct. They ask whether the interaction earned or lost trust.</p>
+					<p>For customer-facing AI, that is often the only question that matters. A system can be technically valid and still fail the customer. CX evals are how teams make that failure visible before it becomes part of the product experience.</p>
+				</section>
+
+				<section id="series-links">
+					<div class="section-kicker">Related Reading</div>
+					<h2>Part of the evals series</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/observe/runtime-evals-observability.html">Runtime Evals and Observability for AI Systems</a></li>
+						<li><a href="/agentic/observe/evalops-operating-model.html">EvalOps: The Operating Model for Production AI Evaluation</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>
