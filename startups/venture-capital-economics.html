@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZBXY60BLWE');
+  </script>
+  <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Venture Capital Firm Economics | Vikas Goyal</title>
+  <meta name="description" content="A practical explanation of how venture capital firms make money through fund structures, LP commitments, management fees, carried interest, GP commitments, and power law returns.">
+  <meta name="keywords" content="venture capital economics, VC funds, limited partners, general partners, management fees, carried interest, GP commitment, startup investing">
+  <meta name="author" content="Vikas Goyal">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vikasgoyal.github.io/startups/venture-capital-economics.html">
+
+  <meta property="og:title" content="Venture Capital Firm Economics">
+  <meta property="og:description" content="How VC firms earn management fees and carried interest, why fund size matters, and how LPs, GPs, and fund life cycles fit together.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://vikasgoyal.github.io/startups/venture-capital-economics.html">
+  <meta property="og:site_name" content="Vikas Goyal">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Venture Capital Firm Economics">
+  <meta name="twitter:description" content="A practical guide to LPs, GPs, management fees, carried interest, GP commitments, and VC fund performance metrics.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Venture Capital Firm Economics",
+    "description": "A practical explanation of how venture capital firms make money through fund structures, LP commitments, management fees, carried interest, GP commitments, and power law returns.",
+    "author": {
+      "@type": "Person",
+      "name": "Vikas Goyal",
+      "url": "https://www.linkedin.com/in/vikasgoyal/"
+    },
+    "datePublished": "2026-05-04",
+    "dateModified": "2026-05-04",
+    "publisher": {
+      "@type": "Person",
+      "name": "Vikas Goyal"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://vikasgoyal.github.io/startups/venture-capital-economics.html"
+    },
+    "keywords": "venture capital economics, VC funds, limited partners, general partners, management fees, carried interest, GP commitment"
+  }
+  </script>
+
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    :root {
+      --vc-ink: #172033;
+      --vc-slate: #4a5568;
+      --vc-border: #d7dee7;
+      --vc-panel: #f8fafc;
+      --vc-blue: #173c73;
+      --vc-blue-soft: #dbeafe;
+      --vc-green: #0f5d44;
+      --vc-green-soft: #dcfce7;
+      --vc-gold: #92400e;
+      --vc-gold-soft: #fef3c7;
+      --vc-rose-soft: #ffe4e6;
+    }
+
+    .vc-article {
+      color: var(--vc-ink);
+    }
+
+    .vc-article header {
+      margin-bottom: 1.6em;
+      padding: 1.85em 1.6em;
+      background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 48%, #ecfdf5 100%);
+      border: 1px solid #dbeafe;
+      border-radius: 20px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+    }
+
+    .vc-article section {
+      margin-bottom: 1.5em;
+      padding: 1.35em 1.4em;
+      background: var(--vc-panel);
+      border: 1px solid var(--vc-border);
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .vc-article h1,
+    .vc-article h2,
+    .vc-article h3 {
+      color: #0f172a;
+    }
+
+    .vc-article h2 {
+      margin-bottom: 0.65em;
+    }
+
+    .vc-article p {
+      margin-bottom: 0.9em;
+      color: var(--vc-slate);
+      line-height: 1.76;
+    }
+
+    .vc-article strong {
+      color: #0f172a;
+    }
+
+    .vc-article p:last-child,
+    .vc-article li:last-child {
+      margin-bottom: 0;
+    }
+
+    .hero-actions {
+      margin-top: 0.95em;
+    }
+
+    .hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5em 0.85em;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .summary-box,
+    .takeaway-box {
+      margin-top: 1.15em;
+      padding: 1em 1.1em;
+      border-radius: 14px;
+    }
+
+    .summary-box {
+      background: linear-gradient(135deg, var(--vc-green-soft) 0%, #ffffff 100%);
+      border: 1px solid #bbf7d0;
+    }
+
+    .summary-box p {
+      margin: 0;
+      color: #14532d;
+    }
+
+    .takeaway-box {
+      background: linear-gradient(135deg, var(--vc-gold-soft) 0%, #ffffff 100%);
+      border: 1px solid #fcd34d;
+    }
+
+    .takeaway-box p {
+      margin: 0;
+      color: #78350f;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      margin-bottom: 0.6em;
+      padding: 0.25em 0.62em;
+      border-radius: 999px;
+      background: var(--vc-blue-soft);
+      color: var(--vc-blue);
+      font-size: 0.78em;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .vc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1em;
+      margin-top: 1.1em;
+    }
+
+    .vc-card {
+      padding: 1em;
+      background: #ffffff;
+      border: 1px solid var(--vc-border);
+      border-radius: 14px;
+    }
+
+    .vc-card h3 {
+      margin: 0 0 0.45em;
+      font-size: 1.04em;
+    }
+
+    .vc-card p {
+      margin: 0;
+      font-size: 0.96em;
+    }
+
+    .vc-card.fund {
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+      border-color: #bfdbfe;
+    }
+
+    .vc-card.carry {
+      background: linear-gradient(135deg, #ffffff 0%, var(--vc-gold-soft) 100%);
+      border-color: #fcd34d;
+    }
+
+    .vc-card.risk {
+      background: linear-gradient(135deg, #ffffff 0%, var(--vc-rose-soft) 100%);
+      border-color: #fda4af;
+    }
+
+    .metric-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85em;
+      margin-top: 1em;
+    }
+
+    .metric-item {
+      padding: 0.9em 1em;
+      background: #ffffff;
+      border: 1px solid var(--vc-border);
+      border-radius: 14px;
+      color: var(--vc-slate);
+      line-height: 1.65;
+    }
+
+    .metric-item strong {
+      display: block;
+      margin-bottom: 0.15em;
+    }
+
+    .vc-article ul,
+    .vc-article ol {
+      margin: 0.8em 0 0;
+      padding-left: 1.2em;
+    }
+
+    .vc-article li {
+      margin-bottom: 0.65em;
+      color: var(--vc-slate);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .vc-article header,
+      .vc-article section,
+      .vc-card,
+      .metric-item {
+        padding: 1.05em;
+      }
+
+      .vc-grid,
+      .metric-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <main class="container-lg px-3 my-5 markdown-body">
+    <article class="vc-article">
+      <header>
+        <h1>Venture Capital Firm Economics</h1>
+        <p style="font-style: italic;">Venture capital firms make money by managing investment funds for outside investors and sharing in the upside if those funds perform well.</p>
+        <div class="hero-actions">
+          <a href="/startups/">Back to startup resources</a>
+        </div>
+        <div class="summary-box">
+          <p><strong>Core idea:</strong> LPs provide most of the money. GPs choose the investments. Management fees keep the firm running. Carry gives the partners a share of the profits when the fund backs one or more outlier companies.</p>
+        </div>
+      </header>
+
+      <section id="basic-structure">
+        <div class="section-kicker">Structure</div>
+        <h2>The Basic Structure</h2>
+        <p>A VC firm usually does not invest from one giant permanent pool of money. Instead, it raises separate funds over time:</p>
+        <ul>
+          <li>Fund I: raised in year 0</li>
+          <li>Fund II: raised a few years later</li>
+          <li>Fund III: raised after that, often once Fund I has meaningful performance signals</li>
+        </ul>
+        <p>Each fund is typically a limited partnership.</p>
+        <div class="vc-grid">
+          <div class="vc-card fund">
+            <h3>Limited partners</h3>
+            <p>LPs provide most of the capital and commit money that is called over time.</p>
+          </div>
+          <div class="vc-card fund">
+            <h3>General partners</h3>
+            <p>GPs manage the fund and make investment decisions.</p>
+          </div>
+          <div class="vc-card fund">
+            <h3>Management company</h3>
+            <p>The management company employs the investment team and runs the business.</p>
+          </div>
+          <div class="vc-card carry">
+            <h3>GP entity</h3>
+            <p>The GP entity receives carried interest from the fund.</p>
+          </div>
+        </div>
+        <p>In practice, people casually say "the VC firm" to mean all of this together, but the legal and economic entities are distinct.</p>
+      </section>
+
+      <section id="limited-partners">
+        <div class="section-kicker">LPs</div>
+        <h2>Limited Partners</h2>
+        <p>LPs are the investors in the VC fund. Common LPs include:</p>
+        <ul>
+          <li>University endowments</li>
+          <li>Pension funds</li>
+          <li>Foundations</li>
+          <li>Family offices</li>
+          <li>Sovereign wealth funds</li>
+          <li>Fund-of-funds</li>
+          <li>Wealthy individuals</li>
+          <li>Corporations</li>
+        </ul>
+        <p>LPs commit capital to a fund, but they usually do not wire all the money on day one. Instead, they make a capital commitment, and the VC fund issues capital calls over time as it needs money for investments, fees, expenses, and follow-on rounds.</p>
+        <p>For example, if an LP commits $20 million to a $500 million fund, the LP is agreeing to provide up to $20 million when called. The fund may call that capital gradually over several years.</p>
+        <p>LPs invest because they want exposure to high-growth private companies. VC is risky and illiquid, but a small number of exceptional outcomes can drive strong returns.</p>
+      </section>
+
+      <section id="fund-life-cycle">
+        <div class="section-kicker">Timeline</div>
+        <h2>Fund Life Cycle</h2>
+        <p>A typical VC fund has a 10-year life, often with optional extensions.</p>
+        <ol>
+          <li><strong>Fundraising:</strong> the VC firm raises commitments from LPs.</li>
+          <li><strong>Investment period:</strong> often the first 3 to 5 years, when the fund makes new investments.</li>
+          <li><strong>Harvest period:</strong> the fund supports existing portfolio companies and waits for exits.</li>
+          <li><strong>Liquidation or extension:</strong> remaining positions are sold, distributed, or held through extensions.</li>
+        </ol>
+        <p>VC funds are long-dated because startups take time to mature. A company might need 7 to 12 years before an IPO, acquisition, secondary sale, or failure fully resolves the investment.</p>
+      </section>
+
+      <section id="management-fees">
+        <div class="section-kicker">Fees</div>
+        <h2>Management Fees</h2>
+        <p>Management fees are the predictable revenue stream that pays the VC firm's operating expenses. The classic fee model is "2 and 20":</p>
+        <ul>
+          <li>2% annual management fee</li>
+          <li>20% carried interest</li>
+        </ul>
+        <p>The 2% fee is usually charged on committed capital during the investment period, then may step down later and be charged on invested capital or remaining cost basis.</p>
+        <p>For a $500 million fund, a 2% annual fee equals $10 million per year. That money pays for salaries, rent, research, travel, legal, finance, platform teams, events, software, and other operating costs.</p>
+        <div class="takeaway-box">
+          <p><strong>Important distinction:</strong> management fees can make a firm stable, but they are not supposed to be the main wealth creation engine. The big upside comes from carry.</p>
+        </div>
+      </section>
+
+      <section id="carried-interest">
+        <div class="section-kicker">Carry</div>
+        <h2>Carried Interest</h2>
+        <p>Carried interest, or carry, is the GP's share of the fund's profits. It is usually 20%, though prominent firms may negotiate higher carry.</p>
+        <p>A simple example:</p>
+        <ul>
+          <li>Fund size: $500 million</li>
+          <li>Total value returned: $2 billion</li>
+          <li>Profit before carry: $1.5 billion</li>
+          <li>Carry at 20%: $300 million</li>
+          <li>Remaining profit to LPs: $1.2 billion</li>
+          <li>LPs also receive their original $500 million back</li>
+        </ul>
+        <p>So the total $2 billion is split as:</p>
+        <ul>
+          <li>$500 million returned capital to LPs</li>
+          <li>$1.2 billion profit to LPs</li>
+          <li>$300 million carry to the GP</li>
+        </ul>
+        <p>Carry is usually paid only after LPs get their contributed capital back. Many funds also include a preferred return, or hurdle, though traditional early-stage VC funds often have no hurdle or a low one compared with private equity.</p>
+      </section>
+
+      <section id="why-carry-is-powerful">
+        <div class="section-kicker">Upside</div>
+        <h2>Why Carry Is Powerful</h2>
+        <p>Carry turns investment judgment into asymmetric upside for the partners.</p>
+        <p>Suppose a $500 million fund returns 4x gross, or $2 billion. A 20% carry pool creates $300 million of economics for the GP after returning capital. If the senior partners own most of the carry pool, the personal economics can be very large.</p>
+        <p>But carry is uncertain. A fund can look promising on paper for years and still return little realized carry if exits do not happen, valuations fall, or the best companies take longer than expected.</p>
+      </section>
+
+      <section id="gp-commitment">
+        <div class="section-kicker">Alignment</div>
+        <h2>GP Commitment</h2>
+        <p>GPs usually invest some of their own money into the fund, often around 1% to 5% of the fund size. This is called the GP commitment.</p>
+        <p>For a $500 million fund, a 2% GP commitment would be $10 million. That commitment aligns the GPs with LPs because the partners have their own capital at risk.</p>
+        <p>Some newer managers struggle with the GP commitment because they may not personally have enough liquidity to fund it. In those cases, they may use financing, outside strategic capital, or more LP-friendly arrangements.</p>
+      </section>
+
+      <section id="fund-vs-management-company">
+        <div class="section-kicker">Economics</div>
+        <h2>Fund Economics vs Management Company Economics</h2>
+        <p>It helps to separate two economic layers.</p>
+        <div class="vc-grid">
+          <div class="vc-card fund">
+            <h3>Fund economics</h3>
+            <p>Capital invested into startups, gains and losses from those investments, distributions to LPs, and carry paid to the GP.</p>
+          </div>
+          <div class="vc-card carry">
+            <h3>Management company economics</h3>
+            <p>Management fee revenue, salaries and bonuses, operating expenses, partner compensation before carry, and platform or support functions.</p>
+          </div>
+        </div>
+        <p>A large VC firm can have a profitable management company even before carry. A small emerging manager may have much tighter management company economics, especially if the fund is small and the team is growing.</p>
+      </section>
+
+      <section id="numerical-example">
+        <div class="section-kicker">Example</div>
+        <h2>A Numerical Example</h2>
+        <p>Imagine a $100 million early-stage fund.</p>
+        <p>Assumptions:</p>
+        <ul>
+          <li>2% annual management fee during a 5-year investment period</li>
+          <li>Fees step down after year 5</li>
+          <li>20% carry</li>
+          <li>2% GP commitment</li>
+        </ul>
+        <div class="vc-grid">
+          <div class="vc-card fund">
+            <h3>Rough fee picture</h3>
+            <p>Years 1 to 5: $2 million per year = $10 million. Years 6 to 10: lower fees, perhaps another $5 million total. Total fees over fund life: roughly $15 million.</p>
+          </div>
+          <div class="vc-card carry">
+            <h3>Return picture</h3>
+            <p>If the fund returns $100 million, there is no profit and no carry. If it returns $200 million, carry is about $20 million. If it returns $500 million, carry is about $80 million.</p>
+          </div>
+        </div>
+        <p>Those fees fund the firm's operations over a decade. They are not all profit. This is why VC firms care so much about outlier companies. A few investments can determine whether the fund merely returns capital or generates meaningful carry.</p>
+      </section>
+
+      <section id="power-law-returns">
+        <div class="section-kicker">Portfolio</div>
+        <h2>Power Law Returns</h2>
+        <p>VC portfolios tend to follow a power law. Many investments fail or return little. A few may return the fund. One extraordinary company can generate most of the gains.</p>
+        <p>For example, in a $100 million fund:</p>
+        <ul>
+          <li>30 investments of roughly $3 million each</li>
+          <li>Many go to zero or return less than invested capital</li>
+          <li>A handful return 2x to 5x</li>
+          <li>One company returns $150 million to the fund</li>
+        </ul>
+        <p>That one company can make the difference between a mediocre fund and a strong one.</p>
+      </section>
+
+      <section id="recycling">
+        <div class="section-kicker">Capital Use</div>
+        <h2>Recycling</h2>
+        <p>Some VC funds can recycle capital. This means the fund can reinvest certain proceeds instead of immediately distributing them to LPs.</p>
+        <p>For example, if an early investment exits quickly and returns $10 million, the fund may be allowed to reinvest that money into new or existing portfolio companies. Recycling can increase the amount of capital actually deployed without increasing LP commitments.</p>
+        <p>Recycling rules matter because management fees and early exits can otherwise reduce the amount of committed capital available for investments.</p>
+      </section>
+
+      <section id="distributions">
+        <div class="section-kicker">Returns</div>
+        <h2>Distributions</h2>
+        <p>VC funds return value to LPs through distributions.</p>
+        <ul>
+          <li>Cash from acquisitions, secondary sales, or share sales after IPO lockups</li>
+          <li>Public stock distributed in kind</li>
+          <li>Occasionally private shares, though this is less common and more operationally complex</li>
+        </ul>
+        <p>LPs care about DPI, or distributed to paid-in capital, because it measures actual cash or stock returned. Paper markups are useful, but realized distributions matter most.</p>
+      </section>
+
+      <section id="key-metrics">
+        <div class="section-kicker">Measurement</div>
+        <h2>Key Metrics</h2>
+        <p>Common fund performance metrics include:</p>
+        <div class="metric-list">
+          <div class="metric-item"><strong>TVPI</strong>Total value to paid-in capital. This includes realized and unrealized value.</div>
+          <div class="metric-item"><strong>DPI</strong>Distributed to paid-in capital. This measures value already returned to LPs.</div>
+          <div class="metric-item"><strong>RVPI</strong>Residual value to paid-in capital. This measures remaining unrealized portfolio value.</div>
+          <div class="metric-item"><strong>IRR</strong>Internal rate of return. This measures time-weighted performance.</div>
+        </div>
+        <p>A young fund may have high TVPI but low DPI because its best companies are still private. An older fund needs DPI to prove that paper gains can become actual returns.</p>
+      </section>
+
+      <section id="why-fund-size-matters">
+        <div class="section-kicker">Strategy</div>
+        <h2>Why Fund Size Matters</h2>
+        <p>Fund size changes the strategy.</p>
+        <p>A small seed fund can generate strong returns by owning meaningful stakes in early companies and exiting at moderate outcomes. A billion-dollar fund needs much larger outcomes to move the needle.</p>
+        <p>For a $50 million fund, a $250 million return from one company is huge. For a $2 billion fund, the same outcome is helpful but not transformative.</p>
+        <p>This is why large funds often need to invest in later rounds, write bigger checks, maintain ownership through follow-ons, or back companies that can plausibly become very large public businesses.</p>
+      </section>
+
+      <section id="vc-firm-as-business">
+        <div class="section-kicker">Franchise</div>
+        <h2>The VC Firm as a Business</h2>
+        <p>A VC firm is both an investment franchise and a fundraising business.</p>
+        <p>Strong firms compound advantages:</p>
+        <ul>
+          <li>Better founders want them on the cap table.</li>
+          <li>Strong exits improve their track record.</li>
+          <li>A strong track record helps them raise the next fund.</li>
+          <li>Bigger or better funds let them hire talent and support portfolio companies.</li>
+          <li>A stronger brand improves access to competitive deals.</li>
+        </ul>
+        <p>Weak performance creates the opposite cycle. If a firm cannot show credible returns or momentum, raising the next fund becomes difficult.</p>
+      </section>
+
+      <section id="short-version">
+        <div class="section-kicker">Short Version</div>
+        <h2>The Economic Prize</h2>
+        <div class="takeaway-box">
+          <p>LPs provide most of the money. GPs choose the investments. Management fees keep the firm running. Carry gives the partners a share of the profits. The fund structure is designed for long holding periods because startups take years to resolve. The economic prize is not the annual fee stream; it is carried interest from a fund that backs one or more outlier companies.</p>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <br><br><br><br><br>
+
+  <div id="footer"></div>
+
+  <script src="../headerfooter.js"></script>
+</body>
+</html>
