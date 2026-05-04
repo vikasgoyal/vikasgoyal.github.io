@@ -227,14 +227,6 @@
       border-color: transparent;
     }
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 22px;
-      margin-bottom: 26px;
-    }
-
-    .hero-panel,
     .signal-card,
     .section-card,
     .feature-card,
@@ -246,66 +238,6 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: var(--shadow);
-    }
-
-    .hero-panel {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius-xl);
-      padding: 42px;
-    }
-
-    .hero-panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg, rgba(15, 93, 68, 0.11), transparent 45%),
-        linear-gradient(315deg, rgba(184, 137, 47, 0.12), transparent 38%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(18, 18, 18, 0.05);
-      color: var(--green-deep);
-      font-size: 0.85rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      position: relative;
-      margin: 0 0 18px;
-      font-family: 'Libre Baskerville', Georgia, serif;
-      font-size: clamp(2.25rem, 4.6vw, 4.15rem);
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-      max-width: 11ch;
-    }
-
-    .hero-copy {
-      position: relative;
-      max-width: 65ch;
-      font-size: 1.08rem;
-      line-height: 1.8;
-      color: var(--ink-soft);
-      margin-bottom: 28px;
-    }
-
-    .hero-actions {
-      position: relative;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 28px;
     }
 
     .button {
@@ -334,34 +266,6 @@
       color: var(--ink);
       background: rgba(255, 255, 255, 0.78);
       border: 1px solid var(--line);
-    }
-
-    .hero-metrics {
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .metric {
-      padding: 16px 18px;
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.76);
-      border: 1px solid rgba(18, 18, 18, 0.08);
-    }
-
-    .metric-label {
-      display: block;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--ink-soft);
-      margin-bottom: 8px;
-    }
-
-    .metric strong {
-      font-size: 1rem;
-      line-height: 1.4;
     }
 
     .signal-grid,
@@ -619,13 +523,11 @@
         align-items: flex-start;
       }
 
-      .hero-panel,
       .section-card,
       .footer-card {
         padding: 22px;
       }
 
-      .hero-metrics,
       .signal-grid,
       .feature-grid,
       .topic-grid,
@@ -633,9 +535,6 @@
         grid-template-columns: 1fr;
       }
 
-      .hero h1 {
-        max-width: none;
-      }
     }
   </style>
 </head>
@@ -656,21 +555,6 @@
         <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </nav>
     </header>
-
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-panel">
-        <div class="eyebrow">Agentic AI Hub</div>
-        <h1 id="hero-title">Agentic AI: systems thinking, architectures, and design patterns.</h1>
-        <p class="hero-copy">
-          A curated guide to agentic AI, from foundations and multi-agent systems to architecture, evaluation, learning, and human-AI collaboration.
-        </p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#featured">Start with the featured pieces</a>
-          <a class="button button-secondary" href="#practice-areas">Browse by practice area</a>
-        </div>
-      </div>
-
-    </section>
 
     <section class="practice-nav" id="practice-areas" aria-label="Practice area navigation">
       <a class="practice-jump" href="#strategy-adoption">

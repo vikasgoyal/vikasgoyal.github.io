@@ -157,15 +157,6 @@
             border-color: transparent;
         }
 
-        .hero {
-            display: grid;
-            grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
-            gap: 22px;
-            margin-bottom: 24px;
-        }
-
-        .hero-panel,
-        .hero-aside,
         .section-card,
         .report-card,
         .footer-card {
@@ -173,136 +164,6 @@
             border: 1px solid rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(12px);
             box-shadow: var(--shadow);
-        }
-
-        .hero-panel {
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--radius-xl);
-            padding: 42px;
-            background:
-                linear-gradient(135deg, rgba(17, 17, 17, 0.97) 0%, rgba(42, 42, 42, 0.96) 55%, rgba(72, 72, 72, 0.95) 100%);
-            color: #ffffff;
-        }
-
-        .hero-panel::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at top right, rgba(255, 255, 255, 0.10), transparent 28%),
-                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.06), transparent 24%);
-            pointer-events: none;
-        }
-
-        .eyebrow {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.10);
-            color: rgba(255, 255, 255, 0.82);
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.10em;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .hero-panel h1 {
-            position: relative;
-            font-size: clamp(2.4rem, 5vw, 4.5rem);
-            line-height: 1.02;
-            letter-spacing: -0.05em;
-            max-width: 10ch;
-            margin-bottom: 18px;
-        }
-
-        .hero-panel p {
-            position: relative;
-            max-width: 62ch;
-            color: rgba(255, 255, 255, 0.78);
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 28px;
-        }
-
-        .hero-actions {
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .hero-actions a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 46px;
-            padding: 0 18px;
-            border-radius: 999px;
-            font-weight: 700;
-            transition: transform 0.2s ease;
-        }
-
-        .hero-actions a:hover,
-        .hero-actions a:focus {
-            transform: translateY(-2px);
-        }
-
-        .hero-actions .primary {
-            background: #ffffff;
-            color: #1f1f1f;
-        }
-
-        .hero-actions .secondary {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: #ffffff;
-        }
-
-        .hero-aside {
-            border-radius: 30px;
-            padding: 28px;
-        }
-
-        .hero-aside h2 {
-            font-size: 1.45rem;
-            line-height: 1.2;
-            margin-bottom: 12px;
-        }
-
-        .hero-aside p {
-            color: var(--ink-soft);
-            margin-bottom: 20px;
-        }
-
-        .signal-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .signal-item {
-            padding: 14px 16px;
-            border-radius: var(--radius-md);
-            background: rgba(15, 23, 42, 0.03);
-            border: 1px solid rgba(15, 23, 42, 0.06);
-        }
-
-        .signal-item strong {
-            display: block;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--agentic-primary);
-            margin-bottom: 6px;
-        }
-
-        .signal-item span {
-            color: var(--ink-soft);
-            font-size: 0.94rem;
-            line-height: 1.6;
         }
 
         .section-card {
@@ -621,7 +482,6 @@
         }
 
         @media (max-width: 1080px) {
-            .hero,
             .footer-grid {
                 grid-template-columns: 1fr;
             }
@@ -642,8 +502,6 @@
                 align-items: flex-start;
             }
 
-            .hero-panel,
-            .hero-aside,
             .section-card,
             .report-card,
             .footer-card {
@@ -653,10 +511,6 @@
             .reports-grid,
             .card-detail-row {
                 grid-template-columns: 1fr;
-            }
-
-            .hero-panel h1 {
-                max-width: none;
             }
         }
     </style>
@@ -678,39 +532,6 @@
                 <a href="https://www.linkedin.com/in/vikasgoyal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </nav>
         </header>
-
-        <section class="hero" aria-labelledby="hero-title">
-            <div class="hero-panel">
-                <div class="eyebrow">Intelligence Reports</div>
-                <h1 id="hero-title">Industry AI reports built for real operating decisions.</h1>
-                <p>
-                    Practitioner-grade briefings on how AI and agentic systems are reshaping industries, from cross-sector intelligence to vertical-specific change signals in retail, legal, and healthcare.
-                </p>
-                <div class="hero-actions">
-                    <a class="primary" href="#reports">Browse reports</a>
-                    <a class="secondary" href="agentic/agentic-ai-2026-03-18.html">Explore Agentic AI hub</a>
-                </div>
-            </div>
-
-            <aside class="hero-aside" aria-label="What this page covers">
-                <h2>What makes these reports useful</h2>
-                <p>Each report is designed as an operator-facing briefing: where the signals are changing, what patterns matter, and which implications deserve attention now.</p>
-                <div class="signal-list">
-                    <div class="signal-item">
-                        <strong>Cross-sector view</strong>
-                        <span>Agentic AI coverage tracks platform shifts, architecture patterns, and major implementation signals across domains.</span>
-                    </div>
-                    <div class="signal-item">
-                        <strong>Vertical detail</strong>
-                        <span>Retail, legal, and healthcare reports focus on concrete operational implications, not just abstract AI trends.</span>
-                    </div>
-                    <div class="signal-item">
-                        <strong>Decision support</strong>
-                        <span>The goal is to help builders and leaders prioritize where to investigate, pilot, or adjust strategy.</span>
-                    </div>
-                </div>
-            </aside>
-        </section>
 
         <section class="section-card" id="reports" aria-labelledby="reports-title">
             <div class="section-heading">
