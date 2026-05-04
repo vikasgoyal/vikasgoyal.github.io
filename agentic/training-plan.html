@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agentic AI Training — Modular Plan</title>
+<style>
+  :root {
+    --fg: #1f2328;
+    --muted: #57606a;
+    --bg: #ffffff;
+    --bg-alt: #f6f8fa;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --accent-soft: #ddf4ff;
+    --f: #6f42c1;
+    --a: #0969da;
+    --b: #1a7f37;
+    --g: #bf8700;
+    --s: #cf222e;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  header.hero {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+  }
+  header.hero h1 { margin: 0 0 .25rem; font-size: 2rem; }
+  header.hero p { margin: 0; color: var(--muted); }
+  h2 {
+    margin-top: 2.5rem;
+    padding-bottom: .35rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  h3 { margin-top: 1.75rem; font-size: 1.1rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: .92rem;
+    background: var(--bg);
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: .55rem .7rem;
+    vertical-align: top;
+    text-align: left;
+  }
+  th { background: var(--bg-alt); font-weight: 600; }
+  tr:nth-child(even) td { background: #fbfcfd; }
+  code, .id {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .88em;
+  }
+  .id {
+    display: inline-block;
+    padding: .08rem .4rem;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: 600;
+  }
+  .id.f { background: var(--f); }
+  .id.a { background: var(--a); }
+  .id.b { background: var(--b); }
+  .id.g { background: var(--g); }
+  .id.s { background: var(--s); }
+  .legend {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .75rem 1rem;
+    font-size: .92rem;
+  }
+  .legend strong { color: var(--accent); }
+  blockquote {
+    margin: 1rem 0;
+    padding: .6rem 1rem;
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    color: #1f2328;
+  }
+  ul, ol { padding-left: 1.4rem; }
+  li { margin: .25rem 0; }
+  .toc {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .toc ol { margin: .25rem 0 0; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .pill {
+    display: inline-block;
+    padding: .05rem .45rem;
+    border-radius: 999px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    font-size: .8rem;
+    color: var(--muted);
+    margin-left: .25rem;
+  }
+  .total-row td { font-weight: 600; background: var(--accent-soft); }
+  .schedule-block {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+  }
+  .schedule-block h3 { margin-top: 0; }
+  @media print {
+    .wrap { max-width: none; padding: 1rem; }
+    header.hero, h2 { page-break-after: avoid; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; }
+    blockquote, .schedule-block { background: #fff; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Agentic AI Training Plan</h1>
+  <p>A modular curriculum organized into self-contained units. Each module declares its <strong>duration, target roles, format, prerequisites, and outcomes</strong>, so it can be scheduled into any day/slot.</p>
+</header>
+
+<div class="legend">
+  <p style="margin:0 0 .5rem"><strong>Role legend:</strong>
+  <strong>TA</strong> Technical Architect ·
+  <strong>FA</strong> Functional Architect ·
+  <strong>DL</strong> Delivery Lead ·
+  <strong>DevL</strong> Development Lead ·
+  <strong>Dev</strong> Developer ·
+  <strong>PgM</strong> Program Mgmt ·
+  <strong>PMO</strong> PMO ·
+  <strong>TL</strong> Test Lead ·
+  <strong>DepL</strong> Deployment Lead ·
+  <strong>ALL</strong> = every role.</p>
+  <p style="margin:0"><strong>Module IDs:</strong>
+  <span class="id f">F</span> Foundation ·
+  <span class="id a">A</span> Architecture ·
+  <span class="id b">B</span> Build/Hands-on ·
+  <span class="id g">G</span> Govern/Deliver ·
+  <span class="id s">S</span> Scenario.</p>
+</div>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#catalog">Module Catalog</a></li>
+    <li><a href="#topics">Topic Coverage Matrix</a></li>
+    <li><a href="#roles">Role → Recommended Modules</a></li>
+    <li><a href="#hours">Total Hours by Track</a></li>
+    <li><a href="#schedules">Sample Schedules</a></li>
+    <li><a href="#logistics">Logistics &amp; Pre-requisites</a></li>
+    <li><a href="#metrics">Success Metrics</a></li>
+  </ol>
+</nav>
+
+<h2 id="catalog">1. Module Catalog</h2>
+
+<h3>Foundation modules (broad audience)</h3>
+<table>
+  <thead><tr><th>ID</th><th>Module</th><th>Duration</th><th>Format</th><th>Audience</th><th>Prereq</th></tr></thead>
+  <tbody>
+    <tr><td><span class="id f">F1</span></td><td>Agentic AI Primer — agents vs. chatbots vs. RAG, reasoning loops, tools, memory, autonomy spectrum</td><td>0.5 hr</td><td>Lecture + demo</td><td>ALL</td><td>None</td></tr>
+    <tr><td><span class="id f">F2</span></td><td>Microsoft Foundry Overview — models, agents, evaluations, where it fits</td><td>0.5 hr</td><td>Lecture + demo</td><td>ALL</td><td>F1</td></tr>
+    <tr><td><span class="id f">F3</span></td><td>Designing Agent Architectures (intro) — single/multi-agent, RAG, voice, MCP-based tools, A2A for agent-to-agent comms</td><td>0.5 hr</td><td>Lecture</td><td>ALL</td><td>F1</td></tr>
+    <tr><td><span class="id f">F4</span></td><td>Responsible AI, Governance, Security &amp; Observability (intro)</td><td>0.5 hr</td><td>Lecture</td><td>ALL</td><td>F1</td></tr>
+    <tr><td><span class="id f">F5</span></td><td>End-to-End Demo — Microsoft Foundry + LangGraph / Microsoft Agent Framework (MAF) + MCP + voice</td><td>0.25 hr</td><td>Demo</td><td>ALL</td><td>F1–F4</td></tr>
+    <tr><td><span class="id f">F6</span></td><td>Pre-flight: environment &amp; repo setup for hands-on</td><td>0.25 hr</td><td>Guided setup</td><td>DevL, Dev, TL, DepL, TA</td><td>F2</td></tr>
+    <tr class="total-row"><td colspan="2">Foundation total</td><td>~2.5 hrs</td><td colspan="3">Suits a single foundation slot for 200–300 people.</td></tr>
+  </tbody>
+</table>
+
+<h3>Architecture &amp; Design modules (Track A)</h3>
+<table>
+  <thead><tr><th>ID</th><th>Module</th><th>Duration</th><th>Format</th><th>Audience</th><th>Prereq</th></tr></thead>
+  <tbody>
+    <tr><td><span class="id a">A1</span></td><td>Agent Architecture Catalog — planner-executor, ReAct, reflection, supervisor, hierarchical</td><td>0.75 hr</td><td>Lecture + whiteboard</td><td>TA, FA, DevL</td><td>F1, F3</td></tr>
+    <tr><td><span class="id a">A2</span></td><td>Multi-Agent Orchestration with LangGraph &amp; Microsoft Agent Framework (MAF) — graph design, state, hand-offs; when to choose MAF vs. LangGraph</td><td>0.75 hr</td><td>Lecture + walkthrough</td><td>TA, DevL, Dev</td><td>F1</td></tr>
+    <tr><td><span class="id a">A3</span></td><td>MCP &amp; A2A as Integration Contracts — MCP for tools, A2A (Agent-to-Agent protocol) for inter-agent communication; when to use each</td><td>0.5 hr</td><td>Lecture</td><td>TA, DevL, Dev</td><td>F1</td></tr>
+    <tr><td><span class="id a">A4</span></td><td>Retrieval-Augmented Agents — index design, grounding, freshness, hybrid retrieval</td><td>0.75 hr</td><td>Lecture + demo</td><td>TA, FA, DevL</td><td>F1</td></tr>
+    <tr><td><span class="id a">A5</span></td><td>Azure Infrastructure Blueprint — Microsoft Foundry, AKS/Container Apps, networking, identity, cost</td><td>0.5 hr</td><td>Lecture</td><td>TA, DepL, DevL</td><td>F2</td></tr>
+    <tr><td><span class="id a">A6</span></td><td>Functional Mapping Workshop — business process → agents/tools/HITL</td><td>0.5 hr</td><td>Workshop</td><td>FA, TA, DL</td><td>F3</td></tr>
+  </tbody>
+</table>
+
+<h3>Build &amp; Validate modules (Track B, hands-on)</h3>
+<table>
+  <thead><tr><th>ID</th><th>Module</th><th>Duration</th><th>Format</th><th>Audience</th><th>Prereq</th></tr></thead>
+  <tbody>
+    <tr><td><span class="id b">B1</span></td><td>LangGraph &amp; Microsoft Agent Framework (MAF) Lab — build a 2-node ReAct agent with a tool call in both frameworks</td><td>1.0 hr</td><td>Hands-on lab</td><td>DevL, Dev</td><td>F6, A2</td></tr>
+    <tr><td><span class="id b">B2</span></td><td>MCP &amp; A2A Lab — wrap an internal API as an MCP server; expose an agent over A2A and invoke it from another agent</td><td>0.75 hr</td><td>Hands-on lab</td><td>DevL, Dev</td><td>F6, A3</td></tr>
+    <tr><td><span class="id b">B3</span></td><td>Voice Agent Lab — MS Live Voice front-end on top of an agent</td><td>0.75 hr</td><td>Hands-on lab</td><td>Dev, DevL</td><td>F6, B1</td></tr>
+    <tr><td><span class="id b">B4</span></td><td>Testing Agents — golden datasets, LLM-as-judge, regression, guardrails, Microsoft Foundry evals</td><td>0.75 hr</td><td>Lab + lecture</td><td>TL, Dev, DevL</td><td>F4, B1</td></tr>
+    <tr><td><span class="id b">B5</span></td><td>Deploy &amp; Operate Agents — containerize, CI/CD, config, tracing, rollback</td><td>0.75 hr</td><td>Lab + lecture</td><td>DepL, DevL, Dev</td><td>F4, B1</td></tr>
+    <tr><td><span class="id b">B6</span></td><td>Observability Deep-Dive — App Insights, traces, prompt/response logging</td><td>0.5 hr</td><td>Demo + lab</td><td>DepL, TL, Dev</td><td>B5</td></tr>
+  </tbody>
+</table>
+
+<h3>Deliver &amp; Govern modules (Track G)</h3>
+<table>
+  <thead><tr><th>ID</th><th>Module</th><th>Duration</th><th>Format</th><th>Audience</th><th>Prereq</th></tr></thead>
+  <tbody>
+    <tr><td><span class="id g">G1</span></td><td>Agent Maturity &amp; Delivery Lifecycle — PoC → Pilot → Scale</td><td>0.5 hr</td><td>Lecture</td><td>DL, PgM, PMO</td><td>F1</td></tr>
+    <tr><td><span class="id g">G2</span></td><td>Risk in Agentic Systems — hallucination, drift, reliability, cost; quantify &amp; mitigate</td><td>0.5 hr</td><td>Lecture + tabletop</td><td>DL, PMO, TL</td><td>F4</td></tr>
+    <tr><td><span class="id g">G3</span></td><td>Responsible AI &amp; Governance Deep-Dive — policies, approvals, audit, data residency</td><td>0.75 hr</td><td>Lecture + workshop</td><td>PMO, DL, PgM, TA</td><td>F4</td></tr>
+    <tr><td><span class="id g">G4</span></td><td>Operating Agents at Scale — environments, SLAs, KPIs, value realization</td><td>0.5 hr</td><td>Lecture</td><td>DL, PgM, DepL</td><td>F4</td></tr>
+    <tr><td><span class="id g">G5</span></td><td>Rollout &amp; RAID Tabletop — facilitated walk-through of taking a sample agentic initiative from build to production: rollout plan (envs, pilot group, success criteria, comms, cutover, rollback) plus a RAID log (Risks, Assumptions, Issues, Dependencies). Attendees leave with a filled-in canvas they can reuse as a template.</td><td>0.5 hr</td><td>Tabletop exercise</td><td>DL, PgM, PMO</td><td>G1, G2</td></tr>
+    <tr><td><span class="id g">G6</span></td><td>Portfolio Governance &amp; Reuse</td><td>0.25 hr</td><td>Lecture</td><td>PgM, PMO</td><td>G1</td></tr>
+  </tbody>
+</table>
+
+<h3>Scenario modules (capstones)</h3>
+<table>
+  <thead><tr><th>ID</th><th>Module</th><th>Duration</th><th>Format</th><th>Audience</th><th>Prereq</th></tr></thead>
+  <tbody>
+    <tr><td><span class="id s">S1</span></td><td>Scenario: Enterprise Knowledge Agent — RAG + multi-agent (LangGraph or MAF) with citations &amp; HITL escalation</td><td>3.0 hr</td><td>Capstone build</td><td>DevL, Dev, TL, DepL (build); TA, FA, DL, PMO (review)</td><td>A2, A4, B1, B4</td></tr>
+    <tr><td><span class="id s">S2</span></td><td>Scenario: Voice-Enabled Operations Agent — voice + MCP + orchestrator (LangGraph or MAF) + telemetry</td><td>3.0 hr</td><td>Capstone build</td><td>DevL, Dev, TL, DepL (build); FA, TA, PMO (review)</td><td>A2, A3, B2, B3, B5</td></tr>
+  </tbody>
+</table>
+
+<h2 id="topics">2. Topic Coverage Matrix</h2>
+<table>
+  <thead><tr><th>Recommended topic</th><th>Modules covering it</th></tr></thead>
+  <tbody>
+    <tr><td>Microsoft Foundry</td><td>F2, A5, B1, B4, B5, S1, S2</td></tr>
+    <tr><td>LangGraph</td><td>F3, A2, B1, S1, S2</td></tr>
+    <tr><td>Microsoft Agent Framework (MAF)</td><td>F3, A2, B1, S1, S2</td></tr>
+    <tr><td>MCP</td><td>F3, A3, B2, S2</td></tr>
+    <tr><td>A2A (Agent-to-Agent protocol)</td><td>F3, A3, B2, S1, S2</td></tr>
+    <tr><td>Voice (MS Live Voice)</td><td>F5, B3, S2</td></tr>
+    <tr><td>Designing Agent Architectures</td><td>F3, A1, A4, A6</td></tr>
+    <tr><td>Azure Infrastructure setup &amp; support</td><td>A5, B5, B6</td></tr>
+    <tr><td>Responsible AI, Governance, Security, Observability</td><td>F4, B4, B6, G2, G3</td></tr>
+    <tr><td>Deploying &amp; Operating Agents at Scale</td><td>B5, B6, G4</td></tr>
+    <tr><td>Multi-Agent Orchestration</td><td>A1, A2, S1, S2</td></tr>
+    <tr><td>Retrieval-Augmented Agents</td><td>A4, S1</td></tr>
+  </tbody>
+</table>
+
+<h2 id="roles">3. Role → Recommended Modules</h2>
+<blockquote>
+  Tracks A, B, and G run <strong>in sequence</strong> (not in parallel). Each attendee joins only the modules listed for their role and is free to leave or join during other modules. This removes the "one room only" constraint, lets a role pick modules from any track, and means the same instructor team can teach all tracks back-to-back.
+</blockquote>
+<table>
+  <thead><tr><th>Role</th><th>Foundation</th><th>Architecture &amp; Design (A)</th><th>Build &amp; Validate (B)</th><th>Deliver &amp; Govern (G)</th><th>Capstone</th></tr></thead>
+  <tbody>
+    <tr><td>Technical Architect</td><td>F1–F5</td><td>A1, A2, A3, A4, A5</td><td>—</td><td>G3</td><td>S1 / S2 (review)</td></tr>
+    <tr><td>Functional Architect</td><td>F1–F5</td><td>A1, A4, A6</td><td>—</td><td>G1, G3</td><td>S2 (review)</td></tr>
+    <tr><td>Delivery Lead</td><td>F1–F5</td><td>A6</td><td>—</td><td>G1, G2, G3, G4, G5</td><td>S1 / S2 (review)</td></tr>
+    <tr><td>Development Lead</td><td>F1–F6</td><td>A1, A2, A3</td><td>B1, B2, B4, B5</td><td>—</td><td>S1 / S2 (build)</td></tr>
+    <tr><td>Developer</td><td>F1–F6</td><td>A2, A3</td><td>B1, B2, B3, B4, B5, B6</td><td>—</td><td>S1 / S2 (build)</td></tr>
+    <tr><td>Program Mgmt</td><td>F1–F5</td><td>—</td><td>—</td><td>G1, G2, G4, G5, G6</td><td>Observer</td></tr>
+    <tr><td>PMO</td><td>F1–F5</td><td>—</td><td>—</td><td>G2, G3, G5, G6</td><td>S2 (gov reviewer)</td></tr>
+    <tr><td>Test Lead</td><td>F1–F6</td><td>—</td><td>B1, B4, B6</td><td>G2</td><td>S1 / S2 (eval focus)</td></tr>
+    <tr><td>Deployment Lead</td><td>F1–F6</td><td>A5</td><td>B5, B6</td><td>G4</td><td>S1 / S2 (deploy focus)</td></tr>
+  </tbody>
+</table>
+<p><strong>Attendance pattern:</strong> roles "pulse in" for the modules marked above and skip the rest. For example, a Technical Architect attends all of Track A, skips Track B, and joins only G3 in Track G.</p>
+
+<h2 id="hours">4. Total Hours by Track</h2>
+<table>
+  <thead><tr><th>Track</th><th>Modules</th><th>Hours</th></tr></thead>
+  <tbody>
+    <tr><td>Foundation (F)</td><td>F1–F6</td><td>~2.5</td></tr>
+    <tr><td>Architecture &amp; Design (A)</td><td>A1–A6</td><td>~3.75</td></tr>
+    <tr><td>Build &amp; Validate (B)</td><td>B1–B6</td><td>~4.5</td></tr>
+    <tr><td>Deliver &amp; Govern (G)</td><td>G1–G6</td><td>~3.0</td></tr>
+    <tr><td>Scenarios (S)</td><td>S1 or S2 (one per attendee)</td><td>3.0</td></tr>
+  </tbody>
+</table>
+
+<h2 id="schedules">5. Sample Schedules (mix-and-match)</h2>
+<p>Modules are independent enough to be re-sequenced. Example schedules:</p>
+
+<div class="schedule-block">
+  <h3>Option A — Sequential 3-day (Wed/Thu/Fri)</h3>
+  <p>All tracks run <strong>back-to-back in one room</strong>. Roles attend only the modules relevant to them (per §3) and may step out for the rest.</p>
+  <ul>
+    <li><strong>Day 1 — Foundation (2.5 hr, all 200–300):</strong> F1 → F2 → F3 → break → F4 → F5 → F6</li>
+    <li><strong>Day 2 — Tracks A → B in sequence (~6 hr with breaks; can split AM/PM):</strong>
+      <ul>
+        <li><strong>AM block (3.75 hr) — Track A:</strong> A1 → A2 → A3 → break → A4 → A5 → A6 <br><em>Attending:</em> TA, FA, DL (A6 only), DevL, Dev (A2/A3), DepL (A5)</li>
+        <li><strong>PM block (4.5 hr) — Track B:</strong> B1 → B2 → B3 → break → B4 → B5 → B6 <br><em>Attending:</em> DevL, Dev, TL (B1/B4/B6), DepL (B5/B6)</li>
+      </ul>
+    </li>
+    <li><strong>Day 3 — Track G + Capstone:</strong>
+      <ul>
+        <li><strong>AM (3 hr) — Track G:</strong> G1 → G2 → G3 → break → G4 → G5 → G6 <br><em>Attending:</em> DL, PgM, PMO, TA/FA (G3), TL (G2), DepL (G4)</li>
+        <li><strong>PM (3 hr) — Capstone:</strong> S1 or S2 (technical roles build; architects/delivery/PMO review)</li>
+      </ul>
+    </li>
+  </ul>
+  <blockquote>If 6 hr in one day is too long, split Track A and Track B across Day 2 + Day 3 morning, and push the capstone to a 4th day.</blockquote>
+</div>
+
+<div class="schedule-block">
+  <h3>Option B — Spread over a week (lighter daily load)</h3>
+  <ul>
+    <li><strong>Mon (1 hr):</strong> F1 + F2</li>
+    <li><strong>Tue (1.5 hr):</strong> F3 + F4 + F5 + F6</li>
+    <li><strong>Wed (2 hr):</strong> track-specific morning session</li>
+    <li><strong>Thu (2 hr):</strong> track-specific afternoon session</li>
+    <li><strong>Fri (3 hr):</strong> capstone scenario</li>
+  </ul>
+</div>
+
+<div class="schedule-block">
+  <h3>Option C — Two half-days only (executive / leadership audience)</h3>
+  <ul>
+    <li><strong>Half-day 1 (2.5 hr):</strong> F1–F5 + G1</li>
+    <li><strong>Half-day 2 (2.5 hr):</strong> G2 + G3 + G4 + G5 + G6 + A6</li>
+  </ul>
+</div>
+
+<div class="schedule-block">
+  <h3>Option D — Developer bootcamp (technical only, 2 days)</h3>
+  <ul>
+    <li><strong>Day 1 (4 hr):</strong> F1, F2, F3, F6, A2, A3, A4</li>
+    <li><strong>Day 2 (5 hr):</strong> B1, B2, B3, B4, B5, B6 + trimmed scenario (S1 or S2, 2 hr)</li>
+  </ul>
+</div>
+
+<h2 id="logistics">6. Logistics &amp; Pre-requisites</h2>
+<ul>
+  <li><strong>Pre-reads:</strong> agentic AI primer, Microsoft Foundry quickstart, LangGraph tour, Microsoft Agent Framework (MAF) tour, MCP spec summary, A2A protocol summary.</li>
+  <li><strong>Lab environment (any B or S module):</strong> Azure subscription with Microsoft Foundry project, GitHub repo template, VS Code + recommended extensions.</li>
+  <li><strong>Capacity guidance:</strong> F-modules tolerate 200–300 (webinar style); A/B/G modules best at ≤80 per room; S-modules at ≤40 per scenario room with 2 instructors + 2 TAs.</li>
+  <li><strong>Artifacts collected:</strong> architecture diagrams (A), runnable repos (B), governance canvases (G), scenario demos (S).</li>
+</ul>
+
+<h2 id="metrics">7. Success Metrics</h2>
+<ul>
+  <li>≥ 80% F-module attendance from invited roles.</li>
+  <li>≥ 70% of B-module attendees produce a runnable artifact.</li>
+  <li>≥ 1 working demo per scenario team.</li>
+  <li>Post-training survey: ≥ 4.2 / 5 overall; role-relevance ≥ 4.0 / 5.</li>
+  <li>30-day follow-up: number of attendees contributing to an internal agentic initiative.</li>
+</ul>
+
+</div>
+</body>
+</html>

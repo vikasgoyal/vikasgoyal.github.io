@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Behavioral Consistency in Multi-Model AI Systems | Vikas Goyal</title>
+		<meta name="description" content="How to design multi-model AI systems that handle provider safety divergence through intent normalization, adjudication, rewrites, and retrieval fallback.">
+		<meta name="keywords" content="multi-model AI, content moderation, AI safety, guardrails, provider safety layers, agentic AI, intent normalization">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/design/content-moderation-at-scale.html">
+
+		<meta property="og:title" content="Behavioral Consistency in Multi-Model AI Systems">
+		<meta property="og:description" content="Why benign enterprise prompts can behave differently across providers, and how to design above those differences.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/design/content-moderation-at-scale.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Behavioral Consistency in Multi-Model AI Systems">
+		<meta name="twitter:description" content="Practical patterns for intent normalization, adjudication, policy-safe rewrites, and retrieval fallback in multi-model AI systems.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Behavioral Consistency in Multi-Model AI Systems",
+			"description": "How to design multi-model AI systems that handle provider safety divergence through intent normalization, adjudication, rewrites, and retrieval fallback.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-04-29",
+			"dateModified": "2026-04-29",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/design/content-moderation-at-scale.html"
+			},
+			"keywords": "multi-model AI, content moderation, AI safety, guardrails, provider safety layers, agentic AI, intent normalization"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--moderation-ink: #121212;
+				--moderation-ink-soft: #505050;
+				--moderation-paper: #f6f4ee;
+				--moderation-surface: rgba(255, 255, 255, 0.92);
+				--moderation-line: rgba(18, 18, 18, 0.10);
+				--moderation-green: #0f5d44;
+				--moderation-green-deep: #0a3f30;
+				--moderation-blue: #173c73;
+				--moderation-amber: #b8892f;
+				--moderation-shadow: 0 20px 52px rgba(18, 18, 18, 0.10);
+				--moderation-radius-lg: 24px;
+			}
+
+			body {
+				width: auto;
+				margin: 0;
+				padding: 24px 20px 72px;
+				background:
+					radial-gradient(circle at top left, rgba(15, 93, 68, 0.12), transparent 24%),
+					radial-gradient(circle at top right, rgba(23, 60, 115, 0.10), transparent 22%),
+					linear-gradient(180deg, #fbfaf6 0%, var(--moderation-paper) 42%, #ffffff 100%);
+			}
+
+			.page-shell {
+				max-width: 980px;
+				margin: 0 auto;
+			}
+
+			.article-shell {
+				display: grid;
+				gap: 1rem;
+				padding-top: 0.25rem;
+			}
+
+			article {
+				max-width: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			.moderation-hero,
+			.moderation-summary,
+			.moderation-section,
+			.moderation-related {
+				background: var(--moderation-surface);
+				border: 1px solid var(--moderation-line);
+				border-radius: var(--moderation-radius-lg);
+				box-shadow: var(--moderation-shadow);
+			}
+
+			.moderation-hero {
+				padding: 2rem;
+				background:
+					linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 244, 238, 0.94) 100%),
+					linear-gradient(135deg, rgba(23, 60, 115, 0.08) 0%, rgba(15, 93, 68, 0.08) 100%);
+			}
+
+			.eyebrow {
+				display: inline-flex;
+				margin-bottom: 1rem;
+				padding: 0.45rem 0.8rem;
+				border-radius: 999px;
+				background: rgba(15, 93, 68, 0.10);
+				color: var(--moderation-green-deep);
+				font-size: 0.78rem;
+				font-weight: 800;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+			}
+
+			.moderation-hero h1 {
+				margin: 0;
+				font-size: clamp(2.1rem, 4vw, 3.3rem);
+				line-height: 1.08;
+				letter-spacing: 0;
+			}
+
+			.article-meta {
+				margin-top: 0.9rem;
+				color: #6b7280;
+				font-size: 0.95rem;
+				font-style: normal;
+			}
+
+			.moderation-dek {
+				margin: 1rem 0 0;
+				max-width: 52rem;
+				font-size: 1.15rem;
+				line-height: 1.72;
+				color: var(--moderation-ink-soft);
+			}
+
+			.moderation-summary,
+			.moderation-section,
+			.moderation-related {
+				padding: 1.35rem 1.5rem;
+			}
+
+			.moderation-summary p {
+				margin: 0;
+				color: var(--moderation-green-deep);
+				font-weight: 600;
+				line-height: 1.72;
+			}
+
+			.moderation-section h2,
+			.moderation-section h3,
+			.moderation-related h3 {
+				margin-top: 0;
+			}
+
+			.moderation-section h2 {
+				font-size: clamp(1.45rem, 2.5vw, 1.95rem);
+			}
+
+			.moderation-section p,
+			.moderation-section li,
+			.moderation-related li {
+				color: var(--moderation-ink-soft);
+				font-size: 1.03rem;
+				line-height: 1.8;
+			}
+
+			.moderation-section p:last-child,
+			.moderation-section ul:last-child,
+			.moderation-section ol:last-child,
+			.moderation-related ul:last-child {
+				margin-bottom: 0;
+			}
+
+			.pattern-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1rem;
+				margin: 1rem 0 1.4rem;
+			}
+
+			.pattern-card,
+			.callout,
+			blockquote {
+				border-radius: 18px;
+			}
+
+			.pattern-card {
+				padding: 1rem;
+				border: 1px solid rgba(18, 18, 18, 0.08);
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(246, 244, 238, 0.82) 100%);
+			}
+
+			.pattern-card h3 {
+				margin-bottom: 0.55rem;
+				color: var(--moderation-blue);
+				font-size: 1.05rem;
+			}
+
+			.pattern-card p {
+				margin: 0;
+			}
+
+			.flow-diagram {
+				display: grid;
+				grid-template-columns: repeat(4, minmax(0, 1fr));
+				gap: 0.65rem;
+				margin: 1.15rem 0 1.35rem;
+				padding: 0.85rem;
+				border: 1px solid rgba(18, 18, 18, 0.08);
+				border-radius: 8px;
+				background: linear-gradient(135deg, rgba(23, 60, 115, 0.05), rgba(15, 93, 68, 0.06));
+			}
+
+			.flow-step {
+				position: relative;
+				min-height: 100%;
+				padding: 0.85rem 0.9rem;
+				border: 1px solid rgba(18, 18, 18, 0.08);
+				border-radius: 8px;
+				background: rgba(255, 255, 255, 0.82);
+			}
+
+			.flow-step:not(:last-child)::after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				right: -0.45rem;
+				z-index: 1;
+				width: 0.55rem;
+				height: 0.55rem;
+				border-top: 2px solid var(--moderation-green-deep);
+				border-right: 2px solid var(--moderation-green-deep);
+				background: transparent;
+				transform: translateY(-50%) rotate(45deg);
+			}
+
+			.flow-kicker {
+				display: block;
+				margin-bottom: 0.35rem;
+				color: var(--moderation-green-deep);
+				font-size: 0.74rem;
+				font-weight: 800;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+			}
+
+			.flow-step strong {
+				display: block;
+				margin-bottom: 0.25rem;
+				color: var(--moderation-ink);
+				font-size: 0.98rem;
+				line-height: 1.35;
+			}
+
+			.flow-step span:last-child {
+				display: block;
+				color: var(--moderation-ink-soft);
+				font-size: 0.9rem;
+				line-height: 1.55;
+			}
+
+			.flow-diagram.compact {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+			}
+
+			.flow-diagram.two-column {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+
+			.flow-diagram.parallel .flow-step::after {
+				content: none;
+			}
+
+			.flow-step.warning {
+				border-color: rgba(184, 137, 47, 0.28);
+				background: rgba(184, 137, 47, 0.10);
+			}
+
+			.flow-step.safe {
+				border-color: rgba(15, 93, 68, 0.24);
+				background: rgba(15, 93, 68, 0.08);
+			}
+
+			.flow-step.blocked {
+				border-color: rgba(185, 28, 28, 0.18);
+				background: rgba(185, 28, 28, 0.06);
+			}
+
+			blockquote {
+				margin: 1.25rem 0;
+				padding: 1rem 1.15rem;
+				border: 1px solid rgba(23, 60, 115, 0.10);
+				border-left: 4px solid var(--moderation-green);
+				background: rgba(23, 60, 115, 0.06);
+				font-style: normal;
+			}
+
+			blockquote p {
+				margin: 0;
+				color: #28476c;
+			}
+
+			.callout {
+				margin: 1.25rem 0;
+				padding: 1rem 1.15rem;
+				border: 1px solid rgba(184, 137, 47, 0.26);
+				background: linear-gradient(135deg, rgba(184, 137, 47, 0.12), rgba(255, 255, 255, 0.88));
+			}
+
+			.callout p {
+				margin: 0;
+				color: #6f4a0d;
+			}
+
+			@media (max-width: 720px) {
+				body {
+					padding: 16px 12px 56px;
+				}
+
+				.moderation-hero,
+				.moderation-summary,
+				.moderation-section,
+				.moderation-related {
+					padding: 1.25rem;
+					border-radius: 20px;
+				}
+
+				.pattern-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.flow-diagram,
+				.flow-diagram.compact,
+				.flow-diagram.two-column {
+					grid-template-columns: 1fr;
+				}
+
+				.flow-step:not(:last-child)::after {
+					content: "";
+					top: auto;
+					right: auto;
+					bottom: -0.5rem;
+					left: 50%;
+					transform: translateX(-50%) rotate(135deg);
+				}
+
+				.flow-diagram.parallel .flow-step::after {
+					content: none;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="page-shell">
+			<div id="header"></div>
+
+			<main class="article-shell" aria-label="Article content">
+				<article>
+					<header class="moderation-hero">
+						<span class="eyebrow">Agentic AI Design</span>
+						<h1>Designing for Behavioral Consistency in Multi-Model AI Systems</h1>
+						<div class="article-meta"><time datetime="2026-04-29">April 29, 2026</time></div>
+						<p class="moderation-dek">The hard part of content moderation at enterprise scale is not always harmful content. It is benign business intent being interpreted differently by different models, clouds, and safety layers.</p>
+					</header>
+
+					<section class="moderation-summary" aria-label="Summary">
+						<p>In multi-model systems, normalize intent before inference, and adjudicate disagreement before users ever see it. Consistency does not come from making providers identical. It comes from designing intelligently above them.</p>
+					</section>
+
+					<section class="moderation-section" id="introduction">
+						<p>One of the more subtle challenges in building AI applications across multiple models and clouds is not harmful content — it is <strong>benign content being interpreted differently by different models.</strong> This problem becomes much more visible as organizations adopt multi-model architectures, and it deserves to be treated as a first-class design concern.</p>
+						<p>Consider an enterprise HR assistant running across models hosted on Microsoft, Google, and Amazon. An employee asks: <em>"Can a manager approve expenses for their spouse if they work in the same department?"</em> One model interprets this correctly as a conflict-of-interest policy question. Another becomes cautious because of relationship-related language. A third responds, but hedges with unnecessary refusal language. Same prompt, same user intent, different outcomes.</p>
+						<div class="flow-diagram compact parallel" aria-label="Example of provider divergence">
+							<div class="flow-step safe"><span class="flow-kicker">Provider A</span><strong>Policy question</strong><span>Answers the HR intent cleanly.</span></div>
+							<div class="flow-step warning"><span class="flow-kicker">Provider B</span><strong>Ambiguous signal</strong><span>Flags relationship language for review.</span></div>
+							<div class="flow-step blocked"><span class="flow-kicker">Provider C</span><strong>Hard block</strong><span>Returns refusal despite benign intent.</span></div>
+						</div>
+						<p>Or take an even simpler case: <em>"Can brother and sister work on the same project?"</em> This is plainly a staffing policy question. But the presence of family-relationship terms in casual phrasing is enough to trigger divergent behavior across providers. One cloud passes it cleanly. Another flags it for review. A third blocks it outright. <strong>That is not a filtering issue. It is a multi-model consistency problem.</strong></p>
+					</section>
+
+					<section class="moderation-section" id="why-provider-safety-layers-diverge">
+						<h2>Why Provider Safety Layers Diverge</h2>
+						<p>The reason this happens is structural, not accidental. Each major cloud provider has built its own safety infrastructure, and while the knobs look similar in spirit, they are not equivalent in behavior.</p>
+						<p>Azure applies integrated prompt-and-completion filtering with configurable content categories and severity levels. Vertex AI exposes configurable harm thresholds and supports both probability-based and severity-based scoring. Bedrock Guardrails lets you tune filter strengths and define separate actions for prompts and responses. All three give you levers to adjust. But the underlying models that score content, the category taxonomies they use, and the default thresholds they ship with are all different. A prompt that scores below the blocking threshold on one platform may score above it on another — not because one provider is wrong, but because they are measuring slightly different things in slightly different ways.</p>
+						<div class="callout"><p>This means the solution is usually not "pick whichever cloud is most permissive," and also not "force one global filter and ignore the providers." The better principle is simpler: <strong>treat each provider's result as signal, and let a central policy layer make the final decision.</strong></p></div>
+					</section>
+
+					<section class="moderation-section" id="mental-model">
+						<h2>A Mental Model for Thinking About This</h2>
+						<p>I think about multi-model systems in three layers.</p>
+						<div class="flow-diagram compact" aria-label="Meaning to orchestration to model flow">
+							<div class="flow-step"><span class="flow-kicker">Layer 1</span><strong>Meaning</strong><span>Identify what the user is actually asking.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Layer 2</span><strong>Orchestration</strong><span>Normalize, classify, route, and adjudicate.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Layer 3</span><strong>Models</strong><span>Generate under provider safety controls.</span></div>
+						</div>
+						<div class="pattern-grid" aria-label="Three-layer mental model">
+							<div class="pattern-card"><h3>Layer 1: Meaning</h3><p>What is the user actually asking? This is where intent lives, independent of any model or provider.</p></div>
+							<div class="pattern-card"><h3>Layer 2: Orchestration</h3><p>How should the system interpret, rewrite, classify, and route the prompt? This is where architectural decisions happen, including how to handle disagreement between providers.</p></div>
+							<div class="pattern-card"><h3>Layer 3: Models</h3><p>Which model or models should help produce the answer? This is execution, subject to each provider's safety infrastructure.</p></div>
+						</div>
+						<p>Many teams start at Layer 3 and work backward. The stronger designs start at Layer 1. Each of the patterns below operates primarily at Layers 1 and 2, which is where consistency is actually won.</p>
+					</section>
+
+					<section class="moderation-section" id="two-step-adjudication">
+						<h2>The Two-Step Adjudication Pattern</h2>
+						<p>The foundational approach has two parts. First, let each provider's native safety run as usual. Azure applies its default safety policies and configurable guardrails. Bedrock applies its configured prompt and response actions. Vertex applies its harm threshold filters. You preserve defense in depth and stay aligned with each platform's intended safety controls — this is not optional.</p>
+						<div class="flow-diagram" aria-label="Two-step adjudication flow">
+							<div class="flow-step"><span class="flow-kicker">1</span><strong>Prompt enters</strong><span>User asks in natural language.</span></div>
+							<div class="flow-step warning"><span class="flow-kicker">2</span><strong>Provider safety runs</strong><span>Native filters remain active.</span></div>
+							<div class="flow-step"><span class="flow-kicker">3</span><strong>Central adjudicator</strong><span>Intent and risk are normalized.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">4</span><strong>Application outcome</strong><span>Allow, rewrite, caution, or block.</span></div>
+						</div>
+						<p>Second, add a central adjudicator above the providers. When a provider blocks a prompt, the system should inspect the case before returning a hard refusal to the user. The adjudicator classifies the intent — is this an HR policy question, or is it actually sensitive content? — inspects whether the family terms are being used in a relationship context or an organizational one, and assigns a normalized outcome: <strong>ALLOW</strong>, <strong>ALLOW_WITH_CAUTION</strong>, <strong>SOFT_REWRITE</strong>, or <strong>BLOCK</strong>. For <em>"Can brother and sister work on the same project?"</em>, the adjudicator should label this as a workplace/HR policy question with low risk and an action of allow-and-answer. A block from one provider becomes a false-positive candidate, not an automatic failure.</p>
+						<p>The question then becomes: how do you implement that adjudication in practice? There are four patterns, each useful in different situations, and they can be combined.</p>
+					</section>
+
+					<section class="moderation-section" id="semantic-rewrite">
+						<h2>Pattern 1: Semantic Rewrite Before Model Invocation</h2>
+						<p>The lowest-friction fix is to rewrite potentially ambiguous prompts into explicit business language before they ever reach a model or its safety layer. The original <em>"Can brother and sister work on the same project?"</em> becomes <em>"What is the company policy on assigning close family members to the same work project?"</em> — or better yet, <em>"From an HR and conflict-of-interest perspective, can immediate family members be staffed on the same internal project?"</em></p>
+						<div class="flow-diagram" aria-label="Semantic rewrite flow">
+							<div class="flow-step warning"><span class="flow-kicker">Input</span><strong>Casual phrasing</strong><span>Family terms create ambiguity.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Normalize</span><strong>Rule or template rewrite</strong><span>No generative model needed.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Output</span><strong>Enterprise-safe phrasing</strong><span>Intent is explicit before inference.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Invoke</span><strong>Provider model</strong><span>Safety layer sees cleaner context.</span></div>
+						</div>
+						<p>This works because you are removing ambiguous family-relationship terms from casual phrasing and replacing them with an explicit enterprise-policy framing. The intent is preserved; the surface ambiguity is gone. Vertex itself recommends using system instructions alongside filters and notes that in many situations well-crafted instructions can be more effective than relying on filters alone.</p>
+						<p>The important implementation detail is that this rewrite cannot itself rely on an LLM — if the safety layer blocks the original prompt, it will likely block the same prompt sent to a rewriting model. The rewrite has to happen without a general-purpose model in the loop. In practice, this means rule-based substitution: maintain a dictionary that maps ambiguous casual terms to enterprise-safe equivalents, apply regex patterns to detect family-relationship or other flagged terms in the context of workplace language, and substitute before the prompt reaches any model or safety layer.</p>
+						<p>A more structured approach is to use template matching: define canonical enterprise question templates like <em>"What is the company policy on [topic] involving [relationship_category]?"</em> and slot detected entities into them. This is deterministic, fast, adds no inference cost, and — critically — operates entirely outside any provider's safety infrastructure.</p>
+						<p>For teams that need slightly more flexibility than static dictionaries, a small embedding model, not a generative LLM, can match incoming prompts against a library of known-safe paraphrases by semantic similarity and select the closest one. This avoids the rigidity of pure regex while still staying outside the generative safety boundary.</p>
+					</section>
+
+					<section class="moderation-section" id="moderation-api">
+						<h2>Where Moderation APIs Fit</h2>
+						<p>Another option is to use a dedicated content moderation API — like Azure AI Content Safety — as a pre-screening layer before any generative model is invoked. These services are not LLMs; they are purpose-built classifiers that return structured category scores and severity levels for content like sexual, violence, self-harm, and hate. You send the prompt to the moderation API first, get back granular scores, and make your own decision.</p>
+						<div class="flow-diagram compact" aria-label="Moderation API flow">
+							<div class="flow-step"><span class="flow-kicker">Screen</span><strong>Structured classifier</strong><span>Returns category and severity scores.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Decide</span><strong>Orchestration layer</strong><span>Interprets risk outside generation.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Route</span><strong>Rewrite, answer, or block</strong><span>Action is based on evidence.</span></div>
+						</div>
+						<p>If <em>"Can brother and sister work on the same project?"</em> comes back with low severity across all categories — which it should, because there is no actual harmful content — your orchestration layer knows the prompt is safe and can send it to the generative model with confidence, or skip the rewrite entirely. If a prompt does come back with elevated scores in a relevant category, you now have structured evidence to decide between rewriting, routing to retrieval, or blocking.</p>
+						<p>The key advantage is that this separates the safety judgment from the generation step. The moderation API is not trying to answer the question; it is only classifying risk. That makes it far less prone to the kind of ambiguity-driven false positives that generative safety layers produce. And because it runs outside the LLM inference path, it does not inherit any particular model's alignment biases.</p>
+					</section>
+
+					<section class="moderation-section" id="tiered-approach">
+						<h2>A Practical Tiered Approach</h2>
+						<p>The natural question is when to call the moderation API — before every model invocation, or only after a provider blocks? Neither extreme is ideal. Calling it on every prompt gives you the cleanest architecture, since you always have structured scores before routing, but you are paying for a moderation call on every request, including the vast majority that would pass cleanly on all providers. That is wasted latency on the hot path.</p>
+						<p>Calling it only after a block saves cost on the happy path, but you have already burned an LLM call that got blocked, and now the user waits through the slow path: failed LLM call, moderation API call, decision, possible rewrite, retry.</p>
+						<div class="callout"><p>The practical pattern is a tiered approach: fast local heuristic first, moderation API only for potentially ambiguous prompts, then rewrite, route, or block based on structured evidence.</p></div>
+						<div class="flow-diagram" aria-label="Tiered moderation flow">
+							<div class="flow-step"><span class="flow-kicker">Fast path</span><strong>Local heuristic</strong><span>Check for ambiguity triggers.</span></div>
+							<div class="flow-step warning"><span class="flow-kicker">If flagged</span><strong>Moderation API</strong><span>Get structured severity scores.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Decision</span><strong>Policy layer</strong><span>Choose allow, rewrite, route, or block.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Happy path</span><strong>Model or retrieval</strong><span>Most prompts avoid extra latency.</span></div>
+						</div>
+						<p>First, run a fast local heuristic — regex or keyword detection for terms known to cause cross-provider divergence, such as family-relationship terms, medical terms, or legal terms in casual phrasing. This costs essentially nothing. If the heuristic flags the prompt as potentially ambiguous, then call the content moderation API to get structured severity scores. If the moderation API confirms low risk, rewrite and send to the model with confidence. If it confirms real risk, block early and skip the LLM call entirely. If the heuristic does not flag anything, send directly to the model with no moderation call needed.</p>
+						<p>This way most prompts go straight through with no added latency, ambiguous prompts get a cheap structured check before the expensive LLM call, and genuinely harmful prompts get caught early without wasting an invocation. The one exception is high-compliance domains — healthcare, legal, financial services — where any false block is operationally costly. In those environments, pre-screening every prompt may be worth the per-call overhead. Moderation endpoints typically respond in 50-100ms and cost a fraction of a generative model call, which is trivial compared to the cost of a blocked workflow or a support escalation.</p>
+						<p>The general principle extends well beyond family terms. Whenever a domain-ambiguous term appears within clearly enterprise intent — medical language in a benefits question, legal terminology in a compliance query, financial phrasing in an audit context — normalize the prompt before inference begins. Consistency is often won before any model is invoked, and this pattern has the advantage of being entirely stateless: no retry logic, no multi-provider coordination, just a cleaner prompt going in.</p>
+					</section>
+
+					<section class="moderation-section" id="retry-paraphrase">
+						<h2>Pattern 2: Retry with a Policy-Safe Paraphrase</h2>
+						<p>When a provider blocks the original prompt, the orchestration layer can automatically retry once using a controlled paraphrase. Instead of surfacing the refusal, the system reformulates: <em>"Interpret this as a workplace conflict-of-interest policy question about staffing immediate family members."</em> The model answers the rewritten intent, not the raw ambiguous phrasing.</p>
+						<div class="flow-diagram" aria-label="Policy-safe retry flow">
+							<div class="flow-step warning"><span class="flow-kicker">Original</span><strong>Provider blocks</strong><span>Do not show refusal yet.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Inspect</span><strong>Benign enterprise intent</strong><span>Classify before retrying.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Retry once</span><strong>Controlled paraphrase</strong><span>Preserve meaning, reduce ambiguity.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Answer</span><strong>Policy-safe response</strong><span>User experiences one coherent result.</span></div>
+						</div>
+						<p>The user experience stays smooth: the user asks normally, the system normalizes intent behind the scenes, and the model answers the enterprise meaning. This pattern is useful when you cannot or do not want to rewrite every prompt upfront — perhaps because the normalization layer would add latency on the majority of prompts that pass cleanly, or because you want to preserve the user's original phrasing for logging purposes and only intervene on blocks.</p>
+					</section>
+
+					<section class="moderation-section" id="intent-classification">
+						<h2>Pattern 3: Intent Classification Before Safety Enforcement</h2>
+						<p>The most robust design for enterprise assistants puts a lightweight classifier in front of all models. The classifier tags prompts into categories — HR_POLICY, LEGAL_POLICY, WORKPLACE_RELATIONSHIP, COMPLIANCE, BENEFITS, GENERAL_QA, SENSITIVE_SEXUAL, SELF_HARM, VIOLENCE, and so on.</p>
+						<div class="flow-diagram" aria-label="Intent classification flow">
+							<div class="flow-step"><span class="flow-kicker">Prompt</span><strong>User language</strong><span>May be casual or ambiguous.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Classify</span><strong>Intent label</strong><span>HR, legal, compliance, sensitive, or general.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Policy</span><strong>Routing choice</strong><span>Pick rewrite, model path, retrieval, or block.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Execute</span><strong>Consistent behavior</strong><span>The app decides before models diverge.</span></div>
+						</div>
+						<p>When the classifier gives high confidence for a benign enterprise category like HR_POLICY, the central layer can apply a safer paraphrase, choose a cloud or model configuration known to behave better for policy questions, lower sensitivity on enterprise-safe categories where supported, or route the request to a provider path with fewer false positives.</p>
+						<p>This is more investment upfront than the rewrite patterns, but it scales better. The classifier becomes a shared asset across all your multi-model workflows, and it gives you a structured signal to make routing decisions on — not just for safety, but for model selection, retrieval strategy, and response formatting.</p>
+					</section>
+
+					<section class="moderation-section" id="retrieval-fallback">
+						<h2>Pattern 4: Block-Review-Override with Retrieval Fallback</h2>
+						<p>When a provider blocks but the central policy engine classifies the prompt as benign enterprise content, the system has several options: send to a second provider, route to an internal moderation model for a second opinion, or — often the best option — answer from deterministic policy retrieval instead of generative mode entirely.</p>
+						<div class="flow-diagram" aria-label="Retrieval fallback flow">
+							<div class="flow-step warning"><span class="flow-kicker">Disagreement</span><strong>Provider block</strong><span>Native signal is retained.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Review</span><strong>Central policy engine</strong><span>Confirms benign enterprise intent.</span></div>
+							<div class="flow-step"><span class="flow-kicker">Fallback</span><strong>Policy retrieval</strong><span>Use authoritative source when possible.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Respond</span><strong>Auditable answer</strong><span>Precise, cited, and less variable.</span></div>
+						</div>
+						<p>For a question like <em>"Can brother and sister work on the same project?"</em>, if the assistant has access to company HR policy documents, it may not need a generative model answer at all. It can route directly to retrieval and respond: <em>"According to company policy, immediate family members may work on the same project if reporting-line and conflict-of-interest controls are satisfied."</em> That avoids re-triggering generative safety ambiguity altogether. The answer is more precise, more auditable, and immune to model-to-model variation.</p>
+						<p>Not every prompt is a retrieval candidate. Open-ended analysis, synthesis across multiple domains, or genuinely novel questions still benefit from generation. But for the large class of enterprise prompts that have authoritative answers in a knowledge base, retrieval-as-fallback is often the cleanest path through a provider disagreement.</p>
+					</section>
+
+					<section class="moderation-section" id="application-consistency">
+						<h2>Application Consistency Over Model Consistency</h2>
+						<p>There is a subtle but important distinction running through all four patterns. Trying to make all models and all providers behave identically is unrealistic — they are trained differently, aligned differently, and their safety infrastructure is built on different taxonomies and thresholds. But making the <strong>application behave consistently despite those differences</strong> is entirely achievable, and that should be the goal.</p>
+						<div class="flow-diagram two-column parallel" aria-label="Consistency design contrast">
+							<div class="flow-step warning"><span class="flow-kicker">Wrong target</span><strong>Make every provider identical</strong><span>Unrealistic across models, taxonomies, and thresholds.</span></div>
+							<div class="flow-step safe"><span class="flow-kicker">Right target</span><strong>Make the application consistent</strong><span>Normalize intent and adjudicate provider disagreement.</span></div>
+						</div>
+						<p>Adding a normalization layer, an intent classifier, or an adjudication step introduces an extra hop. It adds latency and cost. But for enterprise applications where inconsistent behavior erodes user trust, where a flagged benign prompt generates a support ticket, or where compliance requires predictable outputs, the trade-off is overwhelmingly worthwhile. The normalization layer is often a small model call or even a rule-based system — not a heavyweight addition. And these architectural patterns scale across providers and survive model upgrades in a way that per-provider threshold tuning never will.</p>
+					</section>
+
+					<section class="moderation-section" id="takeaway">
+						<h2>The Takeaway</h2>
+						<p>As model ecosystems diversify, behavioral divergence across providers is not a bug — it is a permanent design condition. Each cloud's safety infrastructure is doing legitimate work, and the answer is not to bypass it. The answer is to build a layer above it that treats provider results as signal and makes consistent decisions on behalf of the user.</p>
+						<blockquote><p><strong>In multi-model systems, normalize intent before inference, and adjudicate disagreement before users ever see it.</strong> Consistency does not emerge from making providers identical. It emerges from designing intelligently above them.</p></blockquote>
+					</section>
+
+					<section class="moderation-related" id="related-content">
+						<h3>Related Articles</h3>
+						<ul>
+							<li><a href="/agentic/design/conversational_interfaces.html">Designing Companion Conversational Interfaces</a></li>
+							<li><a href="/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+							<li><a href="/agentic/observe/whatareevals.html">What Are Evals?</a></li>
+						</ul>
+					</section>
+				</article>
+			</main>
+
+			<div id="footer"></div>
+		</div>
+
+		<script src="../../headerfooter.js"></script>
+	</body>
+</html>
