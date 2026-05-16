@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZBXY60BLWE');
+		</script>
+		<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Runtime Governance: 10 Policies No Agent Should Reach Production Without</title>
+		<meta name="description" content="A practical guide to runtime governance for production AI agents: rate limits, TTLs, action budgets, safety checks, prompt injection controls, PII protection, permission boundaries, loop detection, outbound controls, and cost guardrails.">
+		<meta name="keywords" content="runtime governance, AI agents, agent safety, production AI, prompt injection, AI guardrails, agent observability, tool permissions">
+		<meta name="author" content="Vikas Goyal">
+		<meta name="robots" content="index, follow">
+		<link rel="canonical" href="https://vikasgoyal.github.io/agentic/observe/runtime-governance.html">
+
+		<meta property="og:title" content="Runtime Governance: 10 Policies No Agent Should Reach Production Without">
+		<meta property="og:description" content="The minimum runtime policies every production AI agent should enforce before it touches real systems, users, data, or budget.">
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://vikasgoyal.github.io/agentic/observe/runtime-governance.html">
+		<meta property="og:site_name" content="Vikas Goyal">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Runtime Governance: 10 Policies No Agent Should Reach Production Without">
+		<meta name="twitter:description" content="A practical runtime governance checklist for production AI agents, from rate limits and TTLs to prompt injection detection and cost controls.">
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": "Runtime Governance: 10 Policies No Agent Should Reach Production Without",
+			"description": "A practical guide to runtime governance for production AI agents: rate limits, TTLs, action budgets, safety checks, prompt injection controls, PII protection, permission boundaries, loop detection, outbound controls, and cost guardrails.",
+			"author": {
+				"@type": "Person",
+				"name": "Vikas Goyal",
+				"url": "https://www.linkedin.com/in/vikasgoyal/"
+			},
+			"datePublished": "2026-05-15",
+			"dateModified": "2026-05-15",
+			"publisher": {
+				"@type": "Person",
+				"name": "Vikas Goyal"
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://vikasgoyal.github.io/agentic/observe/runtime-governance.html"
+			},
+			"keywords": "runtime governance, AI agents, production AI, agent safety, prompt injection, AI guardrails"
+		}
+		</script>
+
+		<link rel="stylesheet" href="../../styles.css">
+		<style>
+			:root {
+				--gov-ink: #162033;
+				--gov-slate: #475569;
+				--gov-border: #d8dee9;
+				--gov-panel: #f8fafc;
+				--gov-blue-soft: #dbeafe;
+				--gov-green: #0f766e;
+				--gov-green-soft: #ccfbf1;
+				--gov-amber-soft: #fef3c7;
+				--gov-red-soft: #fee2e2;
+				--gov-violet-soft: #ede9fe;
+			}
+
+			.gov-article {
+				color: var(--gov-ink);
+			}
+
+			.gov-article header {
+				margin-bottom: 1.6em;
+				padding: 1.85em 1.6em;
+				background: linear-gradient(135deg, #eff6ff 0%, #f0fdfa 52%, #fff7ed 100%);
+				border: 1px solid #dbeafe;
+				border-radius: 20px;
+				box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+			}
+
+			.gov-article section {
+				margin-bottom: 1.5em;
+				padding: 1.35em 1.4em;
+				background: var(--gov-panel);
+				border: 1px solid var(--gov-border);
+				border-radius: 16px;
+				box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+			}
+
+			.gov-article h1,
+			.gov-article h2,
+			.gov-article h3 {
+				color: #0f172a;
+			}
+
+			.gov-article h2 {
+				margin-bottom: 0.65em;
+			}
+
+			.gov-article p {
+				margin-bottom: 0.9em;
+				color: var(--gov-slate);
+				line-height: 1.76;
+			}
+
+			.gov-article strong {
+				color: #0f172a;
+			}
+
+			.gov-article p:last-child,
+			.gov-article li:last-child {
+				margin-bottom: 0;
+			}
+
+			.summary-box,
+			.takeaway-box {
+				margin-top: 1.15em;
+				padding: 1em 1.1em;
+				border-radius: 14px;
+			}
+
+			.summary-box {
+				background: linear-gradient(135deg, var(--gov-blue-soft) 0%, #ffffff 100%);
+				border: 1px solid #bfdbfe;
+			}
+
+			.summary-box p {
+				margin: 0;
+				color: #1e3a8a;
+			}
+
+			.takeaway-box {
+				background: linear-gradient(135deg, var(--gov-amber-soft) 0%, #ffffff 100%);
+				border: 1px solid #fcd34d;
+			}
+
+			.takeaway-box p {
+				margin: 0;
+				color: #78350f;
+			}
+
+			.section-kicker {
+				display: inline-block;
+				margin-bottom: 0.6em;
+				padding: 0.25em 0.62em;
+				border-radius: 999px;
+				background: var(--gov-green-soft);
+				color: var(--gov-green);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+
+			.policy-table-wrap {
+				margin-top: 1em;
+				border-radius: 14px;
+				border: 1px solid #e5e7eb;
+				background: #ffffff;
+				overflow: hidden;
+			}
+
+			table.gov-table {
+				width: 100%;
+				border-collapse: collapse;
+				table-layout: fixed;
+				background: #ffffff;
+			}
+
+			.gov-table th,
+			.gov-table td {
+				padding: 0.9em 1em;
+				text-align: left;
+				vertical-align: top;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 0.94em;
+				overflow-wrap: anywhere;
+			}
+
+			.gov-table th {
+				background: #eff6ff;
+				color: #1e3a8a;
+				font-size: 0.9em;
+			}
+
+			.gov-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.policy-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1em;
+				margin-top: 1.1em;
+			}
+
+			.policy-card {
+				padding: 1em;
+				background: #ffffff;
+				border: 1px solid var(--gov-border);
+				border-radius: 14px;
+			}
+
+			.policy-card h3 {
+				margin: 0 0 0.45em;
+				font-size: 1.04em;
+			}
+
+			.policy-card p {
+				margin: 0;
+				font-size: 0.96em;
+			}
+
+			.policy-card.control {
+				background: linear-gradient(135deg, #ffffff 0%, var(--gov-green-soft) 100%);
+				border-color: #99f6e4;
+			}
+
+			.policy-card.risk {
+				background: linear-gradient(135deg, #ffffff 0%, var(--gov-red-soft) 100%);
+				border-color: #fecaca;
+			}
+
+			.policy-card.signal {
+				background: linear-gradient(135deg, #ffffff 0%, var(--gov-violet-soft) 100%);
+				border-color: #ddd6fe;
+			}
+
+			.gov-article ul,
+			.gov-article ol {
+				margin: 0.8em 0 0;
+				padding-left: 1.2em;
+			}
+
+			.gov-article li {
+				margin-bottom: 0.65em;
+				color: var(--gov-slate);
+				line-height: 1.7;
+			}
+
+			.series-links {
+				margin: 0;
+				padding-left: 1.2em;
+			}
+
+			@media (max-width: 768px) {
+				.gov-article header,
+				.gov-article section,
+				.policy-card,
+				.gov-table th,
+				.gov-table td {
+					padding: 1.05em;
+				}
+
+				.policy-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+</head>
+
+<body>
+		<div id="header"></div>
+
+		<main class="container-lg px-3 my-5 markdown-body">
+			<article class="gov-article">
+				<header>
+					<h1>Runtime Governance: 10 Policies No Agent Should Reach Production Without</h1>
+					<p style="font-style: italic;">Offline evals tell you how an agent behaves on inputs you imagined. Runtime governance protects you from the inputs, loops, tools, and failures you did not.</p>
+					<div style="margin-top: 0.95em;">
+						<a href="/agentic/observe/eval-content-map.html" style="display: inline-flex; align-items: center; padding: 0.5em 0.85em; border-radius: 999px; background: rgba(255, 255, 255, 0.88); border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; font-weight: 600;">View the eval content map</a>
+					</div>
+					<div class="summary-box">
+						<p><strong>Core idea:</strong> production agents need a measure-and-act policy layer between the agent and the systems it can affect, covering tools, credentials, sensitive data, outbound communication, runtime duration, and cost.</p>
+					</div>
+				</header>
+
+				<section id="why-runtime-governance-matters">
+					<div class="section-kicker">Production Reality</div>
+					<h2>Why launch-day safety checks are not enough</h2>
+					<p>Most teams treat agent safety as a launch-day checklist: red-team the prompts, evaluate on a benchmark, ship. That model breaks the moment an agent runs in production. Evals tell you how the agent behaves on inputs you imagined. Runtime governance is what protects you from inputs you didn't.</p>
+					<p>An agent in production is not a model — it's a long-running process with credentials, tools, a budget, and the autonomy to do real work on real systems. The unit of failure is no longer a bad answer; it's a runaway loop, a leaked secret, a hijacked context, or a tool call to the wrong API at 3am. None of these show up in offline evals. All of them are policy problems, and all of them need to be measured and acted on while the agent is running, not after.</p>
+					<p>What follows is the minimum set of runtime policies every agent should enforce before it touches a production workload. Each one maps to a concrete failure that has already happened to someone, and each one can be implemented as a measure-and-act loop sitting between the agent and the rest of your systems.</p>
+				</section>
+
+				<section id="ten-policies">
+					<div class="section-kicker">Checklist</div>
+					<h2>The 10 policies</h2>
+					<div class="policy-table-wrap">
+						<table class="gov-table">
+							<thead>
+								<tr>
+									<th>Runtime Policy</th>
+									<th>What to Measure</th>
+									<th>Automated Action</th>
+									<th>Failure Mode if Absent</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><strong>1. Tool call rate limiting</strong></td>
+									<td>Tool invocations/minute, retries, bursts</td>
+									<td>Slow down, queue, deny further calls</td>
+									<td>Downstream API abuse, throttling, self-inflicted DoS</td>
+								</tr>
+								<tr>
+									<td><strong>2. Maximum agent duration / TTL</strong></td>
+									<td>Total runtime, step count, reasoning iterations</td>
+									<td>Terminate or force escalation</td>
+									<td>Runaway agent, stuck sessions, unbounded spend</td>
+								</tr>
+								<tr>
+									<td><strong>3. Autonomous action budget</strong></td>
+									<td>Number/value of actions taken</td>
+									<td>Require approval after threshold</td>
+									<td>Large blast radius from a single bad decision</td>
+								</tr>
+								<tr>
+									<td><strong>4. AI-generated content safety check</strong></td>
+									<td>Toxicity, unsafe content, policy categories</td>
+									<td>Block, redact, rewrite, escalate</td>
+									<td>Brand/reputational harm, policy violations</td>
+								</tr>
+								<tr>
+									<td><strong>5. Prompt injection detection</strong></td>
+									<td>Injection score, instruction override attempts</td>
+									<td>Isolate context, strip instructions, switch mode</td>
+									<td>Hijacked agent, exfiltration, unauthorized actions</td>
+								</tr>
+								<tr>
+									<td><strong>6. Data sensitivity / PII policy</strong></td>
+									<td>PII detection, secret leakage, sensitive entities</td>
+									<td>Mask, redact, prevent transmission</td>
+									<td>Data exfiltration, GDPR/HIPAA/PCI compliance breach</td>
+								</tr>
+								<tr>
+									<td><strong>7. Tool permission boundary checks</strong></td>
+									<td>Requested action vs role/authorization</td>
+									<td>Deny tool access and alert</td>
+									<td>Privilege escalation, unauthorized writes</td>
+								</tr>
+								<tr>
+									<td><strong>8. Repetition / infinite-loop detection</strong></td>
+									<td>Repeated tool patterns, cyclic reasoning</td>
+									<td>Kill loop and summarize state</td>
+									<td>Wasted compute, stuck workflows, cost blowout</td>
+								</tr>
+								<tr>
+									<td><strong>9. External communication policy</strong></td>
+									<td>Domain reputation, outbound destinations</td>
+									<td>Block unknown destinations</td>
+									<td>Data exfiltration to attacker-controlled endpoints</td>
+								</tr>
+								<tr>
+									<td><strong>10. Cost and resource guardrails</strong></td>
+									<td>Token burn, API cost, memory growth</td>
+									<td>Degrade gracefully or stop</td>
+									<td>Budget overruns, OOM crashes, noisy-neighbor failures</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section id="why-each-policy-matters">
+					<div class="section-kicker">Policy Detail</div>
+					<h2>Why each one matters in production</h2>
+					<div class="policy-grid">
+						<div class="policy-card control">
+							<h3>1. Tool call rate limiting</h3>
+							<p>A model that decides to "just retry" can put a thousand calls into a downstream API in under a minute. Rate limiting keeps one misbehaving agent from taking down a service shared by every other agent and human user.</p>
+						</div>
+						<div class="policy-card risk">
+							<h3>2. Maximum agent duration / TTL</h3>
+							<p>Agents fail open on time. TTLs convert "we have no idea what happened" into "the agent hit its budget and escalated," which is the difference between an incident and a ticket.</p>
+						</div>
+						<div class="policy-card control">
+							<h3>3. Autonomous action budget</h3>
+							<p>Budgeting actions by count, value, and reversibility forces a human into the loop exactly where the blast radius gets large, without slowing the agent down on routine work.</p>
+						</div>
+						<div class="policy-card signal">
+							<h3>4. AI-generated content safety check</h3>
+							<p>The model vendor's built-in safety layer is tuned for general harm, not for your brand, regulatory regime, or customers. Runtime content checks enforce the rules specific to your business.</p>
+						</div>
+						<div class="policy-card risk">
+							<h3>5. Prompt injection detection</h3>
+							<p>Any content the agent reads can be adversarial input. Without detection and quarantine, the agent's permissions effectively belong to whoever can get text in front of it.</p>
+						</div>
+						<div class="policy-card signal">
+							<h3>6. Data sensitivity / PII policy</h3>
+							<p>Agents move data across boundaries humans never would. Detecting and masking PII, secrets, and regulated data at egress is the realistic control point.</p>
+						</div>
+						<div class="policy-card control">
+							<h3>7. Tool permission boundary checks</h3>
+							<p>The agent's identity, not the prompt's intent, should determine what a tool can do. Authorization at the tool layer prevents clever inputs from becoming privilege escalation.</p>
+						</div>
+						<div class="policy-card risk">
+							<h3>8. Repetition / infinite-loop detection</h3>
+							<p>Loops are common, boring, and expensive. Detecting cyclic patterns and killing the loop pays for itself the first time it fires.</p>
+						</div>
+						<div class="policy-card control">
+							<h3>9. External communication policy</h3>
+							<p>An allowlist of approved domains and channels turns "the agent exfiltrated data" into "the agent tried to and was blocked." The cost is a config file.</p>
+						</div>
+						<div class="policy-card signal">
+							<h3>10. Cost and resource guardrails</h3>
+							<p>Token burn, context growth, and memory pressure compound silently. Per-session and per-tenant limits keep a single bad session from consuming the rest of the month's budget.</p>
+						</div>
+					</div>
+				</section>
+
+				<section id="adoption">
+					<div class="section-kicker">Adoption</div>
+					<h2>How to think about adoption</h2>
+					<p>These ten aren't ten separate projects. They share a common shape: a measurement at the boundary between the agent and something it can affect (a tool, a user, a model, a network), and a policy that decides what to do when the measurement crosses a line. Build that measure-and-act layer once, and adding policies becomes configuration rather than engineering.</p>
+					<ul>
+						<li><strong>Not all ten are equally urgent for every agent.</strong> A read-only research agent doesn't need an action budget the way a payments agent does. But every agent needs some answer for each of these — even if the answer is "not applicable, here's why."</li>
+						<li><strong>Defaults matter more than ceilings.</strong> A policy that's only enforced when someone remembers to configure it is not a policy. The framework should fail closed: no rate limit configured means a conservative default, not unlimited.</li>
+						<li><strong>Observability is the prerequisite.</strong> You can't enforce what you can't measure. If you don't yet have per-agent traces of tool calls, token usage, and outbound destinations, that's the first investment — the policies are what you build on top.</li>
+					</ul>
+					<div class="takeaway-box">
+						<p><strong>Production rule:</strong> in offline evaluation, the agent is the system under test. In production, the agent is one component inside a larger system, and runtime governance is what makes that larger system safe to operate.</p>
+					</div>
+				</section>
+
+				<section id="series-links">
+					<div class="section-kicker">Related Reading</div>
+					<h2>Part of the evals series</h2>
+					<ul class="series-links">
+						<li><a href="/agentic/observe/whatareevals.html">What Are Evals? A Practical Introduction to Evaluating AI Systems</a></li>
+						<li><a href="/agentic/observe/evalstesting.html">Testing vs Evals: How AI Quality Differs from Deterministic Software Quality</a></li>
+						<li><a href="/agentic/observe/build-time-evals.html">Build-Time Evals: Regression, CI/CD, and Release Gates for AI Systems</a></li>
+						<li><a href="/agentic/observe/runtime-evals-observability.html">Runtime Evals and Observability for Agentic Systems</a></li>
+						<li><a href="/agentic/observe/safety-evals-red-teaming.html">Safety Evals and Red Teaming for AI Systems</a></li>
+						<li><a href="/agentic/observe/evalops-operating-model.html">EvalOps Operating Model for AI Systems</a></li>
+					</ul>
+				</section>
+			</article>
+		</main>
+
+		<br><br><br><br><br>
+
+		<div id="footer"></div>
+
+		<script src="../../headerfooter.js"></script>
+</body>
+</html>

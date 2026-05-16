@@ -29,6 +29,7 @@ https://vikasgoyal.github.io/agentic/observe/evalops-operating-model.html
 https://vikasgoyal.github.io/agentic/observe/evals-for-qa-testing-teams.html
 https://vikasgoyal.github.io/agentic/observe/evalstesting.html
 https://vikasgoyal.github.io/agentic/observe/rag-evals.html
+https://vikasgoyal.github.io/agentic/observe/runtime-governance.html
 https://vikasgoyal.github.io/agentic/observe/runtime-evals-observability.html
 https://vikasgoyal.github.io/agentic/observe/safety-evals-red-teaming.html
 https://vikasgoyal.github.io/agentic/observe/whatareevals.html
