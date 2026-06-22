@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>A Practical Taxonomy for Agentic AI Systems | Vikas Goyal</title>
+    <meta name="description" content="A practical taxonomy for agentic AI systems built around control flow, not department or hype-cycle stage. Four tiers, two orthogonal axes, and the one question that actually predicts how much governance a system needs.">
+    <meta name="keywords" content="agentic AI, agent architecture, multi-agent systems, AI governance, taxonomy, solutions architecture, autonomous agents">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/control-flow-taxonomy.html">
+
+    <meta property="og:title" content="A Practical Taxonomy for Agentic AI Systems">
+    <meta property="og:description" content="Four control-flow tiers and two orthogonal axes for classifying agentic AI systems — built for architects who need to know how much to govern, not just what to call it.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/control-flow-taxonomy.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="A Practical Taxonomy for Agentic AI Systems">
+    <meta name="twitter:description" content="Four control-flow tiers and two orthogonal axes for classifying agentic AI systems — built for architects who need to know how much to govern, not just what to call it.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "A Practical Taxonomy for Agentic AI Systems",
+      "description": "A practical taxonomy for agentic AI systems built around control flow, not department or hype-cycle stage. Four tiers, two orthogonal axes, and the one question that actually predicts how much governance a system needs.",
+      "author": {
+        "@type": "Person",
+        "name": "Vikas Goyal",
+        "url": "https://www.linkedin.com/in/vikasgoyal/"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Vikas Goyal"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://vikasgoyal.github.io/agentic/control-flow-taxonomy.html"
+      },
+      "keywords": "agentic AI, agent architecture, multi-agent systems, AI governance, taxonomy, solutions architecture, autonomous agents"
+    }
+    </script>
+
+    <link rel="stylesheet" href="../styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            fontSize: '18px',
+            primaryColor: '#4A90D9',
+            primaryTextColor: '#ffffff',
+            primaryBorderColor: '#2c6fad',
+            lineColor: '#555555',
+            secondaryColor: '#F5A623',
+            tertiaryColor: '#7ED321',
+            edgeLabelBackground: '#FFEB3B'
+        }
+    });</script>
+    <style>
+        .article-kicker {
+            color: #0d6233;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.82rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .article-lead {
+            font-size: 1.1rem;
+            color: #444;
+            margin-top: 1.25rem;
+            margin-bottom: 0;
+        }
+
+        .taxonomy-diagram {
+            margin: 1.5rem 0 0.5rem;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .taxonomy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .taxonomy-table th,
+        .taxonomy-table td {
+            padding: 0.85rem 0.95rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .taxonomy-table th {
+            background: #f2f7f3;
+            color: #0d6233;
+        }
+
+        .taxonomy-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .mermaid .edgeLabel .label { color: #333 !important; }
+        .mermaid .edgeLabel rect,
+        .mermaid .edgeLabel span {
+            fill: #FFEB3B !important;
+            background: #FFEB3B !important;
+            color: #333 !important;
+            opacity: 1 !important;
+        }
+
+        @media (max-width: 768px) {
+            .article-lead {
+                font-size: 1rem;
+            }
+
+            .taxonomy-table {
+                display: block;
+                overflow-x: auto;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <main class="container-lg px-3 my-5 markdown-body">
+        <article>
+            <header>
+                <p class="article-kicker">Agent Architecture</p>
+                <h1>A Practical Taxonomy for Agentic AI Systems</h1>
+                <p class="article-lead">Most taxonomies for agentic AI sort solutions by department or hype-cycle stage. Useful for a budget conversation. Useless for a design doc.</p>
+            </header>
+
+            <section id="introduction">
+                <p>Most taxonomies for agentic AI sort solutions by department — customer service, IT, sales — or by hype-cycle stage. Useful for a budget conversation. Useless for a design doc. As a solutions architect, the question I actually need answered isn't "what does this do," it's "what decides what it does next" — because that's the thing that determines how you test it, how you govern it, and how much you can stop watching it once it's in production.</p>
+                <p>Here's the taxonomy I landed on, and — more usefully — how it broke the first three times I tried to draw it.</p>
+            </section>
+
+            <section id="where-i-started">
+                <h2>Where I Started: Three Tiers</h2>
+                <p>My first cut was simple, and it's still the right starting instinct:</p>
+                <ol>
+                    <li><strong>Conversational</strong> — a human or another agent on one side, turn-based interaction.</li>
+                    <li><strong>Workflow / graph-based</strong> — semi-dynamic or dynamic node selection, but the structure is deterministic and governed.</li>
+                    <li><strong>Autonomous</strong> — give it a goal, it finds its own tools and agents, and comes back for approval only where enterprise policy requires it.</li>
+                </ol>
+                <p>This spine is correct in spirit. It just doesn't survive contact with real systems, and the places it breaks are exactly where the interesting design decisions live.</p>
+            </section>
+
+            <section id="where-it-breaks">
+                <h2>Where It Breaks</h2>
+                <p><strong>"Conversational" describes an interface, not an architecture.</strong> Chat is a turn-taking pattern — it tells you nothing about what's running behind it. You can put a chat window on top of a fully governed graph: the user types a request, it triggers a deterministic multi-step workflow, and the chat is just the front door. You can also have a fully autonomous agent with no conversational surface at all — an SRE agent that wakes up on a paging alert, investigates on its own, and only ever posts a Slack message as a side effect, never as a back-and-forth. Interface and control architecture are correlated, not identical, and conflating them is the first thing that goes wrong.</p>
+                <p><strong>Multi-agent isn't exclusive to the autonomous tier.</strong> "Finds other agents and tools" implies <em>runtime discovery</em> — the system locating capability it wasn't wired to ahead of time. But a workflow graph can fan out to five specialist sub-agents in a fixed, known sequence and still be fully deterministic at the topology level. That's more nodes, not less governance. Fixed-roster multi-agent and dynamic-discovery multi-agent are different risk classes entirely, and the original three-tier model buries that distinction inside tier three.</p>
+                <p><strong>The real battleground is the "semi-dynamic" graph.</strong> This is the qualifier doing the most work in the original framing, and for good reason: graphs where <em>node selection</em> is LLM-decided but the <em>set of possible transitions</em> is fixed and known ahead of time give you most of the flexibility people want from "agentic" without losing testability or an audit trail. My bet is that most production enterprise systems live here for years — not because the technology can't go further, but because this is where you get a bounded blast radius.</p>
+                <p><strong>"Autonomous" in practice usually means autonomous inside a box.</strong> "Give it a goal and let it figure it out" describes the capability correctly, but enterprise deployments almost always scope that goal tightly — "resolve this billing issue using any of these twelve tools" — rather than truly open-ended pursuit across the organization. The approval checkpoints aren't an exception bolted onto autonomy; they're the mechanism that defines the box. Governance hasn't disappeared in tier three — it's moved from the control-flow layer to a policy and approval layer sitting outside it.</p>
+            </section>
+
+            <section id="fault-line">
+                <h2>The Fault Line That Actually Matters: Can You Enumerate It?</h2>
+                <p>Once you stress-test the three tiers against these edge cases, a single distinction does almost all of the explanatory work: <strong>can you enumerate, ahead of time, everything the system might call?</strong></p>
+                <p>Bounded scopes, fixed graphs, and bounded-autonomy agents with a known toolset all share this property — you can write down, before deployment, the complete space of actions the system is capable of taking. That's what makes pre-deployment testing possible and what makes a post-incident audit mean something. The moment a system can discover and call an agent or tool it wasn't given at design time, that property is gone. You're no longer reviewing a system; you're reviewing a system's capacity to acquire systems. That's not "more autonomous" — it's a different category of governance problem, and almost none of the tooling for it (inter-agent trust, capability negotiation, cost containment on recursive delegation) is mature yet.</p>
+            </section>
+
+            <section id="four-tiers">
+                <h2>Four Tiers, Redrawn</h2>
+                <div class="mermaid taxonomy-diagram">
+flowchart TD
+ A["Can you enumerate, ahead of time,\nevery tool, agent, or system\nthis component might call?"]
+ F{{"What's the topology?"}}
+ B["Tier 1 — Bounded Response\nfixed scope, no graph"]
+ C["Tier 2 — Structured Graph\nfixed topology, LLM picks the path"]
+ D["Tier 3 — Bounded Autonomy\nfixed toolset, agent plans the sequence"]
+ E["Tier 4 — Open-Ended / Emergent\nruntime discovery, recursive delegation"]
+
+ style A fill:#4A90D9,stroke:#2c6fad,color:#fff
+ style F fill:#777777,stroke:#444444,color:#fff
+ style B fill:#5BAD6F,stroke:#3d8a52,color:#fff
+ style C fill:#F5A623,stroke:#c97d00,color:#fff
+ style D fill:#E05C5C,stroke:#b83c3c,color:#fff
+ style E fill:#7B68EE,stroke:#5A4FCF,color:#fff
+
+ A -- "Yes" --> F
+ F -- "Single scope" --> B
+ F -- "Fixed graph" --> C
+ F -- "Fixed roster + goal" --> D
+ A -- "No" --> E
+                </div>
+                <p style="font-size:0.9em; color:#666; text-align:center;">Figure: the dividing line that predicts governance burden isn't chatbot-vs-workflow-vs-autonomous — it's whether the action surface can be enumerated ahead of time.</p>
+
+                <table class="taxonomy-table">
+                    <thead>
+                        <tr>
+                            <th>Tier</th>
+                            <th>What controls the path</th>
+                            <th>Where governance lives</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Bounded response</strong></td>
+                            <td>A fixed scope, not a graph — retrieve, reason once, respond or act within a tightly defined surface</td>
+                            <td>Prompt and retrieval scope</td>
+                            <td>FAQ resolution, document Q&amp;A, single-tool lookups</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Structured graph</strong></td>
+                            <td>A fixed, known set of nodes and transitions; the <em>path</em> through them can be LLM-decided, but the <em>set of possible paths</em> is fixed and testable in advance</td>
+                            <td>The graph topology itself</td>
+                            <td>Claims processing, onboarding, multi-step approvals</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Bounded autonomy</strong></td>
+                            <td>A goal plus a fixed, known toolset or agent roster within a domain; the agent plans its own sequence but can't reach outside the box</td>
+                            <td>A policy and approval engine sitting outside the control flow</td>
+                            <td>"Resolve this billing issue using these twelve tools," with checkpoints on refunds or escalations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Open-ended / emergent</strong></td>
+                            <td>A goal plus runtime discovery of tools or agents not wired in at design time; recursive delegation is possible</td>
+                            <td>Has to live in an inter-agent trust and negotiation protocol — and this layer mostly doesn't exist yet in mature form</td>
+                            <td>An agent discovers and calls another agent it wasn't given access to at build time</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Tiers 1 through 3 are different points on a complexity curve. Tier 4 is a different kind of object.</p>
+            </section>
+
+            <section id="two-axes">
+                <h2>Two Axes That Cut Across All Four Tiers</h2>
+                <p>Two properties looked, at first, like they belonged inside the tiers. They don't — they're orthogonal, and folding them into the tier definition is what made the original three-bucket model leak at the edges.</p>
+                <ul>
+                    <li><strong>Interface or trigger.</strong> Chat, event-driven, scheduled, API-invoked. Any of the four tiers can sit behind any of these. Stop using "chatbot" as a stand-in for "low complexity" — it's a front door, not a floor plan.</li>
+                    <li><strong>Topology.</strong> Single-agent, fixed-roster multi-agent, or dynamic-discovery multi-agent. Fixed-roster multi-agent — a graph node that fans out to five known sub-agents — inherits tier 2's governance story even though it "looks" multi-agent. Dynamic discovery is what actually pushes a system into tier 4, regardless of how the goal was framed.</li>
+                </ul>
+            </section>
+
+            <section id="design-doc">
+                <h2>Why This Distinction Earns Its Place in a Design Doc</h2>
+                <p>Most agentic AI taxonomies answer "where does this fit in our roadmap." This one answers "how much of this can I stop watching." Those are different questions, and only one of them changes how you build the system.</p>
+                <p>In practice, this reframing changes three things on a project:</p>
+                <ul>
+                    <li><strong>It changes what you eval before launch.</strong> <a href="https://vikasgoyal.github.io/agentic/prebuildevals.html">Pre-build evals</a> are tractable for tiers 1 through 3 precisely because the action space is enumerable — you can write scenarios against a known surface. For tier 4, "eval before launch" is a much weaker guarantee, because the surface itself can change after launch.</li>
+                    <li><strong>It changes where you put your interface investment.</strong> A chat front end tells you nothing about the backend's risk profile — see <a href="https://vikasgoyal.github.io/agentic/chatbotquerytypes.html">designing a robust chatbot</a> for the query-handling problems that exist regardless of which tier sits behind the window.</li>
+                    <li><strong>It changes your default architecture choice.</strong> Liability wants a bounded blast radius. That's a strong, durable reason to expect most production enterprise systems to live in tier 2 or tier 3 for a long time — not because tier 4 is technically out of reach, but because "I can enumerate everything this could do" is worth more to a risk committee than "it's smarter."</li>
+                </ul>
+            </section>
+
+            <section id="conclusion">
+                <h2>Conclusion</h2>
+                <p>The taxonomy that survives contact with real systems isn't chatbot, workflow, or autonomous. It's: can you write down, before you ship it, everything this thing might call? Three tiers answer yes. One doesn't. Everything else — interface choice, topology, how tightly you scope the goal — is a design decision you make <em>within</em> that boundary, not a new category in its own right.</p>
+            </section>
+
+            <section id="related-content">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="https://vikasgoyal.github.io/agentic/refarchagentic.html">Agentic Systems — Reference Architecture</a></li>
+                    <li><a href="https://vikasgoyal.github.io/agentic/prebuildevals.html">Pre-Build Evals for AI Agents</a></li>
+                    <li><a href="https://vikasgoyal.github.io/agentic/chatbotquerytypes.html">Designing a Robust Chatbot: Handling a Variety of Query Types</a></li>
+                    <li><a href="https://vikasgoyal.github.io/genai/agenticthinking.html">What is Agentic Thinking?</a></li>
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <br><br><br><br><br>
+    <div id="footer"></div>
+    <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+</body>
+</html>

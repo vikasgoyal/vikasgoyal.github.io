@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>Action Models: Moving AI From Reasoning to Execution - Vikas Goyal</title>
+    <meta name="description" content="A practical view of action models, why they matter for agentic AI, and what enterprise teams need before models can safely execute real work.">
+    <meta name="keywords" content="action models, agentic AI, AI SDLC, runtime governance, AI agents, enterprise AI, production readiness">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/actionmodelsv1.html">
+
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Action Models: Moving AI From Reasoning to Execution">
+    <meta property="og:description" content="A practical view of action models, why they matter for agentic AI, and what enterprise teams need before models can safely execute real work.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/actionmodelsv1.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+    <meta property="og:image" content="https://vikasgoyal.github.io/agentic/assets/actionmodels.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Action Models: Moving AI From Reasoning to Execution">
+    <meta name="twitter:description" content="A practical view of action models, agentic AI, and production readiness.">
+    <meta name="twitter:image" content="https://vikasgoyal.github.io/agentic/assets/actionmodels.png">
+
+    <!-- Structured Data for Search Engines (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Action Models: Moving AI From Reasoning to Execution",
+      "description": "A practical view of action models, why they matter for agentic AI, and what enterprise teams need before models can safely execute real work.",
+      "author": {
+        "@type": "Person",
+        "name": "Vikas Goyal",
+        "url": "https://www.linkedin.com/in/vikasgoyal/"
+      },
+      "datePublished": "2026-05-21",
+      "dateModified": "2026-05-21",
+      "publisher": {
+        "@type": "Person",
+        "name": "Vikas Goyal"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://vikasgoyal.github.io/agentic/actionmodelsv1.html"
+      },
+      "image": "https://vikasgoyal.github.io/agentic/assets/actionmodels.png",
+      "keywords": "action models, agentic AI, AI SDLC, runtime governance, production readiness"
+    }
+    </script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="https://vikasgoyal.github.io/styles.css">
+  </head>
+
+  <body>
+    <!-- Dynamic Header Navigation -->
+    <div id="header"></div>
+
+    <!-- Main Content Container -->
+    <main class="container-lg px-3 my-5 markdown-body">
+      <article>
+        <header>
+          <h1>Action Models: Moving AI From Reasoning to Execution</h1>
+          <p><strong>By Vikas Goyal</strong> | Updated May 21, 2026</p>
+        </header>
+
+        <section id="context">
+          <p>LLMs changed how teams create and understand information. Reasoning models improved the ability to work through harder tasks. Action models are the next practical step: systems that can use reasoning to execute work through tools, services, and business controls.</p>
+
+          <p>The distinction matters. Most enterprise AI work still stops at advice, draft output, or summarization. Useful, but incomplete. The real operational question is whether an AI system can take a goal, choose the right steps, call the right services, and stay inside policy while doing it.</p>
+        </section>
+
+        <section id="what-is-an-action-model">
+          <h2>What Is an Action Model?</h2>
+          <p>An action model is an AI system designed to move from intent to controlled execution. It does not only produce text. It plans, selects tools, calls systems, checks results, and adjusts the next step.</p>
+
+          <p>In practical terms, an action model needs four capabilities:</p>
+          <ol>
+            <li><strong>Understand the goal:</strong> Convert a user request into a scoped task with constraints, assumptions, and success criteria.</li>
+            <li><strong>Plan the work:</strong> Break the task into steps and identify which tools, APIs, data sources, or people are needed.</li>
+            <li><strong>Execute with controls:</strong> Take action through approved systems with authentication, policy checks, logging, and approval gates.</li>
+            <li><strong>Monitor the outcome:</strong> Check whether the action worked, handle errors, and escalate when confidence is low.</li>
+          </ol>
+
+          <p>This is where action models differ from a chatbot. A chatbot can describe what to do. An action model can help do it, with the right boundaries.</p>
+        </section>
+
+        <section id="why-now">
+          <h2>Why This Matters Now</h2>
+          <p>The market is moving from AI demos to production systems. That shift exposes a gap. Reasoning alone is not enough. Enterprise teams need execution patterns that are reliable, observable, and governed.</p>
+
+          <p>A model that can reason through a travel plan, procurement request, support case, or compliance workflow is useful. A model that can also call the booking service, check policy, update the system of record, and route exceptions is much more valuable.</p>
+
+          <p>That value does not come from autonomy by itself. It comes from autonomy plus controls.</p>
+        </section>
+
+        <section id="enterprise-example">
+          <h2>Enterprise Example</h2>
+          <p>Consider a customer support scenario. A user reports a product issue. A language model can summarize the issue and draft a reply. A reasoning model can compare symptoms, logs, and known incidents. An action model can go further.</p>
+
+          <p>It could:</p>
+          <ol>
+            <li>Classify the issue and check entitlement.</li>
+            <li>Pull recent telemetry from approved systems.</li>
+            <li>Search known incidents and internal runbooks.</li>
+            <li>Create or update the support case.</li>
+            <li>Recommend a fix with confidence level and evidence.</li>
+            <li>Ask for approval before sending customer-facing communication or changing production configuration.</li>
+          </ol>
+
+          <p>The important part is not that the model acts alone. The important part is that the workflow is explicit. The model has tools, permissions, logs, evaluation criteria, and escalation paths.</p>
+        </section>
+
+        <section id="architecture">
+          <h2>What Has to Be in Place</h2>
+          <p>Action models need an architecture around them. Without that architecture, teams end up with brittle automation wrapped in natural language.</p>
+
+          <p>The minimum stack includes:</p>
+          <ol>
+            <li><strong>Tool registry:</strong> A clear inventory of what the model can call, with descriptions, permissions, and expected inputs.</li>
+            <li><strong>Identity and access:</strong> The model should act through delegated permissions, not broad shared credentials.</li>
+            <li><strong>Policy layer:</strong> Rules for what can be done automatically, what needs approval, and what is blocked.</li>
+            <li><strong>Runtime governance:</strong> Logging, tracing, monitoring, and intervention points for live execution.</li>
+            <li><strong>Evaluation loop:</strong> Tests and evals for tool selection, plan quality, refusal behavior, and recovery from failure.</li>
+          </ol>
+
+          <p>This is AI SDLC work. It belongs in design reviews, threat modeling, release gates, and operational dashboards. It should not be treated as a prompt engineering task.</p>
+        </section>
+
+        <section id="risks">
+          <h2>Key Risks</h2>
+          <p>The risks are not theoretical. The moment an AI system can act, small mistakes can become business events.</p>
+
+          <ol>
+            <li><strong>Wrong action:</strong> The model chooses a valid tool but applies it to the wrong case, customer, or environment.</li>
+            <li><strong>Over-permissioning:</strong> The model gets more access than the workflow requires.</li>
+            <li><strong>Weak approval design:</strong> Human review becomes a rubber stamp because the system does not show evidence or alternatives.</li>
+            <li><strong>Poor recovery:</strong> The model fails midway and leaves the process in an unclear state.</li>
+            <li><strong>Missing audit trail:</strong> Teams cannot explain what happened, which tool was called, or why an action was taken.</li>
+          </ol>
+
+          <p>These risks are manageable, but they need to be designed for early. Retrofitting governance after production use is expensive and usually incomplete.</p>
+        </section>
+
+        <section id="readiness-checklist">
+          <h2>Readiness Checklist</h2>
+          <p>Before deploying action-oriented agents, teams should be able to answer these questions:</p>
+
+          <ol>
+            <li>What actions can the model take, and which actions are explicitly out of scope?</li>
+            <li>Which systems of record can it read or update?</li>
+            <li>What approval gates are required for customer, financial, security, or production-impacting actions?</li>
+            <li>How are tool calls logged and reviewed?</li>
+            <li>What evals prove that the model selects the right tool and refuses unsafe requests?</li>
+            <li>What happens when the model is uncertain, blocked, or partially successful?</li>
+          </ol>
+
+          <p>If these answers are not clear, the system is not ready for high-impact execution. It may still be ready for assistive workflows, draft generation, recommendations, or low-risk internal tasks.</p>
+        </section>
+
+        <section id="road-ahead">
+          <h2>The Road Ahead</h2>
+          <p>Action models will become more important as enterprises move from AI copilots to AI-enabled operations. The winning pattern will not be maximum autonomy. It will be scoped autonomy with strong controls.</p>
+
+          <p>The near-term opportunity is practical:</p>
+          <ol>
+            <li>Start with narrow workflows where the business value is clear.</li>
+            <li>Use approved APIs and tools instead of screen scraping or hidden automation.</li>
+            <li>Keep humans in the loop for high-impact decisions.</li>
+            <li>Measure task completion, error recovery, escalation quality, and policy compliance.</li>
+            <li>Treat runtime governance as part of the product, not as an afterthought.</li>
+          </ol>
+        </section>
+
+        <section id="conclusion">
+          <h2>Conclusion</h2>
+          <p style="text-align: center;"><img src="assets/actionmodels.png" alt="Action Models Evolution" style="max-width: 100%; height: auto;"></p>
+          <p>Action models are not just a new model category. They are a shift in how AI systems are designed, tested, and operated. The core question is no longer whether a model can generate a useful answer. The question is whether it can help complete useful work inside the right controls.</p>
+
+          <p>That is where enterprise AI will be judged: not by how fluent the system sounds, but by whether it can execute safely, recover from issues, and leave a clear audit trail.</p>
+        </section>
+      </article>
+    </main>
+
+    <!-- Spacing before footer -->
+    <br><br><br><br><br>
+
+    <!-- Dynamic Footer -->
+    <div id="footer"></div>
+
+    <!-- Load Header/Footer Script -->
+    <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+  </body>
+</html>

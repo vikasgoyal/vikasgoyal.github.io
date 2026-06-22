@@ -1,0 +1,427 @@
+{
+  "profile_metadata": {
+    "user_id": "vikas_goyal",
+    "profile_version": "1.0",
+    "created_at": "2026-05-21",
+    "last_updated_at": "2026-05-21",
+    "source_sample_count": 20,
+    "content_domains": [
+      "professional email",
+      "customer and partner communication",
+      "internal Microsoft coordination",
+      "calendar responses",
+      "technical AI advisory"
+    ],
+    "confidence_score": 0.74
+  },
+
+  "identity_and_intent": {
+    "primary_role": "Industry AI technical advisor and customer-facing Microsoft engineering leader",
+    "target_audiences": [
+      "enterprise customers",
+      "consulting partners",
+      "Microsoft colleagues",
+      "managers and account teams",
+      "technical stakeholders"
+    ],
+    "communication_goals": [
+      "share concise status updates",
+      "coordinate next steps",
+      "clarify blockers or constraints",
+      "route decisions to the right stakeholder",
+      "provide practical technical references"
+    ],
+    "preferred_reader_reaction": [
+      "understand the action or status quickly",
+      "see the message as direct and useful",
+      "know whether follow-up is needed",
+      "trust the sender's technical judgment"
+    ],
+    "personal_brand_attributes": [
+      "concise",
+      "practical",
+      "technical",
+      "customer-focused",
+      "low-drama",
+      "action-oriented"
+    ]
+  },
+
+  "voice": {
+    "overall_voice": "Direct, concise, professional, and pragmatic. The style favors short factual messages, clear asks, and minimal polish over elaboration.",
+    "tone": [
+      "professional",
+      "brief",
+      "calm",
+      "collaborative",
+      "matter-of-fact",
+      "helpful"
+    ],
+    "formality_level": "medium",
+    "warmth_level": "moderate-low",
+    "confidence_level": "high",
+    "humility_level": "moderate",
+    "directness_level": "high",
+    "energy_level": "low-to-moderate",
+    "emotional_range": "narrow and controlled; generally neutral with light appreciation",
+    "humor_style": "none observed",
+    "authority_style": "practical expert authority; states status, constraints, or recommended next step without over-explaining"
+  },
+
+  "sentence_style": {
+    "average_sentence_length": "short",
+    "sentence_length_variation": "low-to-moderate",
+    "preferred_sentence_types": [
+      "short declarative statements",
+      "direct requests",
+      "brief context-setting sentences",
+      "status confirmations"
+    ],
+    "uses_fragments": true,
+    "uses_rhetorical_questions": false,
+    "uses_contrasts": false,
+    "uses_parallel_structure": false,
+    "uses_repetition_for_emphasis": false,
+    "punctuation_preferences": {
+      "em_dash": "avoid",
+      "colon": "rare",
+      "semicolon": "rare",
+      "parentheses": "rare",
+      "exclamation": "rare"
+    }
+  },
+
+  "paragraph_style": {
+    "average_paragraph_length": "1-2 short sentences",
+    "preferred_paragraph_density": "sparse",
+    "uses_one_line_paragraphs": true,
+    "transition_style": "minimal; jumps directly from greeting to context to ask or status",
+    "white_space_preference": "clear spacing between greeting, body, and signature",
+    "opening_paragraph_style": "brief greeting by name or team, followed immediately by context or status",
+    "closing_paragraph_style": "standard short sign-off; often no summary beyond the requested action or status"
+  },
+
+  "structure_patterns": {
+    "preferred_article_structures": [
+      "problem or topic first, then practical guidance",
+      "short sections with direct labels when content is technical"
+    ],
+    "preferred_email_structures": [
+      "greeting",
+      "one-line context",
+      "status, reference, or ask",
+      "brief condition or next step when needed",
+      "standard thanks/signature"
+    ],
+    "preferred_summary_structures": [
+      "top-line status first",
+      "short bullets for supporting points",
+      "explicit action item if one exists"
+    ],
+    "preferred_memo_structures": [
+      "context",
+      "recommendation",
+      "key considerations",
+      "next steps"
+    ],
+    "uses_headings": true,
+    "heading_style": "short noun phrases or topic labels",
+    "uses_bullets": true,
+    "bullet_style": "compact, action-oriented, often noun phrase or short sentence",
+    "numbered_steps_preference": "use for sequences, agendas, backlogs, and ordered plans",
+    "framework_orientation": "practical frameworks are welcome when they reduce ambiguity; avoid decorative frameworks"
+  },
+
+  "reasoning_style": {
+    "thinking_patterns": [
+      "status-first communication",
+      "constraint identification",
+      "dependency clarification",
+      "production-readiness framing",
+      "scope discipline",
+      "next-step orientation"
+    ],
+    "argument_style": "concise and outcome-oriented; prefers stating the operational implication over developing a long argument",
+    "evidence_preference": "links, concrete status, named constraints, and practical examples",
+    "abstraction_level": "medium; can discuss strategy but usually anchors in execution and technical readiness",
+    "systems_thinking_level": "high for technical and governance topics",
+    "analogy_usage": "low",
+    "mental_model_usage": "moderate; uses operational concepts such as readiness, governance, blockers, controls, and scope",
+    "tradeoff_style": "briefly identifies options or constraints, then proposes a practical path",
+    "risk_framing_style": "production and execution focused; emphasizes controls, readiness, security, and missed topics",
+    "decision_framing_style": "asks for guidance or approval when ownership or commitment depends on another stakeholder",
+    "first_principles_tendency": "moderate",
+    "counterargument_tendency": "low"
+  },
+
+  "content_preferences": {
+    "preferred_topics": [
+      "agentic AI",
+      "AI SDLC",
+      "runtime governance",
+      "Azure AI Foundry",
+      "technical readiness",
+      "enterprise AI adoption",
+      "customer workshops",
+      "milestones and delivery"
+    ],
+    "recurring_themes": [
+      "production readiness",
+      "governance controls",
+      "manager or stakeholder approval",
+      "customer value",
+      "scope and priority",
+      "technical enablement"
+    ],
+    "preferred_examples": [
+      "enterprise customer scenarios",
+      "implementation readiness examples",
+      "governance and control examples",
+      "account or portfolio planning examples"
+    ],
+    "preferred_analogies": [],
+    "preferred_industries": [
+      "technology",
+      "professional services",
+      "enterprise software",
+      "AI and cloud"
+    ],
+    "preferred_depth": "concise by default; deeper only for technical guidance or workshop material",
+    "preferred_practicality_level": "high",
+    "include_action_items": true,
+    "include_frameworks": true,
+    "include_metrics": true,
+    "include_examples": true,
+    "include_caveats": true
+  },
+
+  "lexical_style": {
+    "preferred_words": [
+      "thanks",
+      "team",
+      "guidance",
+      "portfolio",
+      "controls",
+      "production",
+      "priority",
+      "conflict",
+      "commit",
+      "approval",
+      "on track",
+      "offline",
+      "open item",
+      "runtime governance"
+    ],
+    "preferred_phrases": [
+      "Thanks",
+      "Talk to you next week",
+      "I will audit it offline due to conflict",
+      "Pls let me know your thoughts",
+      "All of my milestones are on track",
+      "This is in relation to the open item",
+      "I have listed down",
+      "Setting up some time to get guidance"
+    ],
+    "signature_phrases": [
+      "Thanks, Vikas Goyal",
+      "Industry AI",
+      "The Software Engineer Is Changing. Engineering Isn't."
+    ],
+    "avoided_words": [
+      "thrilled",
+      "delighted",
+      "excited",
+      "transformational",
+      "game-changing",
+      "seamless",
+      "robust" 
+    ],
+    "avoided_phrases": [
+      "I hope this email finds you well",
+      "circling back",
+      "just wanted to",
+      "at your earliest convenience",
+      "please don't hesitate to reach out",
+      "unlock value"
+    ],
+    "jargon_tolerance": "high within AI, cloud, Microsoft, and enterprise delivery contexts",
+    "technical_language_level": "high",
+    "business_language_level": "medium",
+    "metaphor_preferences": [],
+    "cliche_avoidance": true
+  },
+
+  "domain_conventions": {
+    "domain": "enterprise AI, Microsoft cloud, customer success, and technical advisory",
+    "specialty_terms": [
+      "agentic AI",
+      "AI SDLC",
+      "runtime governance",
+      "Azure Foundry",
+      "controls",
+      "milestones",
+      "CSA",
+      "CSAM",
+      "MCAPS",
+      "customer workshop",
+      "quota request",
+      "protected messages"
+    ],
+    "accepted_abbreviations": [
+      "AI",
+      "SDLC",
+      "FY",
+      "CSA",
+      "CSAM",
+      "MCAPS",
+      "POC",
+      "Q&A",
+      "US"
+    ],
+    "forbidden_abbreviations": [],
+    "compliance_constraints": [
+      "keep customer and partner details private unless explicitly needed",
+      "avoid exposing calendar conflicts beyond generic conflict language",
+      "do not include meeting links, passcodes, or recipient details in generated style artifacts"
+    ],
+    "required_disclaimers": [],
+    "preferred_documentation_order": [
+      "context",
+      "status or finding",
+      "priority items",
+      "risks or constraints",
+      "next steps"
+    ],
+    "sensitive_language_rules": [
+      "use neutral language for conflicts and availability",
+      "avoid attributing blame for security or access issues",
+      "treat customer, partner, and internal planning details as confidential"
+    ]
+  },
+
+  "formatting_preferences": {
+    "markdown_preference": "moderate for structured content; plain text preferred for short emails",
+    "table_preference": "useful for backlogs, topic lists, status tracking, and comparisons",
+    "bold_usage": "minimal; use only for labels or emphasis in structured documents",
+    "italics_usage": "rare",
+    "quote_usage": "rare",
+    "code_block_usage": "only for technical snippets, commands, or configuration",
+    "citation_style": "inline links are preferred over formal citations",
+    "visual_structure_preference": "sparse, scannable structure with clear whitespace and short sections"
+  },
+
+  "interaction_style": {
+    "asks_questions": true,
+    "uses_reader_direct_address": true,
+    "uses_first_person": "frequent for status, intent, or constraints",
+    "uses_second_person": "occasional, mainly in requests",
+    "uses_we_language": "occasional for shared team or customer work",
+    "preferred_call_to_action_style": "direct and low-pressure; asks for thoughts, guidance, approval, or next conversation",
+    "engagement_style": "efficient collaborator; gives enough context for action without over-explaining"
+  },
+
+  "editing_behavior": {
+    "common_user_edits": [
+      "shortens messages to the minimum useful context",
+      "keeps greetings and sign-offs simple",
+      "removes generic pleasantries",
+      "moves status or ask near the top",
+      "keeps technical references as direct links"
+    ],
+    "phrases_user_replaces": [
+      "please let me know" 
+    ],
+    "phrases_user_adds": [
+      "Pls let me know your thoughts",
+      "Thanks",
+      "Talk to you next week"
+    ],
+    "phrases_user_deletes": [
+      "hope you are doing well",
+      "I wanted to reach out",
+      "please don't hesitate"
+    ],
+    "verbosity_corrections": [
+      "reduce explanatory setup",
+      "prefer one or two short paragraphs",
+      "use bullets only when they improve scanability"
+    ],
+    "tone_corrections": [
+      "make tone more direct",
+      "remove hype",
+      "keep appreciation brief"
+    ],
+    "structure_corrections": [
+      "start with context or status",
+      "make the ask explicit",
+      "avoid long closing summaries"
+    ],
+    "recurring_rewrite_patterns": [
+      "convert polished corporate prose into short practical email",
+      "replace broad claims with specific status or next step",
+      "turn long context into a single framing sentence"
+    ]
+  },
+
+  "negative_style_constraints": {
+    "never_do": [
+      "do not use generic AI-sounding openings",
+      "do not over-explain simple status updates",
+      "do not add emotional enthusiasm unless the user explicitly asks",
+      "do not bury the ask after long context",
+      "do not expose private meeting, customer, partner, or recipient details in generated examples"
+    ],
+    "avoid_sounding_like": [
+      "marketing copy",
+      "overly polished executive ghostwriting",
+      "generic productivity assistant",
+      "legalistic memo",
+      "cheerful sales outreach"
+    ],
+    "avoid_structures": [
+      "long multi-paragraph setup before the ask",
+      "generic intro-body-conclusion with no action",
+      "balanced pros-and-cons when a direct status update is enough",
+      "decorative headings in short emails"
+    ],
+    "avoid_tones": [
+      "hype-driven",
+      "overly warm",
+      "apologetic",
+      "verbose",
+      "performative"
+    ],
+    "avoid_generic_ai_patterns": [
+      "overly balanced conclusion",
+      "generic opening",
+      "excessive transitions",
+      "hype language",
+      "polished but impersonal tone"
+    ]
+  },
+
+  "generation_controls": {
+    "style_strength": 0.82,
+    "creativity_level": 0.28,
+    "factual_preservation_priority": "highest",
+    "allowed_rephrasing_level": "moderate; preserve facts, names, commitments, dates, and constraints",
+    "allowed_inference_level": "low; infer only tone, structure, and concise wording preferences from source samples",
+    "personalization_depth": "medium-high",
+    "require_fact_style_separation": true
+  },
+
+  "evaluation": {
+    "style_similarity_score": 0.74,
+    "content_accuracy_score": 0.9,
+    "edit_distance_after_user_review": 0.0,
+    "acceptance_rate": 0.0,
+    "user_rewrite_frequency": 0.0,
+    "confidence_by_dimension": {
+      "voice": 0.82,
+      "structure": 0.78,
+      "reasoning": 0.72,
+      "lexical": 0.68,
+      "formatting": 0.7
+    }
+  }
+}
