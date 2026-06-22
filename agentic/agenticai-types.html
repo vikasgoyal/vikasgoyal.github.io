@@ -71,6 +71,44 @@
             edgeLabelBackground: '#FFEB3B'
         }
     });</script>
+    <script>
+    function fitTaxonomyDiagram() {
+        const svg = document.querySelector('.taxonomy-diagram svg');
+        if (!svg || svg.dataset.viewBoxAdjusted) {
+            return false;
+        }
+
+        try {
+            const box = svg.getBBox();
+            if (!box.width || !box.height) {
+                return false;
+            }
+
+            const padding = 28;
+            svg.setAttribute('viewBox', `${box.x - padding} ${box.y - padding} ${box.width + padding * 2} ${box.height + padding * 2}`);
+            svg.style.maxWidth = '100%';
+            svg.style.height = 'auto';
+            svg.dataset.viewBoxAdjusted = 'true';
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    window.addEventListener('load', function() {
+        if (fitTaxonomyDiagram()) {
+            return;
+        }
+
+        let attempts = 0;
+        const timer = window.setInterval(function() {
+            attempts += 1;
+            if (fitTaxonomyDiagram() || attempts >= 10) {
+                window.clearInterval(timer);
+            }
+        }, 100);
+    });
+    </script>
     <style>
         .article-kicker {
             color: #0d6233;
@@ -90,8 +128,15 @@
 
         .taxonomy-diagram {
             margin: 1.5rem 0 0.5rem;
+            padding: 1.75rem 0 2.5rem;
             text-align: center;
             overflow-x: auto;
+        }
+
+        .taxonomy-diagram svg {
+            display: block;
+            margin: 0 auto;
+            overflow: visible !important;
         }
 
         .taxonomy-table {
