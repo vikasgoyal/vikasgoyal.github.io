@@ -60,6 +60,11 @@
     <script>mermaid.initialize({
         startOnLoad: true,
         theme: 'base',
+        flowchart: {
+            htmlLabels: false,
+            nodeSpacing: 70,
+            rankSpacing: 70
+        },
         themeVariables: {
             fontSize: '18px',
             primaryColor: '#4A90D9',
@@ -233,12 +238,12 @@
                 <h2>Four Tiers, Redrawn</h2>
                 <div class="mermaid taxonomy-diagram">
 flowchart TD
- A["Can you enumerate, ahead of time,\nevery tool, agent, or system\nthis component might call?"]
+ A["Can you\nenumerate ahead\nof time every\ntool, agent, or\nsystem this\ncomponent\nmight call?"]
  F{{"What's the topology?"}}
- B["Tier 1 — Bounded Response\nfixed scope, no graph"]
- C["Tier 2 — Structured Graph\nfixed topology, LLM picks the path"]
- D["Tier 3 — Bounded Autonomy\nfixed toolset, agent plans the sequence"]
- E["Tier 4 — Open-Ended / Emergent\nruntime discovery, recursive delegation"]
+ B["Tier 1\nBounded\nResponse\nfixed scope\nno graph"]
+ C["Tier 2\nStructured\nGraph\nfixed topology\nLLM picks\nthe path"]
+ D["Tier 3\nBounded\nAutonomy\nfixed toolset\nagent plans\nthe sequence"]
+ E["Tier 4\nOpen-Ended\nEmergent\nruntime discovery\nrecursive\ndelegation"]
 
  style A fill:#4A90D9,stroke:#2c6fad,color:#fff
  style F fill:#777777,stroke:#444444,color:#fff
