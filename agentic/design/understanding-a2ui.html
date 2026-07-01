@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Understanding A2UI: A Protocol for Agent-Driven Interfaces | Vikas Goyal</title>
+    <meta name="description" content="A practical explanation of A2UI, the agent-to-user-interface protocol for safe, structured, agent-driven UI across trusted client renderers.">
+    <meta name="keywords" content="A2UI, agent-driven interfaces, agentic AI, AI UI protocol, declarative UI, structured outputs, AI agents">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/design/understanding-a2ui.html">
+
+    <meta property="og:title" content="Understanding A2UI: A Protocol for Agent-Driven Interfaces">
+    <meta property="og:description" content="How A2UI lets agents describe rich interfaces safely while clients retain trusted rendering, styling, accessibility, and action handling.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/design/understanding-a2ui.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Understanding A2UI: A Protocol for Agent-Driven Interfaces">
+    <meta name="twitter:description" content="A practical guide to the A2UI protocol for safe, structured, agent-driven interfaces.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Understanding A2UI: A Protocol for Agent-Driven Interfaces",
+      "description": "A practical explanation of A2UI, the agent-to-user-interface protocol for safe, structured, agent-driven UI across trusted client renderers.",
+      "author": {
+        "@type": "Person",
+        "name": "Vikas Goyal",
+        "url": "https://www.linkedin.com/in/vikasgoyal/"
+      },
+      "datePublished": "2026-07-01",
+      "dateModified": "2026-07-01",
+      "publisher": {
+        "@type": "Person",
+        "name": "Vikas Goyal"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://vikasgoyal.github.io/agentic/design/understanding-a2ui.html"
+      },
+      "keywords": "A2UI, agent-driven interfaces, agentic AI, AI UI protocol, declarative UI, structured outputs, AI agents"
+    }
+    </script>
+
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+      :root {
+        --a2ui-ink: #121212;
+        --a2ui-ink-soft: #505050;
+        --a2ui-paper: #f6f4ee;
+        --a2ui-surface: rgba(255, 255, 255, 0.92);
+        --a2ui-line: rgba(18, 18, 18, 0.10);
+        --a2ui-green: #0f5d44;
+        --a2ui-green-deep: #0a3f30;
+        --a2ui-blue: #173c73;
+        --a2ui-red: #b42318;
+        --a2ui-shadow: 0 20px 52px rgba(18, 18, 18, 0.10);
+        --a2ui-radius-lg: 24px;
+      }
+
+      body {
+        width: auto;
+        margin: 0;
+        padding: 24px 20px 72px;
+        background:
+          radial-gradient(circle at top left, rgba(15, 93, 68, 0.12), transparent 24%),
+          radial-gradient(circle at top right, rgba(23, 60, 115, 0.10), transparent 22%),
+          linear-gradient(180deg, #fbfaf6 0%, var(--a2ui-paper) 42%, #ffffff 100%);
+      }
+
+      .page-shell {
+        max-width: 980px;
+        margin: 0 auto;
+      }
+
+      .article-shell {
+        display: grid;
+        gap: 1rem;
+        padding-top: 0.25rem;
+      }
+
+      #a2ui-article {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .a2ui-hero,
+      .a2ui-summary,
+      .a2ui-section {
+        background: var(--a2ui-surface);
+        border: 1px solid var(--a2ui-line);
+        border-radius: var(--a2ui-radius-lg);
+        box-shadow: var(--a2ui-shadow);
+      }
+
+      .a2ui-hero {
+        padding: 2rem;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 244, 238, 0.94) 100%),
+          linear-gradient(135deg, rgba(23, 60, 115, 0.08) 0%, rgba(15, 93, 68, 0.08) 100%);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        margin-bottom: 1rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(15, 93, 68, 0.10);
+        color: var(--a2ui-green-deep);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .a2ui-hero h1 {
+        margin: 0;
+        font-size: clamp(2.1rem, 4vw, 3.3rem);
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      .article-meta {
+        margin-top: 0.9rem;
+        color: #6b7280;
+        font-size: 0.95rem;
+        font-style: normal;
+      }
+
+      .a2ui-dek {
+        margin: 1rem 0 0;
+        max-width: 52rem;
+        font-size: 1.15rem;
+        line-height: 1.72;
+        color: var(--a2ui-ink-soft);
+      }
+
+      .sample-repo-callout {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1.35rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid rgba(15, 93, 68, 0.18);
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(15, 93, 68, 0.10), rgba(23, 60, 115, 0.08));
+      }
+
+      .sample-repo-copy {
+        display: grid;
+        gap: 0.2rem;
+      }
+
+      .sample-repo-kicker {
+        color: var(--a2ui-green-deep);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .sample-repo-title {
+        color: var(--a2ui-ink);
+        font-weight: 800;
+        line-height: 1.35;
+      }
+
+      .sample-repo-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 1rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--a2ui-blue) 0%, var(--a2ui-green) 100%);
+        color: #ffffff;
+        font-weight: 800;
+        text-decoration: none;
+        white-space: nowrap;
+        box-shadow: 0 10px 22px rgba(23, 60, 115, 0.18);
+      }
+
+      .sample-repo-link:hover,
+      .sample-repo-link:focus {
+        color: #ffffff;
+        text-decoration: none;
+      }
+
+      .a2ui-summary,
+      .a2ui-section {
+        padding: 1.35rem 1.5rem;
+      }
+
+      .a2ui-summary p {
+        margin: 0 0 0.9rem;
+        color: var(--a2ui-green-deep);
+        font-weight: 600;
+        line-height: 1.72;
+      }
+
+      .a2ui-summary p:last-child,
+      .a2ui-section p:last-child,
+      .a2ui-section ul:last-child,
+      .a2ui-section ol:last-child,
+      .a2ui-section pre:last-child {
+        margin-bottom: 0;
+      }
+
+      .a2ui-section h2,
+      .a2ui-section h3 {
+        margin-top: 0;
+      }
+
+      .a2ui-section h2 {
+        font-size: clamp(1.45rem, 2.5vw, 1.95rem);
+      }
+
+      .a2ui-section p,
+      .a2ui-section li {
+        color: var(--a2ui-ink-soft);
+        font-size: 1.03rem;
+        line-height: 1.8;
+      }
+
+      .a2ui-section strong,
+      .a2ui-summary strong {
+        color: var(--a2ui-ink);
+      }
+
+      .a2ui-section a {
+        font-weight: 700;
+      }
+
+      blockquote {
+        margin: 1.25rem 0;
+        padding: 1rem 1.15rem;
+        border: 1px solid rgba(23, 60, 115, 0.10);
+        border-left: 6px solid var(--a2ui-green);
+        border-radius: 16px;
+        background: rgba(23, 60, 115, 0.06);
+      }
+
+      blockquote p {
+        margin: 0;
+        color: #28476c;
+        font-weight: 700;
+      }
+
+      code {
+        padding: 0.15rem 0.35rem;
+        border-radius: 7px;
+        background: rgba(23, 60, 115, 0.08);
+        color: var(--a2ui-blue);
+        font-size: 0.92em;
+      }
+
+      pre {
+        margin: 1.1rem 0 1.35rem;
+        padding: 1rem;
+        overflow-x: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(18, 18, 18, 0.12);
+        background: #111827;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      pre code {
+        padding: 0;
+        background: transparent;
+        color: #f9fafb;
+        font-size: 0.9rem;
+        line-height: 1.65;
+      }
+
+      .mermaid {
+        margin: 1.2rem 0;
+        padding: 1rem;
+        overflow-x: auto;
+        border: 1px solid rgba(18, 18, 18, 0.10);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.82);
+      }
+
+      .render-error {
+        padding: 1rem;
+        border: 1px solid rgba(180, 35, 24, 0.24);
+        border-radius: 16px;
+        background: rgba(180, 35, 24, 0.08);
+        color: var(--a2ui-red);
+        font-weight: 700;
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 16px 12px 56px;
+        }
+
+        .a2ui-hero,
+        .a2ui-summary,
+        .a2ui-section {
+          padding: 1.15rem;
+        }
+
+        .sample-repo-callout {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div id="header-container"></div>
+      <main class="article-shell">
+        <article id="a2ui-article" aria-live="polite"></article>
+      </main>
+      <div id="footer-container"></div>
+    </div>
+
+    <textarea hidden id="a2ui-markdown-source">
+# Understanding A2UI: A Protocol for Agent-Driven Interfaces
+
+## Executive Summary
+
+A2UI is a protocol for letting AI agents produce rich, interactive user interfaces without sending executable UI code to the client. Instead of returning only text, HTML, JavaScript, or framework-specific components, an agent returns structured JSON messages that describe surfaces, components, data, bindings, and user actions. The client application then renders those messages using trusted local components.
+
+The core idea is simple: agents describe what interface should appear, but the client decides how that interface is rendered.
+
+That distinction matters. It allows an AI system to create dynamic, task-specific UI while preserving the security, styling, accessibility, and platform conventions of the host application. A2UI is especially useful when an agent needs to collect structured input, guide a user through a workflow, show progressive results, or adapt the interface as more context becomes available.
+
+One practical reference architecture is a backend agent that generates A2UI-compatible protocol responses for an enterprise workflow, paired with a frontend that receives those responses over HTTP/SSE and renders them with a local component catalog.
+
+## What Is A2UI?
+
+A2UI stands for agent-to-user-interface. It is a protocol for agent-driven interfaces: interfaces that are generated or adapted by AI agents at runtime.
+
+At a high level, A2UI defines a common language between an agent and a client application:
+
+- The agent sends versioned JSON messages.
+- The messages describe UI surfaces, component trees, data updates, and actions.
+- The client validates those messages.
+- The client renders only components it already trusts.
+- The user interacts with the rendered UI.
+- The client sends structured action payloads back to the agent.
+- The agent continues the workflow by sending more A2UI messages.
+
+A2UI is not a visual design system, not a JavaScript framework, and not a replacement for React, Angular, Flutter, SwiftUI, or native app frameworks. It sits one layer above those technologies as a protocol.
+
+The same A2UI message can theoretically be rendered by different clients, each using its own native component implementation. A web app may render a `TextField` as a React component. A mobile app may render the same component as a native input control. A command-line or Markdown client might render a simpler representation.
+
+## Why A2UI Exists
+
+Traditional AI interfaces are usually text-first. The user asks a question, and the model responds with prose. That works for many scenarios, but it breaks down when the workflow is inherently interactive or structured.
+
+Consider these examples:
+
+- Creating an IT equipment request
+- Booking travel
+- Filling out an insurance claim
+- Comparing data in charts and tables
+- Selecting approval options
+- Editing a generated plan
+- Completing onboarding forms
+- Reviewing exceptions in a business process
+
+In all of these cases, a plain text answer is not enough. The user needs fields, buttons, choices, validation messages, summaries, and follow-up actions.
+
+One tempting solution is to let the model generate HTML or JavaScript. That is risky. It creates a trust-boundary problem: an untrusted model output is now being treated as executable UI code. That can lead to injection risks, inconsistent styling, inaccessible markup, and unpredictable behavior.
+
+A2UI exists to solve this problem:
+
+> How can an AI agent safely generate rich user interfaces across a trust boundary?
+
+The answer is declarative UI messages. The agent sends descriptions, not executable code. The client owns rendering.
+
+## The Core Philosophy
+
+A2UI is built around a few important principles.
+
+### Declarative, Not Executable
+
+The agent does not send arbitrary HTML, CSS, or JavaScript. It sends JSON that describes component names, properties, layout, data bindings, and actions. The client maps those descriptions to trusted components.
+
+This means a client can safely reject anything it does not understand.
+
+### Client-Owned Rendering
+
+The client controls the actual UI implementation. It decides how `Button`, `Card`, `TextField`, or a custom `Chart` component looks and behaves. This preserves brand, accessibility, localization, telemetry, security policies, and platform-native behavior.
+
+### Catalog-Based Capability
+
+The agent can only use components that the client exposes through a catalog. A catalog is a contract: it tells the agent which components exist, what properties they accept, and how data or actions should flow.
+
+### Progressive Rendering
+
+A2UI messages can stream. The client does not need to wait for a complete screen before showing anything. The agent can create a surface, add components, update data, and refine the UI over time.
+
+### Structured Action Loop
+
+User interactions return to the agent as structured actions, not vague text. A button click, form submission, selected option, or edited field can be sent with context. The agent can then continue the workflow with new UI messages.
+
+## How A2UI Works
+
+The common A2UI interaction flow looks like this:
+
+1. A user sends a message or triggers a task.
+2. The agent decides what UI would help complete the task.
+3. The agent emits A2UI protocol messages.
+4. The backend or transport layer validates the messages.
+5. The client renders the messages using its local component catalog.
+6. The user interacts with the generated UI.
+7. The client sends an action payload back to the agent.
+8. The agent responds with updated UI, a summary, an error, or the next workflow step.
+
+```mermaid
+flowchart LR
+    User[User intent] --> Client[Client app]
+    Client -->|HTTP POST / message| Backend[Agent backend]
+    Backend --> Agent[AI agent]
+    Agent -->|A2UI JSON messages| Backend
+    Backend -->|Validate and stream| Client
+    Client --> Renderer[Trusted local renderer]
+    Renderer --> UI[Interactive UI]
+    UI -->|A2UI action payload| Backend
+    Backend --> Agent
+```
+
+## Key Components of A2UI
+
+### 1. Protocol Version
+
+A2UI messages are versioned. The current production version referenced by the A2UI site is v0.9.1, while v1.0 is a candidate version. Versioning matters because message names, fields, and semantics may evolve.
+
+The examples in this article use A2UI-compatible `v0.9.1` envelopes.
+
+Example:
+
+```json
+{
+  "version": "v0.9.1",
+  "createSurface": {
+    "surfaceId": "it-request",
+    "catalogId": "https://a2ui.org/specification/v0_9_1/catalogs/basic/catalog.json"
+  }
+}
+```
+
+### 2. Surfaces
+
+A surface is a named UI area. It is the place where components appear. A client may support one surface or many. For example:
+
+- A main chat response panel
+- A side panel
+- A modal
+- A dashboard region
+- A task-specific workspace
+
+The agent can create, update, or delete surfaces depending on the protocol version and client capabilities.
+
+In a typical workflow assistant, the backend creates a task-specific surface, and the frontend stores that surface state before rendering it in the application shell.
+
+### 3. Messages
+
+A2UI communication happens through messages. In v0.9.1-style flows, important server-to-client messages include:
+
+- `createSurface`
+- `updateComponents`
+- `updateDataModel`
+- `deleteSurface`
+
+The agent can progressively build a UI by sending these messages in sequence.
+
+For example:
+
+```json
+[
+  {
+    "version": "v0.9.1",
+    "createSurface": {
+      "surfaceId": "it-request",
+      "catalogId": "https://a2ui.org/specification/v0_9_1/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "v0.9.1",
+    "updateComponents": {
+      "surfaceId": "it-request",
+      "components": [
+        {
+          "id": "summary",
+          "type": "Text",
+          "text": "Let's prepare the laptop request."
+        }
+      ]
+    }
+  }
+]
+```
+
+### 4. Components
+
+Components are the building blocks of the rendered interface. A basic catalog may include layout, text, input, choice, and action components.
+
+A practical first implementation often starts with a deliberately small catalog:
+
+- `Column`
+- `Row`
+- `Card`
+- `Text`
+- `Button`
+- `TextField`
+- `ChoicePicker`
+- `DateTimeInput`
+- `CheckBox`
+- `List`
+- `Divider`
+
+This is enough to create structured forms, summaries, and approval flows without exposing arbitrary UI execution.
+
+### 5. Catalogs
+
+A catalog defines what components are available and how they can be used. It is the contract between agent and client.
+
+Catalogs can be standard or custom. A simple business workflow might use only basic components. A data-heavy application might expose custom components such as:
+
+- `KpiCard`
+- `LineChart`
+- `MapView`
+- `ApprovalTimeline`
+- `PolicyViolationList`
+- `DocumentPreview`
+
+The important rule is that these are client-owned components. The agent can request them, but the client implements and controls them.
+
+### 6. Data Model
+
+A2UI separates component structure from data. This makes it possible to update values without recreating the entire UI.
+
+For example, a component might bind to a field in a data model:
+
+```json
+{
+  "id": "employee-name",
+  "type": "TextField",
+  "label": "Employee name",
+  "value": { "$data": "/request/employeeName" }
+}
+```
+
+Then a later message can update the data model:
+
+```json
+{
+  "version": "v0.9.1",
+  "updateDataModel": {
+    "surfaceId": "it-request",
+    "data": {
+      "request": {
+        "employeeName": "Alex Contractor"
+      }
+    }
+  }
+}
+```
+
+This pattern is useful because the user can edit fields locally, and the client can keep the UI state coherent.
+
+### 7. Actions
+
+Actions are how user interactions return to the agent. A button press, selection, or form submission can be sent as a structured payload.
+
+When a user submits a generated IT request form, the frontend can send an action payload to an endpoint such as:
+
+```text
+POST /api/sessions/{session_id}/actions
+```
+
+The backend includes the action context in the next agent prompt. The agent then returns a follow-up A2UI response, such as an approval-ready summary.
+
+### 8. Transports
+
+A2UI is a protocol; it can be carried over different transports. The A2UI ecosystem discusses transports such as A2A, and A2UI can also be used in other agent communication paths.
+
+A simple web transport can use:
+
+- HTTP POST for user prompts
+- Server-Sent Events over HTTP for streamed A2UI envelopes
+- HTTP POST for action callbacks
+
+This is intentionally straightforward and works well for browser-based applications.
+
+## Reference Architecture
+
+The following reference architecture shows an enterprise IT request assistant. It is illustrative: the same A2UI pattern can be implemented with different agent frameworks, transports, renderers, and domain workflows.
+
+```mermaid
+flowchart TB
+    subgraph Browser[React / Vite frontend]
+        Prompt[Prompt input]
+        Renderer[Local A2UI renderer]
+        DataModel[Client data model]
+        Action[Action payload builder]
+    end
+
+    subgraph API[FastAPI backend]
+        Routes[HTTP routes]
+        Orchestrator[A2UI orchestration]
+        Validator[Protocol validator]
+        Fallback[Safe fallback fixtures]
+    end
+
+    subgraph AI[Microsoft Agent Framework + Azure]
+        Agent[Agent Framework assistant]
+        Model[Foundry / Azure OpenAI model]
+    end
+
+    Prompt -->|POST message| Routes
+    Routes --> Orchestrator
+    Orchestrator --> Agent
+    Agent --> Model
+    Model --> Agent
+    Agent -->|A2UI JSON| Orchestrator
+    Orchestrator --> Validator
+    Validator -->|SSE stream| Renderer
+    Renderer --> DataModel
+    Action -->|POST action| Routes
+```
+
+In a concrete implementation, the responsibilities usually map to files or modules like these:
+
+- Backend routes: `backend/app/routes.py`
+- Agent orchestration: `backend/app/a2ui_agent.py`
+- Agent creation: `backend/app/agent_factory.py`
+- A2UI instructions: `backend/app/a2ui_prompt.py`
+- Validation: `backend/app/a2ui_validation.py`
+- Frontend renderer: `frontend/src/a2ui/renderer.tsx`
+- Frontend data binding: `frontend/src/a2ui/dataModel.ts`
+- Frontend action payloads: `frontend/src/a2ui/actions.ts`
+
+An implementation can either use official A2UI SDK/rendering packages or implement a small compatible subset locally. Official packages can improve spec alignment; a local subset can be useful for learning, prototyping, and tightly controlled catalogs.
+
+## Why Not Just Use HTML?
+
+HTML is powerful, but generated HTML crosses an important boundary. If an agent can produce arbitrary markup and script, the client must defend against UI injection, script injection, broken accessibility, visual inconsistency, malicious links, and unpredictable behavior.
+
+A2UI narrows the interface between agent and client. Instead of letting the agent say:
+
+```html
+<script>...</script>
+```
+
+the agent says:
+
+```json
+{
+  "type": "Button",
+  "label": "Submit request",
+  "action": {
+    "type": "submitRequest"
+  }
+}
+```
+
+The client decides what a button is, what actions are allowed, how it is styled, and what happens when the user clicks it.
+
+## Patterns That Work Well
+
+### Pattern: Prompt-First UI Generation
+
+The user describes intent in natural language. The agent responds with a purpose-built UI.
+
+Example:
+
+> I need a new laptop for a contractor starting Monday.
+
+The agent can infer that the user needs fields for employee name, start date, device type, access requirements, urgency, and justification.
+
+This pattern is powerful when the form or workflow depends on the user's specific request.
+
+### Pattern: Progressive Disclosure
+
+Start with the minimum useful UI. Add details only when needed.
+
+For example, an IT request assistant might first ask for:
+
+- Person
+- Start date
+- Device type
+- Manager approval
+
+Only if the user selects admin access does the agent add justification and expiration fields.
+
+This keeps generated UI from becoming overwhelming.
+
+### Pattern: Server-Side Validation Gate
+
+Do not stream raw model output directly to the client. Put a validation layer between the model and the browser.
+
+A strong backend validation layer rejects:
+
+- Unknown component names
+- Generated HTML
+- Generated JavaScript
+- Generated CSS
+- `javascript:` URLs
+- Invalid protocol versions
+- Unsupported message shapes
+
+This makes the client simpler and safer.
+
+### Pattern: Small Catalog First
+
+Start with a small component catalog. Add components only when there is a real workflow need.
+
+The first catalog should usually include:
+
+- Layout primitives
+- Text
+- Buttons
+- Text input
+- Choice input
+- Date input
+- Lists or summaries
+
+Custom components should come later, after you understand the workflows that need them.
+
+### Pattern: Local Data Binding
+
+Let users edit generated fields locally before sending an action back to the agent. This avoids unnecessary model calls for every keystroke and makes the UI feel responsive.
+
+The agent should generate the structure and initial values. The client should own live editing state.
+
+### Pattern: Structured Action Payloads
+
+When the user clicks a button, send structured action context. Do not send a vague message like "the user clicked submit".
+
+Better:
+
+```json
+{
+  "version": "v0.9.1",
+  "surfaceId": "it-request",
+  "action": {
+    "type": "submitRequest",
+    "data": {
+      "employeeName": "Alex Contractor",
+      "deviceType": "Windows laptop",
+      "needBy": "2026-07-06"
+    }
+  }
+}
+```
+
+The agent can then reason from real state.
+
+### Pattern: Agent Repair Loop
+
+Models sometimes produce invalid JSON or use a component shape that is close but not valid. A repair loop can ask the model to correct its response using validation errors.
+
+This should be bounded. If repair fails, return a safe fallback UI.
+
+### Pattern: Transport Independence
+
+Keep A2UI protocol handling separate from the transport. A2UI messages should not depend on whether they arrive through SSE, WebSockets, A2A, MCP, or another channel.
+
+This makes the agent and renderer easier to reuse.
+
+## Antipatterns to Avoid
+
+### Antipattern: Letting the Model Generate Arbitrary HTML
+
+This defeats one of the main reasons A2UI exists. If you let the agent produce raw executable UI, you inherit all the trust and security problems A2UI is designed to avoid.
+
+### Antipattern: Huge Component Catalogs Too Early
+
+Giving the agent dozens or hundreds of components before you understand the workflow creates confusion. The model may choose the wrong component or combine components in strange ways.
+
+Start small. Expand deliberately.
+
+### Antipattern: Treating A2UI as a Design System
+
+A2UI is a protocol. It does not replace your design system. Your client components should still follow your product's visual language, accessibility rules, spacing, typography, and interaction patterns.
+
+### Antipattern: No Validation Layer
+
+If model output goes directly to the renderer, every client must become a security boundary. That increases risk and duplicates logic.
+
+Validate on the backend or at a shared trust boundary.
+
+### Antipattern: Model Call on Every Field Change
+
+Do not call the agent every time the user types a character. Let the client manage local form state. Call the agent when there is meaningful intent: submit, validate, continue, approve, reject, explain, or regenerate.
+
+### Antipattern: Mixing Conversation State and UI State Carelessly
+
+The agent may need conversational memory, while the client needs UI state. Treat them as related but separate concerns.
+
+For example:
+
+- Conversation state: what the user asked for
+- UI state: current field values and validation state
+- Domain state: the actual business request being prepared
+
+### Antipattern: Using A2UI for Static Pages
+
+If the interface is known ahead of time and does not need agent-driven adaptation, build it normally. A2UI is most useful when the interface changes based on user intent, context, or agent reasoning.
+
+## Primary Use Cases
+
+### Enterprise Workflow Assistants
+
+A2UI fits enterprise assistants that help users complete internal workflows:
+
+- IT requests
+- HR onboarding
+- Procurement intake
+- Expense report preparation
+- Access request workflows
+- Policy exception requests
+- Incident triage
+
+These workflows often begin with ambiguous natural language and end with structured data.
+
+### Dynamic Forms
+
+Some forms are hard to model statically because the required fields depend on context. A2UI lets the agent generate the relevant fields based on the user's goal.
+
+Examples:
+
+- A travel form that changes for domestic vs. international trips
+- A support intake form that changes by product area
+- A compliance form that changes based on risk level
+
+### Data Exploration
+
+An agent can choose the best interface for the user's question:
+
+- A summary card for a KPI
+- A table for comparisons
+- A chart for trends
+- A map for locations
+- A filter panel for refinement
+
+The client still owns the chart or map components.
+
+### Guided Troubleshooting
+
+Troubleshooting often needs branching interactions. A2UI can let an agent generate the next diagnostic step as a UI, not just text.
+
+For example:
+
+- Ask for system details
+- Show a checklist
+- Present likely causes
+- Request confirmation
+- Offer a remediation action
+
+### Approval and Review Workflows
+
+A2UI works well when users must review generated content before taking action.
+
+Examples:
+
+- Approve an access request
+- Review a generated purchase order
+- Confirm a customer email draft
+- Accept a remediation plan
+
+### Multi-Platform Agent Experiences
+
+Because A2UI is protocol-based, the same agent can serve multiple clients. A web client, mobile client, desktop client, and chat client can each render the same protocol in platform-appropriate ways.
+
+## Security Model
+
+A2UI improves safety by reducing what the agent is allowed to send.
+
+The agent can describe:
+
+- Component type
+- Component properties
+- Layout relationships
+- Data updates
+- Action definitions
+
+The agent should not be allowed to send:
+
+- Arbitrary script
+- Arbitrary style
+- Arbitrary markup
+- Arbitrary URLs without validation
+- Components outside the catalog
+- Actions outside the allowed action set
+
+This is not magic security. You still need validation, allowlists, and careful implementation. But A2UI gives you a better boundary than raw code generation.
+
+## A2UI and Agent Frameworks
+
+A2UI does not require one specific agent framework. It can be used with many backend architectures as long as the agent can produce valid protocol messages.
+
+Possible backend stacks include:
+
+- Microsoft Agent Framework
+- Google ADK
+- LangGraph
+- Semantic Kernel
+- Custom orchestrators
+- MCP-based tools
+- A2A-compatible agents
+
+The backend's job is to translate user intent and domain context into safe A2UI messages.
+
+For example, Microsoft Agent Framework can be responsible for creating the assistant and calling the model, while A2UI is the response protocol the assistant is instructed to produce.
+
+## A2UI and Frontend Frameworks
+
+A2UI does not require one frontend framework. A renderer can be built for:
+
+- React
+- Angular
+- Lit
+- Flutter
+- Native mobile
+- Markdown
+- Desktop frameworks
+
+The frontend's job is to receive A2UI messages, validate or trust the validation boundary, map component names to local components, bind data, and send actions back.
+
+For example, a React/Vite frontend can host a local A2UI renderer under a module such as `frontend/src/a2ui/`.
+
+## Implementation Checklist
+
+Use this checklist when building an A2UI system.
+
+### Backend Checklist
+
+- Choose the A2UI protocol version.
+- Define or adopt a component catalog.
+- Write agent instructions that require A2UI JSON only.
+- Add a JSON extraction layer.
+- Add schema or allowlist validation.
+- Reject unsafe component properties and URLs.
+- Add bounded repair behavior.
+- Add safe fallback responses.
+- Stream validated messages to the client.
+- Log validation errors without leaking secrets.
+- Test common prompts and invalid outputs.
+
+### Frontend Checklist
+
+- Implement or install an A2UI renderer.
+- Map each catalog component to a trusted local component.
+- Keep generated UI styling consistent with the product.
+- Implement data binding.
+- Handle unknown components safely.
+- Handle streaming updates incrementally.
+- Build action payloads with resolved data context.
+- Show loading, validation, and error states.
+- Avoid executing generated code.
+
+### Product Checklist
+
+- Pick workflows where dynamic UI is actually useful.
+- Keep the first catalog small.
+- Decide which actions are allowed.
+- Define guardrails for generated UI.
+- Test with realistic messy user prompts.
+- Review accessibility and localization.
+- Decide what gets persisted.
+- Decide what is model-generated vs. deterministic.
+
+## Where A2UI Fits in the Agent UI Landscape
+
+A2UI is one piece of a broader agent UI ecosystem.
+
+### Chat UI
+
+Chat is best for open-ended conversation and low-structure tasks. A2UI extends chat by letting the agent generate structured interaction surfaces when needed.
+
+### Function Calling
+
+Function calling lets a model invoke tools or APIs. A2UI is different: it lets the model describe user-facing interface updates. The two can work together. An agent might call a tool to fetch policy data, then use A2UI to render the result.
+
+### Structured Outputs
+
+Structured outputs help models return predictable JSON. A2UI uses structured messages, but its purpose is specifically interactive UI.
+
+### AG-UI, A2A, and MCP
+
+Other protocols and transports can carry agent events, tool calls, or app interactions. A2UI can sit alongside them as the UI description layer.
+
+## Example: Enterprise IT Request Assistant
+
+Here is how the pattern works in a realistic scenario.
+
+User prompt:
+
+```text
+I need a new laptop for a contractor starting Monday.
+```
+
+Expected agent behavior:
+
+1. Interpret the user intent as an equipment request.
+2. Create an A2UI surface.
+3. Render a form with inferred and missing fields.
+4. Bind initial data such as request type and due date.
+5. Let the user edit fields locally.
+6. Receive a submit action.
+7. Generate an approval-ready summary.
+
+Why A2UI helps here:
+
+- The user does not have to find the right form.
+- The agent can tailor fields to the request.
+- The client keeps the form safe and styled.
+- The backend validates generated UI before rendering.
+- The action loop preserves structured data.
+
+## Practical Prompting Guidance
+
+When instructing an agent to produce A2UI, be explicit.
+
+Good instructions include:
+
+- Return only JSON.
+- Use a specific A2UI version.
+- Use only the allowed catalog.
+- Do not generate HTML, CSS, or JavaScript.
+- Prefer a small number of useful fields.
+- Include stable component IDs.
+- Bind inputs to the data model.
+- Use only known action types.
+- Produce a sequence of envelopes when streaming.
+
+Weak instructions often lead to:
+
+- Markdown-wrapped JSON
+- Unsupported component names
+- Prose mixed with protocol messages
+- Overly complex screens
+- Missing surface IDs
+- Invalid data bindings
+
+## Operational Considerations
+
+### Observability
+
+Log the protocol lifecycle:
+
+- Prompt received
+- Model response received
+- JSON extraction succeeded or failed
+- Validation succeeded or failed
+- Repair attempted
+- Fallback used
+- Action received
+- Follow-up response generated
+
+Do not log secrets or sensitive user data unnecessarily.
+
+### Testing
+
+Test at three layers:
+
+- Validator tests: invalid components, invalid actions, unsafe URLs
+- Renderer tests: component rendering and data binding
+- End-to-end tests: prompt to rendered UI to action response
+
+### Versioning
+
+Pin your protocol version. Do not casually mix message versions. If you move from v0.9.1 to v1.0, create an explicit migration path.
+
+### Fallbacks
+
+Always have a fallback. If the model generates invalid UI, the user should see a safe error surface or deterministic form, not a blank screen.
+
+## Common Questions
+
+### Is A2UI only for web apps?
+
+No. A2UI is framework-agnostic. Web is a natural starting point, but the protocol can be rendered by mobile, desktop, or other clients.
+
+### Does A2UI replace React?
+
+No. React can be the renderer implementation. A2UI describes the interface; React renders it.
+
+### Does A2UI require official libraries?
+
+No. You can implement a compatible subset yourself. Official renderers and SDKs can reduce implementation work and improve spec alignment when they fit your stack.
+
+### Is A2UI safe by default?
+
+It is safer than arbitrary generated code, but only if you validate messages and render through trusted components. The protocol gives you the right shape for safety; implementation still matters.
+
+### Should every agent response be A2UI?
+
+No. Use A2UI when interaction, structure, progressive rendering, or user input is valuable. Plain text is still better for simple answers.
+
+## A Good Mental Model
+
+Think of A2UI as the difference between a restaurant order and access to the kitchen.
+
+With raw generated code, the agent enters the kitchen and starts cooking directly. With A2UI, the agent places an order using a menu the kitchen understands. The kitchen decides how to prepare and serve it safely.
+
+In software terms:
+
+- The agent requests UI.
+- The protocol structures that request.
+- The catalog defines what is allowed.
+- The client renders with trusted components.
+- The user acts.
+- The agent continues.
+
+## Conclusion
+
+A2UI is an important pattern for the next generation of agentic applications. It moves AI interfaces beyond text while avoiding the risks of arbitrary generated UI code.
+
+The most valuable idea is not that an agent can create a form. The valuable idea is that an agent can negotiate an interface with the client through a constrained, inspectable, versioned protocol.
+
+That creates a practical middle ground:
+
+- More interactive than chat
+- Safer than generated HTML or JavaScript
+- More portable than framework-specific components
+- More adaptive than static forms
+- More structured than prose
+
+For enterprise applications, this is especially compelling. Many business workflows begin with messy human intent and end with structured action. A2UI gives agents a way to guide that transformation through interfaces that are dynamic, safe, and native to the host application.
+
+An enterprise IT request assistant illustrates the pattern well: a user asks naturally, the backend agent generates A2UI-compatible messages, the backend validates them, the frontend renders them, and user actions continue the workflow.
+
+That is the core promise of A2UI: agents that do not just answer, but assemble the right interface for the task at hand.
+    </textarea>
+    <script src="../../headerfooter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+      (function renderA2uiArticle() {
+        var source = document.getElementById('a2ui-markdown-source');
+        var target = document.getElementById('a2ui-article');
+
+        if (!source || !target || !window.marked) {
+          if (target) {
+            target.innerHTML = '<p class="render-error">This article could not be rendered.</p>';
+          }
+          return;
+        }
+
+        marked.setOptions({
+          gfm: true,
+          breaks: false,
+          headerIds: false,
+          mangle: false
+        });
+
+        var parsed = marked.parse(source.textContent.trim());
+        parsed = parsed.replace(/<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g, function(_, diagram) {
+          var textarea = document.createElement('textarea');
+          textarea.innerHTML = diagram;
+          return '<div class="mermaid">' + textarea.value + '</div>';
+        });
+
+        var template = document.createElement('template');
+        template.innerHTML = parsed;
+
+        var h1 = template.content.querySelector('h1');
+        if (h1) {
+          var hero = document.createElement('header');
+          hero.className = 'a2ui-hero';
+          hero.innerHTML = '<span class="eyebrow">Agentic AI Design</span>';
+          hero.appendChild(h1);
+          var meta = document.createElement('div');
+          meta.className = 'article-meta';
+          meta.textContent = 'July 1, 2026';
+          hero.appendChild(meta);
+          var firstParagraph = template.content.querySelector('p');
+          if (firstParagraph) {
+            firstParagraph.className = 'a2ui-dek';
+            hero.appendChild(firstParagraph);
+          }
+          var repoCallout = document.createElement('div');
+          repoCallout.className = 'sample-repo-callout';
+          repoCallout.innerHTML = '<div class="sample-repo-copy"><span class="sample-repo-kicker">Sample repo</span><span class="sample-repo-title">Web frontend and backend using Microsoft Agent Framework with the A2UI protocol.</span></div><a class="sample-repo-link" href="https://github.com/vikasgoyal/a2ui-sample" target="_blank" rel="noopener noreferrer">View on GitHub</a>';
+          hero.appendChild(repoCallout);
+          target.appendChild(hero);
+        }
+
+        var nodes = Array.from(template.content.childNodes);
+        var currentSection = null;
+        nodes.forEach(function(node) {
+          if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'H2') {
+            currentSection = document.createElement('section');
+            currentSection.className = node.textContent.trim() === 'Executive Summary' ? 'a2ui-summary' : 'a2ui-section';
+            target.appendChild(currentSection);
+          }
+
+          if (!currentSection) {
+            currentSection = document.createElement('section');
+            currentSection.className = 'a2ui-section';
+            target.appendChild(currentSection);
+          }
+
+          currentSection.appendChild(node);
+        });
+
+        if (window.mermaid) {
+          mermaid.initialize({ startOnLoad: false, theme: 'neutral' });
+          mermaid.run({ querySelector: '.mermaid' });
+        }
+      })();
+    </script>
+  </body>
+</html>
