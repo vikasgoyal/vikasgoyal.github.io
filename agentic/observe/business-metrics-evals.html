@@ -317,6 +317,56 @@
 					</div>
 				</section>
 
+				<section id="logic-model">
+					<div class="section-kicker">Framework</div>
+					<h2>The layers are a causal chain, not a flat list</h2>
+					<p>It helps to be honest about one thing first: there is no single industry-standard taxonomy for “the layers of AI evals.” The tooling landscape offers several competing framings — by pipeline stage, by granularity, by lifecycle timing — and almost all of them stop at technical and operational metrics. The business layer is the piece the ecosystem consistently leaves out, which is exactly why it needs deliberate construction.</p>
+					<p>Rather than invent another bespoke stack, it is worth grounding the four layers in a framework with decades of prior use: the <strong>logic model</strong> from program evaluation, which traces a causal chain of input → activity → output → outcome → impact. The four eval layers map cleanly onto it.</p>
+
+					<table class="biz-table">
+						<thead>
+							<tr>
+								<th>Logic model stage</th>
+								<th>Eval layer</th>
+								<th>What it answers</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Output</td>
+								<td>Technical quality</td>
+								<td>Did the system do the thing correctly?</td>
+							</tr>
+							<tr>
+								<td>Short-term outcome</td>
+								<td>Workflow performance</td>
+								<td>Did correct output translate into an efficient process?</td>
+							</tr>
+							<tr>
+								<td>Intermediate outcome</td>
+								<td>User / stakeholder outcome</td>
+								<td>Did the efficient process produce a result people wanted?</td>
+							</tr>
+							<tr>
+								<td>Impact</td>
+								<td>Economic outcome</td>
+								<td>Did the wanted result produce durable business value?</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<p>This reframing does real work. It explains leading versus lagging indicators for free — outputs sit close to the intervention and move within hours of a prompt change, while impact is distal, confounded, and shows up in a quarterly number. It also turns “which layer is broken” into the sharper question of <strong>which link is broken</strong>: the value is not in the four boxes, it is in the three arrows between them.</p>
+					<ul>
+						<li><strong>Output → short-term outcome:</strong> does correctness reliably predict efficiency? If not, the bottleneck is downstream in the workflow, not in model quality.</li>
+						<li><strong>Short-term outcome → intermediate outcome:</strong> does efficiency reliably predict satisfaction? If not, you are optimizing a proxy that has drifted from the thing it stands in for.</li>
+						<li><strong>Intermediate outcome → impact:</strong> does satisfaction reliably predict durable value? If not, you may be buying short-term satisfaction with long-term cost.</li>
+					</ul>
+
+					<div class="takeaway-box">
+						<p><strong>Counterfactual discipline:</strong> in program evaluation, impact means change <em>attributable to</em> the intervention, not just change observed after it. Economic numbers such as cost-to-serve and ROI should be reported net of a counterfactual — a holdout comparison or a pre/post with controls — by default. Most AI ROI claims skip this step, which is a large part of why they do not survive scrutiny from finance.</p>
+					</div>
+				</section>
+
 				<section id="what-business-cares-about">
 					<div class="section-kicker">Business Lens</div>
 					<h2>The business questions evaluation should support</h2>
@@ -403,6 +453,35 @@
 					</table>
 
 					<p>A system might improve technical accuracy by 4% while increasing token cost by 40%. That may still be the right move if it substantially improves first-contact resolution in a high-value workflow. It may be the wrong move if the same gain occurs in a low-value, high-volume workflow where speed and cost dominate. This is why business context matters.</p>
+				</section>
+
+				<section id="risk-tiers">
+					<div class="section-kicker">Applied Example</div>
+					<h2>Apply the logic model per risk tier, not per agent</h2>
+					<p>A realistic retail support agent handles many intents — product inquiry, price match, recommendations, order status, order modification, cancellation, delivery problems, returns, refunds, exchanges, warranty, billing, account management, loyalty, subscriptions, complaints, and fraud. That is too many to build a rubric for each. But they cluster into four risk tiers, and the logic model applies <em>within</em> each tier rather than uniformly across the whole agent.</p>
+
+					<div class="metric-grid">
+						<div class="metric-card highlight">
+							<h3>Informational</h3>
+							<p>Product inquiry, recommendations, loyalty status. Low risk, high volume. High containment is the win condition, and the economics include conversion assist, not just cost avoidance.</p>
+						</div>
+						<div class="metric-card">
+							<h3>Transactional — reversible</h3>
+							<p>Order status, modification, subscription changes. Correctness must be measured against a deadline: a right answer after a fulfillment cutoff is a wrong answer. Subscriptions need a retention-weighted metric.</p>
+						</div>
+						<div class="metric-card">
+							<h3>Transactional — financial</h3>
+							<p>Refunds, returns, exchanges, warranty, billing. High risk, direct P&amp;L exposure. Containment and leakage must be reviewed side by side, always paired.</p>
+						</div>
+						<div class="metric-card highlight">
+							<h3>Escalation-mandatory</h3>
+							<p>Fraud and security. The optimization logic inverts: the correct containment target is zero. Any self-resolution here is a failing signal, not a tradeoff.</p>
+						</div>
+					</div>
+
+					<div class="takeaway-box">
+						<p><strong>The signature failure to watch:</strong> in the financial tier, high containment paired with rising leakage is an agent that looks efficient while quietly bleeding margin. Never review those two metrics separately, or the leakage trend will only surface once it is already a quarterly number.</p>
+					</div>
 				</section>
 
 				<section id="common-mistakes">
