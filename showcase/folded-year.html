@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Folded Year</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#0A111B;
+    --ground-2:#0E1725;
+    --ink:#E9EEF5;
+    --ink-soft:#93A3B8;
+    --ink-faint:#5B6B80;
+    --rule:rgba(147,163,184,.16);
+    --warm:#F0A63C;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+  }
+  :root:not([data-theme="light"]){ color-scheme: dark; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme: dark; } }
+  :root[data-theme="dark"]{ color-scheme: dark; }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--ground);
+    background-image:
+      radial-gradient(120% 70% at 55% -10%, rgba(240,166,60,.12) 0%, rgba(240,166,60,0) 60%),
+      linear-gradient(180deg, var(--ground-2) 0%, var(--ground) 45%);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    min-height:100%;
+  }
+  .wrap{max-width:1060px;margin:0 auto;padding:clamp(32px,6vw,80px) clamp(18px,4vw,40px) 80px}
+
+  header{max-width:56ch}
+  h1{
+    font-family:var(--serif);
+    font-weight:300;
+    font-size:clamp(2.6rem,8vw,5.2rem);
+    line-height:.95;
+    letter-spacing:-.025em;
+    margin:0 0 .35em;
+  }
+  h1 em{font-style:italic;font-weight:400}
+  .standfirst{
+    font-size:clamp(1rem,2.4vw,1.16rem);
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:52ch;
+  }
+
+  .stage{
+    margin:clamp(28px,5vw,52px) 0 0;
+  }
+  svg.chart{display:block;width:100%;height:auto;overflow:visible}
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:18px 24px;
+    margin-top:22px;
+    padding-top:22px;
+    border-top:1px solid var(--rule);
+  }
+  button.fold{
+    font-family:var(--sans);
+    font-size:1rem;
+    font-weight:500;
+    color:var(--ground);
+    background:var(--ink);
+    border:0;
+    border-radius:999px;
+    padding:13px 26px;
+    cursor:pointer;
+    transition:background .18s ease, transform .18s ease;
+  }
+  button.fold:hover{background:#fff}
+  button.fold:active{transform:translateY(1px)}
+  button.fold:focus-visible{outline:2px solid var(--warm);outline-offset:3px}
+
+  .readout{
+    font-size:.98rem;
+    line-height:1.5;
+    color:var(--ink-soft);
+    min-height:2.8em;
+    flex:1 1 300px;
+  }
+  .readout b{color:var(--ink);font-weight:500}
+  .readout .delta{color:var(--warm)}
+
+  .notes{
+    margin-top:clamp(48px,8vw,90px);
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:clamp(28px,5vw,56px);
+    border-top:1px solid var(--rule);
+    padding-top:clamp(28px,5vw,44px);
+  }
+  .notes h2{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:1.5rem;
+    line-height:1.2;
+    letter-spacing:-.01em;
+    margin:0 0 .7em;
+  }
+  .notes p{
+    margin:0 0 1em;
+    font-size:.98rem;
+    line-height:1.7;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  table.pairs{border-collapse:collapse;width:100%;max-width:400px;font-size:.95rem}
+  table.pairs th{
+    text-align:left;font-weight:500;color:var(--ink-faint);
+    font-size:.85rem;padding:0 0 8px;border-bottom:1px solid var(--rule);
+  }
+  table.pairs th:last-child,table.pairs td:last-child{text-align:right}
+  table.pairs td{padding:10px 0;border-bottom:1px solid var(--rule);color:var(--ink-soft)}
+  table.pairs td:first-child{color:var(--ink)}
+  table.pairs .d{color:var(--warm);font-variant-numeric:tabular-nums}
+
+  footer{margin-top:clamp(40px,7vw,72px);color:var(--ink-faint);font-size:.85rem}
+
+  .hit{cursor:pointer;fill:transparent}
+  .hit:focus-visible{outline:none}
+  .hit:focus-visible + .focusring{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>The <em>folded</em> year</h1>
+    <p class="standfirst">Naperville, Illinois has twelve months of weather but only seven kinds of it. Fold the calendar in half at January and July and the months land in pairs: December on February, November on March, October on April. Unfold it to see the year as it is actually lived.</p>
+  </header>
+
+  <div class="stage">
+    <svg class="chart" id="chart" viewBox="0 0 1000 620" role="img" aria-label="Monthly average high and low temperatures, shown as twelve vertical bands that can be folded into matching pairs.">
+      <defs>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="9"/>
+        </filter>
+        <radialGradient id="summerglow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F0A63C" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#F0A63C" stop-opacity="0"/>
+        </radialGradient>
+        <g id="defs-grads"></g>
+      </defs>
+
+      <ellipse cx="560" cy="150" rx="330" ry="180" fill="url(#summerglow)"/>
+      <g id="axis"></g>
+      <g id="wedges"></g>
+      <g id="glowlayer" filter="url(#glow)" opacity=".5"></g>
+      <g id="bars"></g>
+      <g id="labels"></g>
+      <g id="deltas"></g>
+      <g id="hits"></g>
+    </svg>
+  </div>
+
+  <div class="controls">
+    <button class="fold" id="foldBtn">Unfold the year</button>
+    <p class="readout" id="readout">Each pair is two months that share almost the same weather &mdash; the warm sliver between them is how far autumn runs ahead of spring. Hover a month for its numbers.</p>
+  </div>
+
+  <div class="notes">
+    <section>
+      <h2>Why the two halves don't quite meet</h2>
+      <p>The fold never closes cleanly. Every autumn month sits a little above the spring month it lands on — October above April, September above May — and it happens in the same direction every single time.</p>
+      <p>That is thermal lag. Ground and water spend the summer absorbing heat and the autumn giving it back, so the year warms up faster than it cools down. The widest gap falls in the May–September pair, where autumn runs a full six degrees ahead.</p>
+    </section>
+    <section>
+      <h2>The five twins</h2>
+      <table class="pairs">
+        <thead><tr><th>Pair</th><th>Spring</th><th>Autumn</th><th>Gap</th></tr></thead>
+        <tbody id="pairbody"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <footer>Temperatures in °F. Bands are coloured by temperature, cold to warm.</footer>
+</div>
+
+<script>
+const M = [
+  {n:'Jan', lo:19, hi:32},
+  {n:'Feb', lo:22, hi:35},
+  {n:'Mar', lo:29, hi:46},
+  {n:'Apr', lo:40, hi:60},
+  {n:'May', lo:51, hi:70},
+  {n:'Jun', lo:62, hi:80},
+  {n:'Jul', lo:66, hi:83},
+  {n:'Aug', lo:65, hi:81},
+  {n:'Sep', lo:58, hi:75},
+  {n:'Oct', lo:46, hi:62},
+  {n:'Nov', lo:34, hi:48},
+  {n:'Dec', lo:25, hi:35}
+];
+const PAIRS = [[1,11],[2,10],[3,9],[4,8],[5,7]];
+const FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const T_MIN = 12, T_MAX = 90, Y_TOP = 70, Y_BOT = 500;
+const LABEL_Y = 540, DELTA_Y = 578;
+const W_OPEN = 26, W_FOLD = 18, PAIR_OFF = 22;
+
+const y = t => Y_BOT - (t - T_MIN) / (T_MAX - T_MIN) * (Y_BOT - Y_TOP);
+const xOpen = i => 112 + i * (818 / 11);
+const kOf = i => (i <= 6 ? i : 12 - i);
+function xFold(i){
+  const k = kOf(i);
+  const base = 182 + k * (636 / 6);
+  if (k === 0 || k === 6) return base;
+  return base + (i <= 6 ? -PAIR_OFF : PAIR_OFF);
+}
+
+const STOPS = [[19,'#3E86D6'],[30,'#4AA8E3'],[40,'#4FC6C4'],[50,'#93D083'],[60,'#E8C84A'],[70,'#F2A93B'],[80,'#EE7B35'],[88,'#E8562C']];
+function hex2rgb(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function colorAt(t){
+  if (t <= STOPS[0][0]) return STOPS[0][1];
+  if (t >= STOPS[STOPS.length-1][0]) return STOPS[STOPS.length-1][1];
+  for (let i=0;i<STOPS.length-1;i++){
+    const [a,ca]=STOPS[i], [b,cb]=STOPS[i+1];
+    if (t>=a && t<=b){
+      const f=(t-a)/(b-a), A=hex2rgb(ca), B=hex2rgb(cb);
+      const c=A.map((v,j)=>Math.round(v+(B[j]-v)*f));
+      return `rgb(${c[0]},${c[1]},${c[2]})`;
+    }
+  }
+  return STOPS[0][1];
+}
+
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a={})=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const $=id=>document.getElementById(id);
+
+// gradients
+const gdefs=$('defs-grads');
+M.forEach((m,i)=>{
+  const g=el('linearGradient',{id:'g'+i,x1:'0',y1:'1',x2:'0',y2:'0'});
+  g.appendChild(el('stop',{offset:'0','stop-color':colorAt(m.lo)}));
+  g.appendChild(el('stop',{offset:'1','stop-color':colorAt(m.hi)}));
+  gdefs.appendChild(g);
+});
+
+// axis
+const axis=$('axis');
+[20,40,60,80].forEach(t=>{
+  axis.appendChild(el('line',{x1:74,x2:975,y1:y(t),y2:y(t),stroke:'rgba(147,163,184,.13)','stroke-width':1}));
+  const tx=el('text',{x:66,y:y(t)+8,fill:'#5B6B80','font-size':21,'text-anchor':'end','font-family':'Fraunces, serif'});
+  tx.textContent=t+'°';
+  axis.appendChild(tx);
+});
+
+// build elements
+const barsG=$('bars'), glowG=$('glowlayer'), labG=$('labels'), hitG=$('hits'), wedgeG=$('wedges'), deltaG=$('deltas');
+const bars=[], glows=[], labels=[], hits=[], rings=[];
+
+M.forEach((m,i)=>{
+  const attrs={x:0,y:y(m.hi),width:W_OPEN,height:y(m.lo)-y(m.hi),rx:W_OPEN/2,fill:'url(#g'+i+')'};
+  const b=el('rect',attrs); barsG.appendChild(b); bars.push(b);
+  const gl=el('rect',Object.assign({},attrs)); glowG.appendChild(gl); glows.push(gl);
+
+  const lb=el('text',{y:LABEL_Y,fill:'#93A3B8','font-size':21,'text-anchor':'middle','font-family':'Archivo, sans-serif','font-weight':500});
+  lb.textContent=m.n; labG.appendChild(lb); labels.push(lb);
+
+  const ring=el('rect',{y:y(m.hi)-8,width:W_OPEN+16,height:y(m.lo)-y(m.hi)+16,rx:(W_OPEN+16)/2,fill:'none',stroke:'#E9EEF5','stroke-width':1.5,opacity:0});
+  barsG.appendChild(ring); rings.push(ring);
+
+  const h=el('rect',{y:Y_TOP-10,width:60,height:Y_BOT-Y_TOP+60,class:'hit',tabindex:0,role:'button'});
+  h.setAttribute('aria-label', FULL[i]+': low '+m.lo+' degrees, high '+m.hi+' degrees');
+  hitG.appendChild(h); hits.push(h);
+
+  const show=()=>{describe(i); rings[i].setAttribute('opacity','.55');};
+  const hide=()=>{rings[i].setAttribute('opacity','0'); if(!sticky) resetReadout();};
+  h.addEventListener('mouseenter',show);
+  h.addEventListener('mouseleave',hide);
+  h.addEventListener('focus',show);
+  h.addEventListener('blur',hide);
+  h.addEventListener('click',()=>{sticky=true;describe(i);});
+});
+
+// wedges + delta labels (folded only)
+const wedges=[], deltaTexts=[];
+PAIRS.forEach(([s,a])=>{
+  const w=el('path',{fill:'#F0A63C','fill-opacity':.17,stroke:'#F0A63C','stroke-opacity':.4,'stroke-width':1,opacity:0});
+  wedgeG.appendChild(w); wedges.push(w);
+  const d=((M[a].lo-M[s].lo)+(M[a].hi-M[s].hi))/2;
+  const t=el('text',{y:DELTA_Y,fill:'#F0A63C','font-size':22,'text-anchor':'middle','font-family':'Fraunces, serif',opacity:0});
+  t.textContent='+'+(Number.isInteger(d)?d:d.toFixed(1))+'°';
+  deltaG.appendChild(t); deltaTexts.push(t);
+});
+
+// pair table
+const tb=$('pairbody');
+PAIRS.forEach(([s,a])=>{
+  const d=((M[a].lo-M[s].lo)+(M[a].hi-M[s].hi))/2;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${M[s].n} &amp; ${M[a].n}</td><td>${M[s].lo}–${M[s].hi}°</td><td>${M[a].lo}–${M[a].hi}°</td><td class="d">+${Number.isInteger(d)?d:d.toFixed(1)}°</td>`;
+  tb.appendChild(tr);
+});
+
+// readout
+const readout=$('readout');
+let sticky=false;
+const DEFAULT_OPEN='Unfolded. Each band runs from the month\u2019s average low to its average high. Hover a month to see its twin.';
+const DEFAULT_FOLD='Each pair is two months that share almost the same weather \u2014 the warm sliver between them is how far autumn runs ahead of spring. Hover a month for its numbers.';
+function resetReadout(){ readout.innerHTML = folded ? DEFAULT_FOLD : DEFAULT_OPEN; }
+function describe(i){
+  const m=M[i];
+  if(i===0||i===6){
+    readout.innerHTML=`<b>${FULL[i]}</b> ${m.lo}° to ${m.hi}°. This is a hinge month \u2014 the coldest and warmest points of the year, with no twin of its own.`;
+    return;
+  }
+  const t=12-i, o=M[t];
+  const d=((Math.max(i,t)===i?m.lo-o.lo:o.lo-m.lo)+(Math.max(i,t)===i?m.hi-o.hi:o.hi-m.hi))/2;
+  const later=i>6?FULL[i]:FULL[t];
+  readout.innerHTML=`<b>${FULL[i]}</b> ${m.lo}° to ${m.hi}° &nbsp;·&nbsp; twin is <b>${FULL[t]}</b>, ${o.lo}° to ${o.hi}°. <span class="delta">${later} runs ${Number.isInteger(d)?d:d.toFixed(1)}° warmer.</span>`;
+}
+
+// animation
+let folded=true, prog=1, raf=null;
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+
+function render(p){
+  const e=ease(p);
+  const w=W_OPEN+(W_FOLD-W_OPEN)*e;
+  const pos=[];
+  M.forEach((m,i)=>{
+    const x0=xOpen(i), x1=xFold(i);
+    const x=x0+(x1-x0)*e;
+    const lift=-Math.min(120,Math.abs(x1-x0)*0.30)*Math.sin(Math.PI*e);
+    const top=y(m.hi)+lift, h=y(m.lo)-y(m.hi);
+    pos.push({x,top,h,w});
+    [bars[i],glows[i]].forEach(r=>{
+      r.setAttribute('x',x-w/2); r.setAttribute('y',top);
+      r.setAttribute('width',w); r.setAttribute('height',h); r.setAttribute('rx',w/2);
+    });
+    rings[i].setAttribute('x',x-w/2-8); rings[i].setAttribute('y',top-8);
+    rings[i].setAttribute('width',w+16); rings[i].setAttribute('height',h+16); rings[i].setAttribute('rx',(w+16)/2);
+    hits[i].setAttribute('x',x-Math.max(30,w/2+8)); hits[i].setAttribute('width',Math.max(60,w+16));
+    labels[i].setAttribute('x',x); labels[i].setAttribute('y',LABEL_Y+lift*0.15);
+    labels[i].setAttribute('font-size',21-3*e);
+  });
+
+  const wop=Math.max(0,(e-0.78)/0.22);
+  PAIRS.forEach(([s,a],j)=>{
+    const L=pos[s].x+pos[s].w/2, R=pos[a].x-pos[a].w/2;
+    const pts=`M${L},${y(M[s].hi)} L${R},${y(M[a].hi)} L${R},${y(M[a].lo)} L${L},${y(M[s].lo)} Z`;
+    wedges[j].setAttribute('d',pts);
+    wedges[j].setAttribute('opacity',wop);
+    deltaTexts[j].setAttribute('x',(L+R)/2);
+    deltaTexts[j].setAttribute('opacity',wop);
+  });
+}
+
+function animate(to){
+  const from=prog, start=performance.now(), dur=1500;
+  if(reduce){prog=to;render(prog);return;}
+  if(raf) cancelAnimationFrame(raf);
+  const step=now=>{
+    const t=Math.min(1,(now-start)/dur);
+    prog=from+(to-from)*t;
+    render(prog);
+    if(t<1) raf=requestAnimationFrame(step);
+  };
+  raf=requestAnimationFrame(step);
+}
+
+$('foldBtn').addEventListener('click',()=>{
+  folded=!folded;
+  $('foldBtn').textContent=folded?'Unfold the year':'Fold the year';
+  sticky=false;
+  animate(folded?1:0);
+  resetReadout();
+});
+
+render(1);
+</script>
+</body>
+</html>
