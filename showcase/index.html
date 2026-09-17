@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Showcase | Vikas Goyal</title>
+  <meta name="description" content="Small ideas, made tangible. Explore Vikas Goyal's interactive experiments in weather, human connection, and the rhythm of everyday life.">
+  <link rel="canonical" href="https://vikasgoyal.github.io/showcase/">
+  <link rel="icon" href="../favicon.ico">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZBXY60BLWE');
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-underline-offset: 4px; }
+    button { font: inherit; }
+    a, button { touch-action: manipulation; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 5px; }
+    ::selection { background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .wrap { width: min(1240px, calc(100% - 96px)); margin-inline: auto; }
+    .skip-link { position: fixed; top: 12px; left: 12px; z-index: 10; padding: 12px 20px; background: var(--cp-surface); transform: translateY(-160%); }
+    .skip-link:focus { transform: translateY(0); }
+    .site-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; min-height: 100px; border-bottom: 1px solid var(--cp-border); }
+    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 650; font-size: 17px; }
+    .brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--cp-border-strong); border-radius: 10px; font-size: 13px; letter-spacing: -.05em; }
+    .header-actions { display: flex; align-items: center; gap: 28px; }
+    .home-link { color: var(--cp-text-soft); font-size: 14px; text-decoration: none; }
+    .home-link:hover { color: var(--cp-accent); }
+    .theme-toggle { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); color: var(--cp-text); cursor: pointer; }
+    .theme-toggle:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .theme-toggle svg { width: 20px; height: 20px; }
+    .hero { position: relative; display: grid; grid-template-columns: 1fr 220px; gap: 40px; align-items: center; padding: 76px 0 64px; }
+    .eyebrow, .section-label, .project-category, .preview-caption { font-family: Consolas, "Courier New", Courier, monospace; font-size: 11px; line-height: 1.5; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 24px; color: var(--cp-text-soft); }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--cp-accent); }
+    h1 { font-size: clamp(52px, 6.8vw, 88px); line-height: 1.04; letter-spacing: -.065em; font-weight: 600; margin: 0; }
+    h1 span { color: var(--cp-accent); }
+    .hero-copy { max-width: 540px; margin: 24px 0 0; font-size: 17px; line-height: 1.75; color: var(--cp-text-muted); }
+    .hero-art { position: relative; height: 220px; }
+    .idea-sheet { position: absolute; inset: 28px; border: 1px solid var(--cp-border-strong); border-radius: 16px; background: var(--cp-bg-elevated); transform: rotate(-18deg); }
+    .idea-sheet:nth-child(2) { transform: rotate(-4deg); background: var(--cp-accent-soft); border-color: var(--cp-accent); }
+    .idea-sheet:nth-child(3) { display: grid; place-items: center; transform: rotate(12deg); background: var(--cp-surface); }
+    .idea-sheet svg { width: 84px; height: 84px; color: var(--cp-accent); }
+    .collection-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 20px 0; border-top: 1px solid var(--cp-border-strong); }
+    .section-label { margin: 0; color: var(--cp-text); }
+    .collection-note { font-size: 13px; color: var(--cp-text-soft); margin: 0; }
+    .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .project { display: flex; }
+    .project-link { display: flex; flex-direction: column; width: 100%; text-decoration: none; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); overflow: hidden; transition: transform .25s ease, border-color .25s ease; }
+    .project-link:hover { transform: translateY(-6px); border-color: var(--cp-accent); }
+    .preview { position: relative; height: 256px; overflow: hidden; background: var(--cp-bg-elevated); border-bottom: 1px solid var(--cp-border); }
+    .preview svg { display: block; width: 100%; height: 100%; }
+    .preview-caption { position: absolute; bottom: 16px; left: 24px; margin: 0; color: var(--cp-text-soft); font-size: 10px; letter-spacing: .08em; }
+    .preview-number { position: absolute; top: 20px; left: 24px; font: 11px Consolas, "Courier New", Courier, monospace; color: var(--cp-text-soft); }
+    .svg-rule { stroke: var(--cp-border); fill: none; }
+    .svg-accent { stroke: var(--cp-accent); fill: none; }
+    .svg-soft { fill: var(--cp-highlight); }
+    .svg-solid { fill: var(--cp-accent); }
+    .svg-paper { fill: var(--cp-surface); stroke: var(--cp-border-strong); }
+    .svg-text { fill: var(--cp-text); }
+    .svg-muted { fill: var(--cp-text-soft); }
+    .chart-bars, .greeting-bubble, .sun { transition: transform .45s ease; transform-box: fill-box; transform-origin: center; }
+    .project-link:hover .chart-bars { transform: scaleY(1.08); }
+    .project-link:hover .greeting-bubble { transform: translateY(-5px) rotate(-2deg); }
+    .project-link:hover .sun { transform: rotate(30deg); }
+    .project-body { display: flex; flex: 1; flex-direction: column; padding: 28px; }
+    .project-category { color: var(--cp-accent); margin: 0 0 12px; font-size: 10px; }
+    h3 { margin: 0; font-size: 27px; line-height: 1.2; letter-spacing: -.035em; font-weight: 600; }
+    .project-description { margin: 16px 0 28px; font-size: 15px; line-height: 1.75; color: var(--cp-text-muted); }
+    .project-cta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--cp-border); font-size: 13px; font-weight: 600; }
+    .arrow { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--cp-accent-soft); color: var(--cp-accent); transition: background .2s, color .2s; }
+    .arrow svg { width: 16px; height: 16px; }
+    .project-link:hover .arrow { background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .closing-note { display: flex; gap: 20px; align-items: center; padding: 40px 0 56px; color: var(--cp-text-soft); }
+    .closing-note svg { flex: 0 0 24px; width: 24px; height: 24px; color: var(--cp-accent); }
+    .closing-note p { margin: 0; font-size: 14px; line-height: 1.7; }
+    .closing-note strong { color: var(--cp-text); font-weight: 600; }
+    footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; padding: 28px 0 36px; border-top: 1px solid var(--cp-border); font-size: 12px; color: var(--cp-text-soft); }
+    footer p { margin: 0; }
+    footer nav { display: flex; gap: 24px; }
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--cp-accent); text-decoration: underline; }
+    @media (max-width: 1000px) {
+      .wrap { width: calc(100% - 64px); }
+      .project-grid { gap: 16px; }
+      .project-body { padding: 24px 20px; }
+      h3 { font-size: 24px; }
+      .preview { height: 220px; }
+      .hero { grid-template-columns: 1fr 180px; }
+      .hero-art { height: 180px; }
+    }
+    @media (max-width: 760px) {
+      .wrap { width: calc(100% - 40px); }
+      .site-header { min-height: 84px; }
+      .hero { grid-template-columns: 1fr; padding: 52px 0 40px; }
+      .hero-art { display: none; }
+      .hero-copy { font-size: 16px; }
+      .project-grid { grid-template-columns: 1fr; gap: 24px; }
+      .preview { height: 260px; }
+      .project-body { padding: 28px; }
+      h3 { font-size: 28px; }
+      .header-actions { gap: 16px; }
+      .collection-note { font-size: 12px; }
+      .closing-note { padding: 32px 0 40px; align-items: flex-start; }
+    }
+    @media (max-width: 380px) {
+      .home-link { display: none; }
+      h1 { font-size: 46px; }
+      .collection-heading { gap: 12px; }
+      .collection-note { max-width: 100px; text-align: right; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+      .project-link:hover, .project-link:hover .chart-bars, .project-link:hover .greeting-bubble, .project-link:hover .sun { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#projects">Skip to projects</a>
+  <div class="wrap">
+    <header class="site-header">
+      <a class="brand" href="../" aria-label="Vikas Goyal home"><span class="brand-mark" aria-hidden="true">vg.</span> Vikas Goyal</a>
+      <div class="header-actions">
+        <a class="home-link" href="../">Back to main site &nearr;</a>
+        <button class="theme-toggle" type="button" aria-label="Dark theme" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor" stroke="none"/></svg>
+        </button>
+      </div>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">The showcase / a collection of curiosities</p>
+          <h1 id="page-title">Small ideas.<br><span>Made tangible.</span></h1>
+          <p class="hero-copy">A place for experiments that escaped the notebook.<br>Interactive apps, visual stories, and different ways of seeing the everyday. Pick one. Follow your curiosity.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="idea-sheet"></div><div class="idea-sheet"></div>
+          <div class="idea-sheet">
+            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M50 4v92M4 50h92M17.5 17.5l65 65M17.5 82.5l65-65"/><circle cx="50" cy="50" r="27"/><circle cx="50" cy="50" r="7" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </section>
+      <section id="projects" aria-labelledby="collection-title">
+        <div class="collection-heading">
+          <h2 class="section-label" id="collection-title">Selected experiments <span aria-hidden="true">/</span> 03</h2>
+          <p class="collection-note">Built to be explored, not just viewed.</p>
+        </div>
+        <div class="project-grid">
+          <article class="project">
+            <a class="project-link" href="folded-year.html" aria-labelledby="folded-title" aria-describedby="folded-description">
+              <div class="preview" aria-hidden="true">
+                <span class="preview-number">01 / WEATHER, RECONSIDERED</span>
+                <svg viewBox="0 0 380 256">
+                  <path class="svg-rule" d="M36 76h308M36 116h308M36 156h308M36 196h308" stroke-dasharray="2 5"/>
+                  <path class="svg-accent" d="M45 176Q190 -35 335 176" stroke-dasharray="3 5" opacity=".35"/>
+                  <g class="chart-bars">
+                    <g class="svg-solid" opacity=".3"><rect x="47" y="167" width="12" height="33" rx="6"/><rect x="92" y="147" width="12" height="45" rx="6"/><rect x="137" y="116" width="12" height="55" rx="6"/><rect x="182" y="85" width="12" height="67" rx="6"/><rect x="227" y="67" width="12" height="61" rx="6"/><rect x="272" y="57" width="12" height="51" rx="6"/></g>
+                    <g class="svg-solid"><rect x="61" y="163" width="12" height="34" rx="6"/><rect x="106" y="138" width="12" height="46" rx="6"/><rect x="151" y="111" width="12" height="49" rx="6"/><rect x="196" y="75" width="12" height="53" rx="6"/><rect x="241" y="64" width="12" height="44" rx="6"/><rect x="317" y="53" width="12" height="43" rx="6"/></g>
+                  </g>
+                </svg>
+                <p class="preview-caption">Twelve months. A surprising symmetry.</p>
+              </div>
+              <div class="project-body">
+                <p class="project-category">Interactive data story</p>
+                <h3 id="folded-title">The Folded Year</h3>
+                <p class="project-description" id="folded-description">What if you folded the calendar in half? Pair Naperville's spring and autumn temperatures to discover the symmetry of the seasons&mdash;and where it breaks.</p>
+                <span class="project-cta">Unfold the story <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </div>
+            </a>
+          </article>
+          <article class="project">
+            <a class="project-link" href="hello.html" aria-labelledby="hello-title" aria-describedby="hello-description">
+              <div class="preview" aria-hidden="true">
+                <span class="preview-number">02 / A LITTLE MORE HUMAN</span>
+                <svg viewBox="0 0 380 256">
+                  <g class="svg-rule" stroke-width="1.2"><circle cx="190" cy="132" r="78"/><ellipse cx="190" cy="132" rx="38" ry="78"/><ellipse cx="190" cy="132" rx="78" ry="30"/><path d="M112 132h156M190 54v156"/></g>
+                  <g transform="rotate(-9 121 102)"><rect class="svg-paper" x="44" y="70" width="123" height="52" rx="14"/><text class="svg-text" x="105" y="103" text-anchor="middle" font-size="22" font-weight="600">Bonjour!</text></g>
+                  <g transform="rotate(8 267 157)"><rect class="svg-paper" x="218" y="142" width="111" height="46" rx="14"/><text class="svg-text" x="273" y="171" text-anchor="middle" font-size="21" font-weight="600">Hola!</text></g>
+                  <g class="greeting-bubble"><path class="svg-solid" d="M155 88h125a14 14 0 0 1 14 14v33a14 14 0 0 1-14 14h-74l-18 16v-16h-33a14 14 0 0 1-14-14v-33a14 14 0 0 1 14-14Z"/><text x="217" y="128" text-anchor="middle" font-size="31" font-weight="650" fill="var(--cp-accent-fg)">Hello.</text></g>
+                  <circle class="svg-solid" cx="146" cy="178" r="4"/><circle class="svg-solid" cx="256" cy="69" r="3"/>
+                </svg>
+                <p class="preview-caption">A small word. A world of welcome.</p>
+              </div>
+              <div class="project-body">
+                <p class="project-category">Human connection</p>
+                <h3 id="hello-title">Yes Hello</h3>
+                <p class="project-description" id="hello-description">Travel the world through its greetings. A playful reminder that a little warmth belongs in our conversations&mdash;and that efficient communication can still be kind.</p>
+                <span class="project-cta">Meet a greeting <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </div>
+            </a>
+          </article>
+          <article class="project">
+            <a class="project-link" href="vedic/vedic-lifestlyle.html" aria-labelledby="vedic-title" aria-describedby="vedic-description">
+              <div class="preview" aria-hidden="true">
+                <span class="preview-number">03 / IN STEP WITH THE SUN</span>
+                <svg viewBox="0 0 380 256">
+                  <circle class="svg-rule" cx="190" cy="137" r="86" stroke-dasharray="1 8" stroke-width="3"/>
+                  <circle class="svg-rule" cx="190" cy="137" r="66"/>
+                  <path class="svg-accent" d="M124 137a66 66 0 0 1 132 0" stroke-width="2"/>
+                  <path class="svg-soft" d="M146 149a44 44 0 0 1 88 0Z"/>
+                  <g class="sun svg-accent" stroke-width="1.5"><circle cx="190" cy="116" r="18"/><path d="M190 85v-8M190 155v-8M159 116h-8M229 116h-8M168 94l-6-6M218 144l-6-6M168 138l-6 6M218 88l-6 6"/></g>
+                  <path class="svg-accent" d="M137 150h106"/>
+                  <text class="svg-muted" x="190" y="175" text-anchor="middle" font-size="10" letter-spacing="3">SUNRISE TO SUNRISE</text>
+                  <circle class="svg-solid" cx="256" cy="137" r="4"/>
+                </svg>
+                <p class="preview-caption">An ancient rhythm. Your present day.</p>
+              </div>
+              <div class="project-body">
+                <p class="project-category">Time &amp; intentional living</p>
+                <h3 id="vedic-title">Vedic Living</h3>
+                <p class="project-description" id="vedic-description">See your day through a sunrise-anchored Vedic clock. Choose a city to explore local daylight, traditional daily rhythms, and seasonal lifestyle guidance.</p>
+                <span class="project-cta">Find your daily rhythm <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </div>
+            </a>
+          </article>
+        </div>
+      </section>
+      <aside class="closing-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5"/></svg>
+        <p><strong>Always a work in curiosity.</strong> This collection grows one experiment at a time.</p>
+      </aside>
+    </main>
+    <footer>
+      <p>Made with curiosity by <a href="../">Vikas Goyal</a>.</p>
+      <nav aria-label="Footer"><a href="../blog/">Writing</a><a href="../privacy.html">Privacy</a><a href="#page-title">Back to top &uarr;</a></nav>
+    </footer>
+  </div>
+  <script>
+    const themeToggle = document.querySelector(".theme-toggle");
+    themeToggle.style.display = "inline-flex";
+    themeToggle.setAttribute("aria-pressed", String(document.documentElement.dataset.theme === "dark"));
+    themeToggle.addEventListener("click", () => {
+      const dark = document.documentElement.dataset.theme !== "dark";
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+      themeToggle.setAttribute("aria-pressed", String(dark));
+    });
+  </script>
+</body>
+</html>
