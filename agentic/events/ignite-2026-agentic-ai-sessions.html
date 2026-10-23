@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="15 Microsoft Ignite 2026 breakout sessions for teams building agentic AI, grouped by aspect.">
+<title>Your Ignite 2026 Agentic AI watchlist</title>
+<link rel="stylesheet" href="https://vikasgoyal.github.io/styles.css">
+<style>
+  :root {
+    --color-bg: #f5f5f5; --color-surface: #ffffff; --color-fg: #181818;
+    --color-muted: #5f5f5f; --color-accent: #3d3d3d; --color-border: #dedede;
+    --hero-bg: #242424; --hero-fg: #ffffff; --hero-muted: #d5d5d5;
+    --badge-bg: #eeeeee; --badge-fg: #333333;
+    --callout-bg: #f2f2f2; --callout-border: #a6a6a6;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 4px 12px rgba(0, 0, 0, .06);
+    --radius: 14px; --space: 1rem; --max-width: 72rem;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg: #101010; --color-surface: #1b1b1b; --color-fg: #eeeeee;
+      --color-muted: #adadad; --color-accent: #d0d0d0; --color-border: #353535;
+      --hero-bg: #181818; --hero-fg: #ffffff; --hero-muted: #cccccc;
+      --badge-bg: #292929; --badge-fg: #dedede;
+      --callout-bg: #242424; --callout-border: #777777;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 100%; }
+  body { background: var(--color-bg); color: var(--color-fg);
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif; line-height: 1.55; text-align: start; }
+  a { color: var(--color-accent); text-decoration: none; }
+  a:hover, a:focus { text-decoration: underline; }
+  .wrap { max-width: var(--max-width); margin-inline: auto; padding-inline: calc(var(--space) * 1.25); }
+  main.wrap { display: block; padding-block: 0; }
+  #header { max-width: var(--max-width); margin-inline: auto; padding: var(--space) calc(var(--space) * 1.25) 0; }
+  #header .site-shell-header { margin-block-end: var(--space); }
+  .muted { color: var(--color-muted); }
+  header.hero { background: var(--hero-bg); color: var(--hero-fg);
+    padding-block: calc(var(--space) * 3) calc(var(--space) * 2.5); }
+  .eyebrow { letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; font-weight: 600; color: var(--hero-muted); margin: 0; }
+  .hero h1 { color: var(--hero-fg); font-size: clamp(1.8rem, 3.6vw, 2.8rem); line-height: 1.15; margin-block: .5rem .75rem; }
+  .hero .lede { color: var(--hero-muted); max-width: 46rem; margin: 0; font-size: 1.05rem; }
+  .callout { background: var(--callout-bg); border: 1px solid var(--callout-border); border-radius: var(--radius);
+    padding: 1rem 1.25rem; margin-block: calc(var(--space) * 1.5); }
+  .callout h2 { color: var(--color-fg); font-size: 1.1rem; margin: 0 0 .5rem; }
+  .callout ol { margin: 0; padding-inline-start: 1.25rem; }
+  .callout li { margin-block: .35rem; }
+  section.cat { margin-block: calc(var(--space) * 2.25); }
+  .cat-head h2 { color: var(--color-fg); font-size: 1.35rem; margin: 0; display: flex; align-items: center; gap: .6rem; }
+  .cat-head p { margin-block: .25rem 1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1rem; }
+  .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius);
+    padding: 1.1rem 1.2rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: .5rem; }
+  .card h3 { color: var(--color-fg); font-size: 1.08rem; line-height: 1.3; margin: .15rem 0 0; }
+  .card h3 a { color: var(--color-fg); }
+  .card p { margin: 0; color: var(--color-muted); flex: 1; }
+  .badges { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .badge { font-size: .75rem; font-weight: 600; padding: .15rem .55rem; border-radius: 6px; background: var(--badge-bg); color: var(--badge-fg); white-space: nowrap; }
+  .badge.code { font-family: Consolas, "Courier New", monospace; letter-spacing: .02em; }
+  .swaps { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; inline-size: 100%; font-size: .92rem; }
+  th, td { text-align: start; padding: .6rem .8rem; border-block-end: 1px solid var(--color-border); vertical-align: top; }
+  th { color: var(--color-muted); font-weight: 600; background: var(--badge-bg); }
+  tr:last-child td { border-block-end: 0; }
+  .nowrap { white-space: nowrap; font-family: Consolas, "Courier New", monospace; }
+  .reviewed { margin-block: calc(var(--space) * 2.5); font-size: .85rem; }
+  @media print {
+    :root { --color-bg: #ffffff; --color-surface: #ffffff; --color-fg: #000000; --color-muted: #333333;
+      --color-border: #bbbbbb; --hero-fg: #000000; --hero-muted: #333333; --badge-bg: #eeeeee; --badge-fg: #000000;
+      --shadow: none; }
+    @page { margin: 0.6in; }
+    header.hero { background: none; padding-block: 0 .5rem; }
+    .card, tr, .callout { break-inside: avoid; page-break-inside: avoid; }
+    section.cat { break-inside: auto; }
+    a { color: #000000; }
+  }
+</style>
+</head>
+<body>
+<div id="header"></div>
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow">Microsoft Ignite 2026 · November 17–20</p>
+    <h1>Your Ignite 2026 Agentic AI watchlist</h1>
+  </div>
+</header>
+<main class="wrap">
+  <aside class="callout" aria-labelledby="top5-h">
+    <h2 id="top5-h">Short on time? Start with these five</h2>
+    <ol><li><span class="badge code">BRK243</span> <a href="https://ignite.microsoft.com/en-US/sessions/1787856610049001EgNH-1791588175331001CupD" target="_blank" rel="noopener noreferrer">How much should you own? Choosing the right agent architecture</a> <span class="muted">(architecture choices)</span></li><li><span class="badge code">BRK240</span> <a href="https://ignite.microsoft.com/en-US/sessions/1787856609563001Ep0b-1791588070636001Coui" target="_blank" rel="noopener noreferrer">Build and scale the next generation of AI agents in Microsoft Foundry</a> <span class="muted">(end-to-end build)</span></li><li><span class="badge code">BRK249</span> <a href="https://ignite.microsoft.com/en-US/sessions/1787856610944001ErzW-1791588218863001CWHQ" target="_blank" rel="noopener noreferrer">From traces to better agents: The Foundry improvement loop</a> <span class="muted">(improvement loop)</span></li><li><span class="badge code">BRK247</span> <a href="https://ignite.microsoft.com/en-US/sessions/1787856610647001ED9l-1791588131979001CbhB" target="_blank" rel="noopener noreferrer">Token economics: Get more from your production AI budget</a> <span class="muted">(cost at scale)</span></li><li><span class="badge code">BRK344</span> <a href="https://ignite.microsoft.com/en-US/sessions/1787856625393001EoiU-1791588198339001ClLj" target="_blank" rel="noopener noreferrer">Build secure, stay secure: Protecting AI from code to runtime</a> <span class="muted">(security, code to runtime)</span></li></ol>
+  </aside>
+  
+    <section class="cat cat-design" id="design" aria-labelledby="design-h">
+      <div class="cat-head">
+        <h2 id="design-h">Agent design &amp; architecture</h2>
+        <p class="muted">Pick the right build path and runtime pattern before you write much code.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK243</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856610049001EgNH-1791588175331001CupD" target="_blank" rel="noopener noreferrer">How much should you own? Choosing the right agent architecture</a></h3>
+          <p>A decision framework for picking each agent&#x27;s build path (simple prompt agents, the GitHub Copilot harness, or fully hosted agents) and how identity, governance and tools carry across all three.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK259</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856612459001EfZu-1791588174633001COAZ" target="_blank" rel="noopener noreferrer">Understand Copilot Studio&#x27;s GitHub Copilot harness: Behind the scenes</a></h3>
+          <p>An under-the-hood tour of how hooks, skills, multi-agent orchestration, context and tools power long-running agents, plus the container architecture that runs them.</p>
+        </article>
+      </div>
+    </section>
+    <section class="cat cat-build" id="build" aria-labelledby="build-h">
+      <div class="cat-head">
+        <h2 id="build-h">Build process, tools &amp; connecting agents (MCP / A2A)</h2>
+        <p class="muted">From first line of code to a published agent, and how agents call tools.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK240</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856609563001Ep0b-1791588070636001Coui" target="_blank" rel="noopener noreferrer">Build and scale the next generation of AI agents in Microsoft Foundry</a></h3>
+          <p>The full Foundry developer journey: build locally, deploy as hosted agents, connect governed tools, ground with Foundry IQ, then trace, evaluate and publish to Microsoft 365 Copilot and Teams.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK277</span>
+            <span class="badge level">Level 300 · Advanced</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856615129001ELFm-1791588322657001CZrz" target="_blank" rel="noopener noreferrer">Hack the harness: Customize and secure GitHub Copilot SDK agents</a></h3>
+          <p>Add custom tools and MCP servers, intercept prompts and tool calls with hooks, and give each agent only the access it needs. Starter templates included.</p>
+        </article>
+      </div>
+    </section>
+    <section class="cat cat-knowledge" id="knowledge" aria-labelledby="knowledge-h">
+      <div class="cat-head">
+        <h2 id="knowledge-h">Knowledge, memory &amp; context</h2>
+        <p class="muted">Search, memory and state that ground what agents know.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK300</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856618592001EPDX-1791588235919001CbbF" target="_blank" rel="noopener noreferrer">Building agentic retrieval: From DIY to Foundry IQ</a></h3>
+          <p>Codes a retrieval loop by hand (break down the question, search in parallel, check evidence, search again), then swaps in a managed knowledge base.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK367</span>
+            <span class="badge level">Level 300 · Advanced</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856628953001E5nm-1791814920587001CYwd" target="_blank" rel="noopener noreferrer">Designing the data layer for AI apps and agents with Azure Cosmos DB</a></h3>
+          <p>Patterns for agent memory, state and conversation history, plus vector, hybrid and semantic search, built for global production scale.</p>
+        </article>
+      </div>
+    </section>
+    <section class="cat cat-quality" id="quality" aria-labelledby="quality-h">
+      <div class="cat-head">
+        <h2 id="quality-h">Testing, monitoring &amp; ongoing improvement</h2>
+        <p class="muted">Spot when quality slips in production, find out why, and fix it.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK249</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856610944001ErzW-1791588218863001CWHQ" target="_blank" rel="noopener noreferrer">From traces to better agents: The Foundry improvement loop</a></h3>
+          <p>How traces, evaluations and tuning connect into a repeatable loop for improving agents after they ship.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK365</span>
+            <span class="badge level">Level 300 · Advanced</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856628645001Etkf-1791588243215001CYFH" target="_blank" rel="noopener noreferrer">Build self-optimizing AI agents with Azure Cosmos DB and Fabric</a></h3>
+          <p>Track the cost, speed and results of a multi-agent app and build feedback loops, with a real platform of 15+ agents that uses quality gates.</p>
+        </article>
+      </div>
+    </section>
+    <section class="cat cat-scale" id="scale" aria-labelledby="scale-h">
+      <div class="cat-head">
+        <h2 id="scale-h">Scalability, performance &amp; cost</h2>
+        <p class="muted">Run many agents reliably without runaway spend.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK247</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856610647001ED9l-1791588131979001CbhB" target="_blank" rel="noopener noreferrer">Token economics: Get more from your production AI budget</a></h3>
+          <p>Match tasks to the right models, reuse cached prompts, route requests smartly and plan backups for capacity limits: a framework for balancing quality, cost and speed.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK465</span>
+            <span class="badge level">Level 300 · Advanced</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856644012001EVfQ-1791588338991001CX5E" target="_blank" rel="noopener noreferrer">Agentic media operations: Run at scale</a></h3>
+          <p>Agents handing work to other agents on Microsoft Agent Framework and Foundry using open A2A and MCP standards, with reliability and cost at production scale (Kantar example).</p>
+        </article>
+      </div>
+    </section>
+    <section class="cat cat-guardrails" id="guardrails" aria-labelledby="guardrails-h">
+      <div class="cat-head">
+        <h2 id="guardrails-h">Guardrails &amp; responsible AI</h2>
+        <p class="muted">Controls, monitoring and safe autonomy, built in from the start.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK248</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856610796001ElME-1791588120928001CdYn" target="_blank" rel="noopener noreferrer">Trust at scale: Governance lessons from Microsoft</a></h3>
+          <p>Sarah Bird, Microsoft&#x27;s product lead for Responsible AI, on risk-based controls, built-in guardrails, continuous monitoring and controls that scale.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK285</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856616329001EyM8-1791588352535001C8TA" target="_blank" rel="noopener noreferrer">Your agent works. Now make it enterprise-ready.</a></h3>
+          <p>Moving from assistant-style to autonomous agents: the design trade-offs, guardrails, testing and monitoring behind trusted AI at scale.</p>
+        </article>
+      </div>
+    </section>
+    <section class="cat cat-security" id="security" aria-labelledby="security-h">
+      <div class="cat-head">
+        <h2 id="security-h">Security, identity &amp; governance</h2>
+        <p class="muted">Protect agents from code to runtime and manage every agent in one place.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK344</span>
+            <span class="badge level">Level 300 · Advanced</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856625393001EoiU-1791588198339001ClLj" target="_blank" rel="noopener noreferrer">Build secure, stay secure: Protecting AI from code to runtime</a></h3>
+          <p>Building security into agents from the start, governing them at scale with Agent 365, and protecting them in production across mixed platforms.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRK340</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787856624787001Ez7r-1791588351389001CNyF" target="_blank" rel="noopener noreferrer">A Zero Trust approach to securing AI runtime with Microsoft Defender</a></h3>
+          <p>Defending agents against prompt injection, tool misuse and identity abuse, with guidance mapped to the OWASP and MITRE security frameworks.</p>
+        </article>
+        <article class="card">
+          <div class="badges">
+            <span class="badge code">BRKSP601</span>
+            <span class="badge level">Level 200 · Intermediate</span>
+          </div>
+          <h3><a href="https://ignite.microsoft.com/en-US/sessions/1787854983514001tUM8-1791588196008001CfTD" target="_blank" rel="noopener noreferrer">Turn shadow agents into governed digital coworkers</a></h3>
+          <p>Bring unmanaged agents under control with Entra Agent IDs, access policies, lifecycle workflows and Purview, including an outside Python agent via the Agent 365 SDK.</p>
+        </article>
+      </div>
+    </section>
+  <section class="cat" id="swaps" aria-labelledby="swaps-h">
+    <div class="cat-head">
+      <h2 id="swaps-h">Good swaps if any of the 15 don't fit</h2>
+    </div>
+    <div class="swaps">
+      <table>
+        <thead><tr><th scope="col">Session</th><th scope="col">Code</th><th scope="col">Level</th><th scope="col">Aspect</th><th scope="col">Why consider it</th></tr></thead>
+        <tbody><tr><td><a href="https://ignite.microsoft.com/en-US/sessions/1787856612903001EK5O-1791588157241001CqrV" target="_blank" rel="noopener noreferrer">Scale agents, not risk: Governance and FinOps for the enterprise</a></td><td class="nowrap">BRK262</td><td>200</td><td>Scalability</td><td>Operating model for agent inventory, lifecycle and cost</td></tr><tr><td><a href="https://ignite.microsoft.com/en-US/sessions/1787856612311001EcDa-1791588242520001CJup" target="_blank" rel="noopener noreferrer">Agentic automation: How Copilot Studio blends workflows and agents</a></td><td class="nowrap">BRK258</td><td>200</td><td>Design</td><td>Mixing fixed workflows with flexible agents</td></tr><tr><td><a href="https://ignite.microsoft.com/en-US/sessions/1787856621701001E9Ma-1791588172987001CrWj" target="_blank" rel="noopener noreferrer">Agentic Security Unfiltered with Allie Mellen: Hype vs. Reality</a></td><td class="nowrap">BRK320</td><td>200</td><td>Guardrails</td><td>Where agents can safely automate; guardrails security leaders trust</td></tr><tr><td><a href="https://ignite.microsoft.com/en-US/sessions/1787856615724001Em6f-1791588336956001Cipr" target="_blank" rel="noopener noreferrer">Securing coding agents and their code</a></td><td class="nowrap">BRK281</td><td>300</td><td>Security</td><td>Sandboxes, supply-chain protection, checking AI-written code</td></tr><tr><td><a href="https://ignite.microsoft.com/en-US/sessions/1787856624484001E5xH-1791588233652001CrhB" target="_blank" rel="noopener noreferrer">Secure data as you scale your agents with Microsoft Purview and A365</a></td><td class="nowrap">BRK338</td><td>300</td><td>Security</td><td>Protecting sensitive data and meeting compliance as agents spread</td></tr><tr><td><a href="https://ignite.microsoft.com/en-US/sessions/1787856619636001E66J-1791588325591001CbDi" target="_blank" rel="noopener noreferrer">Foundry IQ: Knowledge graphs for better enterprise context</a></td><td class="nowrap">BRK307</td><td>300</td><td>Knowledge</td><td>Graph-based retrieval that goes beyond classic RAG</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+  <p class="muted reviewed">Last reviewed: <time datetime="2026-10-23T12:50:58-05:00">October 23, 2026 at 12:50 PM CDT (UTC-05:00)</time>.</p>
+</main>
+<script src="https://vikasgoyal.github.io/headerfooter.js"></script>
+</body>
+</html>
