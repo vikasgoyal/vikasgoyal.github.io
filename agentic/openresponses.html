@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZBXY60BLWE');
+    </script>
+    <meta name="google-adsense-account" content="ca-pub-8607681845167073">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Open Responses: A Primer on the Open LLM API Specification | Vikas Goyal</title>
+    <meta name="description" content="A practical primer on Open Responses, the open, vendor-neutral specification for calling LLMs, streaming output and running agentic loops across providers, with recommendations for teams building agentic apps today.">
+    <meta name="keywords" content="Open Responses, OpenAI Responses API, LLM API standard, agentic AI, interoperability, multi-provider LLM, streaming events, tool calling, MCP">
+    <meta name="author" content="Vikas Goyal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vikasgoyal.github.io/agentic/openresponses.html">
+
+    <meta property="og:title" content="Open Responses: A Primer on the Open LLM API Specification">
+    <meta property="og:description" content="What Open Responses is, how its items, events and agentic loop work, and how teams should build agentic apps while major providers catch up.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://vikasgoyal.github.io/agentic/openresponses.html">
+    <meta property="og:site_name" content="Vikas Goyal">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Open Responses: A Primer on the Open LLM API Specification">
+    <meta name="twitter:description" content="A practical primer on the vendor-neutral spec for LLM calls, streaming and agentic loops.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Open Responses: A Primer on the Open LLM API Specification",
+      "description": "A practical primer on Open Responses, the open, vendor-neutral specification for calling LLMs, streaming output and running agentic loops across providers.",
+      "author": {
+        "@type": "Person",
+        "name": "Vikas Goyal",
+        "url": "https://www.linkedin.com/in/vikasgoyal/"
+      },
+      "datePublished": "2026-10-26",
+      "dateModified": "2026-10-26",
+      "publisher": {
+        "@type": "Person",
+        "name": "Vikas Goyal"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://vikasgoyal.github.io/agentic/openresponses.html"
+      },
+      "keywords": "Open Responses, OpenAI Responses API, LLM API standard, agentic AI, interoperability, multi-provider LLM"
+    }
+    </script>
+
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      :root {
+        --or-ink: #121212;
+        --or-ink-soft: #505050;
+        --or-paper: #f6f4ee;
+        --or-surface: rgba(255, 255, 255, 0.92);
+        --or-line: rgba(18, 18, 18, 0.10);
+        --or-green: #0f5d44;
+        --or-green-deep: #0a3f30;
+        --or-blue: #173c73;
+        --or-shadow: 0 20px 52px rgba(18, 18, 18, 0.10);
+        --or-radius-lg: 24px;
+      }
+
+      body {
+        width: auto;
+        margin: 0;
+        padding: 24px 20px 72px;
+        background:
+          radial-gradient(circle at top left, rgba(15, 93, 68, 0.12), transparent 24%),
+          radial-gradient(circle at top right, rgba(23, 60, 115, 0.10), transparent 22%),
+          linear-gradient(180deg, #fbfaf6 0%, var(--or-paper) 42%, #ffffff 100%);
+      }
+
+      .page-shell { max-width: 980px; margin: 0 auto; }
+      .article-shell { display: grid; gap: 1rem; padding-top: 0.25rem; }
+      .article-shell, #or-article { grid-template-columns: minmax(0, 1fr); }
+      #or-article { max-width: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+      #or-article > * { min-width: 0; margin: 0; }
+
+      .or-hero, .or-summary, .or-section {
+        background: var(--or-surface);
+        border: 1px solid var(--or-line);
+        border-radius: var(--or-radius-lg);
+        box-shadow: var(--or-shadow);
+      }
+
+      .or-hero {
+        padding: 2rem;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 244, 238, 0.94) 100%),
+          linear-gradient(135deg, rgba(23, 60, 115, 0.08) 0%, rgba(15, 93, 68, 0.08) 100%);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        margin-bottom: 1rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(15, 93, 68, 0.10);
+        color: var(--or-green-deep);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .or-hero h1 { margin: 0; font-size: clamp(2.1rem, 4vw, 3.3rem); line-height: 1.08; letter-spacing: 0; }
+      .article-meta { margin-top: 0.9rem; color: #6b7280; font-size: 0.95rem; }
+      .or-dek { margin: 1rem 0 0; max-width: 52rem; font-size: 1.15rem; line-height: 1.72; color: var(--or-ink-soft); }
+
+      .or-summary, .or-section { padding: 1.35rem 1.5rem; }
+      .or-summary h2, .or-section h2, .or-section h3 { margin-top: 0; }
+      .or-section h2, .or-summary h2 { font-size: clamp(1.45rem, 2.5vw, 1.95rem); }
+      .or-summary li, .or-summary p { color: var(--or-green-deep); font-weight: 600; line-height: 1.72; }
+      .or-section p, .or-section li { color: var(--or-ink-soft); font-size: 1.03rem; line-height: 1.8; }
+      .or-section strong, .or-summary strong { color: var(--or-ink); }
+      .or-section a { font-weight: 700; }
+      .or-section > :last-child, .or-summary > :last-child { margin-bottom: 0; }
+
+      blockquote {
+        margin: 1.25rem 0;
+        padding: 1rem 1.15rem;
+        border: 1px solid rgba(23, 60, 115, 0.10);
+        border-left: 6px solid var(--or-green);
+        border-radius: 16px;
+        background: rgba(23, 60, 115, 0.06);
+      }
+      blockquote p { margin: 0; color: #28476c; font-weight: 700; }
+
+      code {
+        padding: 0.15rem 0.35rem;
+        border-radius: 7px;
+        background: rgba(23, 60, 115, 0.08);
+        color: var(--or-blue);
+        font-size: 0.92em;
+        overflow-wrap: anywhere;
+      }
+      pre {
+        margin: 1.1rem 0 1.35rem;
+        padding: 1rem;
+        overflow-x: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(18, 18, 18, 0.12);
+        background: #111827;
+      }
+      pre code { padding: 0; background: transparent; color: #f9fafb; font-size: 0.9rem; line-height: 1.65; overflow-wrap: normal; }
+
+      .table-wrap { overflow-x: auto; margin: 1rem 0 1.25rem; border-radius: 14px; border: 1px solid var(--or-line); }
+      .table-wrap table { margin: 0; }
+      .table-wrap th { background: var(--or-blue); }
+      .table-wrap td { color: var(--or-ink-soft); line-height: 1.6; vertical-align: top; }
+
+      figure.or-diagram { margin: 1.2rem 0; padding: 1rem; border: 1px solid var(--or-line); border-radius: 18px; background: #fff; }
+      figure.or-diagram svg { display: block; width: 100%; height: auto; }
+      figure.or-diagram figcaption { margin-top: 0.6rem; color: #6b7280; font-size: 0.9rem; text-align: center; }
+
+      ul.checklist { list-style: none; padding-left: 0; }
+      ul.checklist li { padding-left: 1.8rem; position: relative; }
+      ul.checklist li::before {
+        content: ""; position: absolute; left: 0; top: 0.45em;
+        width: 1rem; height: 1rem; border: 2px solid var(--or-green); border-radius: 4px;
+      }
+
+      @media (max-width: 720px) {
+        body { padding: 16px 12px 56px; }
+        .or-hero, .or-summary, .or-section { padding: 1.15rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div id="header-container"></div>
+      <main class="article-shell">
+        <article id="or-article">
+
+          <header class="or-hero">
+            <span class="eyebrow">Agentic AI Architecture</span>
+            <h1>Open Responses: A Primer on the Open LLM API Specification</h1>
+            <div class="article-meta">October 26, 2026 · Vikas Goyal</div>
+            <p class="or-dek">Every major LLM API now offers the same building blocks, but each encodes them differently. Open Responses is an open, vendor-neutral specification that standardizes how you call models, stream their output and run agentic loops, so you can write a request once and run it on any compliant provider.</p>
+          </header>
+
+          <section class="or-summary">
+            <h2>Key takeaways</h2>
+            <ul>
+              <li>Open Responses is a Linux Foundation project based on the OpenAI Responses API, backed by NVIDIA, Vercel, OpenRouter, Hugging Face, Databricks, Red Hat, AWS, Ollama, vLLM and others.</li>
+              <li>Its core ideas are typed <strong>items</strong>, <strong>semantic streaming events</strong>, <strong>state machines</strong> and a built-in <strong>agentic loop</strong>.</li>
+              <li>Anthropic and Google don't offer native endpoints yet. Adopt the Open Responses shape as your internal contract now and translate at the edge.</li>
+            </ul>
+          </section>
+
+          <section class="or-section">
+            <h2>What it is</h2>
+            <p>Open Responses is an open, vendor-neutral specification for calling LLMs, streaming their output and running agentic loops. It is based on the OpenAI Responses API. Write a request once and it runs on any compliant provider, whether hosted or local.</p>
+            <ul>
+              <li><strong>What you get:</strong> a shared schema, an OpenAPI reference, and acceptance tests for checking that your own endpoint complies.</li>
+              <li><strong>Who runs it:</strong> it is a Linux Foundation project (a Series of LF Projects, LLC), governed by a technical charter and a Technical Steering Committee (TSC).</li>
+              <li><strong>Who backs it:</strong> NVIDIA, Vercel AI SDK, OpenRouter, Hugging Face, LM Studio, Databricks, Red Hat, AWS, Ollama, OpenAI, vLLM and Llama Stack.</li>
+              <li><strong>Current version:</strong> 2026-04-24. The previous version is 2026-01-15.</li>
+            </ul>
+          </section>
+
+          <section class="or-section">
+            <h2>Why it exists</h2>
+            <p>Every major LLM API now has the same building blocks: messages, tool calls, streaming and multimodal input. Each provider encodes them differently, so switching models means rewriting glue code. Open Responses standardizes that layer.</p>
+            <ul>
+              <li><strong>Portability:</strong> describe inputs and outputs once, then run them on OpenAI, Anthropic, Gemini or local models.</li>
+              <li><strong>Routing and evals:</strong> compare providers, route requests and log results through one schema.</li>
+              <li><strong>A blueprint for providers:</strong> model labs can expose their APIs in a format that existing clients already understand.</li>
+            </ul>
+            <blockquote><p>In short, it is the Responses API without the vendor lock-in.</p></blockquote>
+          </section>
+
+          <section class="or-section">
+            <h2>Core mental model</h2>
+            <p>Four principles explain almost everything in the spec.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Principle</th><th>What it means</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Agentic loop</strong></td><td>A single request can involve several model steps and tool calls before it returns a result.</td></tr>
+                  <tr><td><strong>Items in, items out</strong></td><td>Items are the atomic unit of context: a message, a function call, a reasoning step. The same item types work as both input and output, and each is identified by its <code>type</code> field.</td></tr>
+                  <tr><td><strong>Semantic events</strong></td><td>Streaming sends meaningful transitions, such as <code>response.output_item.added</code>, <code>response.output_text.delta</code> and <code>response.completed</code>, rather than raw token chunks.</td></tr>
+                  <tr><td><strong>State machines</strong></td><td>Items and responses move through defined states: <code>in_progress</code>, then <code>completed</code>, <code>incomplete</code> or <code>failed</code>. Having a state does not mean an item is stored anywhere.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Every item carries an <code>id</code>, a <code>type</code> and a <code>status</code>. Here is an assistant message next to a tool call, both from one weather lookup:</p>
+<pre><code>{ "type": "message", "id": "msg_01", "role": "assistant", "status": "completed",
+  "content": [{ "type": "output_text", "text": "Let me check the weather." }] }
+
+{ "type": "function_call", "id": "fc_01", "call_id": "call_42", "status": "completed",
+  "name": "get_weather", "arguments": "{\"city\":\"Chicago\"}" }</code></pre>
+            <p>Content is split into two unions. <strong>User content</strong> can mix text, images and other modalities. <strong>Model content</strong> is kept deliberately narrow, mainly <code>output_text</code>, so clients can rely on its shape.</p>
+          </section>
+
+          <section class="or-section">
+            <h2>Key request controls</h2>
+            <p>A few request fields control most of a response's behaviour.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Field</th><th>What it does</th><th>When to use it</th></tr></thead>
+                <tbody>
+                  <tr><td><code>previous_response_id</code></td><td>Continues from a prior response. The model sees the prior input, then the prior output, then the new input.</td><td>Multi-turn chats and tool loops, without resending the transcript</td></tr>
+                  <tr><td><code>tool_choice</code></td><td>Set to <code>auto</code> (the default), <code>required</code>, <code>none</code>, or a specific function</td><td>Force a lookup, or disable tools for model-only evals</td></tr>
+                  <tr><td><code>allowed_tools</code></td><td>Limits which tools the model may call while the full <code>tools</code> list stays visible. The server must enforce the limit.</td><td>Per-tenant or per-role policies that keep prompt caches valid</td></tr>
+                  <tr><td><code>truncation</code></td><td><code>auto</code> lets the server trim older context to fit. <code>disabled</code> makes oversized requests fail instead.</td><td>Choose between graceful degradation and strict correctness</td></tr>
+                  <tr><td><code>service_tier</code></td><td>A priority hint, such as standard, priority or batch</td><td>Workloads where latency matters versus cost</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Reasoning items</strong> expose the model's thinking in three optional forms. Providers may support any combination of them.</p>
+            <ul>
+              <li><code>content</code> is the raw reasoning trace, and it can be streamed.</li>
+              <li><code>encrypted_content</code> is an opaque payload that the client passes back to the provider unchanged.</li>
+              <li><code>summary</code> is a short account that is safe to show end users.</li>
+            </ul>
+            <p><code>allowed_tools</code> deserves particular attention for enterprise work. It turns tool governance into a request-level setting, with no need to rebuild prompts or schemas.</p>
+          </section>
+
+          <section class="or-section">
+            <h2>Tools and the agentic loop</h2>
+            <p>The difference between the two kinds of tool is who holds control while the tool runs.</p>
+            <ul>
+              <li><strong>Internally hosted tools</strong>, such as a provider's file search, run inside the provider. The loop continues without coming back to your app.</li>
+              <li><strong>Externally hosted tools</strong>, such as functions, run in your code. The response ends with a <code>function_call</code>. Your app runs the function, then sends a <code>function_call_output</code> together with the <code>previous_response_id</code>. MCP tools are also hosted externally, but the provider calls those servers directly rather than handing control back to you.</li>
+            </ul>
+            <figure class="or-diagram">
+              <svg viewBox="0 0 760 430" role="img" aria-labelledby="loop-title loop-desc" font-family="inherit" font-size="13">
+                <title id="loop-title">The Open Responses agentic loop</title>
+                <desc id="loop-desc">Your app sends input items to the provider. The model samples the next item. If it is a hosted tool call, the provider runs the tool and feeds the result back to the model. Otherwise the response ends. If the output contains a function call, your app runs the function and starts the next turn with its output and the previous response ID.</desc>
+                <defs>
+                  <marker id="loop-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ca3af"/></marker>
+                </defs>
+                <text x="24" y="34" font-size="15" font-weight="700" fill="#121212">Hosted tools loop inside the provider; functions return to your app</text>
+                <rect x="208" y="60" width="528" height="244" rx="10" fill="#f3f4f1" stroke="#d1d5db"/>
+                <text x="224" y="84" font-size="11.5" font-weight="700" fill="#505050">Provider: Open Responses server</text>
+                <g fill="none" stroke="#9ca3af" stroke-width="1.25">
+                  <path d="M192 130H232" marker-end="url(#loop-arrow)"/>
+                  <path d="M400 130H448" marker-end="url(#loop-arrow)"/>
+                  <path d="M560 130H584" marker-end="url(#loop-arrow)"/>
+                  <path d="M504 170V232" marker-end="url(#loop-arrow)"/>
+                  <path d="M420 260H316V158" marker-end="url(#loop-arrow)"/>
+                  <path d="M652 158V370H192" marker-end="url(#loop-arrow)"/>
+                  <path d="M108 334V158" marker-end="url(#loop-arrow)"/>
+                </g>
+                <rect x="24" y="102" width="168" height="56" rx="8" fill="#fff" stroke="#9ca3af"/>
+                <text x="108" y="126" text-anchor="middle" font-weight="700" fill="#121212">Your app</text>
+                <text x="108" y="142" text-anchor="middle" font-size="11.5" fill="#505050">sends input items</text>
+                <rect x="232" y="102" width="168" height="56" rx="8" fill="#fff" stroke="#9ca3af"/>
+                <text x="316" y="126" text-anchor="middle" font-weight="700" fill="#121212">Model</text>
+                <text x="316" y="142" text-anchor="middle" font-size="11.5" fill="#505050">samples the next item</text>
+                <polygon points="448,130 504,90 560,130 504,170" fill="#fff" stroke="#9ca3af"/>
+                <text x="504" y="134" text-anchor="middle" fill="#121212">Hosted tool?</text>
+                <rect x="584" y="102" width="136" height="56" rx="8" fill="#fff" stroke="#9ca3af"/>
+                <text x="652" y="126" text-anchor="middle" font-weight="700" fill="#121212">Response ends</text>
+                <text x="652" y="142" text-anchor="middle" font-size="11.5" fill="#505050">sends output items</text>
+                <rect x="420" y="232" width="168" height="56" rx="8" fill="#fff" stroke="#9ca3af"/>
+                <text x="504" y="256" text-anchor="middle" font-weight="700" fill="#121212">Hosted tool runs</text>
+                <text x="504" y="272" text-anchor="middle" font-size="11.5" fill="#505050">provider executes it</text>
+                <rect x="24" y="334" width="168" height="72" rx="8" fill="#e8f1ee" stroke="#0f5d44" stroke-width="2"/>
+                <text x="108" y="358" text-anchor="middle" font-weight="700" fill="#121212">Run the function</text>
+                <text x="108" y="374" text-anchor="middle" font-size="11.5" fill="#121212">reply with its output</text>
+                <text x="108" y="390" text-anchor="middle" font-size="11.5" fill="#121212">+ previous_response_id</text>
+                <text x="572" y="122" text-anchor="middle" font-size="11.5" fill="#505050">no</text>
+                <text x="514" y="206" font-size="11.5" fill="#505050">yes</text>
+                <text x="368" y="252" text-anchor="middle" font-size="11.5" fill="#505050">result fed back</text>
+                <text x="420" y="362" text-anchor="middle" font-size="11.5" fill="#505050">function_call in output</text>
+                <text x="118" y="250" font-size="11.5" fill="#505050">next turn</text>
+              </svg>
+              <figcaption>The agentic loop: hosted tools versus function calls</figcaption>
+            </figure>
+            <p>A response that contains only a final message ends the loop. Each pass through the loop adds items to the context the model sees.</p>
+          </section>
+
+          <section class="or-section">
+            <h2>Transport, streaming and errors</h2>
+            <p>Requests and responses are plain HTTP with JSON. Streaming responses use server-sent events (SSE), and every stream must end with a terminal event: <code>response.completed</code>, <code>response.failed</code> or <code>response.incomplete</code>.</p>
+            <p>Every streamed item follows the same lifecycle:</p>
+            <ol>
+              <li><code>response.output_item.added</code> announces the item.</li>
+              <li><code>response.content_part.added</code> opens a content part.</li>
+              <li>One or more <code>response.output_text.delta</code> events carry the text, ending with <code>response.output_text.done</code>.</li>
+              <li><code>response.content_part.done</code> closes the content part.</li>
+              <li><code>response.output_item.done</code> closes the item, now in its final state.</li>
+            </ol>
+            <p>There are two kinds of event. <strong>Delta events</strong> report changes to an object, and <strong>state machine events</strong> report a change in status, such as <code>response.in_progress</code>.</p>
+            <h3>New in 2026-04-24: WebSocket mode</h3>
+            <p>This is a persistent connection on the same <code>/v1/responses</code> resource.</p>
+            <ul>
+              <li>Each turn starts with a <code>response.create</code> message, and the server sends back the same events as SSE.</li>
+              <li>A connection handles one response at a time. Clients open more connections to run work in parallel.</li>
+              <li>The server keeps the latest response state in the connection's memory. That makes continuation fast, even with <code>store=false</code> and zero data retention.</li>
+              <li>Connections last at most 60 minutes. Clients should handle the <code>websocket_connection_limit_reached</code> and <code>previous_response_not_found</code> errors.</li>
+            </ul>
+            <h3>Errors</h3>
+            <p>Errors come back as a structured object with <code>type</code>, <code>code</code>, <code>param</code> and <code>message</code>. The main types are <code>invalid_request</code> (400), <code>not_found</code> (404), <code>too_many_requests</code> (429), <code>server_error</code> (500) and <code>model_error</code> (500). An error during a stream is followed by <code>response.failed</code>.</p>
+          </section>
+
+          <section class="or-section">
+            <h2>Extensibility, compliance and governance</h2>
+            <p>The spec has a stable core and leaves room for providers to add features that aren't standard yet.</p>
+            <ul>
+              <li><strong>Vendor prefix:</strong> custom item types, hosted tools and stream events must be prefixed with the provider's slug, such as <code>openai:web_search_call</code> or <code>acme:trace_event</code>. Clients must be able to skip types they don't recognize.</li>
+              <li><strong>Hosted tools need receipts:</strong> every custom tool needs a matching item type that records the call, its status and its result. That record must be detailed enough to send back in a later request without losing anything.</li>
+              <li><strong>Compliance:</strong> an API is compliant if it implements the spec or a proper superset of it. The acceptance tests check this.</li>
+              <li><strong>Governance:</strong> extensions that become widely adopted can be promoted into the core spec by the TSC, under the project's technical charter.</li>
+            </ul>
+          </section>
+
+          <section class="or-section">
+            <h2>Recommendations for teams building agentic apps today</h2>
+            <p>Adopt the Open Responses shape as your internal contract now, and translate at the edge. Anthropic and Google don't offer native Open Responses endpoints yet, but gateways such as <a href="https://docs.databricks.com/aws/en/machine-learning/model-serving/query-open-responses-models" target="_blank" rel="noopener noreferrer">Databricks</a> already translate Open Responses requests to Claude and Gemini, with a narrower set of features.</p>
+            <ol>
+              <li><strong>Model the agent loop on Open Responses items, not on a vendor SDK.</strong> Use typed items such as <code>message</code>, <code>function_call</code>, <code>function_call_output</code> and <code>reasoning</code>, each with an <code>id</code>, <code>type</code> and <code>status</code>. Your traces, evals and memory then stay provider-neutral.</li>
+              <li><strong>Put a thin adapter or gateway at the edge.</strong> Native providers go straight through, and Anthropic and Gemini get translated. Nothing upstream of the adapter imports a vendor SDK.</li>
+              <li><strong>Standardize on function tools and MCP.</strong> Function calls carry over cleanly between providers. Treat provider-hosted tools, such as web search or code execution, as slug-prefixed extensions that won't port.</li>
+              <li><strong>Pass reasoning state back unchanged.</strong> Gemini attaches an <code>encrypted_content</code> value to every function call, and Anthropic's thinking blocks need the same treatment. Multi-turn tool loops break if your adapter drops or alters them.</li>
+              <li><strong>Own your conversation state.</strong> Store the item history yourself and resend it, rather than relying on server-side <code>previous_response_id</code> across providers. This also keeps zero-data-retention deployments working.</li>
+              <li><strong>Write a provider conformance suite.</strong> Run the same scenarios against every model: a tool loop, a parallel tool call, streaming and an error path. It shows exactly where each adapter leaks.</li>
+              <li><strong>Keep a flagged escape hatch for each provider.</strong> When a native feature is worth the lock-in, such as prompt caching or long context, call the native API behind a flag and document the exception.</li>
+            </ol>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Layer</th><th>Portable?</th><th>Owner</th></tr></thead>
+                <tbody>
+                  <tr><td>Agent loop, item schema, traces, evals</td><td>Yes, using the Open Responses shape</td><td>Your harness</td></tr>
+                  <tr><td>Tool definitions (functions, MCP)</td><td>Yes</td><td>Your harness</td></tr>
+                  <tr><td>Wire protocol and translation</td><td>No, one adapter per provider</td><td>Gateway</td></tr>
+                  <tr><td>Hosted tools, caching, provider-only features</td><td>No</td><td>Flagged exceptions</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <blockquote><p>When Anthropic or Google ship native support, you delete an adapter rather than rewrite your agents.</p></blockquote>
+          </section>
+
+          <section class="or-section">
+            <h2>Getting started</h2>
+            <ul class="checklist">
+              <li>Read the <a href="https://www.openresponses.org/specification" target="_blank" rel="noopener noreferrer">specification</a>, starting with items, streaming events and tools.</li>
+              <li>Browse the <a href="https://www.openresponses.org/reference" target="_blank" rel="noopener noreferrer">OpenAPI reference</a> for the full set of types.</li>
+              <li>Run the <a href="https://www.openresponses.org/compliance" target="_blank" rel="noopener noreferrer">acceptance tests</a> against your endpoint.</li>
+              <li>Read the <a href="https://www.openresponses.org/governance" target="_blank" rel="noopener noreferrer">governance charter</a> if you plan to contribute.</li>
+            </ul>
+            <h3>Related reading</h3>
+            <ul>
+              <li><a href="./mcpfoundation.html">MCP as a foundational layer of the AI-native internet</a></li>
+              <li><a href="./refarchagentic.html">Reference Architecture for Agentic AI</a></li>
+              <li><a href="./design/understanding-a2ui.html">Understanding A2UI: A Protocol for Agent-Driven Interfaces</a></li>
+            </ul>
+          </section>
+
+          <section class="or-section">
+            <h2>Sources</h2>
+            <ul>
+              <li><a href="https://www.openresponses.org/" target="_blank" rel="noopener noreferrer">Open Responses overview</a></li>
+              <li><a href="https://www.openresponses.org/specification" target="_blank" rel="noopener noreferrer">Open Responses specification, version 2026-04-24</a></li>
+              <li><a href="https://docs.databricks.com/aws/en/machine-learning/model-serving/query-open-responses-models" target="_blank" rel="noopener noreferrer">Databricks: Query a model with the Open Responses API</a></li>
+              <li><a href="https://discuss.ai.google.dev/t/open-responses-api-compatibility-for-gemini-api/116336" target="_blank" rel="noopener noreferrer">Google AI Developers Forum: Open Responses API compatibility for Gemini</a></li>
+            </ul>
+          </section>
+
+        </article>
+      </main>
+      <div id="footer-container"></div>
+    </div>
+    <script src="../headerfooter.js"></script>
+  </body>
+</html>
