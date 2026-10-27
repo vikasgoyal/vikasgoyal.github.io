@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Universe 2026: 15 Sessions for Teams Building with Agentic AI | Vikas Goyal</title>
+<meta name="description" content="A curated guide to 15 GitHub Universe 2026 sessions for teams building with agentic AI, organized by the practice areas of agentic software engineering: delegation, context, harness, evals, guardrails, operations, and adoption.">
+<meta name="author" content="Vikas Goyal">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/github-universe-2026-agentic-sessions.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Vikas Goyal">
+<meta property="og:title" content="GitHub Universe 2026: 15 Sessions for Teams Building with Agentic AI">
+<meta property="og:description" content="A practitioner's shortlist of GitHub Universe 2026 sessions, organized by the practice areas of agentic software engineering.">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/github-universe-2026-agentic-sessions.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitHub Universe 2026: 15 Sessions for Teams Building with Agentic AI">
+<meta name="twitter:description" content="A practitioner's shortlist of GitHub Universe 2026 sessions, organized by the practice areas of agentic software engineering.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "GitHub Universe 2026: 15 Sessions for Teams Building with Agentic AI",
+  "author": {"@type": "Person", "name": "Vikas Goyal", "url": "https://vikasgoyal.github.io/"},
+  "datePublished": "2026-10-27",
+  "dateModified": "2026-10-27",
+  "mainEntityOfPage": "https://vikasgoyal.github.io/agentic/github-universe-2026-agentic-sessions.html",
+  "about": ["Agentic AI", "Agentic software engineering", "GitHub Universe 2026", "GitHub Copilot"]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --ink: #1a1a1a;
+    --muted: #666666;
+    --line: #e2e2e2;
+    --accent: #1a1a1a;
+    --accent-soft: #efefef;
+    --warn-bg: #f3f3f3;
+    --warn-line: #d6d6d6;
+    --radius: 12px;
+
+    --c1: #555555; --c2: #555555; --c3: #555555; --c4: #555555;
+    --c5: #555555; --c6: #555555; --c7: #555555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141414;
+      --surface: #1c1c1c;
+      --ink: #ececec;
+      --muted: #a0a0a0;
+      --line: #2e2e2e;
+      --accent: #ececec;
+      --accent-soft: #2a2a2a;
+      --warn-bg: #222222;
+      --warn-line: #3a3a3a;
+      --c1: #b0b0b0; --c2: #b0b0b0; --c3: #b0b0b0; --c4: #b0b0b0;
+      --c5: #b0b0b0; --c6: #b0b0b0; --c7: #b0b0b0;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+  /* Site header */
+  .site-header { border-bottom: 1px solid var(--line); background: var(--surface); }
+  .site-header .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding-top: 14px; padding-bottom: 14px; }
+  .brand { font-weight: 700; color: var(--ink); text-decoration: none; font-size: 17px; }
+  .site-nav { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 14px; }
+  .site-nav a { color: var(--muted); text-decoration: none; }
+  .site-nav a:hover { color: var(--accent); }
+
+  /* Hero */
+  .crumbs { font-size: 13px; color: var(--muted); margin: 28px 0 8px; }
+  .crumbs a { color: var(--muted); }
+  h1 {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.01em;
+  }
+  .event-title-main, .event-title-sub { display: block; }
+  .event-title-main { font-size: clamp(38px, 6vw, 54px); line-height: 1.08; }
+  .event-title-sub { font-size: clamp(24px, 3.6vw, 34px); line-height: 1.2; }
+  .dek { font-size: 19px; color: var(--muted); max-width: 720px; margin: 0 0 18px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+  .meta strong { color: var(--ink); font-weight: 600; }
+
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 0 0 32px; }
+  .fact { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .fact .k { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .fact .v { font-weight: 600; margin-top: 2px; }
+
+  h2 { font-family: "Source Serif 4", Georgia, serif; font-size: 26px; margin: 44px 0 10px; }
+  .lede p { max-width: 720px; }
+
+  /* Lifecycle map */
+  .lifecycle { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 18px 0 8px; }
+  .stage {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px; text-align: left; cursor: pointer; font: inherit; color: inherit;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .stage:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+  .stage .n { font-size: 12px; color: var(--muted); }
+  .stage .t { font-weight: 600; font-size: 14px; line-height: 1.3; margin-top: 2px; }
+  .stage .c { font-size: 12px; color: var(--cc); margin-top: 6px; font-weight: 600; }
+
+  /* Controls */
+  .controls {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    padding: 14px 0 12px; border-bottom: 1px solid var(--line); margin-top: 28px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 999px; padding: 6px 12px; font: 500 13px Inter, sans-serif; cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--cc); margin-right: 6px; vertical-align: 1px; }
+  .row2 { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+  .search {
+    flex: 1 1 240px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 8px; padding: 8px 12px; font: 14px Inter, sans-serif;
+  }
+  .count { font-size: 13px; color: var(--muted); }
+
+  /* Category sections */
+  .cat { margin-top: 34px; scroll-margin-top: 140px; }
+  .cat-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 2px solid var(--cc); padding-bottom: 6px; }
+  .cat-head h3 { margin: 0; font-size: 20px; font-family: "Source Serif 4", Georgia, serif; }
+  .cat-head .num { font-weight: 700; color: var(--cc); font-size: 14px; }
+  .cat-desc { color: var(--muted); font-size: 15px; margin: 8px 0 14px; max-width: 720px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px;
+  }
+  .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  .card h4 { margin: 0; font-size: 17px; line-height: 1.35; }
+  .card h4 a { color: var(--ink); text-decoration: none; }
+  .card h4 a:hover { color: var(--accent); text-decoration: underline; }
+  .star {
+    flex: none; border: 1px solid var(--line); background: transparent; color: var(--muted);
+    border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 17px; line-height: 1;
+  }
+  .star[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+  .who { font-size: 14px; color: var(--muted); margin: 4px 0 8px; }
+  .when { display: inline-block; font-size: 12px; font-weight: 600; background: var(--accent-soft); color: var(--accent); padding: 2px 8px; border-radius: 6px; margin-left: 6px; }
+  .when.tbd { background: transparent; border: 1px dashed var(--line); color: var(--muted); font-weight: 500; }
+  .card p { margin: 0 0 8px; }
+  .card-links { font-size: 14px; margin-top: 8px; }
+
+  .callout { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: var(--radius); padding: 14px 18px; margin: 28px 0; }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  .empty { display: none; text-align: center; color: var(--muted); padding: 40px 0; }
+
+  .related { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .related a { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-weight: 500; font-size: 15px; }
+  .related a span { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-bottom: 2px; }
+  .related a:hover { border-color: var(--accent); }
+
+  .btn { display: inline-block; background: var(--accent); color: var(--bg); text-decoration: none; padding: 9px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; margin-right: 8px; }
+  .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+
+  .sources { font-size: 14px; color: var(--muted); }
+  .sources li { margin-bottom: 4px; }
+  footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 22px 0 40px; font-size: 14px; color: var(--muted); }
+  footer a { color: var(--muted); margin-right: 14px; }
+
+  .hidden { display: none !important; }
+  @media (max-width: 600px) {
+    .dek { font-size: 17px; }
+    .cat { scroll-margin-top: 190px; }
+  }
+  @media print {
+    .controls, .star, .site-nav, .lifecycle { display: none !important; }
+    .card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="https://vikasgoyal.github.io/">Vikas Goyal</a>
+    <nav class="site-nav" aria-label="Site">
+      <a href="https://vikasgoyal.github.io/">Home</a>
+      <a href="https://vikasgoyal.github.io/agentic/">Agentic AI</a>
+      <a href="https://vikasgoyal.github.io/industries/">Industries AI</a>
+      <a href="https://vikasgoyal.github.io/startups/">Startups</a>
+      <a href="https://vikasgoyal.github.io/ecp/">Career Guidance</a>
+      <a href="https://vikasgoyal.github.io/blog/">All Writing</a>
+      <a href="https://www.linkedin.com/in/vikasgoyal/">LinkedIn</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="crumbs"><a href="https://vikasgoyal.github.io/agentic/">Agentic AI</a> / Events</div>
+  <h1><span class="event-title-main">GitHub Universe 2026</span><span class="event-title-sub">15 Sessions for Teams Building with Agentic AI</span></h1>
+  <p class="dek">A practitioner's shortlist from the Universe catalog, organized around the seven practice areas of agentic software engineering, from delegating work to agents through evaluating, securing, and operating them.</p>
+  <div class="meta">
+    <span>By <strong>Vikas Goyal</strong></span>
+    <span>Published <strong>October 27, 2026</strong></span>
+    <span>~8 min read</span>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><div class="k">Dates</div><div class="v">Oct 28–29, 2026</div></div>
+    <div class="fact"><div class="k">Venue</div><div class="v">Fort Mason Center, SF</div></div>
+    <div class="fact"><div class="k">Virtual</div><div class="v">Free pass + recordings</div></div>
+    <div class="fact"><div class="k">Catalog</div><div class="v"><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog">Full session list →</a></div></div>
+  </div>
+
+  <div class="lifecycle" role="list" aria-label="Agentic software engineering practice areas">
+    <button class="stage" style="--cc:var(--c1)" data-jump="delegation" role="listitem"><div class="n">01</div><div class="t">Delegation &amp; agentic workflows</div><div class="c">2 sessions</div></button>
+    <button class="stage" style="--cc:var(--c2)" data-jump="context" role="listitem"><div class="n">02</div><div class="t">Context, memory &amp; skills</div><div class="c">3 sessions</div></button>
+    <button class="stage" style="--cc:var(--c3)" data-jump="harness" role="listitem"><div class="n">03</div><div class="t">Harness &amp; extensibility</div><div class="c">2 sessions</div></button>
+    <button class="stage" style="--cc:var(--c4)" data-jump="evals" role="listitem"><div class="n">04</div><div class="t">Evaluation &amp; verification</div><div class="c">2 sessions</div></button>
+    <button class="stage" style="--cc:var(--c5)" data-jump="security" role="listitem"><div class="n">05</div><div class="t">Security &amp; guardrails</div><div class="c">2 sessions</div></button>
+    <button class="stage" style="--cc:var(--c6)" data-jump="operations" role="listitem"><div class="n">06</div><div class="t">Agents in operations</div><div class="c">1 session</div></button>
+    <button class="stage" style="--cc:var(--c7)" data-jump="adoption" role="listitem"><div class="n">07</div><div class="t">Adoption &amp; the road ahead</div><div class="c">3 sessions</div></button>
+  </div>
+
+  <div class="controls" id="controls">
+    <div class="chips" role="group" aria-label="Filter by practice area">
+      <button class="chip" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" data-filter="delegation" aria-pressed="false" style="--cc:var(--c1)"><span class="dot"></span>Delegation</button>
+      <button class="chip" data-filter="context" aria-pressed="false" style="--cc:var(--c2)"><span class="dot"></span>Context</button>
+      <button class="chip" data-filter="harness" aria-pressed="false" style="--cc:var(--c3)"><span class="dot"></span>Harness</button>
+      <button class="chip" data-filter="evals" aria-pressed="false" style="--cc:var(--c4)"><span class="dot"></span>Evals</button>
+      <button class="chip" data-filter="security" aria-pressed="false" style="--cc:var(--c5)"><span class="dot"></span>Security</button>
+      <button class="chip" data-filter="operations" aria-pressed="false" style="--cc:var(--c6)"><span class="dot"></span>Operations</button>
+      <button class="chip" data-filter="adoption" aria-pressed="false" style="--cc:var(--c7)"><span class="dot"></span>Adoption</button>
+      <button class="chip" data-filter="starred" aria-pressed="false">★ My shortlist</button>
+    </div>
+    <div class="row2">
+      <input class="search" id="search" type="search" placeholder="Search titles, speakers, companies…" aria-label="Search sessions">
+      <span class="count" id="count">15 sessions</span>
+    </div>
+  </div>
+
+  <!-- 01 Delegation -->
+  <section class="cat" id="delegation" data-cat="delegation" style="--cc:var(--c1)">
+    <div class="cat-head"><span class="num">01</span><h3>Delegation &amp; agentic workflows</h3></div>
+    <p class="cat-desc">Moving from prompting an assistant to assigning work to agents, and redesigning the delivery pipeline around them.</p>
+
+    <article class="card" data-id="s01">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1775863398105001Nya7" target="_blank" rel="noopener">Stop prompting, start delegating: Configure Copilot to own the work</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Ken Muse, Mickey Gousset · GitHub <span class="when tbd">Hands-on · see catalog for time</span></div>
+      <p>A hands-on session that layers Copilot's full set of capabilities onto a TypeScript app. You leave with a working project and a clear sense of which capability fits which kind of task.</p>
+    </article>
+
+    <article class="card" data-id="s02">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777439139735001Ke6p" target="_blank" rel="noopener">From writing code to managing agents: Scaling 50+ services at GitHub</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Anjuan Simmons · GitHub <span class="when tbd">See catalog for time</span></div>
+      <p>GitHub's Lifecycle team built an agentic pipeline in which agents triage issues, research the codebase, draft an implementation plan, and open a draft pull request. The talk covers real numbers, how it was built on Actions and Copilot, and where engineers still choose to write code by hand.</p>
+    </article>
+  </section>
+
+  <!-- 02 Context -->
+  <section class="cat" id="context" data-cat="context" style="--cc:var(--c2)">
+    <div class="cat-head"><span class="num">02</span><h3>Context engineering, memory &amp; skills</h3></div>
+    <p class="cat-desc">What an agent knows, what it remembers, and how that knowledge is packaged and shared across a team.</p>
+
+    <article class="card" data-id="s03">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1778275240014001huB4" target="_blank" rel="noopener">Treat your AI context as infrastructure</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Christopher Harrison · GitHub <span class="when">Thu 1:00 PM PT</span></div>
+      <p>Compares custom agents, skills, instruction files, MCP servers, extensions, and plugins: what each one is best at, and how to roll out context consistently as a team's setup grows.</p>
+    </article>
+
+    <article class="card" data-id="s04">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777557576923001fNOZ" target="_blank" rel="noopener">How GitHub taught Copilot to remember and when to forget</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Cooper Nederhood, Alejandro Carderera · GitHub <span class="when tbd">See catalog for time</span></div>
+      <p>GitHub researchers built a benchmark from sequences of real pull requests and found that accumulated context can actually degrade performance. They'll show how that finding shapes Copilot's agent memory work, including features still in development.</p>
+    </article>
+
+    <article class="card" data-id="s05">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1785179690271001xi4A" target="_blank" rel="noopener">Build once, run on any agent: A practical guide to agent skills</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Shishir Tewari · Procore, with Andrea Griffiths · GitHub <span class="when tbd">See catalog for time</span></div>
+      <p>A working session on when a recurring workflow deserves to become a reusable skill, drawing on skills built for a production data engineering team.</p>
+    </article>
+  </section>
+
+  <!-- 03 Harness -->
+  <section class="cat" id="harness" data-cat="harness" style="--cc:var(--c3)">
+    <div class="cat-head"><span class="num">03</span><h3>Harness, hooks &amp; extensibility</h3></div>
+    <p class="cat-desc">The scaffolding around the model: the loop, tools, lifecycle events, and the machinery that keeps an agent stable across models.</p>
+
+    <article class="card" data-id="s06">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777584211997001vbxd" target="_blank" rel="noopener">Inside GitHub Copilot's coding harness: Optimizing across every model</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Julia Kasper · Microsoft <span class="when tbd">See catalog for time</span></div>
+      <p>How the Copilot team keeps one coding agent performing across OpenAI, Anthropic, and Google models: reproducible benchmarks, thousands of autonomous coding tasks, and LLM-graded assertions that catch regressions early.</p>
+    </article>
+
+    <article class="card" data-id="s07">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777614539199001PlmK" target="_blank" rel="noopener">I made my Octolamp think with GitHub Copilot CLI hooks</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Beatris Mendez Gandica · Nuevo Foundation <span class="when tbd">See catalog for time</span></div>
+      <p>A playful demo that wires Copilot CLI lifecycle hooks to a desk lamp, showing how the hooks system works under the hood and how to write your own.</p>
+    </article>
+  </section>
+
+  <!-- 04 Evals -->
+  <section class="cat" id="evals" data-cat="evals" style="--cc:var(--c4)">
+    <div class="cat-head"><span class="num">04</span><h3>Evaluation &amp; verification</h3></div>
+    <p class="cat-desc">Knowing whether agent output is actually correct, and whether a model change made things better or worse.</p>
+
+    <article class="card" data-id="s08">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1776460904386001a8nL" target="_blank" rel="noopener">Your benchmark is lying: What evals actually look like</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Walker Chabbott · GitHub, Julia Kasper · Microsoft <span class="when tbd">Sandbox session · see catalog</span></div>
+      <p>How Copilot evaluates models in production: what the team measures, and which metrics it stopped tracking because they didn't predict what developers actually experienced.</p>
+    </article>
+
+    <article class="card" data-id="s09">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1787615869752001IyaJ" target="_blank" rel="noopener">Beyond pass or fail: How agents verify AI-generated code</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Jeff An · Momentic <span class="when">Thu 9:00 AM PT</span></div>
+      <p>Agents that investigate a running application, reproduce unexpected behavior, and separate real product bugs from flaky tests or infrastructure failures, all within deterministic limits on what they may touch.</p>
+    </article>
+  </section>
+
+  <!-- 05 Security -->
+  <section class="cat" id="security" data-cat="security" style="--cc:var(--c5)">
+    <div class="cat-head"><span class="num">05</span><h3>Security, guardrails &amp; governance</h3></div>
+    <p class="cat-desc">Enforcing what agents can do through infrastructure, not instruction files, and hardening the pipelines they run in.</p>
+
+    <article class="card" data-id="s10">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777489102123001ThSM" target="_blank" rel="noopener">Open pull requests, don't merge them: Fine-grained authorization for hosted MCP servers</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Nick Taylor · Pomerium <span class="when">Thu 10:30 AM PT</span></div>
+      <p>A live demo of an identity-aware proxy that adds per-identity authorization in front of any hosted MCP server, with no upstream changes. In the demo, Copilot can open the pull request, and only a human can merge it.</p>
+    </article>
+
+    <article class="card" data-id="s11">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777658986177001QNCH" target="_blank" rel="noopener">Disrupting supply chain attacks: A threat framework for GitHub Actions</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Steve Glass, Greg Ose · GitHub <span class="when">Wed 2:30 PM PT</span></div>
+      <p>Maps known supply chain attack techniques to specific GitHub Actions controls across three layers: the Actions ecosystem, the workflow attack surface, and runner infrastructure.</p>
+    </article>
+  </section>
+
+  <!-- 06 Operations -->
+  <section class="cat" id="operations" data-cat="operations" style="--cc:var(--c6)">
+    <div class="cat-head"><span class="num">06</span><h3>Agents in production operations</h3></div>
+    <p class="cat-desc">Agentic patterns beyond code generation: SRE, incident response, and investigation.</p>
+
+    <article class="card" data-id="s12">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777687372042001GE87" target="_blank" rel="noopener">The 2 a.m. RCA agent: Architecting AI that investigates, not hallucinates</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Achin Gupta · Intuit, Divya Mahajan · Amazon <span class="when">Thu 9:30 AM PT</span></div>
+      <p>A root-cause-analysis architecture in which deterministic code handles signal collection, topology traversal, correlation, and scoring. The language model only explains evidence that was gathered for it.</p>
+    </article>
+  </section>
+
+  <!-- 07 Adoption -->
+  <section class="cat" id="adoption" data-cat="adoption" style="--cc:var(--c7)">
+    <div class="cat-head"><span class="num">07</span><h3>Adoption, org change &amp; the road ahead</h3></div>
+    <p class="cat-desc">Turning tool access into real fluency, adapting team workflows to agent output, and where the models are heading next.</p>
+
+    <article class="card" data-id="s13">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1782223817329001J5Je" target="_blank" rel="noopener">Building AI fluency at UPS</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Jared Hatfield · UPS <span class="when">Wed 11:30 AM PT</span></div>
+      <p>How UPS moves developers from trying Copilot to using agents to plan, build, and ship real work, and why motivation and measurement matter as much as tooling at enterprise scale.</p>
+    </article>
+
+    <article class="card" data-id="s14">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1776470103196001fJPe" target="_blank" rel="noopener">The view from the labs: What's next for AI-assisted development</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Cara Phillips · Anthropic, Rohan Varma · OpenAI, Kate Catlin · GitHub <span class="when">Thu 9:00 AM PT</span></div>
+      <p>An interactive panel with leaders from the frontier labs on where AI-assisted development is heading over the next two years.</p>
+    </article>
+
+    <article class="card" data-id="s15">
+      <div class="card-top">
+        <h4><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog/session/1777610662772001qS4e" target="_blank" rel="noopener">Stop waiting on your own pull requests: GitHub stacked pull requests in practice</a></h4>
+        <button class="star" aria-pressed="false" aria-label="Add to shortlist">☆</button>
+      </div>
+      <div class="who">Sameen Karim · GitHub <span class="when tbd">Demo · see catalog for time</span></div>
+      <p>A live demo of building a stack of small, dependent pull requests with the GitHub CLI, reviewing it on github.com, and merging each pull request as it becomes ready.</p>
+    </article>
+  </section>
+
+  <div class="empty" id="empty">No sessions match. Try another filter, or star a few sessions to build your shortlist.</div>
+
+  <div class="callout">
+    <strong>⚠ Thursday morning conflict</strong>
+    "The view from the labs" and "Beyond pass or fail" both start at 9:00 AM PT, and the RCA agent talk starts at 9:30. If you're attending virtually, catch the panel live and watch the other two as recordings.
+  </div>
+
+  <h2>Take it further</h2>
+  <p>Related reading from this site that pairs with these sessions:</p>
+  <div class="related">
+    <a href="https://vikasgoyal.github.io/agentic/prebuildevals.html"><span>Pairs with 04 · Evals</span>Pre-Build Evals for AI Agents</a>
+    <a href="https://vikasgoyal.github.io/agentic/observe/evalstesting.html"><span>Pairs with 04 · Evals</span>Testing vs Evals: How AI Quality Differs</a>
+    <a href="https://vikasgoyal.github.io/agentic/observe/runtime-governance.html"><span>Pairs with 05 · Security</span>Runtime Governance: 10 Policies for Production Agents</a>
+    <a href="https://vikasgoyal.github.io/agentic/context/memory-reasoning-learning.html"><span>Pairs with 02 · Context</span>Do Agents Learn Through Memory and Reasoning?</a>
+    <a href="https://vikasgoyal.github.io/agentic/refarchagentic.html"><span>Pairs with 03 · Harness</span>Reference Architecture for Agentic AI</a>
+    <a href="https://vikasgoyal.github.io/ecp/ai-delegation-vs-collaboration.html"><span>Pairs with 01 · Delegation</span>Working with AI: Delegation or Collaboration</a>
+  </div>
+
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li><a href="https://reg.githubuniverse.com/flow/github/universe26/attendee-portal/page/sessioncatalog">GitHub Universe 2026 session catalog</a></li>
+    <li><a href="https://github.blog/news-insights/company-news/your-guide-to-github-universe-2026-is-here-the-schedule-just-launched/">GitHub Blog: Your guide to GitHub Universe 2026</a></li>
+    <li><a href="https://github.blog/news-insights/company-news/10-technical-talks-im-excited-about-at-github-universe-2026/">GitHub Blog: 10 technical talks at GitHub Universe 2026</a></li>
+    <li><a href="https://cloudsmith.com/blog/10-github-universe-2026-sessions-not-to-miss">Cloudsmith: 10 GitHub Universe 2026 sessions not to miss</a></li>
+  </ul>
+  <p class="sources">Session times are Pacific and were taken from published listings as of October 27, 2026. Check the catalog for any last-minute changes.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="https://vikasgoyal.github.io/">Home</a>
+    <a href="https://vikasgoyal.github.io/agentic/">Agentic AI</a>
+    <a href="https://vikasgoyal.github.io/blog/">All Writing</a>
+    <a href="https://www.linkedin.com/in/vikasgoyal/">LinkedIn</a>
+    <div style="margin-top:10px">© 2026 Vikas Goyal</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var STORE = 'gu26-shortlist';
+  var starred = {};
+  try { starred = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { starred = {}; }
+  function save() { try { localStorage.setItem(STORE, JSON.stringify(starred)); } catch (e) {} }
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.cat'));
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+  var search = document.getElementById('search');
+  var count = document.getElementById('count');
+  var empty = document.getElementById('empty');
+  var filter = 'all';
+
+  cards.forEach(function (card) {
+    var btn = card.querySelector('.star');
+    var id = card.getAttribute('data-id');
+    function paint() {
+      var on = !!starred[id];
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.textContent = on ? '★' : '☆';
+      btn.setAttribute('aria-label', on ? 'Remove from shortlist' : 'Add to shortlist');
+    }
+    paint();
+    btn.addEventListener('click', function () {
+      if (starred[id]) delete starred[id]; else starred[id] = true;
+      save(); paint(); apply();
+    });
+  });
+
+  function apply() {
+    var q = (search.value || '').trim().toLowerCase();
+    var shown = 0;
+    sections.forEach(function (sec) {
+      var cat = sec.getAttribute('data-cat');
+      var visibleInSec = 0;
+      sec.querySelectorAll('.card').forEach(function (card) {
+        var matchCat = filter === 'all' || filter === cat ||
+          (filter === 'starred' && starred[card.getAttribute('data-id')]);
+        var matchQ = !q || card.textContent.toLowerCase().indexOf(q) !== -1;
+        var show = matchCat && matchQ;
+        card.classList.toggle('hidden', !show);
+        if (show) { visibleInSec++; shown++; }
+      });
+      sec.classList.toggle('hidden', visibleInSec === 0);
+    });
+    count.textContent = shown + (shown === 1 ? ' session' : ' sessions');
+    empty.style.display = shown ? 'none' : 'block';
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      filter = chip.getAttribute('data-filter');
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+      apply();
+    });
+  });
+  search.addEventListener('input', apply);
+
+  document.querySelectorAll('.stage').forEach(function (s) {
+    s.addEventListener('click', function () {
+      var id = s.getAttribute('data-jump');
+      filter = 'all'; search.value = '';
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-filter') === 'all' ? 'true' : 'false'); });
+      apply();
+      var el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>
