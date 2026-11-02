@@ -84,12 +84,14 @@ button{font:inherit;color:inherit}
 .app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 124px;grid-template-rows:56px minmax(0,1fr);column-gap:12px;
   padding:8px max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
 
-/* top bar: buttons left, title centred, progress right */
-.bar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;min-width:0;padding-bottom:6px}
+/* top bar: buttons left, title centred, zoom + progress right. The sides never shrink below their
+   content; when space runs short the title gives way (ellipsis) instead. */
+.bar{display:grid;grid-template-columns:minmax(max-content,1fr) minmax(0,auto) minmax(max-content,1fr);align-items:center;gap:14px;min-width:0;padding-bottom:6px}
 .ttl{text-align:center;min-width:0}
 h1{font:400 22px/1.05 var(--serif);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .series{display:block;margin-top:2px;font-size:13px;font-variant:all-small-caps;letter-spacing:.09em;color:var(--muted);white-space:nowrap}
-.prog{justify-self:end;display:flex;align-items:center;gap:8px;width:min(260px,100%)}
+.rt{justify-self:end;display:flex;align-items:center;gap:14px}
+.prog{display:flex;align-items:center;gap:8px;width:130px}
 .track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
 .track i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
 .pct{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:3em;text-align:right}
@@ -115,17 +117,19 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-acti
 .sw small{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .sw[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px var(--ink)}
 .sw.done{opacity:.45}
-/* zoom pill, first-visit tip */
-.zoom{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;align-items:center;gap:2px;padding:4px;border-radius:14px;
-  background:rgba(255,255,255,.88);border:1px solid var(--line);box-shadow:0 4px 16px rgba(40,30,20,.14);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-.zb{min-width:44px;height:44px;border:0;background:transparent;border-radius:10px;cursor:pointer;font:500 20px/1 var(--sans);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+/* zoom controls (top bar) and the first-visit tip that points at them */
+.zwrap{position:relative}
+.zoom{display:flex;align-items:center;gap:2px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.zb{min-width:44px;height:44px;border:0;background:transparent;border-radius:11px;cursor:pointer;font:500 20px/1 var(--sans);touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .zb:hover{background:var(--bg)}
 .zb:disabled{opacity:.3;cursor:default;background:transparent}
 .zb.fit{font-size:13px;font-weight:600;padding:0 12px}
 .zpct{min-width:50px;text-align:center;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.tip{position:absolute;right:12px;bottom:72px;z-index:4;max-width:290px;display:flex;align-items:center;gap:4px;padding:6px 4px 6px 14px;border-radius:12px;
+.tip{position:absolute;right:0;top:calc(100% + 12px);z-index:6;width:290px;display:flex;align-items:center;gap:4px;padding:6px 4px 6px 14px;border-radius:12px;
   background:var(--ink);color:var(--card);font-size:13px;line-height:1.35;box-shadow:0 8px 24px rgba(40,30,20,.25);animation:fade .4s ease}
-.tip::after{content:"";position:absolute;right:96px;bottom:-6px;border:6px solid transparent;border-bottom:0;border-top-color:var(--ink)}
+.tip::after{content:"";position:absolute;right:var(--arrow,90px);top:-6px;border:6px solid transparent;border-top:0;border-bottom-color:var(--ink)}
+@media (max-width:1180px){.track{display:none}.prog{width:auto}}      /* narrow: keep the % only */
+@media (max-width:900px){.zpct{display:none}.tip{--arrow:66px}}
 .tip button{flex:none;min-width:44px;height:44px;border:0;background:transparent;color:inherit;font-size:20px;cursor:pointer}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 .mini-wrap{position:absolute;left:12px;bottom:12px;z-index:3;padding:5px;border-radius:10px;background:rgba(255,255,255,.72);
@@ -170,9 +174,9 @@ a.mi{color:inherit;text-decoration:none}
       <button class="ib" id="bMenu" aria-label="Menu" aria-haspopup="true" aria-expanded="false" title="Menu"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></button>
     </div>
     <div class="ttl"><h1 id="title"></h1><span class="series" id="series"></span></div>
-    <div class="prog"><div class="track" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="track"><i></i></div><span class="pct" id="pct">0%</span></div>
+    <div class="rt"><div class="zwrap"><div class="zoom" id="zoom" role="group" aria-label="Zoom"><button class="zb" id="zOut" aria-label="Zoom out">−</button><span class="zpct" id="zPct" aria-live="polite">100%</span><button class="zb" id="zIn" aria-label="Zoom in">+</button><button class="zb fit" id="zFit" aria-label="Fit the whole picture">Fit</button></div><div class="tip" id="tip" role="status" hidden><span>Zoom in to read the letters — pinch, Ctrl + scroll, or +</span><button id="tipX" aria-label="Dismiss tip">×</button></div></div><div class="prog"><div class="track" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="track"><i></i></div><span class="pct" id="pct">0%</span></div></div>
   </header>
-  <main class="stage" id="stage"><canvas id="cv" role="img"></canvas><div class="zoom" id="zoom" role="group" aria-label="Zoom"><button class="zb" id="zOut" aria-label="Zoom out">−</button><span class="zpct" id="zPct" aria-live="polite">100%</span><button class="zb" id="zIn" aria-label="Zoom in">+</button><button class="zb fit" id="zFit" aria-label="Fit the whole picture">Fit</button></div><div class="tip" id="tip" role="status" hidden><span>Zoom in to read the letters — pinch, Ctrl + scroll, or +</span><button id="tipX" aria-label="Dismiss tip">×</button></div><div class="mini-wrap" id="miniWrap" hidden><canvas id="mini" aria-label="Overview map: tap to jump there"></canvas><button class="mini-hide" id="miniHide" aria-label="Hide map" title="Hide map">–</button></div><button class="ib mini-show" id="miniShow" aria-label="Show map" title="Show map" hidden><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14"/></svg></button></main>
+  <main class="stage" id="stage"><canvas id="cv" role="img"></canvas><div class="mini-wrap" id="miniWrap" hidden><canvas id="mini" aria-label="Overview map: tap to jump there"></canvas><button class="mini-hide" id="miniHide" aria-label="Hide map" title="Hide map">–</button></div><button class="ib mini-show" id="miniShow" aria-label="Show map" title="Show map" hidden><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14"/></svg></button></main>
   <nav class="rail" id="rail" aria-label="Colors"></nav>
 </div>
 <div class="menu" id="menu" role="menu" hidden>
@@ -611,11 +615,19 @@ mini.addEventListener('pointermove', e => { if(miniDrag) miniJump(e); });
 ['pointerup','pointercancel'].forEach(t => mini.addEventListener(t, () => { miniDrag=false; }));
 mini.addEventListener('contextmenu', e => e.preventDefault());
 cv.addEventListener('contextmenu', e => e.preventDefault());
+// Wheel: a mouse wheel zooms around the pointer; a trackpad's two-finger scroll pans; Ctrl + wheel and
+// trackpad pinch (which arrives as Ctrl + wheel) zoom smoothly. A mouse wheel moves in whole notches
+// (line mode, or whole-pixel steps of 50+ with no sideways part); trackpads send small, smooth amounts.
+const isMouseWheel = e => !e.ctrlKey && e.deltaX===0 && e.deltaY!==0 &&
+  (e.deltaMode===1 || (e.deltaMode===0 && Number.isInteger(e.deltaY) && Math.abs(e.deltaY)>=50));
+function zoomAround(ns,x,y){ ns=clamp(ns,1,4); const wx=(x-view.tx)/view.s, wy=(y-view.ty)/view.s;
+  view.s=ns; view.tx=x-wx*ns; view.ty=y-wy*ns; }
 cv.addEventListener('wheel', e => {
-  e.preventDefault();
+  e.preventDefault(); anim=null;
   const [x,y]=local(e), k = e.deltaMode===1 ? 16 : 1;
-  if(e.ctrlKey){ const ns=clamp(view.s*Math.exp(-e.deltaY*k*.01),1,4), wx=(x-view.tx)/view.s, wy=(y-view.ty)/view.s;
-    view.s=ns; view.tx=x-wx*ns; view.ty=y-wy*ns; }
+  if(isMouseWheel(e)){ const notches=Math.max(1, Math.round(Math.abs(e.deltaY)/(e.deltaMode===1 ? 3 : 100)));
+    zoomAround(view.s*Math.pow(1.25, -Math.sign(e.deltaY)*notches), x, y); }      // 1.25x per notch: 100% → 400% in ~6 notches
+  else if(e.ctrlKey) zoomAround(view.s*Math.exp(-e.deltaY*k*.01), x, y);
   else { view.tx-=e.deltaX*k; view.ty-=e.deltaY*k; }
   clampView(); dirty=true;
 },{passive:false});
