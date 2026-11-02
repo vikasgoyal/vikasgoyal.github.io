@@ -652,8 +652,13 @@ cv.addEventListener('contextmenu', e => e.preventDefault());
 // Wheel: a mouse wheel zooms around the pointer; a trackpad's two-finger scroll pans; Ctrl + wheel and
 // trackpad pinch (which arrives as Ctrl + wheel) zoom smoothly. A mouse wheel moves in whole notches
 // (line mode, or whole-pixel steps of 50+ with no sideways part); trackpads send small, smooth amounts.
-const isMouseWheel = e => !e.ctrlKey && e.deltaX===0 && e.deltaY!==0 &&
-  (e.deltaMode===1 || (e.deltaMode===0 && Number.isInteger(e.deltaY) && Math.abs(e.deltaY)>=50));
+// Browser zoom (remembered per site) divides wheel deltas by the zoom factor, so a notch of 100 can arrive
+// as 90.9 at 110%; multiplying by devicePixelRatio (which includes that zoom) recovers the whole step.
+const whole = v => Math.abs(v-Math.round(v)) < .02;
+const isMouseWheel = e => { if(e.ctrlKey || e.deltaX!==0 || e.deltaY===0) return false;
+  if(e.deltaMode===1) return true;
+  const d=e.deltaY, dd=d*(window.devicePixelRatio||1);
+  return e.deltaMode===0 && Math.max(Math.abs(d),Math.abs(dd))>=50 && (whole(d) || whole(dd)); };
 function zoomAround(ns,x,y){ ns=clamp(ns,1,4); const wx=(x-view.tx)/view.s, wy=(y-view.ty)/view.s;
   view.s=ns; view.tx=x-wx*ns; view.ty=y-wy*ns; }
 cv.addEventListener('wheel', e => {
