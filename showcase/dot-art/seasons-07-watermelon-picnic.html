@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Watermelon Picnic · Seasons Dot Art</title>
+<meta name="description" content="Color by dot code: Watermelon Picnic (Seasons Dot Art No. 07). Tap a color, then tap or drag across the dots.">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZBXY60BLWE');
+</script>
+<!--
+=====================================================================================
+  SEASONS DOT ART — HOW TO MAKE A NEW PAGE
+=====================================================================================
+  1. Copy this file to seasons-NN-some-name.html.
+  2. Replace ONLY the `PAGE = (function(){ ... })()` block (and the <title> / meta
+     description in <head>). Everything after "ENGINE (generic)" stays untouched.
+  3. Check the result by opening the page with #preview at the end of the URL (for example
+     seasons-03-cherry-blossom.html#preview): the finished view at full size, nothing saved.
+     This is for authors only; nothing on the page links to it.
+
+  PAGE fields
+    id              unique id, e.g. 'seasons-02-snowy-cabin' (also the progress storage key)
+    title           e.g. 'Snowy Cabin at Night' (top bar)
+    series          'Seasons Dot Art · No. NN / 10' (small caps under the title)
+    completeMessage text on the completion card, e.g. 'Snowy Cabin at Night — complete.'
+    about           text for the About dialog
+    prev / next     optional { href, title } — shown as links in the ⋯ menu
+    cols, rows      126 x 81 (landscape). Sketch in 84 x 54 "design units" and scale by
+                    K = 1.5 with the helpers below, so line widths and outlines stay 1 dot.
+    palette         9–10 colours: { LETTER: { name, hex } }. One unique capital letter per
+                    colour (avoid I and O). The key order is the order in the palette rail.
+    fallback        code for any cell no layer covers (normally the background colour)
+    layers          bottom -> top. Each cell takes the code of the TOPMOST layer whose shape
+                    contains the cell centre and whose fill returns a code.
+
+  Helpers defined at the top of PAGE (design units, scaled by K):
+    R(x,y,w,h)  rect · E(cx,cy,rx,ry)  ellipse · P(pts)  polygon · U(...)  union
+    L(lines,w)  thick polylines (w in grid cells) · grow(shape,d)  enlarge by d cells
+    outlined(shape, fill)  -> [1-dot dark outline layer, fill layer]
+
+  Shapes (grid units when written by hand):
+    rect {x,y,w,h} · ellipse {cx,cy,rx,ry} · poly {pts:[[x,y]...]}
+    blob {circles:[[cx,cy,r,ry?]...]} · lines {lines:[[[x,y]...]...], w}
+    ridge {base, waves:[[amp,freq,phase]...], bottom}  (filled below a wavy line)
+    union {shapes:[...]}
+  Fills:
+    'T'                                              a single colour
+    {type:'checker', codes:[a,b], period}            diagonal checker of period x period cells
+    {type:'waves', codes:[a,b], amp, period, wavelength}   wavy horizontal bands
+    {type:'stripes', code, slope, period, width, dash, gap} streaks (null in the gaps, so
+                                                     the layer below shows through)
+    (linear / mix gradients still exist in the engine, but this series does not use them)
+
+  Style rules for the series
+    - FLAT shapes only: no gradients or dithered shading.
+    - A 1-dot dark outline wherever an object meets a similar colour (use outlined()).
+    - Backgrounds are patterns (checker / waves), never empty and never a gradient:
+      every dot belongs to the picture.
+    - One clear focal object in the centre; supporting objects left and right.
+    - Every object must be recognizable in the finished view at full size, not just as
+      a thumbnail. Small details below ~2 dots wide disappear: make them bigger or drop them.
+    - Check the palette counts: a colour used by only a handful of dots is not worth a slot.
+=====================================================================================
+-->
+<style>
+:root{
+  --bg:#f3efe7; --card:#ffffff; --ink:#2a2b2e; --muted:#77726a; --line:#e3ded4; --accent:#2f4d6b;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overscroll-behavior:none}   /* no swipe-back navigation while painting */
+body{background:var(--bg);color:var(--ink);font:15px/1.3 var(--sans);overflow:hidden;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 124px;grid-template-rows:56px minmax(0,1fr);column-gap:12px;
+  padding:8px max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+
+/* top bar: buttons left, title centred, progress right */
+.bar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;min-width:0;padding-bottom:6px}
+.ttl{text-align:center;min-width:0}
+h1{font:400 22px/1.05 var(--serif);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.series{display:block;margin-top:2px;font-size:13px;font-variant:all-small-caps;letter-spacing:.09em;color:var(--muted);white-space:nowrap}
+.prog{justify-self:end;display:flex;align-items:center;gap:8px;width:min(260px,100%)}
+.track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.pct{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:3em;text-align:right}
+.btns{justify-self:start;display:flex;gap:8px}
+.ib{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.ib svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ib:disabled{opacity:.35;cursor:default}
+.ib.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.ib.home{width:auto;display:flex;gap:7px;padding:0 13px 0 11px;color:inherit;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
+@media (max-width:1000px){.ib.home span{display:none}.ib.home{width:44px;padding:0;justify-content:center}}
+
+/* canvas card */
+.stage{grid-column:1;grid-row:2;position:relative;background:var(--card);border-radius:14px;overflow:hidden;
+  box-shadow:0 1px 2px rgba(60,50,30,.06),0 10px 30px rgba(60,50,30,.10)}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+
+/* palette rail */
+.rail{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;gap:4px;overflow-y:auto;padding:2px 3px;scrollbar-width:thin}
+.sw{min-height:48px;flex:none;display:flex;align-items:center;gap:9px;padding:0 9px;border-radius:12px;border:1px solid var(--line);background:var(--card);
+  cursor:pointer;text-align:left;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.sw i{width:28px;height:28px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.sw b{font-weight:650;font-size:14px}
+.sw small{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sw[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px var(--ink)}
+.sw.done{opacity:.45}
+/* zoom pill, first-visit tip */
+.zoom{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;align-items:center;gap:2px;padding:4px;border-radius:14px;
+  background:rgba(255,255,255,.88);border:1px solid var(--line);box-shadow:0 4px 16px rgba(40,30,20,.14);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.zb{min-width:44px;height:44px;border:0;background:transparent;border-radius:10px;cursor:pointer;font:500 20px/1 var(--sans);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.zb:hover{background:var(--bg)}
+.zb:disabled{opacity:.3;cursor:default;background:transparent}
+.zb.fit{font-size:13px;font-weight:600;padding:0 12px}
+.zpct{min-width:50px;text-align:center;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tip{position:absolute;right:12px;bottom:72px;z-index:4;max-width:290px;display:flex;align-items:center;gap:4px;padding:6px 4px 6px 14px;border-radius:12px;
+  background:var(--ink);color:var(--card);font-size:13px;line-height:1.35;box-shadow:0 8px 24px rgba(40,30,20,.25);animation:fade .4s ease}
+.tip::after{content:"";position:absolute;right:96px;bottom:-6px;border:6px solid transparent;border-bottom:0;border-top-color:var(--ink)}
+.tip button{flex:none;min-width:44px;height:44px;border:0;background:transparent;color:inherit;font-size:20px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.mini-wrap{position:absolute;left:12px;bottom:12px;z-index:3;padding:5px;border-radius:10px;background:rgba(255,255,255,.72);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);box-shadow:0 4px 16px rgba(40,30,20,.16)}
+#mini{position:static;display:block;width:160px;height:auto;border-radius:6px;opacity:.92;cursor:pointer}
+.mini-hide{position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+  display:grid;place-items:center;cursor:pointer;font:600 15px/1 var(--sans);color:var(--muted);touch-action:manipulation}
+.mini-hide::before{content:"";position:absolute;inset:-9px}          /* 44px touch target */
+.mini-show{position:absolute;left:12px;bottom:12px;z-index:3;background:rgba(255,255,255,.85)}
+
+/* menu, dialogs, completion */
+.menu{position:fixed;left:12px;top:58px;z-index:10;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;min-width:220px;
+  box-shadow:0 12px 32px rgba(40,30,20,.18);display:flex;flex-direction:column}
+.mi{min-height:44px;border:0;background:none;text-align:left;padding:0 12px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mi:hover{background:var(--bg)}
+a.mi{color:inherit;text-decoration:none}
+.mi.site{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 8px 8px;color:var(--muted,inherit)}
+.mi .tog{width:34px;height:20px;border-radius:10px;background:var(--line);position:relative;flex:none}
+.mi .tog::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--card);transition:left .15s}
+.mi[aria-checked="true"] .tog{background:var(--accent)}
+.mi[aria-checked="true"] .tog::after{left:16px}
+.veil{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:rgba(40,35,28,.28);padding:16px}
+.dlg{background:var(--card);border-radius:14px;padding:20px;max-width:360px;box-shadow:0 16px 40px rgba(40,30,20,.25)}
+.dlg h2{font:400 20px var(--serif);margin:0 0 8px}
+.dlg p{margin:0 0 16px;color:var(--muted)}
+.row{display:flex;gap:8px;justify-content:flex-end}
+.btn{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.done-msg{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:14px;
+  padding:10px 10px 10px 18px;display:flex;align-items:center;gap:16px;box-shadow:0 10px 30px rgba(40,30,20,.16);animation:rise .6s ease}
+.done-msg p{margin:0;font:italic 20px var(--serif)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="btns">
+      <a class="ib home" href="index.html" aria-label="All pages" title="All pages"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/></svg><span>All pages</span></a>
+      <button class="ib" id="bUndo" aria-label="Undo" title="Undo" disabled><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3"/></svg></button>
+      <button class="ib" id="bMenu" aria-label="Menu" aria-haspopup="true" aria-expanded="false" title="Menu"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></button>
+    </div>
+    <div class="ttl"><h1 id="title"></h1><span class="series" id="series"></span></div>
+    <div class="prog"><div class="track" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="track"><i></i></div><span class="pct" id="pct">0%</span></div>
+  </header>
+  <main class="stage" id="stage"><canvas id="cv" role="img"></canvas><div class="zoom" id="zoom" role="group" aria-label="Zoom"><button class="zb" id="zOut" aria-label="Zoom out">−</button><span class="zpct" id="zPct" aria-live="polite">100%</span><button class="zb" id="zIn" aria-label="Zoom in">+</button><button class="zb fit" id="zFit" aria-label="Fit the whole picture">Fit</button></div><div class="tip" id="tip" role="status" hidden><span>Zoom in to read the letters — pinch, Ctrl + scroll, or +</span><button id="tipX" aria-label="Dismiss tip">×</button></div><div class="mini-wrap" id="miniWrap" hidden><canvas id="mini" aria-label="Overview map: tap to jump there"></canvas><button class="mini-hide" id="miniHide" aria-label="Hide map" title="Hide map">–</button></div><button class="ib mini-show" id="miniShow" aria-label="Show map" title="Show map" hidden><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14"/></svg></button></main>
+  <nav class="rail" id="rail" aria-label="Colors"></nav>
+</div>
+<div class="menu" id="menu" role="menu" hidden>
+  <button class="mi" id="mHint" role="menuitemcheckbox" aria-checked="false">Hint: highlight selected color <span class="tog" aria-hidden="true"></span></button>
+  <button class="mi" id="mReset" role="menuitem">Reset…</button>
+  <button class="mi" id="mAbout" role="menuitem">About</button>
+  <a class="mi site" id="mHome" role="menuitem" href="https://vikasgoyal.github.io/">More at vikasgoyal.github.io <span aria-hidden="true">↗</span></a>
+</div>
+
+<script>
+/* ===================== PAGE (the only page-specific part) ===================== */
+const PAGE = (function(){
+  /* Watermelon Picnic. Sketched in design units (84 x 54) and scaled by K onto 126 x 81.
+     Line widths and outline growth are in grid cells, so outlines stay 1 dot. */
+  const K = 1.5;
+  const R = (x,y,w,h) => ({type:'rect', x:x*K, y:y*K, w:w*K, h:h*K});
+  const E = (cx,cy,rx,ry) => ({type:'ellipse', cx:cx*K, cy:cy*K, rx:rx*K, ry:(ry==null?rx:ry)*K});
+  const U = (...shapes) => ({type:'union', shapes});
+  const P = pts => ({type:'poly', pts:pts.map(([x,y]) => [x*K, y*K])});
+  const L = (lines, w) => ({type:'lines', w, lines:lines.map(l => l.map(([x,y]) => [x*K, y*K]))});
+  const grow = (s,d) => s.type==='rect' ? {...s, x:s.x-d, y:s.y-d, w:s.w+2*d, h:s.h+2*d}
+                    : s.type==='ellipse' ? {...s, rx:s.rx+d, ry:s.ry+d}
+                    : s.type==='union' ? U(...s.shapes.map(t => grow(t,d)))
+                    : s.type==='lines' ? {...s, w:s.w+d} : s;
+  const outlined = (shape, fill, d=1) => [{shape:grow(shape,d), fill:'K'}, {shape, fill}];
+  const loop = pts => [...pts, pts[0]];                     // closed polyline for outlines
+
+  // Watermelon slice: a circular sector with its point at the top and the rind along the bottom arc.
+  // Layers: outline, dark rind, pale rind, red flesh, black seeds. `tilt` rotates around the point.
+  function slice(ax, ay, rad, half, tilt){
+    const t=tilt*Math.PI/180;
+    const rot = ([x,y]) => [ax+(x-ax)*Math.cos(t)-(y-ay)*Math.sin(t), ay+(x-ax)*Math.sin(t)+(y-ay)*Math.cos(t)];
+    const sector = r => { const pts=[[ax,ay]]; for(let a=90-half; a<=90+half+.01; a+=4){ const q=a*Math.PI/180; pts.push([ax+r*Math.cos(q), ay+r*Math.sin(q)]); } return pts.map(rot); };
+    const seeds=[]; [[.48,[-14,0,14]],[.7,[-22,-8,8,22]]].forEach(([f,angs]) => angs.forEach(d => { const q=(90+d)*Math.PI/180;
+      const [x,y]=rot([ax+rad*f*Math.cos(q), ay+rad*f*Math.sin(q)]); seeds.push(E(x,y,.42,.75)); }));
+    return [
+      {shape:P(sector(rad)), fill:'D'},
+      {shape:P(sector(rad-1.5)), fill:'L'},
+      {shape:P(sector(rad-2.9)), fill:'R'},
+      {shape:U(...seeds), fill:'K'},
+      {shape:L([loop(sector(rad))], .5), fill:'K'}
+    ];
+  }
+
+  // Daisies in the grass (grid cells): five-dot white flowers with a yellow centre.
+  let seed = 23; const rnd = () => (seed = (seed*16807) % 2147483647) / 2147483647;
+  const blanket = [[13,15],[71,15],[80,53],[4,53]];
+  const inBlanket = (x,y) => y>13.5 && x>12-(y-15)*.25-1.5 && x<72+(y-15)*.24+1.5;
+  const daisies=[];
+  for(let tries=0; tries<4000 && daisies.length<26; tries++){
+    const c=Math.floor(rnd()*122)+2, r=Math.floor(rnd()*77)+2;
+    if(inBlanket(c/K, r/K) || daisies.some(([a,b]) => Math.abs(a-c)+Math.abs(b-r)<7)) continue;
+    daisies.push([c,r]);
+  }
+  const cell = (c,r) => ({type:'rect', x:c, y:r, w:1, h:1});
+  const petals = U(...daisies.flatMap(([c,r]) => [cell(c-1,r), cell(c+1,r), cell(c,r-1), cell(c,r+1)]));
+  const hearts = U(...daisies.map(([c,r]) => cell(c,r)));
+  const tufts = []; for(let k=0;k<34;k++){ const c=Math.floor(rnd()*122)+2, r=Math.floor(rnd()*77)+2;
+    if(!inBlanket(c/K, r/K) && !daisies.some(([a,b]) => Math.abs(a-c)+Math.abs(b-r)<3)) tufts.push([[c-1+.5,r+.5],[c+.5,r-1.5],[c+1.5,r+.5]]); }
+
+  // Lemonade jug (design units): glass body, lemonade, ice, lemon slice, handle.
+  const jugBody = U(R(59,16,13,26), E(65.5,42,6.5,1.6), R(60.5,13,10,3.5), P([[60.5,13],[58.6,11.6],[61.2,11],[70.5,11],[70.5,13]]));
+  const lemon = E(65.5,31.5,2.6);
+
+  return {
+    id: 'seasons-07-watermelon-picnic',
+    title: 'Watermelon Picnic',
+    series: 'Seasons Dot Art · No. 07 / 10',
+    completeMessage: 'Watermelon Picnic — complete. Sweet and cool.',
+    about: 'Seasons Dot Art, No. 07 of 10 (summer). Pick a color on the right, then tap or drag across its dots. Two fingers pan and zoom; the map in the corner jumps around the picture. Free from vikasgoyal.github.io.',
+    prev: { href: 'seasons-06-beach-umbrella.html', title: 'Beach Umbrella and Waves' },
+    next: { href: 'seasons-08-sunflowers.html', title: 'Sunflowers at Golden Hour' },
+    cols: 126, rows: 81,
+    palette: {
+      G:{name:'grass green',  hex:'#7DB04B'},
+      H:{name:'deep grass',   hex:'#5A8E35'},
+      B:{name:'gingham blue', hex:'#4F86C9'},
+      W:{name:'white',        hex:'#FBF8F1'},
+      R:{name:'melon red',    hex:'#E8464F'},
+      L:{name:'pale rind',    hex:'#CFE8A0'},
+      D:{name:'rind green',   hex:'#2E7A3A'},
+      Y:{name:'lemonade',     hex:'#F6D54E'},
+      K:{name:'outline',      hex:'#1F2B1C'}
+    },
+    fallback: 'G',
+    layers: [
+      // grass: wavy two-tone texture, tufts and daisies
+      {bg:true, shape:R(0,0,84,54), fill:{type:'waves', codes:['G','H'], amp:.8, period:2, wavelength:7}},
+      {bg:true, shape:{type:'lines', w:.45, lines:tufts}, fill:'H'},
+      {bg:true, shape:petals, fill:'W'},
+      {bg:true, shape:hearts, fill:'Y'},
+
+      // gingham blanket in perspective, with a 1-dot outline
+      {shape:P(blanket), fill:{type:'checker', codes:['B','W'], period:3}},
+      {shape:L([loop(blanket)], .55), fill:'K'},
+
+      // three watermelon slices (the focal group)
+      ...slice(21, 17, 17, 34, -18),
+      ...slice(38, 19, 18, 34, 0),
+      ...slice(52, 26, 15, 34, 22),
+
+      // lemonade jug with a handle
+      {shape:E(73.6,26.5,3.6,6.2), fill:'K'},
+      {shape:E(73.6,26.5,2.6,5.2), fill:'W'},
+      {shape:E(73.6,26.5,1.6,4.2), fill:'K'},
+      {shape:E(73.6,26.5,.8,3.4), fill:{type:'checker', codes:['B','W'], period:3}},
+      ...outlined(jugBody, 'W'),
+      {shape:U(R(59,17.5,13,24.5), E(65.5,42,6.5,1.6)), fill:'Y'},
+      {shape:L([[[61.5,20],[61.5,40]]], .6), fill:'W'},                    // glass highlight
+      ...outlined(R(66.5,23.5,3.2,3), 'W', .8), ...outlined(R(62.6,26.6,2.6,2.6), 'W', .8),   // ice cubes
+      ...outlined(lemon, 'W', .8),
+      {shape:E(65.5,31.5,1.9), fill:'Y'},
+      {shape:L([[[65.5,29.6],[65.5,33.4]], [[63.6,31.5],[67.4,31.5]]], .4), fill:'W'},
+      {shape:L([[[59,17.5],[72,17.5]]], .5), fill:'K'}                          // lemonade surface line
+    ]
+  };
+})();
+
+/* ===================== ENGINE (generic) ===================== */
+(function(){
+'use strict';
+const P = PAGE, COLS = P.cols, ROWS = P.rows, N = COLS*ROWS;
+const CODES = Object.keys(P.palette), K = CODES.length, HEX = CODES.map(c => P.palette[c].hex);
+const IDX = Object.fromEntries(CODES.map((c,i) => [c,i]));
+const RGB = HEX.map(h => [1,3,5].map(o => parseInt(h.slice(o,o+2),16)));
+const $ = id => document.getElementById(id);
+// Act on touch/pen pointerup instead of waiting for click: Chrome drops the click when a
+// tap lands right after a fast drag (it treats the tap as stopping a fling). Mouse and
+// keyboard still use the normal click.
+function onTap(el, fn, pick){
+  let at=-Infinity;
+  el.addEventListener('pointerup', e => { if(e.pointerType==='mouse') return; const t=pick?pick(e.target):el; if(!t) return;
+    const r=t.getBoundingClientRect(); if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom) return;
+    at=performance.now(); fn(t); });
+  el.addEventListener('click', e => { if(performance.now()-at<800) return; const t=pick?pick(e.target):el; if(t) fn(t); });
+}
+
+/* ---------- rasterizer: sample each cell centre against the layers ---------- */
+const BAYER = (() => { let m=[[0]]; for(let n=1;n<8;n*=2){ const r=[]; for(let y=0;y<2*n;y++){ r[y]=[]; for(let x=0;x<2*n;x++)
+  r[y][x]=4*m[y%n][x%n]+(y<n?(x<n?0:2):(x<n?3:1)); } m=r; } return m; })();
+const thr = (x,y) => (BAYER[y&7][x&7]+.5)/64;
+const clamp = (v,a,b) => v<a?a:v>b?b:v;
+const hash = (x,y) => { const s=Math.sin(x*127.1+y*311.7)*43758.5453; return s-Math.floor(s); };
+function ramp(codes,t,cx,cy,soft){
+  const n=codes.length; if(n===1) return codes[0];
+  t=clamp(t,0,.99999); const pos=t*n, i=Math.floor(pos), f=pos-i;
+  const [b,d] = f<.5 ? [i,f] : [i+1,f-1];
+  if(b<=0||b>=n) return codes[i];
+  const p = soft>0 ? clamp(.5+d/soft,0,1) : (d>=0?1:0);
+  return p>thr(cx,cy) ? codes[b] : codes[b-1];
+}
+function segDist(px,py,ax,ay,bx,by){ const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy; const t=l?clamp(((px-ax)*dx+(py-ay)*dy)/l,0,1):0;
+  return Math.hypot(ax+t*dx-px, ay+t*dy-py); }
+function contains(s,px,py){
+  switch(s.type){
+    case 'rect': return px>=s.x&&px<s.x+s.w&&py>=s.y&&py<s.y+s.h;
+    case 'ellipse': return ((px-s.cx)/s.rx)**2+((py-s.cy)/s.ry)**2<=1;
+    case 'poly': { let inside=false; const p=s.pts; for(let i=0,j=p.length-1;i<p.length;j=i++){ const [xi,yi]=p[i],[xj,yj]=p[j];
+        if((yi>py)!==(yj>py) && px<(xj-xi)*(py-yi)/(yj-yi)+xi) inside=!inside; } return inside; }
+    case 'blob': return s.circles.some(([x,y,r,ry]) => ((px-x)/r)**2+((py-y)/(ry||r))**2<=1);
+    case 'lines': return s.lines.some(l => l.some((p,i) => i>0 && segDist(px,py,l[i-1][0],l[i-1][1],p[0],p[1])<=s.w));
+    case 'ridge': { let y=s.base; for(const [a,f,ph] of s.waves) y+=a*Math.sin(f*px+ph); return py>=y&&py<=s.bottom; }
+    case 'union': return s.shapes.some(sh => contains(sh,px,py));
+  }
+  throw new Error('Unknown shape: '+s.type);
+}
+function fillCode(f,px,py,cx,cy){
+  if(typeof f==='string') return f;
+  switch(f.type){
+    case 'linear': { const vx=f.to[0]-f.from[0], vy=f.to[1]-f.from[1];
+      return ramp(f.codes, ((px-f.from[0])*vx+(py-f.from[1])*vy)/(vx*vx+vy*vy), cx, cy, f.soft); }
+    case 'mix': return thr(cx,cy)<f.p ? f.codes[1] : f.codes[0];
+    case 'checker': { const q=f.period||1; return (Math.floor(cx/q)+Math.floor(cy/q))%2 ? f.codes[1] : f.codes[0]; }
+    case 'waves': { const v=py+(f.amp||0)*Math.sin(px*2*Math.PI/(f.wavelength||12)); return ((Math.floor(v/(f.period||2))%2)+2)%2 ? f.codes[1] : f.codes[0]; }
+    case 'stripes': { const u=px+f.slope*py, k=Math.floor(u/f.period); if(u-k*f.period>=f.width) return null;
+      const per=f.dash+f.gap, v=((py+hash(k,7)*per)%per+per)%per; return v<f.dash ? f.code : null; }
+  }
+  throw new Error('Unknown fill: '+f.type);
+}
+const answer = new Int8Array(N);
+for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+  let code=P.fallback;
+  for(let li=P.layers.length-1;li>=0;li--){ const L=P.layers[li];
+    if(contains(L.shape,x+.5,y+.5)){ const c=fillCode(L.fill,x+.5,y+.5,x,y); if(c!=null){ code=c; break; } } }
+  if(!(code in IDX)) throw new Error('Unknown code '+code);
+  answer[y*COLS+x]=IDX[code];
+}
+const total = new Int32Array(K); for(let i=0;i<N;i++) total[answer[i]]++;
+
+/* ---------- state + storage ---------- */
+const KEY = 'dotart:'+P.id;
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+                set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+                del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
+const fills = new Int8Array(N).fill(-1);
+const left = Int32Array.from(total);          // dots still to fill, per code
+// #preview (authors only, not linked anywhere): open in the finished view, without saving anything
+// or showing the completion card. Painting is off in this mode.
+const preview = location.hash === '#preview';
+let hint = false, filledOK = 0, sel = 0, revealing = false, revealAt = 0, complete = false, completeAt = 0;
+const undo = [];
+function setFill(i,v){
+  const old=fills[i]; if(old===v) return;
+  if(old===answer[i]){ left[old]++; filledOK--; }
+  if(v===answer[i]){ left[v]--; filledOK++; }
+  fills[i]=v;
+}
+function save(){ let s=''; for(let i=0;i<N;i++) s += fills[i]<0 ? '.' : String.fromCharCode(97+fills[i]); store.set(KEY, JSON.stringify({k:K,f:s})); }
+(function load(){ try{ const o=JSON.parse(store.get(KEY)||'null'); if(!o||o.k!==K||o.f.length!==N) return;
+  for(let i=0;i<N;i++){ const c=o.f.charCodeAt(i); if(c!==46) setFill(i,c-97); } }catch(e){} })();
+
+/* ---------- UI: title, palette rail, progress ---------- */
+$('title').textContent = P.title;
+document.title = P.title + ' · ' + P.series.split(' · ')[0];
+$('series').textContent = P.series;
+const rail = $('rail');
+rail.innerHTML = CODES.map((c,k) => `<button class="sw" data-k="${k}" aria-pressed="false"><i style="background:${HEX[k]}"></i><span><b>${c}</b> <small></small></span></button>`).join('');
+const sws = [...rail.querySelectorAll('.sw')];
+onTap(rail, b => select(+b.dataset.k), t => t.closest('.sw'));
+function select(k){ sel=k; sws.forEach((b,j) => b.setAttribute('aria-pressed', j===k)); sws[k].scrollIntoView({block:'nearest'}); if(hint) dirty=true; }   // no canvas change unless the hint is on
+function updateUI(){
+  sws.forEach((b,k) => { const n=left[k]; b.querySelector('small').textContent = n ? '· '+n : '✓'; b.classList.toggle('done',!n);
+    b.setAttribute('aria-label', `${CODES[k]}, ${P.palette[CODES[k]].name}, ${n ? n+' left' : 'finished'}`); });
+  const pct=Math.floor(100*filledOK/N);
+  $('pct').textContent=pct+'%'; $('track').firstElementChild.style.width=(100*filledOK/N)+'%'; $('track').setAttribute('aria-valuenow',pct);
+  $('bUndo').disabled=!undo.length;
+  $('cv').setAttribute('aria-label', `${P.title}: ${filledOK} of ${N} dots colored`);
+  const isDone = filledOK===N;
+  if(isDone && !complete && !preview){ complete=true; completeAt=performance.now(); showDone(); glide({s:1,tx:0,ty:0}); }
+  if(!isDone && complete){ complete=false; hideDone(); }
+  dirty=true;
+}
+function firstOpen(){ const k=CODES.findIndex((c,j) => left[j]>0); return k<0?0:k; }
+
+/* ---------- canvas, layout, view ---------- */
+const cv=$('cv'), ctx=cv.getContext('2d'), stage=$('stage');
+const base=document.createElement('canvas'), bctx=base.getContext('2d');
+const mini=$('mini'), mctx=mini.getContext('2d'), MW=160, MH=Math.round(160*ROWS/COLS);
+const mimg=document.createElement('canvas'); mimg.width=COLS; mimg.height=ROWS; const mictx=mimg.getContext('2d'), mdata=mictx.createImageData(COLS,ROWS);
+let W=0, H=0, dpr=1, cell0=0, ox=0, oy=0;     // base layout (CSS px)
+const view={s:1, tx:0, ty:0};
+let dirty=true;
+function layout(){
+  const r=stage.getBoundingClientRect(); W=r.width; H=r.height; dpr=window.devicePixelRatio||1;
+  cv.width=base.width=Math.round(W*dpr); cv.height=base.height=Math.round(H*dpr);
+  const pad=10; cell0=Math.min((W-2*pad)/COLS,(H-2*pad)/ROWS);
+  ox=(W-cell0*COLS)/2; oy=(H-cell0*ROWS)/2;
+  mini.width=Math.round(MW*dpr); mini.height=Math.round(MH*dpr); mini.style.height=MH+'px';
+  clampView(); dirty=true;
+}
+function centerOn(gc,gr){ view.tx=W/2-(ox+gc*cell0)*view.s; view.ty=H/2-(oy+gr*cell0)*view.s; clampView(); dirty=true; }
+function clampView(v=view){
+  v.s=clamp(v.s,1,4);
+  if(v.s===1){ v.tx=0; v.ty=0; return v; }
+  const gw=cell0*COLS*v.s, gh=cell0*ROWS*v.s, gx=ox*v.s, gy=oy*v.s;
+  v.tx=clamp(v.tx, Math.min(W-gx-gw, 0), Math.max(-gx, 0));   // keep the picture covering the card where possible
+  v.ty=clamp(v.ty, Math.min(H-gy-gh, 0), Math.max(-gy, 0));
+  return v;
+}
+// A clamped view zoomed to `ns` around screen point (cx,cy), without changing the current one.
+function viewAt(ns,cx,cy){ const wx=(cx-view.tx)/view.s, wy=(cy-view.ty)/view.s, v={s:clamp(ns,1,4)}; v.tx=cx-wx*v.s; v.ty=cy-wy*v.s; return clampView(v); }
+const toWorld = (sx,sy) => [(sx-view.tx)/view.s, (sy-view.ty)/view.s];
+function cellAt(sx,sy){ const [wx,wy]=toWorld(sx,sy); const c=Math.floor((wx-ox)/cell0), r=Math.floor((wy-oy)/cell0);
+  return (c<0||r<0||c>=COLS||r>=ROWS) ? -1 : r*COLS+c; }
+
+// Work view: dots touch (97% of the cell); every unpainted dot is the same ring with its letter. Finished view (completion, #preview): a blurred bed of each cell's colour
+// fades in over ~1s and the circles settle to 94% on top, so the picture reads as a soft painting.
+const DOT=.485, FIN=.47, PAD=2;
+function seamAmount(now){
+  if(revealing) return clamp((now-revealAt)/1000,0,1);
+  if(complete)  return clamp((now-completeAt)/1000,0,1);
+  return 0;
+}
+const bed=document.createElement('canvas'); bed.width=COLS+2*PAD; bed.height=ROWS+2*PAD;
+const bedCtx=bed.getContext('2d'), bedImg=bedCtx.createImageData(bed.width,bed.height);
+let filterOK=null;
+function drawBed(g, useAnswer, alpha, s, cs){
+  const d=bedImg.data, bw=bed.width;
+  for(let y=0;y<bed.height;y++) for(let x=0;x<bw;x++){           // edge cells repeat into the padding
+    const i=clamp(y-PAD,0,ROWS-1)*COLS+clamp(x-PAD,0,COLS-1), k=useAnswer?answer[i]:fills[i], o=(y*bw+x)*4;
+    if(k<0){ d[o+3]=0; continue; } const c=RGB[k]; d[o]=c[0]; d[o+1]=c[1]; d[o+2]=c[2]; d[o+3]=255; }
+  bedCtx.putImageData(bedImg,0,0);
+  const gx=ox*s+view.tx, gy=oy*s+view.ty;
+  g.save(); g.beginPath(); g.rect(gx,gy,COLS*cs,ROWS*cs); g.clip(); g.globalAlpha=alpha;
+  if(filterOK===null){ g.filter='blur(2px)'; filterOK=(g.filter==='blur(2px)'); g.filter='none'; }
+  if(filterOK){ g.imageSmoothingEnabled=false; g.filter=`blur(${(.35*cs*dpr).toFixed(2)}px)`; }   // blur radius is in device pixels
+  else g.imageSmoothingEnabled=true;                                                                // fallback: soft bilinear upscale
+  g.drawImage(bed, gx-PAD*cs, gy-PAD*cs, bed.width*cs, bed.height*cs);
+  g.restore();
+}
+// Unpainted layer (a thin ring + letter on every dot, all identical), cached until the view or the hint changes.
+const ucv=document.createElement('canvas'), uctx=ucv.getContext('2d'); let uKey='';
+function renderUnpainted(){
+  const s=view.s, cs=cell0*s, key=[W,H,dpr,s.toFixed(4),view.tx.toFixed(2),view.ty.toFixed(2),hint?sel:-1].join('|');
+  if(key===uKey) return; uKey=key;
+  ucv.width=base.width; ucv.height=base.height;
+  const g=uctx, dotR=cs*DOT, fs=cs*DOT*2*.5;   // letter ≈ 50% of the dot
+  g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,W,H);
+  g.textAlign='center'; g.textBaseline='middle';
+  const font=w=>`${w} ${fs.toFixed(2)}px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif`;
+  g.font=font(400);
+  const c0=Math.max(0,Math.floor((-view.tx/s-ox)/cell0)), c1=Math.min(COLS-1,Math.floor(((W-view.tx)/s-ox)/cell0));
+  const r0=Math.max(0,Math.floor((-view.ty/s-oy)/cell0)), r1=Math.min(ROWS-1,Math.floor(((H-view.ty)/s-oy)/cell0));
+  for(let r=r0;r<=r1;r++) for(let c=c0;c<=c1;c++){
+    const i=r*COLS+c, a=answer[i], x=(ox+(c+.5)*cell0)*s+view.tx, y=(oy+(r+.5)*cell0)*s+view.ty;
+    const mine=hint && a===sel;
+    g.globalAlpha = hint && !mine ? .5 : 1;                       // hint mode: others dim
+    g.beginPath(); g.arc(x,y,dotR-.5,0,6.2832); g.lineWidth=1; g.strokeStyle='#d9d4cb'; g.stroke();   // same thin ring for every dot
+    if(mine){ g.font=font(700); g.fillStyle='#22252a'; g.fillText(CODES[a],x,y+fs*.04); g.font=font(400); }
+    else { g.fillStyle='#5f5a54'; g.fillText(CODES[a],x,y+fs*.04); }
+  }
+  g.globalAlpha=1;
+}
+function renderBase(){
+  const g=bctx, s=view.s, cs=cell0*s, now=performance.now();
+  g.setTransform(dpr,0,0,dpr,0,0); g.fillStyle='#fff'; g.fillRect(0,0,W,H);
+  const t=seamAmount(now), e=t*t*(3-2*t);
+  if(e>0) drawBed(g, revealing, e, s, cs);
+  const ua = complete ? 0 : revealing ? 1-e : 1;          // unpainted layer fades out in the finished view
+  if(ua>0){ renderUnpainted(); g.save(); g.setTransform(1,0,0,1,0,0); g.globalAlpha=ua; g.drawImage(ucv,0,0); g.restore(); }
+  const rad = e>0 ? cs*(DOT+(FIN-DOT)*e) : cs*DOT+.4;    // painted dots fully cover the ring and its letter
+  g.font=`600 ${(cs*DOT).toFixed(2)}px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif`;
+  g.textAlign='center'; g.textBaseline='middle';
+  const c0=Math.max(0,Math.floor((-view.tx/s-ox)/cell0)), c1=Math.min(COLS-1,Math.floor(((W-view.tx)/s-ox)/cell0));
+  const r0=Math.max(0,Math.floor((-view.ty/s-oy)/cell0)), r1=Math.min(ROWS-1,Math.floor(((H-view.ty)/s-oy)/cell0));
+  for(let r=r0;r<=r1;r++) for(let c=c0;c<=c1;c++){
+    const i=r*COLS+c, a=answer[i], f=fills[i];
+    if(f<0 && !revealing) continue;
+    const x=(ox+(c+.5)*cell0)*s+view.tx, y=(oy+(r+.5)*cell0)*s+view.ty, k=revealing?a:f;
+    g.globalAlpha=(revealing && f<0) ? e : 1;
+    g.beginPath(); g.arc(x,y,rad,0,6.2832); g.fillStyle=HEX[k]; g.fill();
+    g.globalAlpha=1;
+  }
+}
+function drawMini(){
+  const d=mdata.data;
+  for(let i=0;i<N;i++){ const f=fills[i], o=i*4;
+    if(f>=0){ const c=RGB[f]; d[o]=c[0]; d[o+1]=c[1]; d[o+2]=c[2]; } else { d[o]=d[o+1]=d[o+2]=255; }   // unpainted stays blank
+    d[o+3]=255; }
+  mictx.putImageData(mdata,0,0);
+  const m=mctx; m.setTransform(dpr,0,0,dpr,0,0); m.imageSmoothingEnabled=false; m.drawImage(mimg,0,0,MW,MH);
+  const s=view.s, k=MW/COLS;
+  const c0=clamp((-view.tx/s-ox)/cell0,0,COLS), c1=clamp(((W-view.tx)/s-ox)/cell0,0,COLS);
+  const r0=clamp((-view.ty/s-oy)/cell0,0,ROWS), r1=clamp(((H-view.ty)/s-oy)/cell0,0,ROWS);
+  m.lineWidth=2; m.strokeStyle='#2a2b2e'; m.strokeRect(c0*k+1,r0*k+1,Math.max(2,(c1-c0)*k-2),Math.max(2,(r1-r0)*k-2));
+}
+// View glide (zoom buttons, Fit, completion): ease the zoom/pan to a target over ~250ms.
+let anim=null;
+function glide(to){ anim={from:{...view}, to:{...to}, t0:performance.now(), ms:250}; }
+function stepGlide(now){
+  if(!anim) return; const t=clamp((now-anim.t0)/anim.ms,0,1), e=t<.5?2*t*t:1-2*(1-t)*(1-t);
+  for(const k of ['s','tx','ty']) view[k]=anim.from[k]+(anim.to[k]-anim.from[k])*e;
+  if(t>=1) anim=null; dirty=true;
+}
+function frame(now){
+  requestAnimationFrame(frame);
+  stepGlide(now);
+  const pulsing = hint && !revealing && !complete && left[sel]>0;
+  const fading = (complete && now-completeAt<1100) || (revealing && now-revealAt<1100);
+  if(fading) dirty=true;
+  if(!dirty && !pulsing) return;
+  if(dirty){ renderBase(); updateMiniVis(); if(!miniWrap.hidden) drawMini(); updateZoomUI(); dirty=false; }
+  ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(base,0,0);
+  if(pulsing){
+    const s=view.s, cs=cell0*s, ph=(Math.sin(now/420)+1)/2;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.lineWidth=Math.max(1.5,cs*.08);
+    ctx.strokeStyle=`rgba(47,77,107,${.25+.35*ph})`; ctx.beginPath();
+    for(let i=0;i<N;i++){ if(answer[i]!==sel||fills[i]===sel) continue;
+      const x=(ox+(i%COLS+.5)*cell0)*s+view.tx, y=(oy+(Math.floor(i/COLS)+.5)*cell0)*s+view.ty;
+      if(x<-cs||y<-cs||x>W+cs||y>H+cs) continue;
+      const rr=cs*(.5+.025*ph); ctx.moveTo(x+rr,y); ctx.arc(x,y,rr,0,6.2832); }
+    ctx.stroke();
+  }
+}
+
+/* ---------- painting (smart fill) ---------- */
+let stroke=null, last=null;
+function paintCell(i){
+  if(i<0 || answer[i]!==sel || fills[i]===sel) return false;
+  stroke.push([i,fills[i]]); setFill(i,sel); dirty=true; return true;
+}
+function paintAt(sx,sy){ return paintCell(cellAt(sx,sy)); }   // one dot under the finger (smart fill)
+function paintLine(x0,y0,x1,y1){
+  const step=Math.max(1,cell0*view.s/3), n=Math.ceil(Math.hypot(x1-x0,y1-y0)/step);
+  for(let k=1;k<=n;k++) paintAt(x0+(x1-x0)*k/n, y0+(y1-y0)*k/n);
+}
+function endStroke(){
+  if(stroke && stroke.length){ undo.push(stroke); if(undo.length>50) undo.shift(); save(); if(!tip.hidden) dismissTip(); updateUI(); }
+  stroke=null;
+}
+function doUndo(){ const s=undo.pop(); if(!s) return; for(let j=s.length-1;j>=0;j--) setFill(s[j][0],s[j][1]); save(); updateUI(); }
+
+/* ---------- pointers: one finger paints, two fingers pinch/pan ---------- */
+const pts=new Map(); let pinch=null, lastTap={t:0,x:0,y:0}, downAt=null;
+const local = e => { const r=cv.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
+cv.addEventListener('pointerdown', e => {
+  if(e.pointerType==='mouse' && e.button!==0) return;
+  cv.setPointerCapture(e.pointerId); closeMenu();
+  const p=local(e); pts.set(e.pointerId,p);
+  if(pts.size===2){ endStroke(); const [a,b]=[...pts.values()];
+    pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1])||1, m:[(a[0]+b[0])/2,(a[1]+b[1])/2], s:view.s, tx:view.tx, ty:view.ty}; return; }
+  if(pts.size>2 || complete || preview) return;
+  stroke=[]; last=p; downAt={t:performance.now(),x:p[0],y:p[1]}; paintAt(p[0],p[1]);
+});
+cv.addEventListener('pointermove', e => {
+  if(!pts.has(e.pointerId)) return;
+  const p=local(e); pts.set(e.pointerId,p);
+  if(pinch && pts.size===2){
+    const [a,b]=[...pts.values()], d=Math.hypot(a[0]-b[0],a[1]-b[1]), m=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+    const ns=clamp(pinch.s*d/pinch.d,1,4), wx=(pinch.m[0]-pinch.tx)/pinch.s, wy=(pinch.m[1]-pinch.ty)/pinch.s;
+    view.s=ns; view.tx=m[0]-wx*ns; view.ty=m[1]-wy*ns; clampView(); dirty=true; return;
+  }
+  if(stroke){ const ev = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for(const ce of (ev.length?ev:[e])){ const q=local(ce); paintLine(last[0],last[1],q[0],q[1]); last=q; } }
+});
+function up(e){
+  if(!pts.has(e.pointerId)) return;
+  const p=pts.get(e.pointerId); pts.delete(e.pointerId);
+  if(pinch){ if(pts.size<2) pinch=null; return; }
+  const tap = downAt && performance.now()-downAt.t<300 && Math.hypot(p[0]-downAt.x,p[1]-downAt.y)<12;
+  const painted = stroke && stroke.length>0;
+  endStroke();
+  if(tap && !painted){   // double-tap on an empty spot resets the view
+    const now=performance.now();
+    if(now-lastTap.t<350 && Math.hypot(p[0]-lastTap.x,p[1]-lastTap.y)<30){ view.s=1; clampView(); dirty=true; lastTap.t=0; }
+    else lastTap={t:now,x:p[0],y:p[1]};
+  }
+  downAt=null;
+}
+cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+// Minimap: tap or drag to move the view there (zooms to 2x first if the whole picture is showing).
+let miniDrag=false;
+const miniWrap=$('miniWrap'), miniShow=$('miniShow'); let miniCollapsed=false;
+function updateMiniVis(){                    // no map when the whole picture is showing, or once it is finished
+  const show = !complete && !preview && view.s>1.1;
+  miniWrap.hidden = !show || miniCollapsed; miniShow.hidden = !show || !miniCollapsed;
+}
+onTap($('miniHide'), () => { miniCollapsed=true; updateMiniVis(); });
+onTap(miniShow, () => { miniCollapsed=false; updateMiniVis(); dirty=true; });
+function miniJump(e){ const r=mini.getBoundingClientRect(); if(view.s<1.5) view.s=2;
+  centerOn(clamp((e.clientX-r.left)/r.width,0,1)*COLS, clamp((e.clientY-r.top)/r.height,0,1)*ROWS); }
+mini.addEventListener('pointerdown', e => { mini.setPointerCapture(e.pointerId); miniDrag=true; closeMenu(); miniJump(e); });
+mini.addEventListener('pointermove', e => { if(miniDrag) miniJump(e); });
+['pointerup','pointercancel'].forEach(t => mini.addEventListener(t, () => { miniDrag=false; }));
+mini.addEventListener('contextmenu', e => e.preventDefault());
+cv.addEventListener('contextmenu', e => e.preventDefault());
+cv.addEventListener('wheel', e => {
+  e.preventDefault();
+  const [x,y]=local(e), k = e.deltaMode===1 ? 16 : 1;
+  if(e.ctrlKey){ const ns=clamp(view.s*Math.exp(-e.deltaY*k*.01),1,4), wx=(x-view.tx)/view.s, wy=(y-view.ty)/view.s;
+    view.s=ns; view.tx=x-wx*ns; view.ty=y-wy*ns; }
+  else { view.tx-=e.deltaX*k; view.ty-=e.deltaY*k; }
+  clampView(); dirty=true;
+},{passive:false});
+
+/* ---------- top bar buttons ---------- */
+onTap($('bUndo'), () => { if(!$('bUndo').disabled) doUndo(); });
+document.addEventListener('keydown', e => { if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='z' && !e.shiftKey){ e.preventDefault(); doUndo(); } });
+// The All pages link: navigate on finger lift too, since Chrome drops the click right after a drag.
+onTap(document.querySelector('.ib.home'), a => { location.href=a.href; });
+const menu=$('menu'), bMenu=$('bMenu');
+// Optional links to the neighbouring pages of the series (PAGE.prev / PAGE.next).
+[['prev', t => '← '+t], ['next', t => t+' →']].forEach(([k, label]) => { if(!P[k]) return;
+  const a=document.createElement('a'); a.className='mi'; a.setAttribute('role','menuitem'); a.href=P[k].href; a.textContent=label(P[k].title); menu.insertBefore(a, $('mHome')); });   // the site link stays last
+function closeMenu(){ menu.hidden=true; bMenu.setAttribute('aria-expanded','false'); }
+onTap(bMenu, ()=>{ const br=bMenu.getBoundingClientRect(); menu.style.left=br.left+'px'; menu.style.top=(br.bottom+6)+'px'; menu.hidden=!menu.hidden; bMenu.setAttribute('aria-expanded',String(!menu.hidden)); if(!menu.hidden) menu.firstElementChild.focus(); });
+document.addEventListener('pointerdown', e => { if(!menu.hidden && !menu.contains(e.target) && !bMenu.contains(e.target)) closeMenu(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); });
+function dialog(title, text, actions){
+  closeMenu();
+  const v=document.createElement('div'); v.className='veil';
+  v.innerHTML=`<div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgT"><h2 id="dlgT"></h2><p></p><div class="row"></div></div>`;
+  v.querySelector('h2').textContent=title; v.querySelector('p').textContent=text;
+  const close=()=>v.remove();
+  actions.forEach(([label,cls,fn])=>{ const b=document.createElement('button'); b.className='btn '+cls; b.textContent=label; onTap(b, ()=>{ close(); fn&&fn(); }); v.querySelector('.row').appendChild(b); });
+  v.addEventListener('pointerdown',e=>{ if(e.target===v) close(); });
+  v.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+  document.body.appendChild(v); v.querySelector('.btn').focus();
+}
+function resetAll(){ if(preview) return; for(let i=0;i<N;i++) setFill(i,-1); undo.length=0; store.del(KEY); view.s=1; clampView(); select(firstOpen()); updateUI(); }
+onTap($('mReset'), ()=>dialog('Reset this picture?', 'Every colored dot will be cleared. This can’t be undone.', [['Cancel','',null],['Reset','primary',resetAll]]));
+onTap($('mAbout'), ()=>dialog(P.title, P.about, [['Close','primary',null]]));
+
+/* ---------- zoom pill + first-visit tip ---------- */
+const zPct=$('zPct'), zIn=$('zIn'), zOut=$('zOut'), tip=$('tip'), TIP_KEY='dotart:tip-zoom-seen';
+const ZSTEP=Math.SQRT2;                       // 100 → 141 → 200 → 283 → 400 %
+onTap(zIn,  () => glide(viewAt(view.s*ZSTEP, W/2, H/2)));
+onTap(zOut, () => glide(viewAt(view.s/ZSTEP, W/2, H/2)));
+onTap($('zFit'), () => glide({s:1, tx:0, ty:0}));
+let lastPct=-1;
+function updateZoomUI(){
+  const pct=Math.round(view.s*100);
+  if(pct!==lastPct){ lastPct=pct; zPct.textContent=pct+'%'; zOut.disabled=view.s<=1.001; zIn.disabled=view.s>=3.999; }
+  $('zoom').hidden=complete||preview;                                   // nothing over the finished picture but the bottom card
+  if(complete||preview) tip.hidden=true;
+  if(!tip.hidden && view.s>1.05) dismissTip();
+}
+function dismissTip(){ tip.hidden=true; store.set(TIP_KEY,'1'); }
+onTap($('tipX'), dismissTip);
+if(!preview && !store.get(TIP_KEY)) tip.hidden=false;
+onTap($('mHint'), () => { hint=!hint; $('mHint').setAttribute('aria-checked',String(hint)); uKey=''; dirty=true; });
+
+/* ---------- completion ---------- */
+let doneEl=null;
+function showDone(){
+  doneEl=document.createElement('div'); doneEl.className='done-msg'; doneEl.setAttribute('role','status');
+  doneEl.innerHTML=`<p></p><button class="btn primary">Start over</button>`;
+  doneEl.querySelector('p').textContent=P.completeMessage;
+  onTap(doneEl.querySelector('button'), resetAll);
+  stage.appendChild(doneEl);
+}
+function hideDone(){ if(doneEl){ doneEl.remove(); doneEl=null; } }
+
+/* ---------- boot ---------- */
+new ResizeObserver(layout).observe(stage);
+if(preview){ revealing=true; revealAt=-Infinity; }      // finished view at once, at Fit
+layout(); select(firstOpen()); updateUI();
+requestAnimationFrame(frame);
+// Read-only hooks for automated tests (no effect on the page).
+window.__dotart = { id: P.id, get hint(){ return hint; }, answer, fills, CODES, COLS, ROWS, view, get cell(){ return cell0*view.s; }, get origin(){ return [ox,oy]; }, get sel(){ return sel; }, get undoDepth(){ return undo.length; } };
+})();
+</script>
+</body>
+</html>
