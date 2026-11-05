@@ -18,22 +18,12 @@
   :root {
     --color-bg: #f5f5f5; --color-surface: #ffffff; --color-fg: #181818;
     --color-muted: #5f5f5f; --color-accent: #3d3d3d; --color-border: #dedede;
-    --hero-bg: #242424; --hero-fg: #ffffff; --hero-muted: #d5d5d5;
+    --hero-bg: var(--color-surface); --hero-fg: var(--color-fg); --hero-muted: var(--color-muted);
     --badge-bg: #eeeeee; --badge-fg: #333333;
     --callout-bg: #f2f2f2; --callout-border: #a6a6a6;
     --shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 4px 12px rgba(0, 0, 0, .06);
     --radius: 14px; --space: 1rem; --max-width: 72rem;
     color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-bg: #101010; --color-surface: #1b1b1b; --color-fg: #eeeeee;
-      --color-muted: #adadad; --color-accent: #d0d0d0; --color-border: #353535;
-      --hero-bg: #181818; --hero-fg: #ffffff; --hero-muted: #cccccc;
-      --badge-bg: #292929; --badge-fg: #dedede;
-      --callout-bg: #242424; --callout-border: #777777;
-      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
-    }
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; width: 100%; }
@@ -288,7 +278,7 @@
       </table>
     </div>
   </section>
-  <p class="muted reviewed">Last reviewed: <time datetime="2026-10-23T12:50:58-05:00">October 23, 2026 at 12:50 PM CDT (UTC-05:00)</time>.</p>
+  <p class="muted reviewed">Last reviewed: <time datetime="2026-11-05T14:00:37-06:00">November 5, 2026 at 2:00 PM CST (UTC-06:00)</time>.</p>
 </main>
 <script src="https://vikasgoyal.github.io/headerfooter.js"></script>
 </body>
