@@ -2,7 +2,7 @@
    Layout: pattern-language catalog. Numbered index grid on the hub, one long-form card per pattern.
    Light-only, to match the rest of vikasgoyal.github.io. All rules are scoped under .apl
    so they never touch the shared site header and footer. */
-.apl{
+.apl-body, .apl{
   --bg:#f2f4f7; --surface:#ffffff; --ink:#15202b; --muted:#5b6774; --line:#d6dce3; --soft:#e9edf2;
   --accent:#2a48c4; --accent-soft:#e3e8fb;
   --est:#1d7a4c; --emg:#a86d10; --hor:#7448c4;
@@ -13,7 +13,27 @@
   color-scheme:light;
 }
 .apl *{box-sizing:border-box}
-.apl .wrap{max-width:1120px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+
+/* Site integration: /styles.css styles the shared header but also sets page-wide rules
+   (70% body width, black table headers, flex <main>, article separators, list margins).
+   These overrides cancel them inside the library only. */
+body.apl-body{width:auto;margin:0;padding:0;background:var(--bg);font-size:16px}
+.apl-shell{max-width:1120px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.apl-shell-top{padding-block:20px 0}
+.apl-shell-bottom{padding-block:0 24px}
+.apl-shell .site-shell-header{margin:0}
+.apl main{display:block;padding:0;gap:0}
+.apl section{margin-bottom:0}
+.apl article{max-width:none;margin:0;padding:0;text-align:left}
+.apl article section + section{border-top:0;padding-top:0}
+.apl p{margin:0}
+.apl ul,.apl ol{margin-left:0}
+.apl li{margin-bottom:0}
+.apl a:hover{text-decoration:none}
+.apl .sec p a:hover,.apl .hero p a:hover{text-decoration:underline}
+.apl tr:hover{background:transparent}
+.apl table.fail th{background:transparent}
+.apl .wrap{max-width:1120px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 .apl a{color:var(--accent)}
 .apl button{font:inherit;color:inherit}
 .apl :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
