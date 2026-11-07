@@ -1,0 +1,21 @@
+<svg viewBox="0 0 760 260" role="img" aria-label="Goal goes to a planner that writes an ordered plan. An executor runs the steps one at a time and produces the result. A failed step sends control back to the planner to replan.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="94" width="90" height="52" rx="8"/><text class="t" x="55" y="125" text-anchor="middle">Goal</text>
+ <rect class="nd-a" x="140" y="86" width="130" height="68" rx="8"/><text class="t" x="205" y="115" text-anchor="middle">Planner</text><text class="ts" x="205" y="134" text-anchor="middle">strong model</text>
+ <rect class="nd" x="310" y="30" width="160" height="180" rx="8"/><text class="t" x="390" y="56" text-anchor="middle">Plan</text>
+ <rect class="nd-g" x="326" y="70" width="128" height="26" rx="5"/><text class="ts" x="338" y="87">1 · pull usage</text>
+ <rect class="nd-g" x="326" y="102" width="128" height="26" rx="5"/><text class="ts" x="338" y="119">2 · open cases</text>
+ <rect class="nd-g" x="326" y="134" width="128" height="26" rx="5"/><text class="ts" x="338" y="151">3 · renewal dates</text>
+ <rect class="nd-g" x="326" y="166" width="128" height="26" rx="5"/><text class="ts" x="338" y="183">4 · draft brief</text>
+ <rect class="nd-a" x="510" y="86" width="120" height="68" rx="8"/><text class="t" x="570" y="115" text-anchor="middle">Executor</text><text class="ts" x="570" y="134" text-anchor="middle">cheaper model + tools</text>
+ <rect class="nd" x="666" y="94" width="84" height="52" rx="8"/><text class="t" x="708" y="125" text-anchor="middle">Result</text>
+ <line class="ln" x1="100" y1="120" x2="138" y2="120" marker-end="url(#a)"/>
+ <line class="ln" x1="270" y1="120" x2="308" y2="120" marker-end="url(#a)"/>
+ <line class="ln" x1="470" y1="120" x2="508" y2="120" marker-end="url(#a)"/><text class="ts" x="489" y="111" text-anchor="middle">next</text>
+ <line class="ln-a" x1="630" y1="120" x2="664" y2="120" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M570 154 L570 236 L205 236 L205 156" marker-end="url(#ah)"/><text class="ts" x="390" y="252" text-anchor="middle">step failed or result changes the plan → replan remaining steps</text>
+</svg>

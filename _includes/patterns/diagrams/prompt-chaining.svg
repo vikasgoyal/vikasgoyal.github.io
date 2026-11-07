@@ -1,0 +1,21 @@
+<svg viewBox="0 0 760 260" role="img" aria-label="Input flows through step 1 extract, a gate, step 2 classify and step 3 draft to output. If the gate fails, the chain stops and flags the record.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="94" width="80" height="52" rx="8"/><text class="t" x="50" y="125" text-anchor="middle">Input</text>
+ <rect class="nd-a" x="120" y="86" width="120" height="68" rx="8"/><text class="t" x="180" y="115" text-anchor="middle">1 · Extract</text><text class="ts" x="180" y="134" text-anchor="middle">facts as JSON</text>
+ <path class="nd" d="M310 76 L360 120 L310 164 L260 120 Z"/><text class="t" x="310" y="117" text-anchor="middle">Gate</text><text class="ts" x="310" y="133" text-anchor="middle">schema</text>
+ <rect class="nd-a" x="390" y="86" width="120" height="68" rx="8"/><text class="t" x="450" y="115" text-anchor="middle">2 · Classify</text><text class="ts" x="450" y="134" text-anchor="middle">label + reason</text>
+ <rect class="nd-a" x="540" y="86" width="120" height="68" rx="8"/><text class="t" x="600" y="115" text-anchor="middle">3 · Draft</text><text class="ts" x="600" y="134" text-anchor="middle">note + email</text>
+ <rect class="nd" x="684" y="94" width="66" height="52" rx="8"/><text class="t" x="717" y="125" text-anchor="middle">Out</text>
+ <rect class="nd-g" x="380" y="196" width="140" height="48" rx="8"/><text class="t" x="450" y="217" text-anchor="middle">Stop &amp; flag</text><text class="ts" x="450" y="234" text-anchor="middle">retry or human fix</text>
+ <line class="ln" x1="90" y1="120" x2="118" y2="120" marker-end="url(#a)"/>
+ <line class="ln" x1="240" y1="120" x2="258" y2="120" marker-end="url(#a)"/>
+ <line class="ln-a" x1="360" y1="120" x2="388" y2="120" marker-end="url(#aa)"/>
+ <line class="ln" x1="510" y1="120" x2="538" y2="120" marker-end="url(#a)"/>
+ <line class="ln-a" x1="660" y1="120" x2="682" y2="120" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M310 164 L310 220 L378 220" marker-end="url(#ah)"/><text class="ts" x="302" y="196" text-anchor="end">check fails</text>
+ <text class="ts" x="380" y="50" text-anchor="middle">code decides the order · each step has one job and a fixed output format</text>
+</svg>

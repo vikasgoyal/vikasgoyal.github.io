@@ -1,0 +1,20 @@
+<svg viewBox="0 0 760 280" role="img" aria-label="A request goes to a classifier, which sends it to one of three handlers: a billing workflow, a support agent, or a reasoning model. Low-confidence requests go to a fallback.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="114" width="110" height="52" rx="8"/><text class="t" x="65" y="145" text-anchor="middle">Request</text>
+ <rect class="nd-a" x="160" y="106" width="150" height="68" rx="8"/><text class="t" x="235" y="135" text-anchor="middle">Classifier</text><text class="ts" x="235" y="154" text-anchor="middle">small model or rules</text>
+ <rect class="nd" x="480" y="10" width="200" height="52" rx="8"/><text class="t" x="580" y="32" text-anchor="middle">Billing workflow</text><text class="ts" x="580" y="50" text-anchor="middle">plain code · no LLM</text>
+ <rect class="nd" x="480" y="80" width="200" height="52" rx="8"/><text class="t" x="580" y="102" text-anchor="middle">Support agent</text><text class="ts" x="580" y="120" text-anchor="middle">fast model + docs search</text>
+ <rect class="nd" x="480" y="150" width="200" height="52" rx="8"/><text class="t" x="580" y="172" text-anchor="middle">Reasoning model</text><text class="ts" x="580" y="190" text-anchor="middle">complex or high stakes</text>
+ <rect class="nd-g" x="480" y="220" width="200" height="52" rx="8"/><text class="t" x="580" y="242" text-anchor="middle">Fallback</text><text class="ts" x="580" y="260" text-anchor="middle">general agent or human</text>
+ <line class="ln" x1="120" y1="140" x2="158" y2="140" marker-end="url(#a)"/>
+ <path class="ln-a" d="M310 132 C 390 132, 400 36, 478 36" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M310 137 C 390 137, 400 106, 478 106" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M310 143 C 390 143, 400 176, 478 176" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M310 150 C 380 150, 400 246, 478 246" marker-end="url(#ah)"/>
+ <text class="ts" x="372" y="270" text-anchor="middle">confidence &lt; 0.7</text>
+ <text class="ts" x="372" y="22" text-anchor="middle">route + confidence</text>
+</svg>
