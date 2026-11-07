@@ -1,1 +1,17 @@
 theme: jekyll-theme-leap-day
+
+collections:
+  patterns:
+    output: true
+    permalink: /agentic/patterns/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: patterns
+    values:
+      layout: pattern
+
+exclude:
+  - README-patterns-library.md
+  - _config.patterns.yml

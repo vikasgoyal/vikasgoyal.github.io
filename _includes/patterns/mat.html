@@ -1,0 +1,1 @@
+{% assign _m = site.data.patterns.maturity | where: "id", include.m | first %}<span class="mat m-{{ _m.id }}" title="{{ _m.name }}">{% for i in (1..3) %}<i{% if i <= _m.dots %} class="on"{% endif %}></i>{% endfor %}</span>{% if include.label %} {{ _m.name }}{% endif %}

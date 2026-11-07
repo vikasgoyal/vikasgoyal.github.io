@@ -1,0 +1,81 @@
+---
+layout: patterns-base
+title: The Pattern Card
+description: How every card in the Agentic Pattern Library is structured, with guidance for each of the nine sections and a ready-to-copy pattern file.
+permalink: /agentic/patterns/template/
+apl_nav: template
+---
+{%- assign D = site.data.patterns -%}
+{%- assign ex1 = D.base | append: "fast-slow-escalation/" | relative_url -%}
+{%- assign ex2 = D.base | append: "evaluator-optimizer/" | relative_url -%}
+<section class="hero hero-single">
+  <div>
+    <div class="label">Authoring guide</div>
+    <h1>The pattern card</h1>
+    <p>Every pattern in the library uses these nine sections in this order. Keeping the shape fixed lets readers compare patterns quickly and lets new cards be added without design work. Two finished examples: <a href="{{ ex1 }}">Fast/Slow Escalation</a> and <a href="{{ ex2 }}">Evaluator–Optimizer</a>.</p>
+  </div>
+</section>
+
+<div class="anat">
+{%- for s in D.sections %}
+  <div class="arow"><span class="n">{{ forloop.index0 | prepend: "0" }}</span><div><h3>{{ s.name }}</h3><p>{{ s.what }}</p></div><div class="guide">{{ s.guide | markdownify | remove: "<p>" | remove: "</p>" | strip }}</div></div>
+{%- endfor %}
+</div>
+
+<section class="sec" style="margin-top:34px">
+  <div class="sec-h"><span class="label">File</span><h2>Adding a pattern</h2></div>
+  <p>Each pattern is one Markdown file in the <code>_patterns/</code> folder of the site repo. The file name becomes the URL, so <code>_patterns/draft-verify.md</code> is published at <code>{{ D.base }}draft-verify/</code>. Change <code>status: stub</code> to <code>status: full</code> once every section is filled in.</p>
+  <div class="copyrow"><button class="btn" id="copy" type="button">Copy pattern file</button><span class="toast" id="toast" hidden>Copied</span></div>
+  <pre class="json" id="skeleton">---
+title: Pattern Name
+n: 40                     # catalog number, unique
+family: core              # core | multi | context | safety | runtime | eval | fastslow
+maturity: emg             # est | emg | hor
+axes: [decision]          # decision | tool | context | verification | coordination
+intent: One line, 20 words max.
+aka: Other names, comma separated
+status: full              # stub until every section is written
+
+problem: &gt;-
+  The recurring situation, in one short paragraph.
+forces:
+  - Tension one, like latency vs. accuracy.
+  - Tension two.
+  - Tension three.
+
+solution: &gt;-
+  How the pattern resolves the forces. Name the roles and decision points.
+
+diagram: pattern-name     # _includes/patterns/diagrams/pattern-name.svg
+diagram_caption: One fact about how it behaves in practice.
+
+use_when:
+  - A condition the reader can check.
+avoid_when:
+  - A condition where it does not fit.
+
+tradeoffs:                # 1-5; same four on every card
+  latency:     { score: 3, note: "…" }
+  cost:        { score: 3, note: "…" }
+  complexity:  { score: 3, note: "…" }
+  reliability: { score: 3, note: "…" }
+gains:
+  - …
+costs:
+  - …
+
+example:
+  scenario: The concrete situation.
+  steps:
+    - who: User
+      what: "What happens, with real values. `inline code` works."
+
+failures:
+  - failure: Name
+    symptom: What you see
+    fix: How to guard against it
+
+related:                  # pattern = another file name, without .md
+  - { type: Combines with, pattern: reflection }
+---</pre>
+</section>

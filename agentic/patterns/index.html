@@ -1,0 +1,59 @@
+---
+layout: patterns-base
+title: Agentic AI Design Patterns
+description: A catalog of agentic AI design patterns, from ReAct and Orchestrator–Workers to System 1 / System 2 escalation. Each card covers the problem, a diagram, when to use it, trade-offs, a worked example and related patterns.
+apl_nav: catalog
+---
+{%- assign D = site.data.patterns -%}
+{%- assign all = site.patterns | sort: "n" -%}
+{%- assign full = site.patterns | where: "status", "full" -%}
+<section class="hero">
+  <div>
+    <div class="label">{{ all.size }} patterns · {{ D.families.size }} families · {{ full.size }} full cards</div>
+    <h1>Agentic AI design patterns</h1>
+    <p>Reusable answers to recurring problems in agent design. Each pattern uses the same card: problem, diagram, when to use, trade-offs, a worked example and related patterns. Every pattern is tagged with the degrees of freedom it changes.</p>
+  </div>
+  <div class="legend" aria-label="Maturity legend">
+    <span class="label">Maturity</span>
+    {%- for m in D.maturity %}
+    <div>{% include patterns/mat.html m=m.id %}<span><b>{{ m.name }}</b> <small>{{ m.note }}</small></span></div>
+    {%- endfor %}
+  </div>
+</section>
+
+<div class="filters" data-hub>
+  <div class="frow"><span class="label">Family</span>
+    <button class="chip" data-k="family" data-v="all" aria-pressed="true">All</button>
+    {%- for f in D.families %}<button class="chip" data-k="family" data-v="{{ f.id }}" aria-pressed="false">{{ f.name }}</button>{% endfor %}
+  </div>
+  <div class="frow"><span class="label">Maturity</span>
+    <button class="chip" data-k="mat" data-v="all" aria-pressed="true">All</button>
+    {%- for m in D.maturity %}<button class="chip" data-k="mat" data-v="{{ m.id }}" aria-pressed="false">{{ m.name }}</button>{% endfor %}
+  </div>
+  <div class="frow"><span class="label">DoF axis</span>
+    <button class="chip" data-k="axis" data-v="all" aria-pressed="true">All</button>
+    {%- for a in D.axes %}<button class="chip" data-k="axis" data-v="{{ a.id }}" aria-pressed="false">{{ a.name }}</button>{% endfor %}
+  </div>
+  <div class="frow"><label class="label" for="q">Search</label><input id="q" class="search" type="search" placeholder="e.g. escalation, memory, judge"><span class="count" id="count">{{ all.size }} of {{ all.size }}</span></div>
+</div>
+
+<div id="list">
+{%- for f in D.families %}
+  {%- assign items = all | where: "family", f.id %}
+  <section class="family" id="{{ f.id }}" data-family-section="{{ f.id }}">
+    <div class="family-head"><h2>{{ f.name }}</h2><p>{{ f.blurb }}</p></div>
+    <div class="grid">
+    {%- for p in items %}
+      {%- assign num = p.n | prepend: "0" | slice: -2, 2 %}
+      <a class="entry" href="{{ p.url | relative_url }}" data-family="{{ p.family }}" data-mat="{{ p.maturity }}" data-axes="{{ p.axes | join: ' ' }}" data-text="{{ p.title | append: ' ' | append: p.intent | downcase | escape }}">
+        <span class="row"><span class="num">No. {{ num }}</span>{% include patterns/mat.html m=p.maturity %}</span>
+        <h3>{{ p.title }}</h3>
+        <p>{{ p.intent }}</p>
+        <span class="row">{% include patterns/axes.html axes=p.axes %}{% if p.status == "full" %}<span class="status">Full card</span>{% endif %}</span>
+      </a>
+    {%- endfor %}
+    </div>
+  </section>
+{%- endfor %}
+  <p class="empty" id="empty" hidden>No patterns match these filters. Clear a filter or try a different word.</p>
+</div>

@@ -1,0 +1,104 @@
+# Shared vocabulary for the Agentic Pattern Library.
+# Every pattern file in _patterns/ refers to these ids.
+
+base: /agentic/patterns/   # must match the collection permalink in _config.yml
+
+families:
+  - id: core
+    name: Core loop
+    blurb: How a single agent thinks, acts and checks itself.
+  - id: multi
+    name: Multi-agent
+    blurb: How several agents divide and coordinate work.
+  - id: context
+    name: Context & memory
+    blurb: What the agent knows, remembers and forgets.
+  - id: safety
+    name: Safety & control
+    blurb: Where the agent's autonomy stops.
+  - id: runtime
+    name: Runtime & interop
+    blurb: The platform the agent runs on and talks through.
+  - id: eval
+    name: Evaluation & learning
+    blurb: How the agent is graded and gets better.
+  - id: fastslow
+    name: Fast & slow
+    blurb: Pairing System 1 (fast, intuitive) and System 2 (deliberate) models.
+
+maturity:
+  - id: est
+    name: Established
+    dots: 3
+    note: Proven in production, broadly documented
+  - id: emg
+    name: Emerging
+    dots: 2
+    note: Shipping in leading systems, practices still settling
+  - id: hor
+    name: Horizon
+    dots: 1
+    note: Early or experimental, watch closely
+
+# Degrees-of-freedom axes a pattern can change
+axes:
+  - id: decision
+    name: Decision
+  - id: tool
+    name: Tool/action
+  - id: context
+    name: Context
+  - id: verification
+    name: Verification
+  - id: coordination
+    name: Coordination
+
+# The same four meters appear on every card, scored 1-5
+meters:
+  - id: latency
+    name: Latency
+  - id: cost
+    name: Cost
+  - id: complexity
+    name: Complexity
+  - id: reliability
+    name: Reliability
+
+# The nine card sections, in order, with authoring guidance
+sections:
+  - id: header
+    name: Header
+    what: Number, name, also-known-as, one-line intent, family, maturity and DoF axes.
+    guide: "**Intent ≤ 20 words.** Say what the pattern does, not why it's good. Pick 1–3 axes it changes most."
+  - id: problem
+    name: Problem
+    what: The recurring situation and the forces pulling in different directions.
+    guide: "**One short paragraph plus 3–4 forces.** A force is a tension, like cost vs. accuracy. If there's no tension, it's not a pattern."
+  - id: solution
+    name: Solution
+    what: How the pattern resolves the forces.
+    guide: "**One paragraph.** Name the roles and the decision points. Leave framework code for the worked example."
+  - id: diagram
+    name: Diagram
+    what: The mechanism as boxes and arrows.
+    guide: "**4–7 nodes.** Highlight the pattern's signature element (the gate, the loop, the handoff). Caption it with one fact about real behavior."
+  - id: use
+    name: When to use
+    what: Conditions where it fits, and where it doesn't.
+    guide: "**3–4 bullets each.** Write conditions a reader can check against their own system."
+  - id: tradeoffs
+    name: Trade-offs
+    what: Four 1–5 meters, plus gains and costs.
+    guide: "**Same four meters on every card:** latency, cost, complexity, reliability. This makes cards comparable side by side."
+  - id: example
+    name: Worked example
+    what: A concrete scenario traced step by step.
+    guide: "**4–6 steps with named actors.** Use real-looking values (amounts, scores, timings). End with what the logs teach you."
+  - id: failures
+    name: Failure modes
+    what: What goes wrong in production and how to guard against it.
+    guide: "**3–4 rows:** failure, symptom, mitigation."
+  - id: related
+    name: Related patterns
+    what: How this pattern connects to others.
+    guide: "**3–5 links, each typed:** alternative, combines with, specializes, next step."

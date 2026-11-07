@@ -1,0 +1,125 @@
+---
+layout: patterns-base
+---
+{%- assign D = site.data.patterns -%}
+{%- assign fam = D.families | where: "id", page.family | first -%}
+{%- assign mat = D.maturity | where: "id", page.maturity | first -%}
+{%- assign full = false -%}{%- if page.status == "full" -%}{%- assign full = true -%}{%- endif -%}
+{%- assign all = site.patterns | sort: "n" -%}
+{%- assign num = page.n | prepend: "0" | slice: -2, 2 -%}
+{%- if page.n > 9 -%}{%- assign num = page.n -%}{%- endif -%}
+
+<a class="back" href="{{ D.base | relative_url }}">← All patterns</a>
+<article>
+<header class="card-head">
+  <div class="bignum">{{ num }}</div>
+  <div>
+    <h1>{{ page.title }}</h1>
+    {% if page.aka %}<div class="aka">Also known as: {{ page.aka }}</div>{% endif %}
+    <p class="intent">{{ page.intent }}</p>
+    <div class="meta">
+      <span><span class="label">Family</span><a href="{{ D.base | relative_url }}#{{ fam.id }}">{{ fam.name }}</a></span>
+      <span><span class="label">Maturity</span>{% include patterns/mat.html m=page.maturity label=true %}</span>
+      <span><span class="label">Changes</span>{% include patterns/axes.html axes=page.axes %}</span>
+    </div>
+  </div>
+</header>
+
+<div class="sections">
+  <nav class="toc" aria-label="Card sections">
+    {%- for s in D.sections offset: 1 %}
+    <a href="#{{ s.id }}">{{ s.name }}</a>
+    {%- endfor %}
+  </nav>
+  <div class="sections-body">
+{%- if full %}
+
+  <section class="sec" id="problem">
+    <div class="sec-h"><span class="label">01</span><h2>Problem</h2></div>
+    {{ page.problem | markdownify }}
+    <ul class="forces">{% for f in page.forces %}<li>{{ f | markdownify | remove: "<p>" | remove: "</p>" | strip }}</li>{% endfor %}</ul>
+  </section>
+
+  <section class="sec" id="solution">
+    <div class="sec-h"><span class="label">02</span><h2>Solution</h2></div>
+    {{ page.solution | markdownify }}
+  </section>
+
+  <section class="sec" id="diagram">
+    <div class="sec-h"><span class="label">03</span><h2>Diagram</h2></div>
+    <div class="diagram">{% include patterns/diagrams/{{ page.diagram }}.svg %}</div>
+    <p class="caption">{{ page.diagram_caption }}</p>
+  </section>
+
+  <section class="sec" id="use">
+    <div class="sec-h"><span class="label">04</span><h2>When to use</h2></div>
+    <div class="two">
+      <div class="box yes"><h3>Use it when</h3><ul>{% for x in page.use_when %}<li>{{ x }}</li>{% endfor %}</ul></div>
+      <div class="box no"><h3>Avoid it when</h3><ul>{% for x in page.avoid_when %}<li>{{ x }}</li>{% endfor %}</ul></div>
+    </div>
+  </section>
+
+  <section class="sec" id="tradeoffs">
+    <div class="sec-h"><span class="label">05</span><h2>Trade-offs</h2></div>
+    <div class="meters">
+      {%- for m in D.meters %}{% assign t = page.tradeoffs[m.id] %}
+      <div class="meter"><span class="label">{{ m.name }}</span>
+        <div class="bar" role="img" aria-label="{{ m.name }} {{ t.score }} of 5">{% for i in (1..5) %}<i{% if i <= t.score %} class="on"{% endif %}></i>{% endfor %}</div>
+        <small>{{ t.note }}</small></div>
+      {%- endfor %}
+    </div>
+    <div class="two">
+      <div class="box"><h3>Gains</h3><ul>{% for x in page.gains %}<li>{{ x }}</li>{% endfor %}</ul></div>
+      <div class="box"><h3>Costs</h3><ul>{% for x in page.costs %}<li>{{ x }}</li>{% endfor %}</ul></div>
+    </div>
+  </section>
+
+  <section class="sec" id="example">
+    <div class="sec-h"><span class="label">06</span><h2>Worked example</h2></div>
+    <div class="scenario"><span class="label">Scenario</span><br>{{ page.example.scenario }}</div>
+    <ol class="steps">{% for s in page.example.steps %}
+      <li><div><span class="who">{{ s.who }}</span>{{ s.what | markdownify | remove: "<p>" | remove: "</p>" | strip }}</div></li>{% endfor %}
+    </ol>
+  </section>
+
+  <section class="sec" id="failures">
+    <div class="sec-h"><span class="label">07</span><h2>Failure modes</h2></div>
+    <div class="tablewrap"><table class="fail">
+      <thead><tr><th>Failure</th><th>Symptom</th><th>Mitigation</th></tr></thead>
+      <tbody>{% for r in page.failures %}<tr><td>{{ r.failure }}</td><td>{{ r.symptom }}</td><td>{{ r.fix }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </section>
+
+  <section class="sec" id="related">
+    <div class="sec-h"><span class="label">08</span><h2>Related patterns</h2></div>
+    <div class="related">{% for rel in page.related %}{% assign rel_url = D.base | append: rel.pattern | append: "/" %}{% assign r = site.patterns | where: "url", rel_url | first %}{% if r %}
+      <a class="rel" href="{{ r.url | relative_url }}"><span class="label">{{ rel.type }}</span><b>{{ r.title }}</b> {% include patterns/mat.html m=r.maturity %}</a>{% endif %}{% endfor %}
+    </div>
+  </section>
+
+{%- else %}
+  {%- for s in D.sections offset: 1 %}
+  <section class="sec" id="{{ s.id }}">
+    <div class="sec-h"><span class="label">{{ forloop.index | prepend: "0" }}</span><h2>{{ s.name }}</h2></div>
+    {%- if s.id == "related" %}
+    <div class="related">{% assign sibs = all | where: "family", page.family %}{% assign shown = 0 %}{% for r in sibs %}{% if r.url != page.url and shown < 4 %}{% assign shown = shown | plus: 1 %}
+      <a class="rel" href="{{ r.url | relative_url }}"><span class="label">Same family</span><b>{{ r.title }}</b> {% include patterns/mat.html m=r.maturity %}</a>{% endif %}{% endfor %}
+    </div>
+    <p class="caption">Typed relations get added when the card is written.</p>
+    {%- else %}
+    <div class="stub"><b>Not written yet.</b> {{ s.guide | markdownify | remove: "<p>" | remove: "</p>" | strip }}</div>
+    {%- endif %}
+  </section>
+  {%- endfor %}
+{%- endif %}
+
+  <nav class="pager" aria-label="Previous and next pattern">
+    {%- for p in all %}{% if p.url == page.url %}
+      {%- assign pi = forloop.index0 | minus: 1 -%}{%- assign ni = forloop.index0 | plus: 1 -%}
+      {%- if forloop.first == false %}{% assign prev = all[pi] %}<a class="rel" href="{{ prev.url | relative_url }}"><span class="label">← Previous</span><b>{{ prev.title }}</b></a>{% else %}<span></span>{% endif %}
+      {%- if forloop.last == false %}{% assign next = all[ni] %}<a class="rel next" href="{{ next.url | relative_url }}"><span class="label">Next →</span><b>{{ next.title }}</b></a>{% endif %}
+    {%- endif %}{% endfor %}
+  </nav>
+  </div>
+</div>
+</article>

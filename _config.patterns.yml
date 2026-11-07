@@ -1,0 +1,20 @@
+# ------------------------------------------------------------------
+# Agentic Pattern Library: add these blocks to your existing _config.yml
+# (keep your "theme:" line as it is).
+# ------------------------------------------------------------------
+
+collections:
+  patterns:
+    output: true
+    permalink: /agentic/patterns/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: patterns
+    values:
+      layout: pattern
+
+exclude:
+  - README-patterns-library.md
+  - _config.patterns.yml
