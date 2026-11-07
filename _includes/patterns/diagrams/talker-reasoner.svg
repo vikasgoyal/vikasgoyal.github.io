@@ -1,0 +1,19 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="The user talks to a fast Talker model. The Talker passes new details to a Reasoner model that plans and calls tools. Both read and write a shared memory, which the Talker uses to answer.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="30" width="110" height="52" rx="8"/><text class="t" x="65" y="61" text-anchor="middle">User</text>
+ <rect class="nd-a" x="190" y="22" width="160" height="68" rx="8"/><text class="t" x="270" y="51" text-anchor="middle">Talker</text><text class="ts" x="270" y="70" text-anchor="middle">System 1 · &lt;1s replies</text>
+ <rect class="nd-g" x="190" y="178" width="160" height="68" rx="8"/><text class="t" x="270" y="207" text-anchor="middle">Reasoner</text><text class="ts" x="270" y="226" text-anchor="middle">System 2 · plans</text>
+ <rect class="nd" x="440" y="100" width="150" height="68" rx="8"/><text class="t" x="515" y="129" text-anchor="middle">Shared memory</text><text class="ts" x="515" y="148" text-anchor="middle">beliefs · progress</text>
+ <rect class="nd" x="640" y="178" width="110" height="68" rx="8"/><text class="t" x="695" y="207" text-anchor="middle">Tools</text><text class="ts" x="695" y="226" text-anchor="middle">search · book</text>
+ <path class="ln-a" d="M120 50 L188 50" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M188 64 L122 64" marker-end="url(#aa)"/>
+ <text class="ts" x="154" y="42" text-anchor="middle">voice</text>
+ <path class="ln-h" d="M250 90 L250 176" marker-end="url(#ah)"/><text class="ts" x="242" y="138" text-anchor="end">new details</text>
+ <path class="ln" d="M350 212 L400 212 L400 150 L438 150" marker-end="url(#a)"/><text class="ts" x="408" y="196">writes</text>
+ <path class="ln" d="M438 118 L400 118 L400 56 L352 56" marker-end="url(#a)"/><text class="ts" x="408" y="80">reads every turn</text>
+ <line class="ln" x1="350" y1="232" x2="638" y2="232" marker-end="url(#a)"/>
+</svg>

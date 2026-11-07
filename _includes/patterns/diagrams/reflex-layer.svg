@@ -1,0 +1,22 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Input passes through fast input reflexes, then the agent, which uses an in-loop stop or continue reflex, then output reflexes before the response. Uncertain cases from any reflex escalate to System 2 or a human.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="64" width="80" height="52" rx="8"/><text class="t" x="50" y="95" text-anchor="middle">Input</text>
+ <rect class="nd-a" x="120" y="40" width="150" height="100" rx="8"/><text class="t" x="195" y="64" text-anchor="middle">Input reflexes</text><text class="ts" x="195" y="88" text-anchor="middle">relevant?</text><text class="ts" x="195" y="104" text-anchor="middle">injection?</text><text class="ts" x="195" y="120" text-anchor="middle">personal data?</text>
+ <rect class="nd" x="300" y="56" width="150" height="68" rx="8"/><text class="t" x="375" y="85" text-anchor="middle">Agent</text><text class="ts" x="375" y="104" text-anchor="middle">main work</text>
+ <rect class="nd-a" x="480" y="40" width="150" height="100" rx="8"/><text class="t" x="555" y="64" text-anchor="middle">Output reflexes</text><text class="ts" x="555" y="88" text-anchor="middle">policy ok?</text><text class="ts" x="555" y="104" text-anchor="middle">data leaked?</text><text class="ts" x="555" y="120" text-anchor="middle">format valid?</text>
+ <rect class="nd" x="660" y="64" width="90" height="52" rx="8"/><text class="t" x="705" y="95" text-anchor="middle">Out</text>
+ <rect class="nd-a" x="310" y="150" width="130" height="38" rx="6"/><text class="ts" x="375" y="173" text-anchor="middle">stop / continue?</text>
+ <rect class="nd-g" x="250" y="214" width="250" height="44" rx="8"/><text class="t" x="375" y="234" text-anchor="middle">System 2 or human</text><text class="ts" x="375" y="250" text-anchor="middle">uncertain band only</text>
+ <text class="ts" x="195" y="20" text-anchor="middle">each check: one typed answer · ms</text>
+ <line class="ln" x1="90" y1="90" x2="118" y2="90" marker-end="url(#a)"/>
+ <line class="ln-a" x1="270" y1="90" x2="298" y2="90" marker-end="url(#aa)"/>
+ <line class="ln" x1="450" y1="90" x2="478" y2="90" marker-end="url(#a)"/>
+ <line class="ln-a" x1="630" y1="90" x2="658" y2="90" marker-end="url(#aa)"/>
+ <line class="ln" x1="375" y1="124" x2="375" y2="148" stroke-dasharray="2 3"/>
+ <path class="ln-h" d="M195 140 L195 236 L248 236" marker-end="url(#ah)"/>
+ <path class="ln-h" d="M555 140 L555 236 L502 236" marker-end="url(#ah)"/>
+</svg>
