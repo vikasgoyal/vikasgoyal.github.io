@@ -23,3 +23,5 @@ Thumbs.db
 # Generated content
 md/
 *.md
+# Pattern library cards
+!_patterns/*.md
