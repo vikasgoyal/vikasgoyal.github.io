@@ -1,3 +1,7 @@
+---
+layout: null
+# Jekyll fills in every pattern page below; the rest of this file is plain URLs.
+---
 https://vikasgoyal.github.io/
 https://vikasgoyal.github.io/index.html
 https://vikasgoyal.github.io/showcase/
@@ -7,7 +11,10 @@ https://vikasgoyal.github.io/privacy.html
 https://vikasgoyal.github.io/test-page-llm.html
 https://vikasgoyal.github.io/agentic/
 https://vikasgoyal.github.io/agentic/index.html
-https://vikasgoyal.github.io/agentic/actionmodels.html
+https://vikasgoyal.github.io/agentic/patterns/
+https://vikasgoyal.github.io/agentic/patterns/template/
+{% assign _apl = site.patterns | sort: "n" %}{% for p in _apl %}https://vikasgoyal.github.io{{ p.url }}
+{% endfor %}https://vikasgoyal.github.io/agentic/actionmodels.html
 https://vikasgoyal.github.io/agentic/agenticai.html
 https://vikasgoyal.github.io/agentic/agenticsystems.html
 https://vikasgoyal.github.io/agentic/chatbotquerytypes.html

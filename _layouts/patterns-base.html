@@ -23,9 +23,15 @@
   <meta property="og:type" content="{% if page.collection == 'patterns' %}article{% else %}website{% endif %}">
   <meta property="og:url" content="{{ page.url | absolute_url }}">
   <meta property="og:site_name" content="Vikas Goyal">
-  <meta name="twitter:card" content="summary">
+  {%- assign _img = page.og_image | default: "/assets/patterns/og-patterns.png" | absolute_url %}
+  <meta property="og:image" content="{{ _img }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Agentic Pattern Library: agentic AI design patterns by Vikas Goyal">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ _title | escape }}">
   <meta name="twitter:description" content="{{ _desc | escape }}">
+  <meta name="twitter:image" content="{{ _img }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
