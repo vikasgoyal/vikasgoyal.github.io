@@ -1,0 +1,22 @@
+<svg viewBox="0 0 760 280" role="img" aria-label="A shared blackboard in the center holds facts, hypotheses and open questions. Four specialist agents read from and write to it. A controller decides which agent acts next and when the problem is solved.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+ </defs>
+ <rect class="nd" x="250" y="70" width="260" height="140" rx="10"/><text class="t" x="380" y="96" text-anchor="middle">Blackboard</text>
+ <rect class="nd-g" x="268" y="108" width="224" height="24" rx="5"/><text class="ts" x="280" y="124">fact · EU only · 14:02</text>
+ <rect class="nd-g" x="268" y="138" width="224" height="24" rx="5"/><text class="ts" x="280" y="154">hypothesis · release 14:00</text>
+ <rect class="nd-g" x="268" y="168" width="224" height="24" rx="5"/><text class="ts" x="280" y="184">open · which dependency?</text>
+ <rect class="nd-a" x="20" y="30" width="150" height="56" rx="8"/><text class="t" x="95" y="54" text-anchor="middle">Metrics agent</text><text class="ts" x="95" y="72" text-anchor="middle">dashboards</text>
+ <rect class="nd-a" x="20" y="194" width="150" height="56" rx="8"/><text class="t" x="95" y="218" text-anchor="middle">Deploy agent</text><text class="ts" x="95" y="236" text-anchor="middle">release history</text>
+ <rect class="nd-a" x="590" y="30" width="150" height="56" rx="8"/><text class="t" x="665" y="54" text-anchor="middle">Logs agent</text><text class="ts" x="665" y="72" text-anchor="middle">error search</text>
+ <rect class="nd-a" x="590" y="194" width="150" height="56" rx="8"/><text class="t" x="665" y="218" text-anchor="middle">Dependencies</text><text class="ts" x="665" y="236" text-anchor="middle">config · APIs</text>
+ <rect class="nd" x="300" y="10" width="160" height="40" rx="8"/><text class="t" x="380" y="35" text-anchor="middle">Controller</text>
+ <line class="ln" x1="380" y1="50" x2="380" y2="68" marker-end="url(#a)"/>
+ <line class="ln" x1="170" y1="62" x2="248" y2="100" marker-end="url(#a)"/>
+ <line class="ln" x1="170" y1="218" x2="248" y2="184" marker-end="url(#a)"/>
+ <line class="ln" x1="588" y1="62" x2="512" y2="100" marker-end="url(#a)"/>
+ <line class="ln" x1="588" y1="218" x2="512" y2="184" marker-end="url(#a)"/>
+ <text class="ts" x="380" y="232" text-anchor="middle">agents read + write only here · never call each other</text>
+ <text class="ts" x="470" y="35">picks next · stops</text>
+</svg>

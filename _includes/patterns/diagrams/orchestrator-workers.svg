@@ -1,0 +1,28 @@
+<svg viewBox="0 0 760 280" role="img" aria-label="A task goes to the lead agent, which plans and writes briefs for several workers. Workers run in their own contexts and return condensed results to the lead, which synthesizes the answer. If there are gaps, the lead spawns a follow-up worker.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="80" width="70" height="52" rx="8"/><text class="t" x="45" y="111" text-anchor="middle">Task</text>
+ <rect class="nd-a" x="110" y="72" width="130" height="68" rx="8"/><text class="t" x="175" y="101" text-anchor="middle">Lead · plan</text><text class="ts" x="175" y="120" text-anchor="middle">writes briefs</text>
+ <rect class="nd" x="290" y="14" width="150" height="50" rx="8"/><text class="t" x="365" y="35" text-anchor="middle">Worker 1</text><text class="ts" x="365" y="53" text-anchor="middle">own context</text>
+ <rect class="nd" x="290" y="81" width="150" height="50" rx="8"/><text class="t" x="365" y="102" text-anchor="middle">Worker 2</text><text class="ts" x="365" y="120" text-anchor="middle">own context</text>
+ <rect class="nd" x="290" y="148" width="150" height="50" rx="8"/><text class="t" x="365" y="169" text-anchor="middle">Worker N</text><text class="ts" x="365" y="187" text-anchor="middle">count set at runtime</text>
+ <rect class="nd-a" x="490" y="72" width="140" height="68" rx="8"/><text class="t" x="560" y="101" text-anchor="middle">Lead · synthesize</text><text class="ts" x="560" y="120" text-anchor="middle">checks for gaps</text>
+ <rect class="nd" x="666" y="80" width="84" height="52" rx="8"/><text class="t" x="708" y="111" text-anchor="middle">Answer</text>
+ <rect class="nd-g" x="290" y="220" width="150" height="50" rx="8"/><text class="t" x="365" y="241" text-anchor="middle">Follow-up worker</text><text class="ts" x="365" y="259" text-anchor="middle">narrow brief</text>
+ <line class="ln" x1="80" y1="106" x2="108" y2="106" marker-end="url(#a)"/>
+ <path class="ln" d="M240 100 C 265 100, 265 39, 288 39" marker-end="url(#a)"/>
+ <line class="ln" x1="240" y1="106" x2="288" y2="106" marker-end="url(#a)"/>
+ <path class="ln" d="M240 112 C 265 112, 265 173, 288 173" marker-end="url(#a)"/>
+ <path class="ln" d="M440 39 C 465 39, 465 100, 488 100" marker-end="url(#a)"/>
+ <line class="ln" x1="440" y1="106" x2="488" y2="106" marker-end="url(#a)"/>
+ <path class="ln" d="M440 173 C 465 173, 465 112, 488 112" marker-end="url(#a)"/>
+ <text class="ts" x="264" y="146" text-anchor="middle">briefs</text>
+ <text class="ts" x="466" y="146" text-anchor="middle">condensed</text>
+ <text class="ts" x="466" y="158" text-anchor="middle">results</text>
+ <line class="ln-a" x1="630" y1="106" x2="664" y2="106" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M530 140 L530 236 L442 236" marker-end="url(#ah)"/><text class="ts" x="538" y="196">gap found</text>
+ <path class="ln-h" d="M442 256 L590 256 L590 142" marker-end="url(#ah)"/>
+</svg>
