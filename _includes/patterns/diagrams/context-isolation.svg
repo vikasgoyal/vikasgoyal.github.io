@@ -1,0 +1,17 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="The main agent sends a short brief to a sub-agent with a fresh context. The sub-agent reads many files and tries approaches, using tens of thousands of tokens. It returns a short structured result, and its context is discarded.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+ </defs>
+ <rect class="nd-a" x="10" y="60" width="200" height="140" rx="10"/><text class="t" x="110" y="86" text-anchor="middle">Main agent</text><text class="ts" x="110" y="110" text-anchor="middle">overall task</text>
+ <rect class="nd" x="28" y="124" width="164" height="26" rx="5"/><text class="ts" x="40" y="141">task · decisions</text>
+ <rect class="nd-a" x="28" y="156" width="164" height="26" rx="5"/><text class="ts" x="40" y="173">+ 6-line result</text>
+ <rect class="nd-g" x="380" y="20" width="370" height="230" rx="12"/><text class="t" x="400" y="46">Sub-agent · fresh context</text><text class="ts" x="730" y="46" text-anchor="end">discarded after</text>
+ <rect class="nd" x="400" y="64" width="100" height="34" rx="5"/><text class="ts" x="450" y="86" text-anchor="middle">23 files</text>
+ <rect class="nd" x="512" y="64" width="100" height="34" rx="5"/><text class="ts" x="562" y="86" text-anchor="middle">2 configs</text>
+ <rect class="nd" x="624" y="64" width="106" height="34" rx="5"/><text class="ts" x="677" y="86" text-anchor="middle">dead end</text>
+ <rect class="nd" x="400" y="110" width="330" height="34" rx="5"/><text class="ts" x="565" y="132" text-anchor="middle">~60,000 tokens of reading and trial and error</text>
+ <rect class="nd-a" x="400" y="170" width="330" height="56" rx="8"/><text class="t" x="565" y="194" text-anchor="middle">Structured result</text><text class="ts" x="565" y="212" text-anchor="middle">answer · evidence · file references</text>
+ <path class="ln" d="M210 100 L378 100" marker-end="url(#a)"/><text class="ts" x="294" y="90" text-anchor="middle">brief: goal · scope</text><text class="ts" x="294" y="76" text-anchor="middle">format · ≤150 words</text>
+ <path class="ln-a" d="M400 198 L300 198 L300 169 L194 169" marker-end="url(#aa)"/><text class="ts" x="306" y="216">~150 tokens back</text>
+</svg>
