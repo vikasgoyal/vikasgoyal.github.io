@@ -1,0 +1,30 @@
+<svg viewBox="0 0 760 280" role="img" aria-label="Events from email, calendar, tickets, CRM and schedules flow into a relevance filter. Most are dropped. Relevant events update memory and a ledger of commitments. A policy chooses between doing nothing, a small allowed action, adding to a daily digest, or a rare alert.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="20" width="110" height="36" rx="6"/><text class="ts" x="65" y="43" text-anchor="middle">email</text>
+ <rect class="nd" x="10" y="64" width="110" height="36" rx="6"/><text class="ts" x="65" y="87" text-anchor="middle">calendar</text>
+ <rect class="nd" x="10" y="108" width="110" height="36" rx="6"/><text class="ts" x="65" y="131" text-anchor="middle">tickets</text>
+ <rect class="nd" x="10" y="152" width="110" height="36" rx="6"/><text class="ts" x="65" y="175" text-anchor="middle">CRM</text>
+ <rect class="nd" x="10" y="196" width="110" height="36" rx="6"/><text class="ts" x="65" y="219" text-anchor="middle">schedules</text>
+ <rect class="nd-a" x="170" y="92" width="120" height="68" rx="8"/><text class="t" x="230" y="121" text-anchor="middle">Filter</text><text class="ts" x="230" y="140" text-anchor="middle">reflexes</text>
+ <rect class="nd" x="330" y="92" width="140" height="68" rx="8"/><text class="t" x="400" y="121" text-anchor="middle">Memory</text><text class="ts" x="400" y="140" text-anchor="middle">+ ledger</text>
+ <path class="nd" d="M545 82 L605 126 L545 170 L485 126 Z"/><text class="t" x="545" y="130" text-anchor="middle">Policy</text>
+ <rect class="nd" x="630" y="14" width="120" height="44" rx="8"/><text class="ts" x="690" y="40" text-anchor="middle">do nothing</text>
+ <rect class="nd" x="630" y="72" width="120" height="44" rx="8"/><text class="ts" x="690" y="98" text-anchor="middle">small action</text>
+ <rect class="nd-a" x="630" y="130" width="120" height="44" rx="8"/><text class="ts" x="690" y="156" text-anchor="middle">daily digest</text>
+ <rect class="nd-g" x="630" y="188" width="120" height="44" rx="8"/><text class="ts" x="690" y="214" text-anchor="middle">alert · rare</text>
+ <path class="ln" d="M120 38 C 150 38, 150 110, 168 112" marker-end="url(#a)"/>
+ <line class="ln" x1="120" y1="126" x2="168" y2="126" marker-end="url(#a)"/>
+ <path class="ln" d="M120 214 C 150 214, 150 142, 168 140" marker-end="url(#a)"/>
+ <line class="ln" x1="290" y1="126" x2="328" y2="126" marker-end="url(#a)"/>
+ <line class="ln" x1="470" y1="126" x2="483" y2="126" marker-end="url(#a)"/>
+ <path class="ln" d="M605 126 C 618 126, 615 36, 628 36" marker-end="url(#a)"/>
+ <path class="ln" d="M605 126 C 618 126, 615 94, 628 94" marker-end="url(#a)"/>
+ <path class="ln-a" d="M605 126 C 618 126, 615 152, 628 152" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M605 126 C 618 126, 615 210, 628 210" marker-end="url(#ah)"/>
+ <line class="ln" x1="230" y1="160" x2="230" y2="200" stroke-dasharray="2 3"/><text class="ts" x="230" y="216" text-anchor="middle">~85% dropped</text>
+ <text class="ts" x="380" y="262" text-anchor="middle">every action explainable · user tunes what is watched</text>
+</svg>

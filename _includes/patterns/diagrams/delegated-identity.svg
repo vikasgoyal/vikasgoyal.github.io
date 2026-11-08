@@ -1,0 +1,17 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="A user grants consent with specific scopes. The identity provider issues a short-lived token naming both the agent and the user. The agent calls a target system with the token, and the system logs both identities. The user can revoke access.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="30" width="120" height="52" rx="8"/><text class="t" x="70" y="53" text-anchor="middle">User</text><text class="ts" x="70" y="71" text-anchor="middle">grants consent</text>
+ <rect class="nd" x="230" y="22" width="170" height="68" rx="8"/><text class="t" x="315" y="51" text-anchor="middle">Identity provider</text><text class="ts" x="315" y="70" text-anchor="middle">scopes · expiry</text>
+ <rect class="nd-a" x="230" y="160" width="170" height="68" rx="8"/><text class="t" x="315" y="189" text-anchor="middle">Agent identity</text><text class="ts" x="315" y="208" text-anchor="middle">registered app</text>
+ <rect class="nd-a" x="470" y="20" width="280" height="96" rx="8"/><text class="t" x="610" y="44" text-anchor="middle">Token</text><text class="ts" x="490" y="66">agent: Scheduling Agent</text><text class="ts" x="490" y="82">on behalf of: employee</text><text class="ts" x="490" y="98">scope: calendar.write · 1h</text>
+ <rect class="nd" x="510" y="160" width="240" height="68" rx="8"/><text class="t" x="630" y="189" text-anchor="middle">Calendar</text><text class="ts" x="630" y="208" text-anchor="middle">logs agent + user</text>
+ <line class="ln" x1="130" y1="56" x2="228" y2="56" marker-end="url(#a)"/><text class="ts" x="179" y="47" text-anchor="middle">scopes</text>
+ <line class="ln" x1="400" y1="56" x2="468" y2="56" marker-end="url(#a)"/><text class="ts" x="434" y="47" text-anchor="middle">issues</text>
+ <line class="ln" x1="315" y1="158" x2="315" y2="92" marker-end="url(#a)"/><text class="ts" x="323" y="130">requests</text>
+ <line class="ln-a" x1="400" y1="194" x2="508" y2="194" marker-end="url(#aa)"/><text class="ts" x="454" y="185" text-anchor="middle">call + token</text>
+ <path class="ln-h" d="M70 82 L70 250 L630 250 L630 230" marker-end="url(#ah)"/><text class="ts" x="78" y="244">revoke anytime</text>
+</svg>

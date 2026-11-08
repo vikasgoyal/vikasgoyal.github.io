@@ -1,0 +1,26 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Top: classic tool calling, where the model makes many separate round trips. Bottom: code-as-action, where the model writes one program that runs in a sandbox, calls tools many times, and returns a small printed result.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+ </defs>
+ <text class="ts" x="10" y="18">CLASSIC · one call per turn</text>
+ <rect class="nd" x="10" y="28" width="110" height="52" rx="8"/><text class="t" x="65" y="59" text-anchor="middle">Model</text>
+ <rect class="nd" x="190" y="34" width="70" height="40" rx="6"/><text class="ts" x="225" y="58" text-anchor="middle">call 1</text>
+ <rect class="nd" x="280" y="34" width="70" height="40" rx="6"/><text class="ts" x="315" y="58" text-anchor="middle">call 2</text>
+ <rect class="nd" x="370" y="34" width="70" height="40" rx="6"/><text class="ts" x="405" y="58" text-anchor="middle">call 3</text>
+ <text class="t" x="470" y="59">…</text>
+ <rect class="nd" x="500" y="34" width="80" height="40" rx="6"/><text class="ts" x="540" y="58" text-anchor="middle">call 360</text>
+ <text class="ts" x="600" y="50">~360 round trips</text><text class="ts" x="600" y="66">raw data in context</text>
+ <line class="ln" x1="120" y1="54" x2="188" y2="54" marker-end="url(#a)"/>
+ <line class="ln" x1="10" y1="106" x2="750" y2="106" stroke-dasharray="2 4"/>
+ <text class="ts" x="10" y="130">CODE-AS-ACTION · one program</text>
+ <rect class="nd-a" x="10" y="150" width="130" height="68" rx="8"/><text class="t" x="75" y="179" text-anchor="middle">Model</text><text class="ts" x="75" y="198" text-anchor="middle">writes 12 lines</text>
+ <rect class="nd-g" x="200" y="140" width="330" height="96" rx="10"/><text class="t" x="216" y="162">Sandbox</text>
+ <rect class="nd" x="216" y="174" width="144" height="46" rx="6"/><text class="ts" x="288" y="195" text-anchor="middle">loop · filter · sort</text><text class="ts" x="288" y="210" text-anchor="middle">over 180 accounts</text>
+ <rect class="nd" x="374" y="174" width="140" height="46" rx="6"/><text class="ts" x="444" y="195" text-anchor="middle">tools called</text><text class="ts" x="444" y="210" text-anchor="middle">361× in code</text>
+ <rect class="nd-a" x="590" y="150" width="160" height="68" rx="8"/><text class="t" x="670" y="179" text-anchor="middle">Printed result</text><text class="ts" x="670" y="198" text-anchor="middle">5 rows · ~200 tokens</text>
+ <line class="ln" x1="140" y1="184" x2="198" y2="184" marker-end="url(#a)"/><text class="ts" x="169" y="175" text-anchor="middle">code</text>
+ <line class="ln" x1="360" y1="197" x2="372" y2="197" marker-end="url(#a)"/>
+ <line class="ln-a" x1="530" y1="184" x2="588" y2="184" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M670 218 L670 256 L75 256 L75 220" marker-end="url(#aa)"/><text class="ts" x="372" y="250" text-anchor="middle">only the result returns to the model</text>
+</svg>

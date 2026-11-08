@@ -1,0 +1,26 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Agents from several vendors connect through one gateway to tool servers that expose internal systems using a standard protocol. Agents also talk to each other using an agent-to-agent protocol.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+ </defs>
+ <text class="ts" x="80" y="18" text-anchor="middle">AGENTS · any vendor</text>
+ <rect class="nd-a" x="10" y="30" width="140" height="48" rx="8"/><text class="t" x="80" y="59" text-anchor="middle">Sales agent</text>
+ <rect class="nd-a" x="10" y="110" width="140" height="48" rx="8"/><text class="t" x="80" y="139" text-anchor="middle">Pricing agent</text>
+ <rect class="nd-a" x="10" y="190" width="140" height="48" rx="8"/><text class="t" x="80" y="219" text-anchor="middle">Support agent</text>
+ <path class="ln" d="M60 78 L60 108" marker-end="url(#a)"/><path class="ln" d="M100 108 L100 80" marker-end="url(#a)"/>
+ <text class="ts" x="160" y="98">agent-to-agent</text>
+ <rect class="nd" x="250" y="30" width="130" height="208" rx="10"/><text class="t" x="315" y="122" text-anchor="middle">Gateway</text><text class="ts" x="315" y="142" text-anchor="middle">identity</text><text class="ts" x="315" y="158" text-anchor="middle">allowlists</text><text class="ts" x="315" y="174" text-anchor="middle">audit log</text>
+ <line class="ln" x1="150" y1="54" x2="248" y2="80" marker-end="url(#a)"/>
+ <line class="ln" x1="150" y1="134" x2="248" y2="134" marker-end="url(#a)"/>
+ <line class="ln" x1="150" y1="214" x2="248" y2="190" marker-end="url(#a)"/>
+ <text class="ts" x="565" y="18" text-anchor="middle">TOOL SERVERS · standard protocol (e.g. MCP)</text>
+ <rect class="nd" x="440" y="30" width="140" height="44" rx="8"/><text class="ts" x="510" y="56" text-anchor="middle">CRM server</text>
+ <rect class="nd" x="600" y="30" width="150" height="44" rx="8"/><text class="ts" x="675" y="56" text-anchor="middle">ticketing server</text>
+ <rect class="nd" x="440" y="112" width="140" height="44" rx="8"/><text class="ts" x="510" y="138" text-anchor="middle">HR server</text>
+ <rect class="nd" x="600" y="112" width="150" height="44" rx="8"/><text class="ts" x="675" y="138" text-anchor="middle">documents server</text>
+ <rect class="nd" x="440" y="194" width="140" height="44" rx="8"/><text class="ts" x="510" y="220" text-anchor="middle">billing server</text>
+ <rect class="nd-g" x="600" y="194" width="150" height="44" rx="8"/><text class="ts" x="675" y="220" text-anchor="middle">+ 3 more</text>
+ <line class="ln" x1="380" y1="80" x2="438" y2="54" marker-end="url(#a)"/>
+ <line class="ln" x1="380" y1="134" x2="438" y2="134" marker-end="url(#a)"/>
+ <line class="ln" x1="380" y1="190" x2="438" y2="214" marker-end="url(#a)"/>
+ <text class="ts" x="565" y="262" text-anchor="middle">each system exposed once · reused by every agent</text>
+</svg>
