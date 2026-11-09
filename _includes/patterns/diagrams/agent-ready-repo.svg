@@ -1,0 +1,18 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="The agent runs one setup command, changes code, runs fast checks and a smoke test, reads the results and fixes failures, all without a human. The same checks run in CI before review.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="90" width="130" height="68" rx="8"/><text class="t" x="75" y="119" text-anchor="middle">make setup</text><text class="ts" x="75" y="138" text-anchor="middle">~90s · seed data</text>
+ <rect class="nd-a" x="190" y="90" width="130" height="68" rx="8"/><text class="t" x="255" y="119" text-anchor="middle">Agent edits</text><text class="ts" x="255" y="138" text-anchor="middle">code</text>
+ <rect class="nd-a" x="370" y="74" width="160" height="100" rx="8"/><text class="t" x="450" y="100" text-anchor="middle">make check</text><text class="ts" x="450" y="122" text-anchor="middle">lint · types</text><text class="ts" x="450" y="138" text-anchor="middle">600 tests · 45s</text><text class="ts" x="450" y="154" text-anchor="middle">+ make smoke</text>
+ <path class="nd" d="M630 80 L680 124 L630 168 L580 124 Z"/><text class="t" x="630" y="121" text-anchor="middle">Pass?</text>
+ <rect class="nd" x="690" y="98" width="60" height="52" rx="8"/><text class="t" x="720" y="129" text-anchor="middle">PR</text>
+ <line class="ln" x1="140" y1="124" x2="188" y2="124" marker-end="url(#a)"/>
+ <line class="ln" x1="320" y1="124" x2="368" y2="124" marker-end="url(#a)"/>
+ <line class="ln" x1="530" y1="124" x2="578" y2="124" marker-end="url(#a)"/>
+ <line class="ln-a" x1="680" y1="124" x2="688" y2="124" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M630 168 L630 214 L255 214 L255 160" marker-end="url(#ah)"/><text class="ts" x="442" y="230" text-anchor="middle">clear error → agent fixes, no human needed</text>
+ <text class="ts" x="380" y="40" text-anchor="middle">same commands documented in CLAUDE.md and run again in CI</text>
+</svg>

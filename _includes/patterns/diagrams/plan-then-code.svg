@@ -1,0 +1,19 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="A task goes to the agent in read-only plan mode, which explores code and writes a plan with files, approach, tests, risks and questions. The developer reviews and corrects the plan, then approves it. The agent edits code following the plan. If reality differs, it stops and updates the plan.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="92" width="80" height="52" rx="8"/><text class="t" x="50" y="123" text-anchor="middle">Task</text>
+ <rect class="nd-a" x="120" y="84" width="140" height="68" rx="8"/><text class="t" x="190" y="113" text-anchor="middle">Plan mode</text><text class="ts" x="190" y="132" text-anchor="middle">read-only</text>
+ <rect class="nd" x="290" y="54" width="170" height="128" rx="8"/><text class="t" x="375" y="78" text-anchor="middle">Plan</text><text class="ts" x="375" y="100" text-anchor="middle">approach</text><text class="ts" x="375" y="116" text-anchor="middle">files to change</text><text class="ts" x="375" y="132" text-anchor="middle">tests · risks</text><text class="ts" x="375" y="148" text-anchor="middle">open questions</text>
+ <path class="nd" d="M545 70 L605 118 L545 166 L485 118 Z"/><text class="t" x="545" y="115" text-anchor="middle">Developer</text><text class="ts" x="545" y="131" text-anchor="middle">review</text>
+ <rect class="nd-a" x="630" y="84" width="120" height="68" rx="8"/><text class="t" x="690" y="113" text-anchor="middle">Edit mode</text><text class="ts" x="690" y="132" text-anchor="middle">follow plan</text>
+ <line class="ln" x1="90" y1="118" x2="118" y2="118" marker-end="url(#a)"/>
+ <line class="ln" x1="260" y1="118" x2="288" y2="118" marker-end="url(#a)"/>
+ <line class="ln" x1="460" y1="118" x2="483" y2="118" marker-end="url(#a)"/>
+ <line class="ln-a" x1="605" y1="118" x2="628" y2="118" marker-end="url(#aa)"/><text class="ts" x="617" y="60" text-anchor="middle">approve</text>
+ <path class="ln-h" d="M545 166 L545 216 L375 216 L375 184" marker-end="url(#ah)"/><text class="ts" x="460" y="232" text-anchor="middle">correct approach · answer questions</text>
+ <path class="ln-h" d="M690 152 L690 252 L190 252 L190 154" marker-end="url(#ah)"/><text class="ts" x="682" y="200" text-anchor="end">reality differs</text><text class="ts" x="682" y="214" text-anchor="end">→ stop, replan</text>
+ <text class="ts" x="190" y="40" text-anchor="middle">no files change before approval</text>
+</svg>

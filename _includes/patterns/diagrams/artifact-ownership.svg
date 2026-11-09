@@ -1,0 +1,16 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Three lanes. Developer-owned artifacts like the spec, acceptance tests and security config can only be changed by agent proposals that the developer approves. AI-drafted artifacts like source code and unit tests are changed freely by the agent and reviewed in PRs. Joint artifacts like CLAUDE.md are edited by both, with the agent explaining its changes.">
+ <rect class="nd-g" x="10" y="20" width="240" height="230" rx="10"/><text class="t" x="130" y="46" text-anchor="middle">Developer-owned</text><text class="ts" x="130" y="64" text-anchor="middle">agent proposes only</text>
+ <rect class="nd" x="28" y="80" width="204" height="30" rx="5"/><text class="ts" x="40" y="99">mvp-spec.md</text>
+ <rect class="nd" x="28" y="116" width="204" height="30" rx="5"/><text class="ts" x="40" y="135">tests/acceptance/</text>
+ <rect class="nd" x="28" y="152" width="204" height="30" rx="5"/><text class="ts" x="40" y="171">config/security.yml</text>
+ <text class="ts" x="130" y="220" text-anchor="middle">protected by code owners</text>
+ <rect class="nd-a" x="260" y="20" width="240" height="230" rx="10"/><text class="t" x="380" y="46" text-anchor="middle">AI-drafted</text><text class="ts" x="380" y="64" text-anchor="middle">agent changes freely</text>
+ <rect class="nd" x="278" y="80" width="204" height="30" rx="5"/><text class="ts" x="290" y="99">src/</text>
+ <rect class="nd" x="278" y="116" width="204" height="30" rx="5"/><text class="ts" x="290" y="135">unit tests</text>
+ <rect class="nd" x="278" y="152" width="204" height="30" rx="5"/><text class="ts" x="290" y="171">doc drafts</text>
+ <text class="ts" x="380" y="220" text-anchor="middle">reviewed in PRs</text>
+ <rect class="nd" x="510" y="20" width="240" height="230" rx="10"/><text class="t" x="630" y="46" text-anchor="middle">Joint</text><text class="ts" x="630" y="64" text-anchor="middle">both edit</text>
+ <rect class="nd" x="528" y="80" width="204" height="30" rx="5"/><text class="ts" x="540" y="99">CLAUDE.md</text>
+ <rect class="nd" x="528" y="116" width="204" height="30" rx="5"/><text class="ts" x="540" y="135">docs/architecture.md</text>
+ <text class="ts" x="630" y="220" text-anchor="middle">agent explains each edit</text>
+</svg>

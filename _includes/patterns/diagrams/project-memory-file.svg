@@ -1,0 +1,24 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="A CLAUDE.md file in the repo root holds commands, architecture, decisions and rules. It is loaded into every agent session. Mistakes and decisions from each session become short rules, which are reviewed in a pull request and added back to the file.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd-a" x="10" y="20" width="250" height="230" rx="10"/><text class="t" x="135" y="46" text-anchor="middle">CLAUDE.md</text><text class="ts" x="135" y="64" text-anchor="middle">repo root · ~60 lines</text>
+ <rect class="nd" x="28" y="80" width="214" height="30" rx="5"/><text class="ts" x="40" y="99">commands · make test</text>
+ <rect class="nd" x="28" y="116" width="214" height="30" rx="5"/><text class="ts" x="40" y="135">architecture · 3 lines</text>
+ <rect class="nd" x="28" y="152" width="214" height="30" rx="5"/><text class="ts" x="40" y="171">decisions + reason</text>
+ <rect class="nd" x="28" y="188" width="214" height="30" rx="5"/><text class="ts" x="40" y="207">rules from mistakes</text>
+ <rect class="nd" x="340" y="20" width="160" height="56" rx="8"/><text class="t" x="420" y="44" text-anchor="middle">Session 1</text><text class="ts" x="420" y="62" text-anchor="middle">loads file first</text>
+ <rect class="nd" x="340" y="94" width="160" height="56" rx="8"/><text class="t" x="420" y="118" text-anchor="middle">Session 2</text><text class="ts" x="420" y="136" text-anchor="middle">loads file first</text>
+ <rect class="nd" x="340" y="168" width="160" height="56" rx="8"/><text class="t" x="420" y="192" text-anchor="middle">Session N</text><text class="ts" x="420" y="210" text-anchor="middle">any dev or agent</text>
+ <rect class="nd-g" x="570" y="70" width="180" height="56" rx="8"/><text class="t" x="660" y="94" text-anchor="middle">New rule</text><text class="ts" x="660" y="112" text-anchor="middle">from a mistake</text>
+ <rect class="nd" x="570" y="168" width="180" height="56" rx="8"/><text class="t" x="660" y="192" text-anchor="middle">PR review</text><text class="ts" x="660" y="210" text-anchor="middle">like any code</text>
+ <path class="ln-a" d="M260 48 L338 48" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M260 122 L338 122" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M260 196 L338 196" marker-end="url(#aa)"/>
+ <text class="ts" x="299" y="40" text-anchor="middle">loaded</text>
+ <path class="ln-h" d="M500 122 L535 122 L535 98 L568 98" marker-end="url(#ah)"/>
+ <line class="ln-h" x1="660" y1="126" x2="660" y2="166" marker-end="url(#ah)"/>
+ <path class="ln-h" d="M660 224 L660 258 L135 258 L135 252" marker-end="url(#ah)"/><text class="ts" x="400" y="252" text-anchor="middle">merged back into the file</text>
+</svg>

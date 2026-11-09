@@ -3,6 +3,7 @@ layout: patterns-base
 ---
 {%- assign D = site.data.patterns -%}
 {%- assign fam = D.families | where: "id", page.family | first -%}
+{%- assign trk = D.tracks | where: "id", fam.track | first -%}
 {%- assign mat = D.maturity | where: "id", page.maturity | first -%}
 {%- assign full = false -%}{%- if page.status == "full" -%}{%- assign full = true -%}{%- endif -%}
 {%- assign all = site.patterns | sort: "n" -%}
@@ -18,6 +19,7 @@ layout: patterns-base
     {% if page.aka %}<div class="aka">Also known as: {{ page.aka }}</div>{% endif %}
     <p class="intent">{{ page.intent }}</p>
     <div class="meta">
+      <span><span class="label">Track</span><a href="{{ D.base | relative_url }}#track-{{ trk.id }}">{{ trk.name }}</a></span>
       <span><span class="label">Family</span><a href="{{ D.base | relative_url }}#{{ fam.id }}">{{ fam.name }}</a></span>
       <span><span class="label">Maturity</span>{% include patterns/mat.html m=page.maturity label=true %}</span>
       <span><span class="label">Changes</span>{% include patterns/axes.html axes=page.axes %}</span>

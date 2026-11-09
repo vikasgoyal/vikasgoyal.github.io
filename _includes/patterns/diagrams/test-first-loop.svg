@@ -1,0 +1,19 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Acceptance criteria become tests that the developer approves and that are protected. The tests fail first. The agent loops: change code, run all tests, read failures. When all tests pass, the change is done. If the agent thinks a test is wrong, it asks the developer instead of editing it.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="90" width="120" height="68" rx="8"/><text class="t" x="70" y="119" text-anchor="middle">Tests first</text><text class="ts" x="70" y="138" text-anchor="middle">approved · locked</text>
+ <rect class="nd-g" x="160" y="98" width="80" height="52" rx="8"/><text class="t" x="200" y="122" text-anchor="middle">Red</text><text class="ts" x="200" y="140" text-anchor="middle">fail</text>
+ <rect class="nd-a" x="290" y="90" width="140" height="68" rx="8"/><text class="t" x="360" y="119" text-anchor="middle">Change code</text><text class="ts" x="360" y="138" text-anchor="middle">agent</text>
+ <rect class="nd-a" x="470" y="90" width="140" height="68" rx="8"/><text class="t" x="540" y="119" text-anchor="middle">Run all tests</text><text class="ts" x="540" y="138" text-anchor="middle">new + existing</text>
+ <rect class="nd" x="660" y="98" width="90" height="52" rx="8"/><text class="t" x="705" y="122" text-anchor="middle">Green</text><text class="ts" x="705" y="140" text-anchor="middle">done</text>
+ <rect class="nd-g" x="440" y="10" width="200" height="44" rx="8"/><text class="t" x="540" y="30" text-anchor="middle">Ask developer</text><text class="ts" x="540" y="46" text-anchor="middle">if a test seems wrong</text>
+ <line class="ln" x1="130" y1="124" x2="158" y2="124" marker-end="url(#a)"/>
+ <line class="ln" x1="240" y1="124" x2="288" y2="124" marker-end="url(#a)"/>
+ <line class="ln" x1="430" y1="124" x2="468" y2="124" marker-end="url(#a)"/>
+ <line class="ln-a" x1="610" y1="124" x2="658" y2="124" marker-end="url(#aa)"/><text class="ts" x="634" y="115" text-anchor="middle">pass</text>
+ <path class="ln-h" d="M540 158 L540 210 L360 210 L360 160" marker-end="url(#ah)"/><text class="ts" x="450" y="226" text-anchor="middle">read failures · fix · repeat (capped)</text>
+ <path class="ln" d="M540 90 L540 56" stroke-dasharray="2 3"/>
+</svg>

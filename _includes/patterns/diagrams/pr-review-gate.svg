@@ -1,0 +1,21 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="The agent works on its own branch and opens a pull request with a description. CI runs all checks. An optional AI reviewer does a first pass and flags risks. A human reviews and either requests changes, which go back to the agent, or merges into the protected main branch.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd-a" x="10" y="80" width="130" height="68" rx="8"/><text class="t" x="75" y="109" text-anchor="middle">Agent</text><text class="ts" x="75" y="128" text-anchor="middle">own branch</text>
+ <rect class="nd" x="170" y="64" width="140" height="100" rx="8"/><text class="t" x="240" y="88" text-anchor="middle">Pull request</text><text class="ts" x="240" y="110" text-anchor="middle">what · why</text><text class="ts" x="240" y="126" text-anchor="middle">plan · tests</text><text class="ts" x="240" y="142" text-anchor="middle">doubts</text>
+ <rect class="nd" x="340" y="34" width="120" height="52" rx="8"/><text class="t" x="400" y="57" text-anchor="middle">CI</text><text class="ts" x="400" y="75" text-anchor="middle">all checks</text>
+ <rect class="nd-g" x="340" y="142" width="120" height="52" rx="8"/><text class="t" x="400" y="165" text-anchor="middle">AI reviewer</text><text class="ts" x="400" y="183" text-anchor="middle">flags risks</text>
+ <path class="nd" d="M560 66 L620 114 L560 162 L500 114 Z"/><text class="t" x="560" y="111" text-anchor="middle">Human</text><text class="ts" x="560" y="127" text-anchor="middle">review</text>
+ <rect class="nd" x="650" y="88" width="100" height="52" rx="8"/><text class="t" x="700" y="111" text-anchor="middle">main</text><text class="ts" x="700" y="129" text-anchor="middle">protected</text>
+ <line class="ln" x1="140" y1="114" x2="168" y2="114" marker-end="url(#a)"/>
+ <path class="ln" d="M310 100 C 325 100, 325 60, 338 60" marker-end="url(#a)"/>
+ <path class="ln" d="M310 128 C 325 128, 325 168, 338 168" marker-end="url(#a)"/>
+ <path class="ln" d="M460 60 C 480 60, 480 104, 500 108" marker-end="url(#a)"/>
+ <path class="ln" d="M460 168 C 480 168, 480 124, 500 120" marker-end="url(#a)"/>
+ <line class="ln-a" x1="620" y1="114" x2="648" y2="114" marker-end="url(#aa)"/><text class="ts" x="628" y="102" text-anchor="middle">merge</text>
+ <path class="ln-h" d="M560 162 L560 232 L75 232 L75 150" marker-end="url(#ah)"/><text class="ts" x="320" y="250" text-anchor="middle">changes requested → agent updates the PR</text>
+ <text class="ts" x="700" y="166" text-anchor="middle">no direct pushes</text>
+</svg>

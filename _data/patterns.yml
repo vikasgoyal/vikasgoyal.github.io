@@ -3,28 +3,56 @@
 
 base: /agentic/patterns/   # must match the collection permalink in _config.yml
 
+tracks:
+  - id: systems
+    name: Agentic systems
+    blurb: Patterns for designing agents and multi-agent systems.
+  - id: coding
+    name: Building with coding agents
+    blurb: Patterns for developing software with AI coding agents.
+
 families:
   - id: core
+    track: systems
     name: Core loop
     blurb: How a single agent thinks, acts and checks itself.
   - id: multi
+    track: systems
     name: Multi-agent
     blurb: How several agents divide and coordinate work.
   - id: context
+    track: systems
     name: Context & memory
     blurb: What the agent knows, remembers and forgets.
   - id: safety
+    track: systems
     name: Safety & control
     blurb: Where the agent's autonomy stops.
   - id: runtime
+    track: systems
     name: Runtime & interop
     blurb: The platform the agent runs on and talks through.
   - id: eval
+    track: systems
     name: Evaluation & learning
     blurb: How the agent is graded and gets better.
   - id: fastslow
+    track: systems
     name: Fast & slow
     blurb: Pairing System 1 (fast, intuitive) and System 2 (deliberate) models.
+  - id: setup
+    track: coding
+    name: Working agreements
+    blurb: What the repo and the team give the agent before work starts.
+  - id: buildloop
+    track: coding
+    name: Build loop
+    blurb: How a coding agent moves from task to working code.
+  - id: review
+    track: coding
+    name: Review & scale
+    blurb: How agent changes land safely, and how to run several agents at once.
+
 
 maturity:
   - id: est
