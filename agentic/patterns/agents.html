@@ -1,0 +1,75 @@
+---
+layout: patterns-base
+title: Use the Pattern Library from Your Coding Agent
+description: Machine-readable versions of the Agentic Pattern Library (llms.txt, full Markdown, JSON) and a drop-in agent skill, so coding agents can choose and apply the right patterns.
+permalink: /agentic/patterns/for-agents/
+apl_nav: agents
+---
+{%- assign D = site.data.patterns -%}
+{%- assign all = site.patterns | sort: "n" -%}
+{%- assign u_llms = D.base | append: "llms.txt" | absolute_url -%}
+{%- assign u_full = D.base | append: "llms-full.txt" | absolute_url -%}
+{%- assign u_json = D.base | append: "patterns.json" | absolute_url -%}
+{%- assign u_skill = D.base | append: "skill/SKILL.md" | absolute_url -%}
+<section class="hero hero-single">
+  <div>
+    <div class="label">For AI agents · {{ all.size }} patterns</div>
+    <h1>Use the library from your coding agent</h1>
+    <p>Every card is also published in formats coding agents can read. Point your agent at the library and it can pick the right patterns, read their failure modes and design around them. All files are generated from the same source as these pages, so they're always current.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-h"><span class="label">Files</span><h2>What's available</h2></div>
+  <div class="endpoints">
+    <a class="rel" href="{{ u_llms }}"><span class="label">llms.txt · ~9 KB</span><b>Index</b><span class="ep-note">Every pattern with its one-line intent and link. Start here.</span></a>
+    <a class="rel" href="{{ u_full }}"><span class="label">llms-full.txt · ~200 KB</span><b>Full text</b><span class="ep-note">Every card as Markdown in one file: problem, solution, trade-offs, failure modes, example.</span></a>
+    <a class="rel" href="{{ u_json }}"><span class="label">patterns.json · ~220 KB</span><b>Structured data</b><span class="ep-note">All fields per pattern, for tools and scripts. IDs are stable.</span></a>
+    <a class="rel" href="{{ u_skill }}"><span class="label">SKILL.md · ~22 KB</span><b>Agent skill</b><span class="ep-note">Usage rules plus an index with "use when" for every pattern.</span></a>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-h"><span class="label">Option 1</span><h2>Install the skill</h2></div>
+  <p>For coding agents that support skills, such as Claude Code, save the skill into your repo. The agent loads it when a task involves designing an agent or setting up how coding agents work, and fetches full cards when it needs them.</p>
+  <div class="copyrow"><span class="label">PowerShell</span><button class="btn ghost" type="button" data-copy="cmd-ps">Copy</button><span class="toast" hidden>Copied</span></div>
+  <pre class="json" id="cmd-ps">New-Item -ItemType Directory -Force .claude/skills/agentic-patterns | Out-Null
+Invoke-WebRequest {{ u_skill }} -OutFile .claude/skills/agentic-patterns/SKILL.md</pre>
+  <div class="copyrow" style="margin-top:14px"><span class="label">bash / zsh</span><button class="btn ghost" type="button" data-copy="cmd-sh">Copy</button><span class="toast" hidden>Copied</span></div>
+  <pre class="json" id="cmd-sh">mkdir -p .claude/skills/agentic-patterns
+curl -fsSL {{ u_skill }} -o .claude/skills/agentic-patterns/SKILL.md</pre>
+  <p class="caption">For other tools, use the folder they read skills from. Re-run the command to update.</p>
+</section>
+
+<section class="sec">
+  <div class="sec-h"><span class="label">Option 2</span><h2>Add a pointer to AGENTS.md or CLAUDE.md</h2></div>
+  <p>Works with any coding agent that reads a project instructions file and can fetch web pages.</p>
+  <div class="copyrow"><button class="btn" type="button" data-copy="snippet">Copy snippet</button><span class="toast" hidden>Copied</span></div>
+  <pre class="json" id="snippet">## Agentic design patterns
+When designing or reviewing an agent, a multi-agent system or an agentic feature,
+or when changing how coding agents work in this repo, consult the Agentic Pattern Library:
+- Index: {{ u_llms }}
+- Full cards: {{ u_full }}
+Name the patterns you apply and why, and handle each pattern's failure modes.
+Values in the worked examples are illustrative; derive real ones from our requirements.</pre>
+</section>
+
+<section class="sec">
+  <div class="sec-h"><span class="label">Option 3</span><h2>Use it in a single prompt</h2></div>
+  <div class="copyrow"><button class="btn ghost" type="button" data-copy="prompt">Copy prompt</button><span class="toast" hidden>Copied</span></div>
+  <pre class="json" id="prompt">Read {{ u_llms }}.
+For the design below, pick the 2–4 patterns that fit best, explain why,
+and list how the design handles each pattern's failure modes
+(full cards: {{ u_full }}).
+
+Design: &lt;describe the agent or feature&gt;</pre>
+</section>
+
+<section class="sec">
+  <div class="sec-h"><span class="label">Notes</span><h2>Good to know</h2></div>
+  <ul class="forces">
+    <li>Numbers in worked examples, like thresholds, caps and timings, are illustrative. The skill tells agents not to copy them.</li>
+    <li>Pattern IDs such as <code>fast-slow-escalation</code> are stable. New patterns are added; existing IDs won't be renamed.</li>
+    <li><code>patterns.json</code> includes a <code>generated</code> timestamp, so tools can tell when the library last changed.</li>
+  </ul>
+</section>

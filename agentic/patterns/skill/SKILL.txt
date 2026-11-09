@@ -1,0 +1,37 @@
+---
+layout: null
+permalink: /agentic/patterns/skill/SKILL.md
+---
+{%- assign D = site.data.patterns -%}
+{%- assign all = site.patterns | sort: "n" -%}
+---
+name: agentic-patterns
+description: Choose and apply proven design patterns when designing or reviewing an AI agent, a multi-agent system or an agentic feature (agent loops, routing, memory, safety, runtime, evaluation, fast/slow models), or when setting up a repo and workflow for AI coding agents (specs, CLAUDE.md, plan mode, tests, PRs, worktrees).
+---
+
+# Agentic Pattern Library
+
+{{ all.size }} patterns by Vikas Goyal, in two tracks: designing agentic systems, and building software with coding agents. Source: {{ D.base | absolute_url }}
+
+## How to use this skill
+
+1. **Match.** Read the task, then scan the index below. Pick the 1–3 patterns whose "use when" fits and whose "avoid when" doesn't. Patterns combine; most real designs use several.
+2. **Read the full card** before designing or writing code. Fetch `{{ D.base | absolute_url }}<id>/` for the page, or find the `## <title>` section in `{{ D.base | append: 'llms-full.txt' | absolute_url }}`. Structured fields are in `{{ D.base | append: 'patterns.json' | absolute_url }}`.
+3. **Apply.** Name the patterns you chose and why. Address each failure mode from the card in the design or the code (for example, a step cap, a confidence threshold with a fallback, a protected test file). Check the related patterns for anything that should be combined.
+4. **Don't copy example numbers.** Values in worked examples (thresholds, caps, budgets, timings) are illustrative. Derive real values from the user's requirements, make them configurable, and say what you assumed.
+5. **Say when no pattern fits.** Don't force one.
+
+## Index
+{% for t in D.tracks %}
+### Track: {{ t.name }}
+{%- assign tfams = D.families | where: "track", t.id %}
+{%- for f in tfams %}
+
+#### {{ f.name }}
+{%- assign items = all | where: "family", f.id %}
+{%- for p in items %}
+{%- assign pid = p.url | remove: D.base | remove: "/" %}
+- **{{ p.title }}** (`{{ pid }}`): {{ p.intent }}{% if p.use_when %} Use when: {{ p.use_when | join: "; " }}.{% endif %}{% if p.avoid_when %} Avoid when: {{ p.avoid_when | first }}.{% endif %}
+{%- endfor %}
+{%- endfor %}
+{% endfor %}

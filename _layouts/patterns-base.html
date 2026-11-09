@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/patterns/patterns.css' | relative_url }}">
+  <link rel="alternate" type="application/json" title="Agentic Pattern Library (JSON)" href="{{ site.data.patterns.base | append: 'patterns.json' | relative_url }}">
 </head>
 <body class="apl-body">
   <div class="apl-shell apl-shell-top"><div id="header"></div></div>
@@ -47,6 +48,7 @@
         <nav class="nav" aria-label="Library sections">
           <a href="{{ site.data.patterns.base | relative_url }}"{% if page.apl_nav == "catalog" %} aria-current="page"{% endif %}>Catalog</a>
           <a href="{{ site.data.patterns.base | append: 'template/' | relative_url }}"{% if page.apl_nav == "template" %} aria-current="page"{% endif %}>Card template</a>
+          <a href="{{ site.data.patterns.base | append: 'for-agents/' | relative_url }}"{% if page.apl_nav == "agents" %} aria-current="page"{% endif %}>For AI agents</a>
         </nav>
       </header>
       <main>

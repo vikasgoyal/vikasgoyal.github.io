@@ -1,0 +1,48 @@
+---
+layout: null
+permalink: /agentic/patterns/patterns.json
+---
+{%- assign D = site.data.patterns -%}
+{%- assign all = site.patterns | sort: "n" -%}
+{
+  "name": "Agentic Pattern Library",
+  "author": "Vikas Goyal",
+  "url": {{ D.base | absolute_url | jsonify }},
+  "generated": {{ site.time | date_to_xmlschema | jsonify }},
+  "count": {{ all.size }},
+  "note": "Numbers in worked examples are illustrative, not recommendations. Choose real values from your requirements and make them configurable.",
+  "tracks": {{ D.tracks | jsonify }},
+  "families": {{ D.families | jsonify }},
+  "maturity": {{ D.maturity | jsonify }},
+  "axes": {{ D.axes | jsonify }},
+  "patterns": [
+{%- for p in all %}
+{%- assign pid = p.url | remove: D.base | remove: "/" -%}
+{%- assign fam = D.families | where: "id", p.family | first %}
+    {
+      "id": {{ pid | jsonify }},
+      "n": {{ p.n }},
+      "title": {{ p.title | jsonify }},
+      "url": {{ p.url | absolute_url | jsonify }},
+      "track": {{ fam.track | jsonify }},
+      "family": {{ p.family | jsonify }},
+      "maturity": {{ p.maturity | jsonify }},
+      "axes": {{ p.axes | jsonify }},
+      "intent": {{ p.intent | jsonify }},
+      "aka": {{ p.aka | jsonify }},
+      "status": {{ p.status | jsonify }},
+      "problem": {{ p.problem | jsonify }},
+      "forces": {{ p.forces | jsonify }},
+      "solution": {{ p.solution | jsonify }},
+      "use_when": {{ p.use_when | jsonify }},
+      "avoid_when": {{ p.avoid_when | jsonify }},
+      "tradeoffs": {{ p.tradeoffs | jsonify }},
+      "gains": {{ p.gains | jsonify }},
+      "costs": {{ p.costs | jsonify }},
+      "failures": {{ p.failures | jsonify }},
+      "related": {{ p.related | jsonify }},
+      "example": {{ p.example | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+{%- endfor %}
+  ]
+}

@@ -1,0 +1,29 @@
+---
+layout: null
+permalink: /agentic/patterns/llms.txt
+---
+{%- assign D = site.data.patterns -%}
+{%- assign all = site.patterns | sort: "n" -%}
+# Agentic Pattern Library
+
+> {{ all.size }} design patterns by Vikas Goyal in two tracks: designing agentic AI systems, and building software with AI coding agents. Each pattern has a problem, forces, solution, when to use and avoid, trade-offs, failure modes, related patterns and a worked example.
+
+Numbers in worked examples are illustrative, not recommendations. Choose real values from your requirements and make them configurable.
+
+## Machine-readable versions
+
+- [All patterns as JSON]({{ D.base | append: 'patterns.json' | absolute_url }}): structured fields for every pattern
+- [All patterns as Markdown]({{ D.base | append: 'llms-full.txt' | absolute_url }}): full text of every card in one file
+- [Agent skill]({{ D.base | append: 'skill/SKILL.md' | absolute_url }}): drop-in SKILL.md for coding agents
+{% for t in D.tracks %}
+## Track: {{ t.name }}
+{%- assign tfams = D.families | where: "track", t.id %}
+{%- for f in tfams %}
+
+### {{ f.name }}
+{%- assign items = all | where: "family", f.id %}
+{%- for p in items %}
+- [{{ p.title }}]({{ p.url | absolute_url }}): {{ p.intent }}
+{%- endfor %}
+{%- endfor %}
+{% endfor %}

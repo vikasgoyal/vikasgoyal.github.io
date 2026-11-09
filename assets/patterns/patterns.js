@@ -49,6 +49,21 @@
     apply();
   }
 
+  document.querySelectorAll("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var pre = document.getElementById(btn.dataset.copy);
+      var toast = btn.parentNode.querySelector(".toast");
+      function done(msg) { if (!toast) return; toast.textContent = msg; toast.hidden = false; setTimeout(function () { toast.hidden = true; }, 1800); }
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        done("Selected, press Ctrl+C");
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(pre.textContent).then(function () { done("Copied"); }, fallback);
+      else fallback();
+    });
+  });
+
   var copy = document.getElementById("copy");
   if (copy) {
     copy.addEventListener("click", function () {

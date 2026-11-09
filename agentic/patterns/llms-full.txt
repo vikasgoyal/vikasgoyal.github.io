@@ -1,0 +1,89 @@
+---
+layout: null
+permalink: /agentic/patterns/llms-full.txt
+---
+{%- assign D = site.data.patterns -%}
+{%- assign all = site.patterns | sort: "n" -%}
+# Agentic Pattern Library: full text
+
+{{ all.size }} patterns by Vikas Goyal. Source: {{ D.base | absolute_url }}
+
+Numbers in worked examples are illustrative, not recommendations. Choose real values from your requirements and make them configurable.
+
+Trade-off scores run from 1 (low) to 5 (high) for latency, cost and complexity, and 1 (weak) to 5 (strong) for reliability.
+{% for t in D.tracks %}
+# Track: {{ t.name }}
+{%- assign tfams = D.families | where: "track", t.id %}
+{%- for f in tfams %}
+{%- assign items = all | where: "family", f.id %}
+{%- for p in items %}
+{%- assign pid = p.url | remove: D.base | remove: "/" %}
+{%- assign mat = D.maturity | where: "id", p.maturity | first %}
+
+---
+
+## {{ p.title }}
+
+- id: {{ pid }}
+- url: {{ p.url | absolute_url }}
+- track: {{ t.name }} · family: {{ f.name }} · maturity: {{ mat.name }}
+- changes: {{ p.axes | join: ", " }}
+{%- if p.aka %}
+- also known as: {{ p.aka }}
+{%- endif %}
+
+**Intent:** {{ p.intent }}
+{%- if p.status == "full" %}
+
+**Problem:** {{ p.problem }}
+
+**Forces:**
+{%- for x in p.forces %}
+- {{ x }}
+{%- endfor %}
+
+**Solution:** {{ p.solution }}
+
+**Use when:**
+{%- for x in p.use_when %}
+- {{ x }}
+{%- endfor %}
+
+**Avoid when:**
+{%- for x in p.avoid_when %}
+- {{ x }}
+{%- endfor %}
+
+**Trade-offs:**
+{%- for m in D.meters %}{% assign tr = p.tradeoffs[m.id] %}
+- {{ m.name }}: {{ tr.score }}/5 · {{ tr.note }}
+{%- endfor %}
+
+**Gains:**
+{%- for x in p.gains %}
+- {{ x }}
+{%- endfor %}
+
+**Costs:**
+{%- for x in p.costs %}
+- {{ x }}
+{%- endfor %}
+
+**Failure modes:**
+{%- for r in p.failures %}
+- {{ r.failure }}: {{ r.symptom }} → {{ r.fix }}
+{%- endfor %}
+
+**Related:**
+{%- for r in p.related %}
+- {{ r.type }}: {{ r.pattern }}
+{%- endfor %}
+
+**Worked example (illustrative values):** {{ p.example.scenario }}
+{%- for s in p.example.steps %}
+{{ forloop.index }}. {{ s.who }}: {{ s.what }}
+{%- endfor %}
+{%- endif %}
+{%- endfor %}
+{%- endfor %}
+{% endfor %}
