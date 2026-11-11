@@ -64,11 +64,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .next{color:var(--muted);font-size:.9rem;margin:0}
 .place h2{font-family:var(--display);font-weight:700;font-size:1.5rem;line-height:1.15;margin:0}
 .place p{margin:4px 0 0;color:var(--muted);font-size:.92rem;font-variant-numeric:tabular-nums}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-.card{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:inherit;min-width:0}
-.card img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:var(--rule);display:block}
-.card strong{font-size:.92rem;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
-.card span{font-size:.76rem;color:var(--muted);line-height:1.3;overflow-wrap:anywhere}
+.shot{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;min-width:0}
+.shot img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:var(--rule);display:block}
+.shot strong{font-family:var(--display);font-size:1.25rem;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.shot span{font-size:.82rem;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
+.shot em{font-style:normal;color:var(--dawn);font-weight:600}
 .note{border:1px dashed var(--rule);border-radius:12px;padding:16px;color:var(--muted);font-size:.92rem;margin:0}
 footer{grid-column:1/-1;color:var(--muted);font-size:.8rem;border-top:1px solid var(--rule);padding-top:14px}
 footer a{color:inherit}
@@ -102,7 +102,7 @@ footer a{color:inherit}
       <p id="placeMeta"></p>
     </div>
     <div>
-      <p class="label" id="seenLabel">Seen near here in the last two days</p>
+      <p class="label" id="seenLabel">Seen near here this week</p>
       <div class="grid" id="grid"></div>
       <p class="note" id="note" hidden></p>
     </div>
@@ -268,42 +268,47 @@ function select(city,byUser){
   loadSightings(city);
 }
 
-// ---------- iNaturalist ----------
+// ---------- iNaturalist: one photo, the most-liked of the week if there is one, else the newest ----------
+const BLANK="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+async function ask(city,extra,signal){
+  const d1=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
+  const res=await fetch("https://api.inaturalist.org/v1/observations?lat="+city.lat+"&lng="+city.lon+
+    "&radius=60&photos=true&photo_licensed=true&captive=false&d1="+d1+"&per_page=1&locale=en"+extra,{signal});
+  if(!res.ok) throw new Error(res.status);
+  return ((await res.json()).results||[]).find(o=>o.photos&&o.photos[0])||null;
+}
 async function loadSightings(city){
   const grid=$("grid"), note=$("note"); note.hidden=true; grid.textContent="";
   const hit=cache.get(city.name);
-  if(hit&&Date.now()-hit.at<600000) return render(city,hit.rows);
-  for(let i=0;i<4;i++){ const d=document.createElement("div"); d.className="card";
-    const ph=document.createElement("img"); ph.alt=""; ph.src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="; d.append(ph); grid.append(d); }
-  const d1=new Date(Date.now()-2*86400000).toISOString().slice(0,10);
-  const url="https://api.inaturalist.org/v1/observations?lat="+city.lat+"&lng="+city.lon+
-    "&radius=60&photos=true&photo_licensed=true&captive=false&d1="+d1+"&order_by=created_at&order=desc&per_page=12&locale=en";
+  if(hit&&Date.now()-hit.at<600000) return render(city,hit.row);
+  const ph=document.createElement("div"); ph.className="shot";
+  const im=document.createElement("img"); im.alt=""; im.src=BLANK; ph.append(im); grid.append(ph);
   const ac=new AbortController(), timer=setTimeout(()=>ac.abort(),12000);
   try{
-    const res=await fetch(url,{signal:ac.signal}); if(!res.ok) throw new Error(res.status);
-    const rows=((await res.json()).results||[]).filter(o=>o.photos&&o.photos[0]);
-    cache.set(city.name,{at:Date.now(),rows});
-    if(selected===city) render(city,rows);
+    const row=await ask(city,"&popular=true&order_by=votes&order=desc",ac.signal)
+           ||await ask(city,"&order_by=created_at&order=desc",ac.signal);
+    cache.set(city.name,{at:Date.now(),row});
+    if(selected===city) render(city,row);
   }catch(e){
     if(selected!==city) return;
     grid.textContent=""; note.hidden=false;
-    note.textContent="Sightings couldn't load here. On the open web this space fills with photos people took near "+city.name+" in the last two days.";
+    note.textContent="The photo couldn't load here. On the open web this space shows something people spotted near "+city.name+" this week.";
   }finally{ clearTimeout(timer); }
 }
-function render(city,rows){
+function render(city,o){
   const grid=$("grid"), note=$("note"); grid.textContent="";
-  if(!rows.length){ note.hidden=false; note.textContent="Nobody has shared a sighting near "+city.name+" in the last two days. Try another place on the line."; return; }
+  if(!o){ note.hidden=false; note.textContent="Nobody has shared a sighting near "+city.name+" this week. Try another place on the line."; return; }
   note.hidden=true;
-  for(const o of rows){
-    const a=document.createElement("a"); a.className="card"; a.target="_blank"; a.rel="noopener";
-    a.href=/^https:\/\/www\.inaturalist\.org\//.test(o.uri||"")?o.uri:"https://www.inaturalist.org/observations/"+encodeURIComponent(o.id);
-    const img=document.createElement("img"); img.loading="lazy";
-    const src=String(o.photos[0].url||"").replace("square","medium"); if(/^https:\/\//.test(src)) img.src=src;
-    const name=o.taxon?.preferred_common_name||o.taxon?.name||o.species_guess||"Not yet identified";
-    img.alt=name; const s=document.createElement("strong"); s.textContent=name;
-    const by=document.createElement("span"); by.textContent=[o.place_guess,o.photos[0].attribution].filter(Boolean).join(" · ");
-    a.append(img,s,by); grid.append(a);
-  }
+  const a=document.createElement("a"); a.className="shot"; a.target="_blank"; a.rel="noopener";
+  a.href=/^https:\/\/www\.inaturalist\.org\//.test(o.uri||"")?o.uri:"https://www.inaturalist.org/observations/"+encodeURIComponent(o.id);
+  const img=document.createElement("img");
+  const src=String(o.photos[0].url||"").replace("square","large"); if(/^https:\/\//.test(src)) img.src=src;
+  const name=o.taxon?.preferred_common_name||o.taxon?.name||o.species_guess||"Not yet identified";
+  img.alt=name; const st=document.createElement("strong"); st.textContent=name;
+  const by=document.createElement("span"), n=o.faves_count||0;
+  if(n>0){ const em=document.createElement("em"); em.textContent=n+(n===1?" like":" likes"); by.append(em,"  ·  "); }
+  by.append([o.place_guess,o.photos[0].attribution].filter(Boolean).join(" · "));
+  a.append(img,st,by); grid.append(a);
 }
 
 // ---------- loop ----------
