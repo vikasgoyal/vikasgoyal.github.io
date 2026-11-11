@@ -59,6 +59,18 @@ button{font:inherit;color:inherit;cursor:pointer}
 .report{margin:8px 0 0;font-size:.98rem;line-height:1.5;font-variant-numeric:tabular-nums}
 .tally{margin:14px 2px 0;color:var(--muted);font-size:.9rem}
 .tally b{color:var(--ink);font-weight:600}
+.radio{display:flex;align-items:center;gap:14px;margin-top:18px}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:1px solid var(--gold);background:rgba(255,201,120,.12);position:relative;padding:0}
+.play::before{content:"";position:absolute;left:18px;top:14px;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent var(--gold)}
+.play[aria-pressed="true"]::before{left:16px;top:16px;width:12px;height:12px;border:0;background:var(--gold);border-radius:2px}
+.rtext{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rtext span{font-family:var(--display);font-size:1.35rem;line-height:1.15;overflow-wrap:anywhere}
+.rtext small{font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
+.rtext a{color:inherit}
+.reads{margin:0;font-family:var(--display);font-size:1.3rem;line-height:1.4}
+.reads a{color:inherit;text-decoration:none;border-bottom:1px solid var(--rule)}
+.reads a:hover{color:var(--gold);border-color:var(--gold)}
+.reads i{font-style:normal;color:var(--muted);margin:0 .55em}
 .shot{position:relative;display:block;aspect-ratio:4/3;border-radius:20px;overflow:hidden;color:#fff;text-decoration:none;
   background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:0 34px 60px -34px rgba(0,0,0,.85)}
 .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease}
@@ -105,11 +117,19 @@ footer a{color:inherit}
       <p class="now" id="now">Finding the sunrise…</p>
       <p class="meta" id="placeMeta"></p>
       <p class="report" id="report"></p>
+      <div class="radio" id="radio" hidden>
+        <button class="play" id="play" type="button" aria-pressed="false" aria-label="Play local radio"></button>
+        <div class="rtext"><span id="rline"></span><small id="rsub"></small></div>
+      </div>
     </div>
     <div>
       <div id="grid"></div>
       <p class="note" id="note" hidden></p>
       <p class="tally" id="tally" hidden></p>
+    </div>
+    <div id="reading" hidden>
+      <p class="label" id="readLabel"></p>
+      <p class="reads" id="reads"></p>
     </div>
     <div>
       <p class="label">Along the line</p>
@@ -316,7 +336,7 @@ function refresh(){
   }
   rows.forEach((x,i)=>{ const b=table.children[i]?.firstChild; if(!b||!b.lastChild) return;
     b.setAttribute("aria-pressed",x.c===selected);
-    b.lastChild.textContent=x.soon?"first light in "+mins(x.v.light):
+    b.lastChild.textContent=x.soon?(x.v.light<1?"first light now":"first light in "+mins(x.v.light)):
       x.v.rise===null?"":Math.abs(x.v.rise)<1?"sunrise now":x.v.rise>0?"sunrise in "+mins(x.v.rise):"rose "+mins(x.v.rise)+" ago"; });
 }
 
@@ -332,6 +352,7 @@ function dayLen(lat,dec){
 }
 function report(t,s,off){
   const rp=$("report"), tl=$("tally"); rp.textContent=""; tl.hidden=true; tl.textContent="";
+  renderRadio(); renderReading();
   if(!selected) return;
   const x=extras.get(selected.name)||{}, parts=[];
   if(x.tz){ try{ parts.push(new Intl.DateTimeFormat(undefined,{timeZone:x.tz,weekday:"long",hour:"numeric",minute:"2-digit"}).format(new Date(t))+" there"); }catch(e){} }
@@ -349,6 +370,96 @@ function report(t,s,off){
     tl.append("near here this week."); tl.hidden=false;
   }
 }
+// ---------- local radio (Radio Browser) and what the country is reading (Wikimedia) ----------
+const ISO={"USA":"US","French Polynesia":"PF","Canada":"CA","Mexico":"MX","Guatemala":"GT","Ecuador":"EC","Costa Rica":"CR","Cuba":"CU","Panama":"PA","Peru":"PE",
+"Jamaica":"JM","Colombia":"CO","Chile":"CL","Dominican Republic":"DO","Bolivia":"BO","Venezuela":"VE","Puerto Rico":"PR","Brazil":"BR","Argentina":"AR","Paraguay":"PY",
+"Uruguay":"UY","Greenland":"GL","Azores":"PT","Cabo Verde":"CV","Iceland":"IS","Senegal":"SN","Madeira":"PT","Canary Islands":"ES","Sierra Leone":"SL","Portugal":"PT",
+"Morocco":"MA","Ireland":"IE","Mali":"ML","Côte d'Ivoire":"CI","Spain":"ES","UK":"GB","Ghana":"GH","France":"FR","Algeria":"DZ","Nigeria":"NG","Netherlands":"NL",
+"Switzerland":"CH","Tunisia":"TN","Norway":"NO","Italy":"IT","Germany":"DE","Angola":"AO","DR Congo":"CD","Austria":"AT","Sweden":"SE","South Africa":"ZA","Poland":"PL",
+"Greece":"GR","Finland":"FI","Türkiye":"TR","Ukraine":"UA","Egypt":"EG","Sudan":"SD","Uganda":"UG","Mozambique":"MZ","Kenya":"KE","Russia":"RU","Ethiopia":"ET",
+"Tanzania":"TZ","Iraq":"IQ","Georgia":"GE","Saudi Arabia":"SA","Madagascar":"MG","Iran":"IR","UAE":"AE","Mauritius":"MU","Oman":"OM","Pakistan":"PK","Uzbekistan":"UZ",
+"Afghanistan":"AF","India":"IN","Maldives":"MV","Kazakhstan":"KZ","Sri Lanka":"LK","Nepal":"NP","Bangladesh":"BD","China":"CN","Myanmar":"MM","Thailand":"TH",
+"Malaysia":"MY","Singapore":"SG","Vietnam":"VN","Indonesia":"ID","Mongolia":"MN","Australia":"AU","Philippines":"PH","Taiwan":"TW","South Korea":"KR","Japan":"JP",
+"Guam":"GU","Papua New Guinea":"PG","Solomon Islands":"SB","New Caledonia":"NC","Vanuatu":"VU","New Zealand":"NZ","Fiji":"FJ","Samoa":"WS","Tonga":"TO"};
+const SAYS={"Azores":"Portugal","Madeira":"Portugal","Canary Islands":"Spain","USA":"the United States","UK":"the United Kingdom","UAE":"the United Arab Emirates",
+"Netherlands":"the Netherlands","Philippines":"the Philippines","Maldives":"the Maldives","Solomon Islands":"the Solomon Islands","Dominican Republic":"the Dominican Republic","DR Congo":"the DR Congo"};
+const HOME=new Set(["Main_Page","メインページ","Pagina_principale","Заглавная_страница","Página_principal","Hoofdpagina","Strona_główna","Anasayfa","Hauptseite","Huvudsida",
+"Forside","Etusivu","Trang_Chính","Halaman_Utama","首页","대문","หน้าหลัก","الصفحة_الرئيسية","صفحهٔ_اصلی","मुखपृष्ठ","প্রধান_পাতা","Головна_сторінка","Laman_Utama","Unang_Pahina",
+"Pagina_principală","Hlavní_strana","Kezdőlap","Forsíða","Portada","Accueil_principal","Hovedside"]);
+const SKIP=/sex|porn|xxx|xnxx|xvideos|hentai|nude|^Deaths_in_|^List_of_deaths/i;
+const readable=a=>a&&typeof a.article==="string"&&/^[a-z-]+\.wikipedia$/.test(a.project||"")&&!a.article.includes(":")&&!HOME.has(a.article)&&!SKIP.test(a.article);
+async function wikiTop(cc,get){
+  if(!cc) return null;
+  for(const back of [1,2]){
+    const d=new Date(Date.now()-back*86400000);
+    try{ const r=await get("https://wikimedia.org/api/rest_v1/metrics/pageviews/top-per-country/"+cc+"/all-access/"+d.toISOString().slice(0,10).replace(/-/g,"/"));
+      const list=(r.items?.[0]?.articles||[]).filter(readable).slice(0,3);
+      if(list.length) return {day:d.toLocaleDateString(undefined,{day:"numeric",month:"short",timeZone:"UTC"}),list}; }catch(e){}
+  }
+  return null;
+}
+let radioHost="de1.api.radio-browser.info", radioAsked=false;
+async function radioNear(city,get){
+  if(!radioAsked){ radioAsked=true;
+    try{ const n=(await get("https://all.api.radio-browser.info/json/servers")).find(x=>x&&/^[a-z0-9-]+\.api\.radio-browser\.info$/.test(x.name)); if(n) radioHost=n.name; }catch(e){} }
+  const rows=await get("https://"+radioHost+"/json/stations/search?geo_lat="+city.lat+"&geo_long="+city.lon+
+    "&geo_distance=80000&is_https=true&hidebroken=true&order=clickcount&reverse=true&limit=12");
+  const hlsOk=!!document.createElement("audio").canPlayType("application/vnd.apple.mpegurl");
+  return (Array.isArray(rows)?rows:[]).filter(r=>r&&/^https:\/\//.test(r.url_resolved||"")&&typeof r.name==="string"&&r.name.trim()&&(!r.hls||hlsOk))
+    .slice(0,5).map(r=>({name:r.name.trim().slice(0,60),url:r.url_resolved,id:String(r.stationuuid||""),home:/^https:\/\//.test(r.homepage||"")?r.homepage:""}));
+}
+const audio=new Audio(); audio.preload="none";
+let playing=null, stallT=0, radioKey="", readKey="", gaveUp="";
+function tune(){
+  const st=playing.list[playing.i]; playing.live=false; audio.src=st.url; audio.play().catch(()=>{});
+  clearTimeout(stallT); stallT=setTimeout(nextStation,9000);
+  if(/^[0-9a-f-]{36}$/.test(st.id)) fetch("https://"+radioHost+"/json/url/"+st.id).catch(()=>{});   // counts the listen, as the directory asks
+  renderRadio();
+}
+function nextStation(){
+  if(!playing) return; clearTimeout(stallT);
+  if(++playing.i>=playing.list.length){ gaveUp=playing.city.name; stopRadio(); return; }
+  tune();
+}
+function stopRadio(){ playing=null; clearTimeout(stallT); audio.pause(); audio.removeAttribute("src"); audio.load(); renderRadio(); }
+audio.addEventListener("playing",()=>{ if(playing){ clearTimeout(stallT); playing.live=true; renderRadio(); } });
+audio.addEventListener("error",()=>{ if(playing) nextStation(); });
+$("play").onclick=()=>{
+  if(playing) return stopRadio();
+  const list=selected&&extras.get(selected.name)?.stations;
+  if(list?.length){ gaveUp=""; playing={city:selected,list,i:0,live:false}; tune(); }
+};
+function renderRadio(){
+  const box=$("radio"), btn=$("play"), line=$("rline"), sub=$("rsub");
+  const list=selected&&extras.get(selected.name)?.stations, st=playing&&playing.list[playing.i];
+  const key=playing?"p|"+playing.city.name+"|"+playing.i+"|"+playing.live:"o|"+(selected?.name||"")+"|"+(list?.length||0)+"|"+gaveUp;
+  if(key===radioKey) return; radioKey=key;
+  sub.textContent="";
+  if(playing){
+    box.hidden=false; btn.hidden=false; btn.setAttribute("aria-pressed","true"); btn.setAttribute("aria-label","Stop the radio");
+    line.textContent=st.name;
+    sub.append(playing.live?"Live from "+playing.city.name:"Tuning in to "+playing.city.name+"…");
+    if(st.home){ const a=document.createElement("a"); a.href=st.home; a.target="_blank"; a.rel="noopener"; a.textContent="station site"; sub.append("  ·  ",a); }
+  } else if(list?.length&&gaveUp!==selected.name){
+    box.hidden=false; btn.hidden=false; btn.setAttribute("aria-pressed","false"); btn.setAttribute("aria-label","Play local radio from "+selected.name);
+    line.textContent="Listen to "+selected.name+", live"; sub.textContent="Local radio  ·  "+list[0].name;
+  } else if(selected&&gaveUp===selected.name){
+    box.hidden=false; btn.hidden=true; line.textContent="No station would play"; sub.textContent="The stations near "+selected.name+" did not start in this browser.";
+  } else box.hidden=true;
+}
+function renderReading(){
+  const box=$("reading"), r=selected&&extras.get(selected.name)?.reads;
+  const key=r?selected.name+"|"+r.day+"|"+r.list.map(a=>a.article).join("|"):"";
+  if(key===readKey) return; readKey=key;
+  if(!r){ box.hidden=true; return; }
+  $("readLabel").textContent="Most read on Wikipedia in "+(SAYS[selected.country]||selected.country)+", "+r.day;
+  const p=$("reads"); p.textContent="";
+  r.list.forEach((a,i)=>{ if(i){ const sep=document.createElement("i"); sep.textContent="·"; p.append(sep); }
+    const l=document.createElement("a"); l.href="https://"+a.project+".org/wiki/"+encodeURIComponent(a.article); l.target="_blank"; l.rel="noopener";
+    l.textContent=a.article.replace(/_/g," "); p.append(l); });
+  box.hidden=false;
+}
+
 async function loadExtras(city){
   const hit=extras.get(city.name); if(hit&&Date.now()-hit.at<600000) return;
   extras.set(city.name,{at:Date.now(),...(hit||{})});               // marks the request as under way
@@ -356,11 +467,13 @@ async function loadExtras(city){
   const get=u=>fetch(u,{signal:ac.signal}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); });
   const d1=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
   const near="lat="+city.lat+"&lng="+city.lon+"&radius=60&captive=false&d1="+d1+"&per_page=1";
-  const [w,sp,ob]=await Promise.allSettled([
+  const [w,sp,ob,rd,wk]=await Promise.allSettled([
     get("https://api.open-meteo.com/v1/forecast?latitude="+city.lat+"&longitude="+city.lon+
         "&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto"+(useF?"&temperature_unit=fahrenheit":"")),
     get("https://api.inaturalist.org/v1/observations/species_counts?"+near),
-    get("https://api.inaturalist.org/v1/observations/observers?"+near)]);
+    get("https://api.inaturalist.org/v1/observations/observers?"+near),
+    radioNear(city,get),
+    wikiTop(ISO[city.country],get)]);
   clearTimeout(timer);
   const x={at:Date.now()};
   if(w.status==="fulfilled"&&w.value){ const c=w.value.current||{};
@@ -369,6 +482,8 @@ async function loadExtras(city){
     x.code=c.weather_code; if(typeof c.wind_speed_10m==="number") x.wind=c.wind_speed_10m; }
   if(sp.status==="fulfilled"&&Number.isFinite(sp.value?.total_results)) x.species=sp.value.total_results;
   if(ob.status==="fulfilled"&&Number.isFinite(ob.value?.total_results)) x.people=ob.value.total_results;
+  if(rd.status==="fulfilled"&&rd.value.length) x.stations=rd.value;
+  if(wk.status==="fulfilled"&&wk.value) x.reads=wk.value;
   if(!x.tz&&x.species===undefined) x.at=Date.now()-540000;          // nothing came back: allow a retry in a minute
   extras.set(city.name,x);
   if(selected===city) refresh();
