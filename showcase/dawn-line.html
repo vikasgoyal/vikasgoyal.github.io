@@ -12,99 +12,103 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dawn Line</title>
-<meta name="description" content="A live globe showing where the sun is rising right now, with fresh wildlife sightings from the places waking up.">
+<meta name="description" content="A live globe showing where the sun is rising right now, with something people spotted in nature in the places waking up.">
 <link rel="canonical" href="https://vikasgoyal.github.io/showcase/dawn-line.html">
 <link rel="icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-/* Layout: the globe is the page. It sits left (top on phones) with the sunrise line always facing the viewer;
-   a quiet column beside it names where dawn is and shows what people saw there. */
+/* Layout: one night sky with dawn glowing up from below. The lit globe sits left (top on phones);
+   beside it a single serif sentence names the place, and one photograph shows what was seen there. */
 :root{
-  --bg:#eceef8; --panel:#f8f9fd; --ink:#1a2040; --muted:#5b6386; --rule:#d3d7e8;
-  --ocean:#bcd3ea; --land:#86ad99; --night:#141a44; --dawn:#f0703f; --gold:#f2a93b;
-  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",sans-serif;
+  color-scheme:dark;
+  --sky:#05071a; --ink:#f4efe6; --muted:#aaa9cb; --rule:rgba(255,255,255,.16);
+  --dawn:#ff8a5c; --gold:#ffc978; --rose:#ec706c;
+  --display:"Instrument Serif","Iowan Old Style",Georgia,serif;
   --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#0d1024; --panel:#161a36; --ink:#e8eaf8; --muted:#9aa2c6; --rule:#2a3058;
-  --ocean:#27456e; --land:#5f917d; --night:#070a1c; --dawn:#ff8a5c; --gold:#ffc46b; color-scheme:dark } }
-:root[data-theme="dark"]{
-  --bg:#0d1024; --panel:#161a36; --ink:#e8eaf8; --muted:#9aa2c6; --rule:#2a3058;
-  --ocean:#27456e; --land:#5f917d; --night:#070a1c; --dawn:#ff8a5c; --gold:#ffc46b; color-scheme:dark }
-
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
-.wrap{max-width:1120px;margin:0 auto;padding-block:20px 40px;
+body{background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;margin:0;min-height:100%}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+  radial-gradient(95% 58% at 26% 112%, rgba(255,150,90,.6) 0%, rgba(214,92,110,.34) 36%, rgba(90,50,130,0) 72%),
+  linear-gradient(180deg,#05071a 0%,#0b0f33 55%,#1b1748 100%)}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.wrap{max-width:1180px;margin:0 auto;padding-block:22px 36px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
-@media (min-width:880px){ .wrap{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start;gap:40px}
-  .stage{position:sticky;top:20px} }
-header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,5vw,2.8rem);line-height:1;margin:0;letter-spacing:-.02em}
-.clock{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.9rem}
-.stage{display:flex;flex-direction:column;gap:14px;min-width:0}
-.globe{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:1}
+  display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){ .wrap{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:center;column-gap:56px;row-gap:14px} }
+header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px}
+h1{font-family:var(--display);font-weight:400;font-size:1.75rem;line-height:1;margin:0;letter-spacing:.01em}
+.clock{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem}
+.stage{display:flex;flex-direction:column;gap:6px;min-width:0}
+.globe{position:relative;width:100%;max-width:620px;margin:0 auto;aspect-ratio:1}
 .globe canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab;border-radius:50%}
-.now{font-family:var(--display);font-weight:500;font-size:clamp(1.15rem,3.4vw,1.5rem);line-height:1.25;margin:0;text-wrap:balance}
-.now b{color:var(--dawn);font-weight:700}
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.legend{display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:620px;width:100%;margin:0 auto;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.legend #hint{letter-spacing:.04em;text-transform:none;font-size:.85rem;text-align:center}
+.controls{display:flex;justify-content:center;min-height:38px}
 button{font:inherit;color:inherit;cursor:pointer}
-.toggle{border:1px solid var(--rule);background:var(--panel);border-radius:999px;padding:7px 14px;font-size:.88rem;font-weight:500}
-.toggle[aria-pressed="true"]{background:var(--dawn);border-color:var(--dawn);color:#fff}
-:focus-visible{outline:2px solid var(--dawn);outline-offset:2px}
-.hint{color:var(--muted);font-size:.85rem}
-.side{display:flex;flex-direction:column;gap:20px;min-width:0}
-.label{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 8px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--rule);background:transparent;border-radius:999px;padding:6px 12px;font-size:.9rem;line-height:1.2;display:flex;gap:6px;align-items:center}
-.chip i{width:7px;height:7px;border-radius:50%;background:var(--dawn);flex:none}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.next{color:var(--muted);font-size:.9rem;margin:0}
-.place h2{font-family:var(--display);font-weight:700;font-size:1.5rem;line-height:1.15;margin:0}
-.place p{margin:4px 0 0;color:var(--muted);font-size:.92rem;font-variant-numeric:tabular-nums}
-.shot{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;min-width:0}
-.shot img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:var(--rule);display:block}
-.shot strong{font-family:var(--display);font-size:1.25rem;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
-.shot span{font-size:.82rem;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
-.shot em{font-style:normal;color:var(--dawn);font-weight:600}
-.note{border:1px dashed var(--rule);border-radius:12px;padding:16px;color:var(--muted);font-size:.92rem;margin:0}
-footer{grid-column:1/-1;color:var(--muted);font-size:.8rem;border-top:1px solid var(--rule);padding-top:14px}
+.toggle{border:1px solid var(--gold);background:rgba(255,201,120,.14);color:var(--gold);border-radius:999px;padding:7px 16px;font-size:.88rem;font-weight:500}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 10px}
+.now{font-family:var(--display);font-weight:400;font-size:clamp(2.5rem,5.6vw,4.1rem);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.now em{font-style:italic;color:var(--gold)}
+.meta{margin:12px 0 0;color:var(--muted);font-size:.95rem;font-variant-numeric:tabular-nums}
+.shot{position:relative;display:block;aspect-ratio:4/3;border-radius:20px;overflow:hidden;color:#fff;text-decoration:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:0 34px 60px -34px rgba(0,0,0,.85)}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease}
+.shot img.in{opacity:1}
+.cap{position:absolute;inset:auto 0 0 0;padding:64px 20px 16px;display:flex;flex-direction:column;gap:4px;
+  background:linear-gradient(180deg,rgba(5,7,26,0),rgba(5,7,26,.86))}
+.cap strong{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,3.2vw,2rem);line-height:1.08;overflow-wrap:anywhere}
+.cap span{font-size:.76rem;line-height:1.35;color:rgba(255,255,255,.82);overflow-wrap:anywhere}
+.cap b{font-weight:600;color:var(--gold)}
+.note{border:1px dashed var(--rule);border-radius:20px;padding:20px;color:var(--muted);font-size:.92rem;margin:0}
+.table{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;width:100%;background:none;border:0;
+  border-bottom:1px solid var(--rule);padding:10px 2px;text-align:left}
+.row .n{font-family:var(--display);font-size:1.35rem;line-height:1.1;min-width:0;overflow-wrap:anywhere;transition:color .2s}
+.row .n small{font-family:var(--body);font-size:.76rem;color:var(--muted);margin-left:9px;letter-spacing:.02em;font-style:normal}
+.row .t{font-size:.84rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.row.soon .n{color:var(--muted)}
+.row:hover .n,.row[aria-pressed="true"] .n{color:var(--gold)}
+.row[aria-pressed="true"] .n{font-style:italic}
+.row[aria-pressed="true"] .t{color:var(--ink)}
+.hint{color:var(--muted);font-size:.9rem}
+footer{grid-column:1/-1;color:rgba(244,239,230,.72);font-size:.78rem;padding-top:10px}
 footer a{color:inherit}
 @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
 </style>
 </head>
 <body>
+<canvas id="sky" aria-hidden="true"></canvas>
 <div class="wrap">
   <header>
     <h1>Dawn Line</h1>
-    <div class="clock" id="clock" aria-live="off"></div>
+    <div class="clock" id="clock"></div>
   </header>
 
   <section class="stage" aria-label="Globe">
-    <div class="globe"><canvas id="globe" tabindex="0" role="img" aria-label="Globe showing where the sun is rising. Drag, or use the left and right arrow keys, to turn the Earth through the day."></canvas></div>
-    <p class="now" id="now">Finding the sunrise…</p>
-    <div class="controls">
-      <button class="toggle" id="fast" type="button" hidden>Back to live</button>
-      <span class="hint" id="hint">Live. Drag the globe to turn the Earth and see dawn at another hour.</span>
-    </div>
+    <div class="globe"><canvas id="globe" tabindex="0" role="img" aria-label="Globe showing where the sun is rising. Drag, or use the left and right arrow keys, to turn the Earth through the day. Tap a place to choose it."></canvas></div>
+    <div class="legend"><span>Night</span><span id="hint">Drag to turn the Earth, or tap a place</span><span>Day</span></div>
+    <div class="controls"><button class="toggle" id="fast" type="button" hidden>Back to live</button></div>
   </section>
 
   <section class="side">
     <div>
-      <p class="label">Waking up now</p>
-      <div class="chips" id="chips"></div>
-      <p class="next" id="next"></p>
-    </div>
-    <div class="place" id="place" hidden>
-      <h2 id="placeName"></h2>
-      <p id="placeMeta"></p>
+      <p class="label" id="kicker">Right now</p>
+      <p class="now" id="now">Finding the sunrise…</p>
+      <p class="meta" id="placeMeta"></p>
     </div>
     <div>
-      <p class="label" id="seenLabel">Seen near here this week</p>
-      <div class="grid" id="grid"></div>
+      <div id="grid"></div>
       <p class="note" id="note" hidden></p>
+    </div>
+    <div>
+      <p class="label">Along the line</p>
+      <ul class="table" id="chips"></ul>
     </div>
   </section>
 
@@ -118,17 +122,16 @@ const LAND = {"type":"MultiPolygon","coordinates":[[[[-59.57,-80.04],[-59.87,-80
 const CITIES = `Honolulu,USA,21.31,-157.86;Anchorage,USA,61.22,-149.9;Papeete,French Polynesia,-17.54,-149.57;Vancouver,Canada,49.28,-123.12;Seattle,USA,47.61,-122.33;San Francisco,USA,37.77,-122.42;Los Angeles,USA,34.05,-118.24;Tijuana,Mexico,32.51,-117.04;Calgary,Canada,51.05,-114.07;Phoenix,USA,33.45,-112.07;Denver,USA,39.74,-104.99;Guadalajara,Mexico,20.67,-103.35;Mexico City,Mexico,19.43,-99.13;Winnipeg,Canada,49.9,-97.14;Houston,USA,29.76,-95.37;Minneapolis,USA,44.98,-93.27;Guatemala City,Guatemala,14.63,-90.51;New Orleans,USA,29.95,-90.07;Chicago,USA,41.88,-87.63;Galápagos,Ecuador,-0.74,-90.31;San José,Costa Rica,9.93,-84.08;Atlanta,USA,33.75,-84.39;Havana,Cuba,23.11,-82.37;Miami,USA,25.76,-80.19;Toronto,Canada,43.65,-79.38;Panama City,Panama,8.98,-79.52;Quito,Ecuador,-0.18,-78.47;Lima,Peru,-12.05,-77.04;Washington,USA,38.91,-77.04;Kingston,Jamaica,17.97,-76.79;Bogotá,Colombia,4.71,-74.07;New York,USA,40.71,-74.01;Montréal,Canada,45.5,-73.57;Santiago,Chile,-33.45,-70.67;Punta Arenas,Chile,-53.16,-70.92;Santo Domingo,Dominican Republic,18.49,-69.93;La Paz,Bolivia,-16.5,-68.15;Caracas,Venezuela,10.48,-66.9;San Juan,Puerto Rico,18.47,-66.11;Halifax,Canada,44.65,-63.58;Manaus,Brazil,-3.12,-60.02;Buenos Aires,Argentina,-34.6,-58.38;Asunción,Paraguay,-25.26,-57.58;Montevideo,Uruguay,-34.9,-56.16;St. John's,Canada,47.56,-52.71;Nuuk,Greenland,64.18,-51.72;Brasília,Brazil,-15.79,-47.88;São Paulo,Brazil,-23.55,-46.63;Rio de Janeiro,Brazil,-22.91,-43.17;Salvador,Brazil,-12.97,-38.5;Recife,Brazil,-8.05,-34.88;Ponta Delgada,Azores,37.74,-25.67;Praia,Cabo Verde,14.93,-23.51;Reykjavík,Iceland,64.15,-21.94;Dakar,Senegal,14.72,-17.47;Funchal,Madeira,32.65,-16.91;Las Palmas,Canary Islands,28.12,-15.43;Freetown,Sierra Leone,8.47,-13.23;Lisbon,Portugal,38.72,-9.14;Marrakesh,Morocco,31.63,-7.99;Dublin,Ireland,53.35,-6.26;Bamako,Mali,12.64,-8;Abidjan,Côte d'Ivoire,5.36,-4.01;Madrid,Spain,40.42,-3.7;Edinburgh,UK,55.95,-3.19;Accra,Ghana,5.6,-0.19;London,UK,51.51,-0.13;Paris,France,48.86,2.35;Barcelona,Spain,41.39,2.17;Algiers,Algeria,36.75,3.06;Lagos,Nigeria,6.52,3.38;Amsterdam,Netherlands,52.37,4.9;Zürich,Switzerland,47.38,8.54;Tunis,Tunisia,36.81,10.18;Oslo,Norway,59.91,10.75;Rome,Italy,41.9,12.5;Berlin,Germany,52.52,13.4;Luanda,Angola,-8.84,13.23;Kinshasa,DR Congo,-4.44,15.27;Vienna,Austria,48.21,16.37;Stockholm,Sweden,59.33,18.07;Cape Town,South Africa,-33.92,18.42;Tromsø,Norway,69.65,18.96;Warsaw,Poland,52.23,21.01;Athens,Greece,37.98,23.73;Helsinki,Finland,60.17,24.94;Johannesburg,South Africa,-26.2,28.05;Istanbul,Türkiye,41.01,28.98;Kyiv,Ukraine,50.45,30.52;Cairo,Egypt,30.04,31.24;Khartoum,Sudan,15.5,32.56;Kampala,Uganda,0.35,32.58;Maputo,Mozambique,-25.97,32.57;Nairobi,Kenya,-1.29,36.82;Moscow,Russia,55.76,37.62;Addis Ababa,Ethiopia,9.03,38.74;Dar es Salaam,Tanzania,-6.79,39.21;Baghdad,Iraq,33.31,44.37;Tbilisi,Georgia,41.72,44.83;Riyadh,Saudi Arabia,24.71,46.68;Antananarivo,Madagascar,-18.88,47.51;Tehran,Iran,35.69,51.39;Dubai,UAE,25.2,55.27;Port Louis,Mauritius,-20.16,57.5;Muscat,Oman,23.59,58.41;Yekaterinburg,Russia,56.84,60.6;Karachi,Pakistan,24.86,67.01;Tashkent,Uzbekistan,41.3,69.24;Kabul,Afghanistan,34.56,69.21;Mumbai,India,19.08,72.88;Malé,Maldives,4.18,73.51;Lahore,Pakistan,31.55,74.34;Almaty,Kazakhstan,43.24,76.89;Delhi,India,28.61,77.21;Bengaluru,India,12.97,77.59;Colombo,Sri Lanka,6.93,79.86;Chennai,India,13.08,80.27;Novosibirsk,Russia,55.01,82.93;Kathmandu,Nepal,27.72,85.32;Kolkata,India,22.57,88.36;Dhaka,Bangladesh,23.81,90.41;Lhasa,China,29.65,91.14;Yangon,Myanmar,16.87,96.2;Bangkok,Thailand,13.76,100.5;Kuala Lumpur,Malaysia,3.14,101.69;Chengdu,China,30.57,104.07;Singapore,Singapore,1.35,103.82;Irkutsk,Russia,52.29,104.28;Hanoi,Vietnam,21.03,105.85;Ho Chi Minh City,Vietnam,10.82,106.63;Jakarta,Indonesia,-6.21,106.85;Ulaanbaatar,Mongolia,47.89,106.91;Hong Kong,China,22.32,114.17;Perth,Australia,-31.95,115.86;Denpasar,Indonesia,-8.65,115.22;Beijing,China,39.9,116.41;Manila,Philippines,14.6,120.98;Shanghai,China,31.23,121.47;Taipei,Taiwan,25.03,121.57;Seoul,South Korea,37.57,126.98;Yakutsk,Russia,62.03,129.73;Darwin,Australia,-12.46,130.84;Fukuoka,Japan,33.59,130.4;Vladivostok,Russia,43.12,131.89;Alice Springs,Australia,-23.7,133.88;Kyoto,Japan,35.01,135.77;Adelaide,Australia,-34.93,138.6;Tokyo,Japan,35.68,139.69;Sapporo,Japan,43.06,141.35;Guam,Guam,13.44,144.79;Melbourne,Australia,-37.81,144.96;Cairns,Australia,-16.92,145.77;Port Moresby,Papua New Guinea,-9.44,147.18;Hobart,Australia,-42.88,147.33;Sydney,Australia,-33.87,151.21;Brisbane,Australia,-27.47,153.03;Petropavlovsk,Russia,53.04,158.65;Honiara,Solomon Islands,-9.43,159.95;Nouméa,New Caledonia,-22.27,166.44;Port Vila,Vanuatu,-17.73,168.32;Christchurch,New Zealand,-43.53,172.64;Auckland,New Zealand,-36.85,174.76;Suva,Fiji,-18.14,178.44;Apia,Samoa,-13.83,-171.77;Nukuʻalofa,Tonga,-21.14,-175.2`
   .split(";").map(s=>{const [name,country,lat,lon]=s.split(",");return {name,country,lat:+lat,lon:+lon}});
 
-const R=Math.PI/180, norm=d=>(((d+540)%360)+360)%360-180;
+const R=Math.PI/180, norm=d=>(((d+540)%360)+360)%360-180, TILT=12;
 
-// Low-precision solar position: the point on Earth directly under the sun.
+// The point on Earth directly under the sun (low-precision solar position).
 function subsolar(ms){
   const n=ms/86400000+2440587.5-2451545.0;
   const L=280.460+0.9856474*n, g=(357.528+0.9856003*n)*R;
   const lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*R, eps=(23.439-0.0000004*n)*R;
   const ra=Math.atan2(Math.cos(eps)*Math.sin(lam),Math.cos(lam))/R;
   const dec=Math.asin(Math.sin(eps)*Math.sin(lam))/R;
-  const gmst=280.46061837+360.98564736629*n;
-  return {lat:dec, lon:norm(ra-gmst)};
+  return {lat:dec, lon:norm(ra-(280.46061837+360.98564736629*n))};
 }
 // For one place: sun altitude, whether it is morning, minutes to/since sunrise, minutes until first light.
 function sunAt(c,s){
@@ -142,78 +145,116 @@ function sunAt(c,s){
 const isDawn=v=>v.morning&&v.alt>-6&&v.alt<2;
 
 // ---------- state ----------
-let offsetMs=0, dragging=false, lastTick=performance.now(), selected=null, dawnKey="", cache=new Map(), colors={};
-const $=id=>document.getElementById(id);
+let offsetMs=0, dragging=false, pinned=false, selected=null, chipKey="", lastRefresh=0;
+const cache=new Map(), $=id=>document.getElementById(id);
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const now=()=>Date.now()+offsetMs;
 
-function readColors(){
-  const cs=getComputedStyle(document.documentElement);
-  for(const k of ["bg","ink","muted","ocean","land","night","dawn","gold"]) colors[k]=cs.getPropertyValue("--"+k).trim();
+// ---------- sky ----------
+function paintSky(){
+  const el=$("sky"), w=innerWidth, h=innerHeight, dpr=Math.min(devicePixelRatio||1,2);
+  el.width=w*dpr; el.height=h*dpr; const g=el.getContext("2d"); g.setTransform(dpr,0,0,dpr,0,0);
+  let seed=7; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const count=Math.round(w*h/5200);
+  for(let i=0;i<count;i++){
+    const x=rnd()*w, y=rnd()*h, fade=Math.pow(1-y/h,1.6), big=rnd()>.93;
+    g.globalAlpha=(0.25+rnd()*0.75)*fade; g.fillStyle=rnd()>.8?"#ffe2bd":"#ffffff";
+    g.beginPath(); g.arc(x,y,big?1.3:0.7,0,7); g.fill();
+  }
 }
+addEventListener("resize",paintSky);
 
 // ---------- globe ----------
 const canvas=$("globe"), ctx=canvas.getContext("2d");
 const proj=d3.geoOrthographic().clipAngle(90), path=d3.geoPath(proj,ctx);
-let size=0;
+const GRAT=d3.geoGraticule10();
+let size=0, light=null, lightDec=99;
 function resize(){
   const w=canvas.clientWidth, dpr=Math.min(devicePixelRatio||1,2);
   if(!w) return; size=w; canvas.width=canvas.height=Math.round(w*dpr);
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  proj.translate([w/2,w/2]).scale(w/2-10);
+  proj.translate([w/2,w/2]).scale(w/2-Math.max(18,w*0.05)); light=null;
 }
 new ResizeObserver(resize).observe(canvas);
 
+// Sunlight painted once per pixel: warm day edge, rose at the horizon, violet twilight, deep night.
+// The view is locked to the sun, so this only changes with the season.
+function buildLight(dec){
+  const n=Math.min(720,Math.round(proj.scale()*2)), cv=document.createElement("canvas"); cv.width=cv.height=n;
+  const g=cv.getContext("2d"), img=g.createImageData(n,n), d=img.data;
+  const Sx=Math.cos(dec*R), Sy=Math.cos(TILT*R)*Math.sin(dec*R), Sz=Math.sin(TILT*R)*Math.sin(dec*R);
+  const ss=(a,b,x)=>{let t=(x-a)/(b-a); t=t<0?0:t>1?1:t; return t*t*(3-2*t)};
+  const W=[255,176,110], P=[236,112,108], V=[96,62,130], N=[9,14,44];
+  for(let j=0;j<n;j++){ const py=1-2*(j+.5)/n;
+    for(let i=0;i<n;i++){ const px=2*(i+.5)/n-1, q=px*px+py*py; if(q>1) continue;
+      const e=px*Sx+py*Sy+Math.sqrt(1-q)*Sz; let c,a;
+      if(e>=0){ const k=ss(0,.12,e); c=[P[0]+(W[0]-P[0])*k,P[1]+(W[1]-P[1])*k,P[2]+(W[2]-P[2])*k]; a=.5*Math.exp(-e/.11); }
+      else{ const k=ss(0,-.1,e), m=ss(-.05,-.34,e);
+        c=[0,1,2].map(z=>{const t=P[z]+(V[z]-P[z])*k; return t+(N[z]-t)*m}); a=.5+.3*ss(0,-.3,e); }
+      const o=(j*n+i)*4; d[o]=c[0]; d[o+1]=c[1]; d[o+2]=c[2]; d[o+3]=a*255;
+    } }
+  g.putImageData(img,0,0); return cv;
+}
+
 function draw(){
   if(!size) return;
-  const t=now(), s=subsolar(t), anti=[norm(s.lon+180),-s.lat];
-  proj.rotate([-(s.lon-90),-12]);           // keep the sunrise meridian facing the viewer
+  const s=subsolar(now()), c=size/2, r=proj.scale();
+  proj.rotate([-(s.lon-90),-TILT]);            // the sunrise meridian always faces the viewer
   ctx.clearRect(0,0,size,size);
-  const c=size/2, r=proj.scale();
+  if(!light||Math.abs(lightDec-s.lat)>.05){ light=buildLight(s.lat); lightDec=s.lat; }
 
-  // soft atmosphere
-  const halo=ctx.createRadialGradient(c,c,r*0.96,c,c,r+10);
-  halo.addColorStop(0,colors.gold+"55"); halo.addColorStop(1,colors.gold+"00");
-  ctx.fillStyle=halo; ctx.beginPath(); ctx.arc(c,c,r+10,0,7); ctx.fill();
+  // atmosphere: cool on the night limb, warm on the day limb
+  ctx.save(); ctx.fillStyle="#0b1030";
+  ctx.shadowColor="rgba(120,160,255,.6)"; ctx.shadowBlur=r*.12; ctx.beginPath(); ctx.arc(c,c,r,0,7); ctx.fill();
+  ctx.shadowColor="rgba(255,176,120,.55)"; ctx.shadowBlur=r*.14; ctx.shadowOffsetX=r*.04; ctx.beginPath(); ctx.arc(c,c,r,0,7); ctx.fill();
+  ctx.restore();
 
-  ctx.beginPath(); path({type:"Sphere"}); ctx.fillStyle=colors.ocean; ctx.fill();
-  ctx.beginPath(); path(LAND); ctx.fillStyle=colors.land; ctx.fill();
+  const sea=ctx.createRadialGradient(c+r*.55,c-r*.15,r*.1,c+r*.3,c,r*1.7);
+  sea.addColorStop(0,"#5ea6e0"); sea.addColorStop(1,"#1d4a8c");
+  ctx.beginPath(); path({type:"Sphere"}); ctx.fillStyle=sea; ctx.fill();
+  ctx.beginPath(); path(GRAT); ctx.strokeStyle="rgba(255,255,255,.07)"; ctx.lineWidth=.6; ctx.stroke();
+  ctx.beginPath(); path(LAND); ctx.fillStyle="#8dbf93"; ctx.fill();
+  ctx.strokeStyle="rgba(255,255,255,.22)"; ctx.lineWidth=.5; ctx.stroke();
 
-  // night, darkening in steps through twilight (sun 0, 6, 12, 18 degrees below the horizon)
-  ctx.fillStyle=colors.night;
-  [[90,.34],[84,.22],[78,.16],[72,.12]].forEach(([rad,a])=>{
-    ctx.globalAlpha=a; ctx.beginPath(); path(d3.geoCircle().center(anti).radius(rad).precision(2)()); ctx.fill();});
-  ctx.globalAlpha=1;
+  ctx.save(); ctx.beginPath(); ctx.arc(c,c,r,0,7); ctx.clip();
+  ctx.drawImage(light,c-r,c-r,r*2,r*2);
+  const limb=ctx.createRadialGradient(c,c,r*.62,c,c,r);
+  limb.addColorStop(0,"rgba(4,6,20,0)"); limb.addColorStop(1,"rgba(4,6,20,.5)");
+  ctx.fillStyle=limb; ctx.fillRect(c-r,c-r,r*2,r*2);
+  ctx.restore();
 
-  // the terminator: sunrise half glows, sunset half stays quiet
+  // the line itself
   const ring=d3.geoCircle().center([s.lon,s.lat]).radius(90).precision(1.5)().coordinates[0];
   const rise=ring.filter(p=>norm(p[0]-s.lon)<0).sort((a,b)=>a[1]-b[1]);
-  const set=ring.filter(p=>norm(p[0]-s.lon)>=0).sort((a,b)=>a[1]-b[1]);
   ctx.lineCap="round"; ctx.lineJoin="round";
-  ctx.beginPath(); path({type:"LineString",coordinates:set}); ctx.strokeStyle=colors.muted+"66"; ctx.lineWidth=1; ctx.stroke();
-  ctx.save(); ctx.shadowColor=colors.dawn; ctx.shadowBlur=22;
-  ctx.beginPath(); path({type:"LineString",coordinates:rise}); ctx.strokeStyle=colors.dawn+"aa"; ctx.lineWidth=7; ctx.stroke();
+  ctx.save(); ctx.shadowColor="#ff9a62"; ctx.shadowBlur=26;
+  ctx.beginPath(); path({type:"LineString",coordinates:rise}); ctx.strokeStyle="rgba(255,150,96,.55)"; ctx.lineWidth=5; ctx.stroke();
   ctx.restore();
-  ctx.beginPath(); path({type:"LineString",coordinates:rise}); ctx.strokeStyle=colors.gold; ctx.lineWidth=2; ctx.stroke();
+  ctx.beginPath(); path({type:"LineString",coordinates:rise}); ctx.strokeStyle="#ffe3b0"; ctx.lineWidth=1.4; ctx.stroke();
 
-  // places
-  const pulse=reduce?0.5:(performance.now()%2400)/2400;
+  // places: lamps at night, rings at dawn, quiet dots by day
+  const pulse=reduce?.5:(performance.now()%2600)/2600;
   for(const city of CITIES){
-    if(d3.geoDistance([city.lon,city.lat],[s.lon-90,12])>Math.PI/2) continue;
+    if(d3.geoDistance([city.lon,city.lat],[s.lon-90,TILT])>Math.PI/2-.03) continue;
     const p=proj([city.lon,city.lat]); if(!p) continue;
-    const v=sunAt(city,s), dawn=isDawn(v), sel=city===selected;
+    const v=sunAt(city,s), dawn=isDawn(v);
+    city._p=p;
     if(dawn){
-      ctx.beginPath(); ctx.arc(p[0],p[1],4+pulse*12,0,7);
-      ctx.strokeStyle=colors.gold; ctx.globalAlpha=1-pulse; ctx.lineWidth=1.5; ctx.stroke(); ctx.globalAlpha=1;
+      ctx.beginPath(); ctx.arc(p[0],p[1],4+pulse*13,0,7);
+      ctx.strokeStyle="#ffd9a0"; ctx.globalAlpha=1-pulse; ctx.lineWidth=1.4; ctx.stroke(); ctx.globalAlpha=1;
+      ctx.beginPath(); ctx.arc(p[0],p[1],3.4,0,7); ctx.fillStyle="#fff1d6"; ctx.fill();
+    } else if(v.alt<0){
+      ctx.beginPath(); ctx.arc(p[0],p[1],3.4,0,7); ctx.fillStyle="rgba(255,201,120,.16)"; ctx.fill();
+      ctx.beginPath(); ctx.arc(p[0],p[1],1.25,0,7); ctx.fillStyle="rgba(255,214,150,.9)"; ctx.fill();
+    } else {
+      ctx.beginPath(); ctx.arc(p[0],p[1],1.4,0,7); ctx.fillStyle="rgba(16,28,64,.5)"; ctx.fill();
     }
-    ctx.beginPath(); ctx.arc(p[0],p[1],dawn?3.5:1.6,0,7);
-    ctx.fillStyle=dawn?colors.gold:(v.alt>0?colors.ink+"88":"#ffffff66"); ctx.fill();
-    if(sel){
-      ctx.beginPath(); ctx.arc(p[0],p[1],7,0,7); ctx.strokeStyle="#fff"; ctx.lineWidth=2; ctx.stroke();
+    if(city===selected){
+      ctx.beginPath(); ctx.arc(p[0],p[1],7.5,0,7); ctx.strokeStyle="#fff"; ctx.lineWidth=1.8; ctx.stroke();
       ctx.font="600 13px "+getComputedStyle(document.body).fontFamily;
       const left=p[0]>c; ctx.textAlign=left?"right":"left"; ctx.textBaseline="middle";
-      const x=p[0]+(left?-12:12);
-      ctx.lineWidth=4; ctx.strokeStyle=colors.night+"cc"; ctx.strokeText(city.name,x,p[1]);
+      const x=p[0]+(left?-13:13);
+      ctx.lineWidth=4; ctx.strokeStyle="rgba(5,7,26,.8)"; ctx.strokeText(city.name,x,p[1]);
       ctx.fillStyle="#fff"; ctx.fillText(city.name,x,p[1]);
     }
   }
@@ -222,54 +263,66 @@ function draw(){
 // ---------- words ----------
 const mins=m=>{m=Math.round(Math.abs(m)); return m<60?m+" min":Math.floor(m/60)+" h "+(m%60)+" min"};
 function riseText(v){
-  if(v.rise===null) return "no sunrise today";
-  return v.rise>0?"sunrise in "+mins(v.rise):"sun came up "+mins(v.rise)+" ago";
+  if(v.rise===null) return "no sunrise here today";
+  return v.rise>0?"sunrise in "+mins(v.rise):"the sun rose "+mins(v.rise)+" ago";
 }
-function list(names){ return names.length<2?names.join(""):names.slice(0,-1).join(", ")+" and "+names.at(-1); }
+function opening(v){
+  if(v.alt<-6) return v.morning?"Dawn is coming to":"It is night in";
+  if(v.alt<-0.833) return v.morning?"First light in":"Dusk in";
+  if(v.alt<8) return v.morning?"The sun is up in":"Evening light in";
+  return "Full daylight in";
+}
 
 function refresh(){
-  const t=now(), s=subsolar(t), d=new Date(t);
-  $("clock").textContent=d.toISOString().slice(0,10)+"  "+d.toISOString().slice(11,16)+" UTC"+(Math.abs(offsetMs)>30000?"  ("+(offsetMs>0?"+":"−")+mins(offsetMs/60000)+" from now)":"");
+  const t=now(), s=subsolar(t), d=new Date(t), off=Math.abs(offsetMs)>30000;
+  $("clock").textContent=d.toISOString().slice(0,10)+"  "+d.toISOString().slice(11,16)+" UTC";
+  $("kicker").textContent=off?(offsetMs>0?mins(offsetMs/60000)+" from now":mins(offsetMs/60000)+" ago"):"Right now";
   const all=CITIES.map(c=>({c,v:sunAt(c,s)}));
   const dawn=all.filter(x=>isDawn(x.v)).sort((a,b)=>Math.abs(a.v.alt)-Math.abs(b.v.alt));
   const coming=all.filter(x=>!isDawn(x.v)&&x.v.light!==null&&x.v.light<240).sort((a,b)=>a.v.light-b.v.light).slice(0,3);
 
-  const nowEl=$("now"); nowEl.textContent="";
-  if(dawn.length){
-    nowEl.append("The sun is rising over "); const b=document.createElement("b");
-    b.textContent=list(dawn.slice(0,3).map(x=>x.c.name)); nowEl.append(b,dawn.length>3?" and "+(dawn.length-3)+" more places.":".");
-  } else nowEl.textContent="Dawn is crossing open water right now.";
-  $("next").textContent=coming.length?"Next: "+coming.map(x=>x.c.name+" in "+mins(x.v.light)).join(", ")+".":"";
+  if(pinned&&selected&&sunAt(selected,s).alt>15) pinned=false;
+  if(!pinned&&!dawn.some(x=>x.c===selected)) select(dawn[0]?.c??coming[0]?.c??null,false);
 
-  const key=dawn.map(x=>x.c.name).join("|");
-  if(key!==dawnKey){
-    dawnKey=key; const chips=$("chips"); chips.textContent="";
-    if(!dawn.some(x=>x.c===selected)) select(dawn[0]?.c??coming[0]?.c??null,false);
-    for(const x of dawn){
-      const b=document.createElement("button"); b.className="chip"; b.type="button";
-      b.setAttribute("aria-pressed",x.c===selected); b.append(document.createElement("i"),x.c.name);
-      b.onclick=()=>select(x.c,true); chips.append(b);
-    }
-    if(!dawn.length){ const p=document.createElement("span"); p.className="hint"; p.textContent="No city on our map is at first light this minute."; chips.append(p); }
-  }
+  const nowEl=$("now"); nowEl.textContent="";
   if(selected){
-    const v=sunAt(selected,s);
-    $("placeMeta").textContent=riseText(v)+"  ·  sun "+(v.alt<0?"−":"+")+Math.abs(v.alt).toFixed(1)+"° "+(v.alt<0?"below":"above")+" the horizon";
+    const v=sunAt(selected,s), em=document.createElement("em"); em.textContent=selected.name;
+    nowEl.append(opening(v)+" ",em,".");
+    $("placeMeta").textContent=selected.country+"  ·  "+riseText(v);
+  } else { nowEl.textContent="Dawn is crossing open water."; $("placeMeta").textContent=""; }
+  // a timetable of dawn: places at first light now, then the next few to come
+  const rows=dawn.slice(0,5).map(x=>({...x,soon:false})).concat(coming.map(x=>({...x,soon:true})));
+  const key=rows.map(x=>x.c.name+(x.soon?"~":"")).join("|");
+  const table=$("chips");
+  if(key!==chipKey){
+    chipKey=key; table.textContent="";
+    for(const x of rows){
+      const li=document.createElement("li"), b=document.createElement("button");
+      b.className="row"+(x.soon?" soon":""); b.type="button";
+      const n=document.createElement("span"); n.className="n"; n.textContent=x.c.name;
+      const sm=document.createElement("small"); if(x.c.country!==x.c.name){ sm.textContent=x.c.country; n.append(sm); }
+      const t=document.createElement("span"); t.className="t";
+      b.append(n,t); b.onclick=()=>{ select(x.c,true); refresh(); }; li.append(b); table.append(li);
+    }
+    if(!rows.length){ const li=document.createElement("li"); li.className="hint"; li.style.padding="10px 2px";
+      li.textContent="Dawn is over open water. No city on this map is near first light."; table.append(li); }
   }
+  rows.forEach((x,i)=>{ const b=table.children[i]?.firstChild; if(!b||!b.lastChild) return;
+    b.setAttribute("aria-pressed",x.c===selected);
+    b.lastChild.textContent=x.soon?"first light in "+mins(x.v.light):
+      x.v.rise===null?"":x.v.rise>0?"sunrise in "+mins(x.v.rise):"rose "+mins(x.v.rise)+" ago"; });
 }
 
 function select(city,byUser){
+  if(byUser) pinned=true;
+  if(city===selected) return;
   selected=city;
-  for(const b of $("chips").children) if(b.tagName==="BUTTON") b.setAttribute("aria-pressed",b.lastChild.textContent===city?.name);
-  $("place").hidden=!city;
-  if(!city){ $("grid").textContent=""; return; }
-  $("placeName").textContent=city.name+", "+city.country;
-  if(dragging&&!byUser) return;          // wait until the drag ends before fetching photos
+  if(!city){ $("grid").textContent=""; $("note").hidden=true; return; }
+  if(dragging) return;                    // wait until the drag ends before fetching a photo
   loadSightings(city);
 }
 
 // ---------- iNaturalist: one photo, the most-liked of the week if there is one, else the newest ----------
-const BLANK="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 async function ask(city,extra,signal){
   const d1=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
   const res=await fetch("https://api.inaturalist.org/v1/observations?lat="+city.lat+"&lng="+city.lon+
@@ -278,11 +331,10 @@ async function ask(city,extra,signal){
   return ((await res.json()).results||[]).find(o=>o.photos&&o.photos[0])||null;
 }
 async function loadSightings(city){
-  const grid=$("grid"), note=$("note"); note.hidden=true; grid.textContent="";
+  const grid=$("grid"), note=$("note"); note.hidden=true;
   const hit=cache.get(city.name);
   if(hit&&Date.now()-hit.at<600000) return render(city,hit.row);
-  const ph=document.createElement("div"); ph.className="shot";
-  const im=document.createElement("img"); im.alt=""; im.src=BLANK; ph.append(im); grid.append(ph);
+  grid.textContent=""; const ph=document.createElement("div"); ph.className="shot"; grid.append(ph);
   const ac=new AbortController(), timer=setTimeout(()=>ac.abort(),12000);
   try{
     const row=await ask(city,"&popular=true&order_by=votes&order=desc",ac.signal)
@@ -297,50 +349,64 @@ async function loadSightings(city){
 }
 function render(city,o){
   const grid=$("grid"), note=$("note"); grid.textContent="";
-  if(!o){ note.hidden=false; note.textContent="Nobody has shared a sighting near "+city.name+" this week. Try another place on the line."; return; }
+  if(!o){ note.hidden=false; note.textContent="Nobody has shared a sighting near "+city.name+" this week. Tap another place on the globe."; return; }
   note.hidden=true;
   const a=document.createElement("a"); a.className="shot"; a.target="_blank"; a.rel="noopener";
   a.href=/^https:\/\/www\.inaturalist\.org\//.test(o.uri||"")?o.uri:"https://www.inaturalist.org/observations/"+encodeURIComponent(o.id);
   const img=document.createElement("img");
-  const src=String(o.photos[0].url||"").replace("square","large"); if(/^https:\/\//.test(src)) img.src=src;
   const name=o.taxon?.preferred_common_name||o.taxon?.name||o.species_guess||"Not yet identified";
-  img.alt=name; const st=document.createElement("strong"); st.textContent=name;
+  img.alt=name; img.onload=()=>img.classList.add("in");
+  const src=String(o.photos[0].url||"").replace("square","large"); if(/^https:\/\//.test(src)) img.src=src;
+  if(img.complete&&img.naturalWidth) img.classList.add("in");
+  const cap=document.createElement("div"); cap.className="cap";
+  const st=document.createElement("strong"); st.textContent=name;
   const by=document.createElement("span"), n=o.faves_count||0;
-  if(n>0){ const em=document.createElement("em"); em.textContent=n+(n===1?" like":" likes"); by.append(em,"  ·  "); }
-  by.append([o.place_guess,o.photos[0].attribution].filter(Boolean).join(" · "));
-  a.append(img,st,by); grid.append(a);
+  if(n>0){ const b=document.createElement("b"); b.textContent=n+(n===1?" like":" likes"); by.append(b,"  ·  "); }
+  by.append([o.place_guess,o.photos[0].attribution].filter(Boolean).join("  ·  "));
+  cap.append(st,by); a.append(img,cap); grid.append(a);
 }
 
-// ---------- loop ----------
-const LIVE_HINT="Live. Drag the globe to turn the Earth and see dawn at another hour.";
+// ---------- turning the Earth ----------
 function shifted(){
   const off=Math.abs(offsetMs)>30000; $("fast").hidden=!off;
-  $("hint").textContent=off?"Drag right for later, left for earlier.":LIVE_HINT;
+  $("hint").textContent=off?"Right is later, left is earlier":"Drag to turn the Earth, or tap a place";
 }
-function settle(){ dawnKey="\u0000"; refresh(); if(selected) loadSightings(selected); }
-$("fast").onclick=()=>{ offsetMs=0; shifted(); settle(); };
-let dragX=0;
-canvas.addEventListener("pointerdown",e=>{ dragging=true; dragX=e.clientX; canvas.setPointerCapture(e.pointerId); canvas.style.cursor="grabbing"; });
+function settle(){ refresh(); if(selected) loadSightings(selected); }
+$("fast").onclick=()=>{ offsetMs=0; pinned=false; shifted(); settle(); };
+let dragX=0, travel=0;
+canvas.addEventListener("pointerdown",e=>{ dragging=true; dragX=e.clientX; travel=0; canvas.setPointerCapture(e.pointerId); canvas.style.cursor="grabbing"; });
 canvas.addEventListener("pointermove",e=>{
   if(!dragging) return;
-  offsetMs+=(e.clientX-dragX)/proj.scale()/R*240000;   // one degree of turn is four minutes
-  dragX=e.clientX; shifted();
+  const dx=e.clientX-dragX; travel+=Math.abs(dx); dragX=e.clientX;
+  if(travel<6) return;
+  offsetMs+=dx/proj.scale()/R*240000;          // one degree of turn is four minutes
+  shifted();
   const t=performance.now(); if(t-lastRefresh>120){ refresh(); lastRefresh=t; }
 });
-const endDrag=()=>{ if(!dragging) return; dragging=false; canvas.style.cursor="grab"; settle(); };
-canvas.addEventListener("pointerup",endDrag); canvas.addEventListener("pointercancel",endDrag);
+canvas.addEventListener("pointerup",e=>{
+  if(!dragging) return; dragging=false; canvas.style.cursor="grab";
+  if(travel<6){                                // a tap: choose the nearest place
+    const b=canvas.getBoundingClientRect(), x=e.clientX-b.left, y=e.clientY-b.top; let best=null, bd=26;
+    const s=subsolar(now());
+    for(const c of CITIES){ if(!c._p||d3.geoDistance([c.lon,c.lat],[s.lon-90,TILT])>Math.PI/2-.03) continue;
+      const q=Math.hypot(c._p[0]-x,c._p[1]-y); if(q<bd){ bd=q; best=c; } }
+    if(best){ select(best,true); refresh(); }
+    return;
+  }
+  settle();
+});
+canvas.addEventListener("pointercancel",()=>{ if(dragging){ dragging=false; canvas.style.cursor="grab"; settle(); } });
 canvas.addEventListener("keydown",e=>{
   const step=e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0; if(!step) return;
   e.preventDefault(); offsetMs+=step*900000; shifted(); settle();
 });
-let lastRefresh=0, lastColors=0;
+
+// ---------- loop ----------
 function frame(ts){
-  const dt=ts-lastTick; lastTick=ts;
-  if(ts-lastColors>2000){ readColors(); lastColors=ts; }
   if(ts-lastRefresh>15000){ refresh(); lastRefresh=ts; }
   draw(); requestAnimationFrame(frame);
 }
-readColors(); resize(); refresh(); requestAnimationFrame(frame);
+paintSky(); resize(); refresh(); requestAnimationFrame(frame);
 </script>
 </body>
 </html>
