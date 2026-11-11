@@ -56,6 +56,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .now{font-family:var(--display);font-weight:400;font-size:clamp(2.5rem,5.6vw,4.1rem);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
 .now em{font-style:italic;color:var(--gold)}
 .meta{margin:12px 0 0;color:var(--muted);font-size:.95rem;font-variant-numeric:tabular-nums}
+.report{margin:8px 0 0;font-size:.98rem;line-height:1.5;font-variant-numeric:tabular-nums}
+.tally{margin:14px 2px 0;color:var(--muted);font-size:.9rem}
+.tally b{color:var(--ink);font-weight:600}
 .shot{position:relative;display:block;aspect-ratio:4/3;border-radius:20px;overflow:hidden;color:#fff;text-decoration:none;
   background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:0 34px 60px -34px rgba(0,0,0,.85)}
 .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease}
@@ -101,10 +104,12 @@ footer a{color:inherit}
       <p class="label" id="kicker">Right now</p>
       <p class="now" id="now">Finding the sunrise…</p>
       <p class="meta" id="placeMeta"></p>
+      <p class="report" id="report"></p>
     </div>
     <div>
       <div id="grid"></div>
       <p class="note" id="note" hidden></p>
+      <p class="tally" id="tally" hidden></p>
     </div>
     <div>
       <p class="label">Along the line</p>
@@ -264,6 +269,7 @@ function draw(){
 const mins=m=>{m=Math.round(Math.abs(m)); return m<60?m+" min":Math.floor(m/60)+" h "+(m%60)+" min"};
 function riseText(v){
   if(v.rise===null) return "no sunrise here today";
+  if(Math.abs(v.rise)<1) return "sunrise now";
   return v.rise>0?"sunrise in "+mins(v.rise):"the sun rose "+mins(v.rise)+" ago";
 }
 function opening(v){
@@ -290,6 +296,7 @@ function refresh(){
     nowEl.append(opening(v)+" ",em,".");
     $("placeMeta").textContent=selected.country+"  ·  "+riseText(v);
   } else { nowEl.textContent="Dawn is crossing open water."; $("placeMeta").textContent=""; }
+  report(t,s,off);
   // a timetable of dawn: places at first light now, then the next few to come
   const rows=dawn.slice(0,5).map(x=>({...x,soon:false})).concat(coming.map(x=>({...x,soon:true})));
   const key=rows.map(x=>x.c.name+(x.soon?"~":"")).join("|");
@@ -310,7 +317,61 @@ function refresh(){
   rows.forEach((x,i)=>{ const b=table.children[i]?.firstChild; if(!b||!b.lastChild) return;
     b.setAttribute("aria-pressed",x.c===selected);
     b.lastChild.textContent=x.soon?"first light in "+mins(x.v.light):
-      x.v.rise===null?"":x.v.rise>0?"sunrise in "+mins(x.v.rise):"rose "+mins(x.v.rise)+" ago"; });
+      x.v.rise===null?"":Math.abs(x.v.rise)<1?"sunrise now":x.v.rise>0?"sunrise in "+mins(x.v.rise):"rose "+mins(x.v.rise)+" ago"; });
+}
+
+// ---------- the morning report: local clock, weather now, daylight, and who has been out looking ----------
+const extras=new Map(), useF=/-US$/.test(navigator.language||"");
+const SKY={0:"clear sky",1:"mostly clear",2:"partly cloudy",3:"overcast",45:"fog",48:"freezing fog",51:"light drizzle",53:"drizzle",55:"heavy drizzle",
+  56:"freezing drizzle",57:"freezing drizzle",61:"light rain",63:"rain",65:"heavy rain",66:"freezing rain",67:"freezing rain",71:"light snow",73:"snow",
+  75:"heavy snow",77:"snow grains",80:"light showers",81:"showers",82:"heavy showers",85:"snow showers",86:"heavy snow showers",95:"thunderstorm",96:"thunderstorm with hail",99:"thunderstorm with hail"};
+const breeze=k=>k<6?"calm":k<20?"light breeze":k<39?"breezy":"windy";
+function dayLen(lat,dec){
+  const x=(Math.sin(-0.833*R)-Math.sin(lat*R)*Math.sin(dec*R))/(Math.cos(lat*R)*Math.cos(dec*R));
+  return x>=1?0:x<=-1?1440:2*Math.acos(x)/R*4;                     // minutes of daylight
+}
+function report(t,s,off){
+  const rp=$("report"), tl=$("tally"); rp.textContent=""; tl.hidden=true; tl.textContent="";
+  if(!selected) return;
+  const x=extras.get(selected.name)||{}, parts=[];
+  if(x.tz){ try{ parts.push(new Intl.DateTimeFormat(undefined,{timeZone:x.tz,weekday:"long",hour:"numeric",minute:"2-digit"}).format(new Date(t))+" there"); }catch(e){} }
+  if(!off&&typeof x.temp==="number"){
+    const bits=[Math.round(x.temp)+(useF?"°F":"°C")]; if(SKY[x.code]) bits.push(SKY[x.code]); if(typeof x.wind==="number") bits.push(breeze(x.wind));
+    parts.push(bits.join(", "));
+  }
+  const len=dayLen(selected.lat,s.lat), diff=len-dayLen(selected.lat,subsolar(t-86400000).lat);
+  parts.push(len===0?"no daylight today":len===1440?"daylight all day":
+    mins(len)+" of daylight"+(Math.abs(diff)<.5?", about the same as yesterday":", "+Math.round(Math.abs(diff))+" min "+(diff>0?"more":"less")+" than yesterday"));
+  rp.textContent=parts.join("  ·  ");
+  if(x.species>0){
+    const b=document.createElement("b"); b.textContent=x.species.toLocaleString()+" species"; tl.append(b," spotted ");
+    if(x.people>0){ const p=document.createElement("b"); p.textContent=x.people.toLocaleString()+(x.people===1?" person":" people"); tl.append("by ",p," "); }
+    tl.append("near here this week."); tl.hidden=false;
+  }
+}
+async function loadExtras(city){
+  const hit=extras.get(city.name); if(hit&&Date.now()-hit.at<600000) return;
+  extras.set(city.name,{at:Date.now(),...(hit||{})});               // marks the request as under way
+  const ac=new AbortController(), timer=setTimeout(()=>ac.abort(),10000);
+  const get=u=>fetch(u,{signal:ac.signal}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); });
+  const d1=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
+  const near="lat="+city.lat+"&lng="+city.lon+"&radius=60&captive=false&d1="+d1+"&per_page=1";
+  const [w,sp,ob]=await Promise.allSettled([
+    get("https://api.open-meteo.com/v1/forecast?latitude="+city.lat+"&longitude="+city.lon+
+        "&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto"+(useF?"&temperature_unit=fahrenheit":"")),
+    get("https://api.inaturalist.org/v1/observations/species_counts?"+near),
+    get("https://api.inaturalist.org/v1/observations/observers?"+near)]);
+  clearTimeout(timer);
+  const x={at:Date.now()};
+  if(w.status==="fulfilled"&&w.value){ const c=w.value.current||{};
+    if(typeof w.value.timezone==="string") x.tz=w.value.timezone;
+    if(typeof c.temperature_2m==="number") x.temp=c.temperature_2m;
+    x.code=c.weather_code; if(typeof c.wind_speed_10m==="number") x.wind=c.wind_speed_10m; }
+  if(sp.status==="fulfilled"&&Number.isFinite(sp.value?.total_results)) x.species=sp.value.total_results;
+  if(ob.status==="fulfilled"&&Number.isFinite(ob.value?.total_results)) x.people=ob.value.total_results;
+  if(!x.tz&&x.species===undefined) x.at=Date.now()-540000;          // nothing came back: allow a retry in a minute
+  extras.set(city.name,x);
+  if(selected===city) refresh();
 }
 
 function select(city,byUser){
@@ -332,6 +393,7 @@ async function ask(city,extra,signal){
 }
 async function loadSightings(city){
   const grid=$("grid"), note=$("note"); note.hidden=true;
+  loadExtras(city);
   const hit=cache.get(city.name);
   if(hit&&Date.now()-hit.at<600000) return render(city,hit.row);
   grid.textContent=""; const ph=document.createElement("div"); ph.className="shot"; grid.append(ph);
