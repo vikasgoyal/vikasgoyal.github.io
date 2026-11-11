@@ -19,8 +19,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-/* Layout: one night sky with dawn glowing up from below. The lit globe sits left (top on phones);
-   beside it a single serif sentence names the place, and one photograph shows what was seen there. */
+/* Layout: one night sky with dawn glowing up from below. Two columns with one subject each:
+   left is the world (the lit globe, then the timetable of dawn); right is the place
+   (one serif sentence, a radio dial you turn, one photograph, one quiet table of notes). On phones they stack in that order. */
 :root{
   color-scheme:dark;
   --sky:#05071a; --ink:#f4efe6; --muted:#aaa9cb; --rule:rgba(255,255,255,.16);
@@ -37,40 +38,61 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;ba
 .wrap{max-width:1180px;margin:0 auto;padding-block:22px 36px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
-@media (min-width:900px){ .wrap{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:center;column-gap:56px;row-gap:14px} }
+@media (min-width:900px){ .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:64px;row-gap:28px;align-items:start;
+    grid-template-areas:"head head" "stage city" "line city" "foot foot";grid-template-rows:auto auto 1fr auto}
+  header{grid-area:head} .stage{grid-area:stage} .city{grid-area:city} .line{grid-area:line} footer{grid-area:foot} }
 header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px}
 h1{font-family:var(--display);font-weight:400;font-size:1.75rem;line-height:1;margin:0;letter-spacing:.01em}
 .clock{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem}
 .stage{display:flex;flex-direction:column;gap:6px;min-width:0}
-.globe{position:relative;width:100%;max-width:620px;margin:0 auto;aspect-ratio:1}
+.globe{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:1}
 .globe canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab;border-radius:50%}
-.legend{display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:620px;width:100%;margin:0 auto;
+.legend{display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:560px;width:100%;margin:0 auto;
   font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .legend #hint{letter-spacing:.04em;text-transform:none;font-size:.85rem;text-align:center}
 .controls{display:flex;justify-content:center;min-height:38px}
 button{font:inherit;color:inherit;cursor:pointer}
 .toggle{border:1px solid var(--gold);background:rgba(255,201,120,.14);color:var(--gold);border-radius:999px;padding:7px 16px;font-size:.88rem;font-weight:500}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.city{display:flex;flex-direction:column;gap:20px;min-width:0}
+.line{min-width:0}
 .label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 10px}
-.now{font-family:var(--display);font-weight:400;font-size:clamp(2.5rem,5.6vw,4.1rem);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.now{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,4.8vw,3.7rem);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
 .now em{font-style:italic;color:var(--gold)}
-.meta{margin:12px 0 0;color:var(--muted);font-size:.95rem;font-variant-numeric:tabular-nums}
-.report{margin:8px 0 0;font-size:.98rem;line-height:1.5;font-variant-numeric:tabular-nums}
-.tally{margin:14px 2px 0;color:var(--muted);font-size:.9rem}
-.tally b{color:var(--ink);font-weight:600}
-.radio{display:flex;align-items:center;gap:14px;margin-top:18px}
-.play{flex:none;width:46px;height:46px;border-radius:50%;border:1px solid var(--gold);background:rgba(255,201,120,.12);position:relative;padding:0}
-.play::before{content:"";position:absolute;left:18px;top:14px;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent var(--gold)}
-.play[aria-pressed="true"]::before{left:16px;top:16px;width:12px;height:12px;border:0;background:var(--gold);border-radius:2px}
-.rtext{display:flex;flex-direction:column;gap:2px;min-width:0}
-.rtext span{font-family:var(--display);font-size:1.35rem;line-height:1.15;overflow-wrap:anywhere}
-.rtext small{font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
+.meta{margin:10px 0 0;color:var(--muted);font-size:.95rem;font-variant-numeric:tabular-nums}
+.notes{margin:0;border-top:1px solid var(--rule)}
+.notes div{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:2px 16px;align-items:baseline;padding:10px 2px;border-bottom:1px solid var(--rule)}
+.notes dt{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.notes dd{margin:0;font-size:.95rem;line-height:1.45;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.notes dd small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+.notes a{color:inherit;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
+.notes a:hover{color:var(--gold)}
+.notes i{font-style:normal;color:var(--muted);margin:0 .5em}
+@media (max-width:460px){ .notes div{grid-template-columns:minmax(0,1fr)} }
+/* the radio is a tuning dial: the scale is a row of ticks, the needle slides to a station, and the ticks around it come alive */
+.radio{display:flex;flex-direction:column;gap:12px}
+.radio .label{margin:0}
+.dial{position:relative;height:92px;cursor:ew-resize;touch-action:pan-y;user-select:none;-webkit-user-select:none;border-radius:6px}
+.wave{position:absolute;inset:6px 0 28px 0;display:flex;align-items:flex-end;gap:3px}
+.wave span{flex:1;min-width:0;height:calc(var(--h,15)*1%);background:var(--muted);opacity:.5;border-radius:1px 1px 0 0;
+  transform-origin:bottom;transition:height .5s ease,opacity .4s}
+.radio.tuning .wave span.hot{opacity:.85;animation:beat .22s steps(2) infinite alternate;animation-delay:var(--d)}
+.radio.live .wave span.hot{opacity:1;background:linear-gradient(180deg,var(--gold),var(--dawn));animation:beat var(--s) ease-in-out infinite alternate;animation-delay:var(--d)}
+.dial::after{content:"";position:absolute;left:0;right:0;bottom:28px;height:1px;background:var(--rule)}
+.stops{position:absolute;left:0;right:0;bottom:0;height:22px}
+.stops span{position:absolute;transform:translateX(-50%);font-family:var(--display);font-style:italic;font-size:1.05rem;line-height:22px;color:var(--muted);transition:color .3s}
+.stops span:first-child{font-family:var(--body);font-style:normal;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase}
+.stops span.on{color:var(--gold)}
+.stops span.dead{text-decoration:line-through;opacity:.5}
+.needle{position:absolute;top:0;bottom:24px;width:2px;margin-left:-1px;background:var(--gold);border-radius:1px;
+  box-shadow:0 0 14px var(--dawn),0 0 3px rgba(255,255,255,.8);transition:left .6s cubic-bezier(.3,1.45,.5,1)}
+.needle::before{content:"";position:absolute;top:-3px;left:-4px;width:10px;height:10px;background:var(--gold);transform:rotate(45deg);border-radius:2px}
+.dial.drag .needle{transition:none}
+.rtext{display:flex;flex-direction:column;gap:4px;min-width:0}
+.rtext span{font-family:var(--display);font-size:clamp(1.7rem,3.1vw,2.2rem);line-height:1.15;overflow-wrap:anywhere}
+.rtext small{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
 .rtext a{color:inherit}
-.reads{margin:0;font-family:var(--display);font-size:1.3rem;line-height:1.4}
-.reads a{color:inherit;text-decoration:none;border-bottom:1px solid var(--rule)}
-.reads a:hover{color:var(--gold);border-color:var(--gold)}
-.reads i{font-style:normal;color:var(--muted);margin:0 .55em}
+@keyframes beat{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
 .shot{position:relative;display:block;aspect-ratio:4/3;border-radius:20px;overflow:hidden;color:#fff;text-decoration:none;
   background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:0 34px 60px -34px rgba(0,0,0,.85)}
 .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease}
@@ -111,30 +133,31 @@ footer a{color:inherit}
     <div class="controls"><button class="toggle" id="fast" type="button" hidden>Back to live</button></div>
   </section>
 
-  <section class="side">
+  <section class="city" aria-label="The place">
     <div>
       <p class="label" id="kicker">Right now</p>
       <p class="now" id="now">Finding the sunrise…</p>
       <p class="meta" id="placeMeta"></p>
-      <p class="report" id="report"></p>
-      <div class="radio" id="radio" hidden>
-        <button class="play" id="play" type="button" aria-pressed="false" aria-label="Play local radio"></button>
-        <div class="rtext"><span id="rline"></span><small id="rsub"></small></div>
+    </div>
+    <div class="radio" id="radio" hidden>
+      <p class="label">Local radio</p>
+      <div class="dial" id="dial" role="slider" tabindex="0" aria-label="Radio dial" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="Off">
+        <div class="wave" id="wave" aria-hidden="true"></div>
+        <div class="stops" id="stops" aria-hidden="true"></div>
+        <div class="needle" id="needle" aria-hidden="true"></div>
       </div>
+      <div class="rtext"><span id="rline"></span><small id="rsub"></small></div>
     </div>
     <div>
       <div id="grid"></div>
       <p class="note" id="note" hidden></p>
-      <p class="tally" id="tally" hidden></p>
     </div>
-    <div id="reading" hidden>
-      <p class="label" id="readLabel"></p>
-      <p class="reads" id="reads"></p>
-    </div>
-    <div>
-      <p class="label">Along the line</p>
-      <ul class="table" id="chips"></ul>
-    </div>
+    <dl class="notes" id="notes"></dl>
+  </section>
+
+  <section class="line" aria-label="Along the line">
+    <p class="label">Along the line</p>
+    <ul class="table" id="chips"></ul>
   </section>
 
   <footer>Sunrise is calculated in your browser from the current time. Sightings and photos come from people on
@@ -314,7 +337,7 @@ function refresh(){
   if(selected){
     const v=sunAt(selected,s), em=document.createElement("em"); em.textContent=selected.name;
     nowEl.append(opening(v)+" ",em,".");
-    $("placeMeta").textContent=selected.country+"  ·  "+riseText(v);
+    $("placeMeta").textContent=(selected.country!==selected.name?selected.country+"  ·  ":"")+riseText(v);
   } else { nowEl.textContent="Dawn is crossing open water."; $("placeMeta").textContent=""; }
   report(t,s,off);
   // a timetable of dawn: places at first light now, then the next few to come
@@ -350,26 +373,38 @@ function dayLen(lat,dec){
   const x=(Math.sin(-0.833*R)-Math.sin(lat*R)*Math.sin(dec*R))/(Math.cos(lat*R)*Math.cos(dec*R));
   return x>=1?0:x<=-1?1440:2*Math.acos(x)/R*4;                     // minutes of daylight
 }
+let notesKey="";
 function report(t,s,off){
-  const rp=$("report"), tl=$("tally"); rp.textContent=""; tl.hidden=true; tl.textContent="";
-  renderRadio(); renderReading();
-  if(!selected) return;
-  const x=extras.get(selected.name)||{}, parts=[];
-  if(x.tz){ try{ parts.push(new Intl.DateTimeFormat(undefined,{timeZone:x.tz,weekday:"long",hour:"numeric",minute:"2-digit"}).format(new Date(t))+" there"); }catch(e){} }
-  if(!off&&typeof x.temp==="number"){
-    const bits=[Math.round(x.temp)+(useF?"°F":"°C")]; if(SKY[x.code]) bits.push(SKY[x.code]); if(typeof x.wind==="number") bits.push(breeze(x.wind));
-    parts.push(bits.join(", "));
+  renderRadio();
+  const dl=$("notes"), rows=[];
+  if(selected){
+    const x=extras.get(selected.name)||{};
+    if(x.tz){ try{ rows.push(["Local time",new Intl.DateTimeFormat(undefined,{timeZone:x.tz,weekday:"long",hour:"numeric",minute:"2-digit"}).format(new Date(t))]); }catch(e){} }
+    if(!off&&typeof x.temp==="number"){
+      const bits=[Math.round(x.temp)+(useF?"°F":"°C")]; if(SKY[x.code]) bits.push(SKY[x.code]); if(typeof x.wind==="number") bits.push(breeze(x.wind));
+      rows.push(["Weather now",bits.join(", ")]);
+    }
+    const len=dayLen(selected.lat,s.lat), diff=len-dayLen(selected.lat,subsolar(t-86400000).lat);
+    rows.push(["Daylight",len===0?"None today":len===1440?"All day":
+      mins(len)+(Math.abs(diff)<.5?", about the same as yesterday":", "+Math.round(Math.abs(diff))+" min "+(diff>0?"more":"less")+" than yesterday")]);
+    if(x.species>0) rows.push(["Nature this week",x.species.toLocaleString()+" species spotted"+(x.people>0?" by "+x.people.toLocaleString()+(x.people===1?" person":" people"):"")]);
+    if(x.reads) rows.push(["Most read",x.reads]);
   }
-  const len=dayLen(selected.lat,s.lat), diff=len-dayLen(selected.lat,subsolar(t-86400000).lat);
-  parts.push(len===0?"no daylight today":len===1440?"daylight all day":
-    mins(len)+" of daylight"+(Math.abs(diff)<.5?", about the same as yesterday":", "+Math.round(Math.abs(diff))+" min "+(diff>0?"more":"less")+" than yesterday"));
-  rp.textContent=parts.join("  ·  ");
-  if(x.species>0){
-    const b=document.createElement("b"); b.textContent=x.species.toLocaleString()+" species"; tl.append(b," spotted ");
-    if(x.people>0){ const p=document.createElement("b"); p.textContent=x.people.toLocaleString()+(x.people===1?" person":" people"); tl.append("by ",p," "); }
-    tl.append("near here this week."); tl.hidden=false;
+  const key=(selected?.name||"")+"|"+rows.map(r=>r[0]+"="+(typeof r[1]==="string"?r[1]:r[1].day+r[1].list.map(a=>a.article).join())).join("|");
+  if(key===notesKey) return; notesKey=key; dl.textContent="";
+  for(const [label,value] of rows){
+    const row=document.createElement("div"), dt=document.createElement("dt"), dd=document.createElement("dd"); dt.textContent=label;
+    if(typeof value==="string") dd.textContent=value;
+    else{
+      value.list.forEach((a,i)=>{ if(i){ const sep=document.createElement("i"); sep.textContent="·"; dd.append(sep); }
+        const l=document.createElement("a"); l.href="https://"+a.project+".org/wiki/"+encodeURIComponent(a.article); l.target="_blank"; l.rel="noopener";
+        l.textContent=a.article.replace(/_/g," "); dd.append(l); });
+      const sm=document.createElement("small"); sm.textContent="On Wikipedia in "+(SAYS[selected.country]||selected.country)+", "+value.day; dd.append(sm);
+    }
+    row.append(dt,dd); dl.append(row);
   }
 }
+
 // ---------- local radio (Radio Browser) and what the country is reading (Wikimedia) ----------
 const ISO={"USA":"US","French Polynesia":"PF","Canada":"CA","Mexico":"MX","Guatemala":"GT","Ecuador":"EC","Costa Rica":"CR","Cuba":"CU","Panama":"PA","Peru":"PE",
 "Jamaica":"JM","Colombia":"CO","Chile":"CL","Dominican Republic":"DO","Bolivia":"BO","Venezuela":"VE","Puerto Rico":"PR","Brazil":"BR","Argentina":"AR","Paraguay":"PY",
@@ -409,62 +444,89 @@ async function radioNear(city,get){
     .slice(0,5).map(r=>({name:r.name.trim().slice(0,60),url:r.url_resolved,id:String(r.stationuuid||""),home:/^https:\/\//.test(r.homepage||"")?r.homepage:""}));
 }
 const audio=new Audio(); audio.preload="none";
-let playing=null, stallT=0, radioKey="", readKey="", gaveUp="";
+let playing=null, stallT=0, radioKey="", gaveUp="", dialDrag=false;
+const BARS=72, bars=[], dial=$("dial");
+for(let i=0;i<BARS;i++){ const b=document.createElement("span");
+  b.style.setProperty("--d",-((i*137)%900)+"ms"); b.style.setProperty("--s",(380+(i*89)%420)+"ms"); $("wave").append(b); bars.push(b); }
+const stopAt=(k,n)=>4+k*(92/Math.max(n,1));                 // where each stop sits on the dial, in percent; stop 0 is "off"
+function shape(pct){                                        // ticks at rest; a swell of signal around the needle when tuned
+  const c=pct==null?-99:pct/100*BARS;
+  bars.forEach((b,i)=>{ const g=Math.exp(-Math.pow((i+.5-c)/5,2)), rest=i%6===0?30:15;
+    b.style.setProperty("--h",Math.round(rest+(100-rest)*g*(.55+.45*Math.abs(Math.sin(i*2.3))))); b.classList.toggle("hot",g>.03); });
+}
+const dialCity=()=>playing?playing.city:selected;
+const dialList=()=>{ const c=dialCity(); return (c&&extras.get(c.name)?.stations)||[]; };
 function tune(){
   const st=playing.list[playing.i]; playing.live=false; audio.src=st.url; audio.play().catch(()=>{});
   clearTimeout(stallT); stallT=setTimeout(nextStation,9000);
   if(/^[0-9a-f-]{36}$/.test(st.id)) fetch("https://"+radioHost+"/json/url/"+st.id).catch(()=>{});   // counts the listen, as the directory asks
   renderRadio();
 }
-function nextStation(){
-  if(!playing) return; clearTimeout(stallT);
-  if(++playing.i>=playing.list.length){ gaveUp=playing.city.name; stopRadio(); return; }
+function nextStation(){                                     // a station that will not start is struck off; the needle moves on
+  if(!playing) return; clearTimeout(stallT); playing.dead.add(playing.i);
+  let j=playing.i+1; while(j<playing.list.length&&playing.dead.has(j)) j++;
+  if(j>=playing.list.length){ gaveUp=playing.city.name; stopRadio(); return; }
+  playing.i=j; tune();
+}
+function stopRadio(){ playing=null; clearTimeout(stallT); audio.pause(); audio.removeAttribute("src"); audio.load(); radioKey=""; renderRadio(); }
+function setStop(k){
+  const c=dialCity(), list=dialList(); radioKey="";
+  if(!c||!list.length) return;
+  if(k<=0){ if(playing) stopRadio(); else renderRadio(); return; }
+  k=Math.min(k,list.length);
+  if(playing&&playing.i===k-1) return renderRadio();
+  gaveUp="";
+  if(playing) playing.i=k-1; else playing={city:c,list,i:k-1,live:false,dead:new Set()};
   tune();
 }
-function stopRadio(){ playing=null; clearTimeout(stallT); audio.pause(); audio.removeAttribute("src"); audio.load(); renderRadio(); }
 audio.addEventListener("playing",()=>{ if(playing){ clearTimeout(stallT); playing.live=true; renderRadio(); } });
 audio.addEventListener("error",()=>{ if(playing) nextStation(); });
-$("play").onclick=()=>{
-  if(playing) return stopRadio();
-  const list=selected&&extras.get(selected.name)?.stations;
-  if(list?.length){ gaveUp=""; playing={city:selected,list,i:0,live:false}; tune(); }
-};
+const dialPct=e=>{ const b=dial.getBoundingClientRect(); return (e.clientX-b.left)/b.width*100; };
+dial.addEventListener("pointerdown",e=>{ dialDrag=true; dial.classList.add("drag"); dial.setPointerCapture(e.pointerId);
+  $("needle").style.left=Math.max(2,Math.min(98,dialPct(e)))+"%"; });
+dial.addEventListener("pointermove",e=>{ if(dialDrag) $("needle").style.left=Math.max(2,Math.min(98,dialPct(e)))+"%"; });
+dial.addEventListener("pointerup",e=>{
+  if(!dialDrag) return; dialDrag=false; dial.classList.remove("drag");
+  const n=dialList().length, p=dialPct(e); let best=0, bd=1e9;
+  for(let k=0;k<=n;k++){ const d=Math.abs(stopAt(k,n)-p); if(d<bd){ bd=d; best=k; } }
+  setStop(best);
+});
+dial.addEventListener("pointercancel",()=>{ dialDrag=false; dial.classList.remove("drag"); radioKey=""; renderRadio(); });
+dial.addEventListener("keydown",e=>{
+  const cur=playing?playing.i+1:0, n=dialList().length;
+  const k=e.key==="ArrowRight"||e.key==="ArrowUp"?cur+1:e.key==="ArrowLeft"||e.key==="ArrowDown"?cur-1:e.key==="Home"?0:null;
+  if(k===null) return; e.preventDefault(); if(k>=0&&k<=n) setStop(k);
+});
 function renderRadio(){
-  const box=$("radio"), btn=$("play"), line=$("rline"), sub=$("rsub");
-  const list=selected&&extras.get(selected.name)?.stations, st=playing&&playing.list[playing.i];
-  const key=playing?"p|"+playing.city.name+"|"+playing.i+"|"+playing.live:"o|"+(selected?.name||"")+"|"+(list?.length||0)+"|"+gaveUp;
+  const box=$("radio"), c=dialCity(), list=dialList(), n=list.length, cur=playing?playing.i+1:0, st=playing&&playing.list[playing.i];
+  const key=[c?.name,n,cur,playing?.live,gaveUp,playing?[...playing.dead].join():""].join("|");
   if(key===radioKey) return; radioKey=key;
-  sub.textContent="";
-  if(playing){
-    box.hidden=false; btn.hidden=false; btn.setAttribute("aria-pressed","true"); btn.setAttribute("aria-label","Stop the radio");
-    line.textContent=st.name;
-    sub.append(playing.live?"Live from "+playing.city.name:"Tuning in to "+playing.city.name+"…");
-    if(st.home){ const a=document.createElement("a"); a.href=st.home; a.target="_blank"; a.rel="noopener"; a.textContent="station site"; sub.append("  ·  ",a); }
-  } else if(list?.length&&gaveUp!==selected.name){
-    box.hidden=false; btn.hidden=false; btn.setAttribute("aria-pressed","false"); btn.setAttribute("aria-label","Play local radio from "+selected.name);
-    line.textContent="Listen to "+selected.name+", live"; sub.textContent="Local radio  ·  "+list[0].name;
-  } else if(selected&&gaveUp===selected.name){
-    box.hidden=false; btn.hidden=true; line.textContent="No station would play"; sub.textContent="The stations near "+selected.name+" did not start in this browser.";
-  } else box.hidden=true;
-}
-function renderReading(){
-  const box=$("reading"), r=selected&&extras.get(selected.name)?.reads;
-  const key=r?selected.name+"|"+r.day+"|"+r.list.map(a=>a.article).join("|"):"";
-  if(key===readKey) return; readKey=key;
-  if(!r){ box.hidden=true; return; }
-  $("readLabel").textContent="Most read on Wikipedia in "+(SAYS[selected.country]||selected.country)+", "+r.day;
-  const p=$("reads"); p.textContent="";
-  r.list.forEach((a,i)=>{ if(i){ const sep=document.createElement("i"); sep.textContent="·"; p.append(sep); }
-    const l=document.createElement("a"); l.href="https://"+a.project+".org/wiki/"+encodeURIComponent(a.article); l.target="_blank"; l.rel="noopener";
-    l.textContent=a.article.replace(/_/g," "); p.append(l); });
+  if(!c||!n){ box.hidden=true; return; }
   box.hidden=false;
+  box.classList.toggle("live",!!playing&&playing.live); box.classList.toggle("tuning",!!playing&&!playing.live);
+  const stops=$("stops"); stops.textContent="";
+  for(let k=0;k<=n;k++){ const sp=document.createElement("span"); sp.textContent=k?String(k):"off"; sp.style.left=stopAt(k,n)+"%";
+    if(k===cur) sp.className="on"; else if(k&&playing?.dead.has(k-1)) sp.className="dead"; stops.append(sp); }
+  if(!dialDrag) $("needle").style.left=stopAt(cur,n)+"%";
+  shape(playing?stopAt(cur,n):null);
+  dial.setAttribute("aria-valuemax",n); dial.setAttribute("aria-valuenow",cur); dial.setAttribute("aria-valuetext",st?st.name:"Off");
+  const line=$("rline"), sub=$("rsub"); sub.textContent="";
+  if(st){
+    line.textContent=st.name;
+    sub.append(playing.live?"Live from "+c.name:"Tuning in to "+c.name+"…");
+    if(st.home){ const a=document.createElement("a"); a.href=st.home; a.target="_blank"; a.rel="noopener"; a.textContent="station site"; sub.append("  ·  ",a); }
+  } else if(gaveUp===c.name){
+    line.textContent="Nothing came through"; sub.textContent="The stations near "+c.name+" did not start in this browser. Try another number.";
+  } else {
+    line.textContent="Turn the dial to hear "+c.name;
+    sub.textContent=n+(n===1?" local station":" local stations")+"  ·  drag the needle or tap a number";
+  }
 }
 
 async function loadExtras(city){
   const hit=extras.get(city.name); if(hit&&Date.now()-hit.at<600000) return;
   extras.set(city.name,{at:Date.now(),...(hit||{})});               // marks the request as under way
-  const ac=new AbortController(), timer=setTimeout(()=>ac.abort(),10000);
-  const get=u=>fetch(u,{signal:ac.signal}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); });
+  const get=u=>fetch(u,{signal:AbortSignal.timeout(10000)}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); });
   const d1=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
   const near="lat="+city.lat+"&lng="+city.lon+"&radius=60&captive=false&d1="+d1+"&per_page=1";
   const [w,sp,ob,rd,wk]=await Promise.allSettled([
@@ -474,8 +536,7 @@ async function loadExtras(city){
     get("https://api.inaturalist.org/v1/observations/observers?"+near),
     radioNear(city,get),
     wikiTop(ISO[city.country],get)]);
-  clearTimeout(timer);
-  const x={at:Date.now()};
+  const x={...(hit||{}),at:Date.now()};
   if(w.status==="fulfilled"&&w.value){ const c=w.value.current||{};
     if(typeof w.value.timezone==="string") x.tz=w.value.timezone;
     if(typeof c.temperature_2m==="number") x.temp=c.temperature_2m;
@@ -484,7 +545,7 @@ async function loadExtras(city){
   if(ob.status==="fulfilled"&&Number.isFinite(ob.value?.total_results)) x.people=ob.value.total_results;
   if(rd.status==="fulfilled"&&rd.value.length) x.stations=rd.value;
   if(wk.status==="fulfilled"&&wk.value) x.reads=wk.value;
-  if(!x.tz&&x.species===undefined) x.at=Date.now()-540000;          // nothing came back: allow a retry in a minute
+  if(!x.tz||x.species===undefined) x.at=Date.now()-540000;          // nothing came back: allow a retry in a minute
   extras.set(city.name,x);
   if(selected===city) refresh();
 }
@@ -502,7 +563,7 @@ function select(city,byUser){
 async function ask(city,extra,signal){
   const d1=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
   const res=await fetch("https://api.inaturalist.org/v1/observations?lat="+city.lat+"&lng="+city.lon+
-    "&radius=60&photos=true&photo_licensed=true&captive=false&d1="+d1+"&per_page=1&locale=en"+extra,{signal});
+    "&radius=60&photos=true&photo_licensed=true&captive=false&without_term_id=17&without_term_value_id=19&d1="+d1+"&per_page=1&locale=en"+extra,{signal});
   if(!res.ok) throw new Error(res.status);
   return ((await res.json()).results||[]).find(o=>o.photos&&o.photos[0])||null;
 }
@@ -580,7 +641,7 @@ canvas.addEventListener("keydown",e=>{
 
 // ---------- loop ----------
 function frame(ts){
-  if(ts-lastRefresh>15000){ refresh(); lastRefresh=ts; }
+  if(ts-lastRefresh>15000){ refresh(); lastRefresh=ts; if(selected&&!dragging) loadExtras(selected); }
   draw(); requestAnimationFrame(frame);
 }
 paintSky(); resize(); refresh(); requestAnimationFrame(frame);
