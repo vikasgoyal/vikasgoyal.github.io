@@ -1,16 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>System 1 Models Explained</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>System 1 Models Explained | Vikas Goyal</title>
 <meta name="description" content="A practical guide to System 1 (decision) models: what they are, where they pay off, how to design questions and patterns, how to test them, known failure modes, and the models available as of November 2026.">
+<meta name="keywords" content="System 1 models, decision models, Jev, Microsoft-Decision-1, agentic AI, AI guardrails, model routing, calibrated probabilities, AI agents">
+<meta name="author" content="Vikas Goyal">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/design/system-1-models.html">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
 <meta property="og:title" content="System 1 Models Explained">
 <meta property="og:description" content="A practical guide to System 1 (decision) models: what they are, where they pay off, how to design questions and patterns, how to test them, known failure modes, and the models available as of November 2026.">
 <meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/design/system-1-models.html">
+<meta property="og:site_name" content="Vikas Goyal">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="System 1 Models Explained">
+<meta name="twitter:description" content="A practical guide to System 1 (decision) models: what they are, where they pay off, how to design questions and patterns, how to test them, known failure modes, and the models available as of November 2026.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "System 1 Models Explained",
+  "description": "A practical guide to System 1 (decision) models: what they are, where they pay off, how to design questions and patterns, how to test them, known failure modes, and the models available as of November 2026.",
+  "author": { "@type": "Person", "name": "Vikas Goyal", "url": "https://www.linkedin.com/in/vikasgoyal/" },
+  "datePublished": "2026-11-12",
+  "dateModified": "2026-11-12",
+  "publisher": { "@type": "Person", "name": "Vikas Goyal" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://vikasgoyal.github.io/agentic/design/system-1-models.html" },
+  "keywords": "System 1 models, decision models, Jev, Microsoft-Decision-1, agentic AI, AI guardrails, model routing, calibrated probabilities, AI agents"
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700&family=Merriweather:wght@700&display=swap">
 <style>
 /* Layout: sticky contents rail on the left, a single reading column on the right; charts sit inline with the prose they explain. Light theme only. */
 :root {
@@ -275,7 +313,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .split-line .who { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
 .split-line ul { margin: 0; padding-left: 18px; font-size: 0.92rem; }
 
-footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: var(--step--1); color: var(--muted); }
+main > footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: var(--step--1); color: var(--muted); }
 
 /* Reference tables, calculator */
 .table-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
@@ -347,9 +385,141 @@ table.limits td { width: 33%; }
 .srclist { margin: 12px 0 0; padding-left: 18px; font-size: 0.9rem; display: grid; gap: 6px; max-width: 80ch; }
 .srclist a { color: var(--accent); }
 .prose a, .sub a, .small a, .pitfall a, .steps a { color: var(--accent); }
+
+/* ---- Site frame: shared header and footer from vikasgoyal.github.io ----
+   The header rules below are copied from /styles.css so the site's global
+   element styles don't restyle this guide. Re-copy them if the site header changes. */
+:root {
+  --primary-color: #000000; --shell-surface: rgba(255, 255, 255, 0.92); --shell-line: rgba(18, 18, 18, 0.10);
+  --shell-green: #0f5d44; --shell-blue: #173c73; --shell-ink-soft: #505050; --shell-shadow: 0 18px 44px rgba(18, 18, 18, 0.10);
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Merriweather', Georgia, 'Times New Roman', serif;
+}
+.site-frame { max-width: 1240px; margin: 0 auto; padding-block: 20px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.site-frame > .wrap { padding-left: 0; padding-right: 0; }
+#header, #footer { font-family: var(--font-main); font-size: 16px; line-height: 1.6; }
+#header { min-height: 84px; }
+#footer section { padding: 0; margin: 0; }
+#footer .site-footer-card h2, #footer .site-footer-card h3 { font-family: var(--font-heading); font-weight: 700; letter-spacing: 0; display: block; }
+#footer .site-footer-card article, #footer article { max-width: none; }
+/* Shared header shell for content pages */
+.site-shell-header {
+    margin: 0 0 2rem;
+}
+
+.site-shell-topbar {
+    background: var(--shell-surface);
+    border: 1px solid var(--shell-line);
+    box-shadow: var(--shell-shadow);
+}
+
+.site-shell-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 28px;
+}
+
+.site-shell-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 220px;
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.site-shell-brand:hover {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.site-shell-brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.site-shell-brand-tagline {
+    font-size: 0.92rem;
+    color: var(--shell-ink-soft);
+}
+
+.site-shell-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.site-shell-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 0.9rem;
+    border: 1px solid var(--shell-line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--shell-ink-soft);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site-shell-nav a:hover,
+.site-shell-nav a:focus {
+    color: var(--primary-color);
+    text-decoration: none;
+    border-color: rgba(18, 18, 18, 0.22);
+    transform: translateY(-1px);
+}
+
+.site-shell-nav .nav-highlight {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--shell-blue) 0%, var(--shell-green) 100%);
+    border-color: transparent;
+    box-shadow: 0 10px 22px rgba(23, 60, 115, 0.18);
+}
+
+.site-shell-nav .nav-highlight:hover,
+.site-shell-nav .nav-highlight:focus {
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.site-shell-nav .nav-subscribe {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--shell-green) 0%, var(--shell-blue) 100%);
+    border-color: transparent;
+    box-shadow: 0 10px 22px rgba(15, 93, 68, 0.18);
+}
+
+.site-shell-nav .nav-subscribe:hover,
+.site-shell-nav .nav-subscribe:focus {
+    color: #ffffff;
+    border-color: transparent;
+}
+
+
+.site-shell-nav a { transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important; }
+@media (max-width: 768px) {
+  .site-shell-topbar { flex-direction: column; align-items: flex-start; padding: 1rem; }
+  .site-shell-brand { min-width: 0; }
+  .site-shell-nav { justify-content: flex-start; }
+}
+@media print { #header, #footer { display: none; } }
 </style>
 </head>
 <body>
+
+<div class="site-frame">
+<div id="header"></div>
 
 <div class="wrap">
 
@@ -1004,6 +1174,9 @@ print(a["urgent"]["noul"], a["team"]["choice"], a["team"]["probabilities"])</pre
   </main>
 </div>
 
+<div id="footer"></div>
+</div>
+
 <script>
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
@@ -1479,6 +1652,7 @@ else:
   show(0);
 })();
 </script>
+<script src="../../headerfooter.js"></script>
 
 </body>
 </html>
