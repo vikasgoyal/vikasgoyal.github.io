@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System 1 Models Explained</title>
+<meta name="description" content="A practical guide to System 1 (decision) models: what they are, where they pay off, how to design questions and patterns, how to test them, known failure modes, and the models available as of November 2026.">
+<meta property="og:title" content="System 1 Models Explained">
+<meta property="og:description" content="A practical guide to System 1 (decision) models: what they are, where they pay off, how to design questions and patterns, how to test them, known failure modes, and the models available as of November 2026.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky contents rail on the left, a single reading column on the right; charts sit inline with the prose they explain. Light theme only. */
+:root {
+  color-scheme: light;
+  --bg: #F6F7F9;
+  --surface: #FFFFFF;
+  --ink: #18202E;
+  --muted: #586274;
+  --rule: #DCE1E8;
+  --accent: #2B55D9;
+  --accent-soft: #E7EDFC;
+  --yes: #1E8459;
+  --yes-soft: #E3F3EB;
+  --review: #A86A12;
+  --review-soft: #FBF1DF;
+  --no: #B8432A;
+  --no-soft: #FBE9E4;
+  --code-bg: #121A2A;
+  --code-fg: #DCE3F0;
+  --code-key: #8FB3FF;
+  --code-str: #A8E0B8;
+  --code-num: #F5C27A;
+
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.5rem;
+  --step-3: 2.125rem;
+  --step-4: clamp(2.25rem, 5vw, 3.25rem);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+@media (min-width: 1000px) { .wrap { grid-template-columns: 210px minmax(0, 1fr); gap: 56px; } }
+
+/* Contents rail */
+nav.toc { display: none; }
+@media (min-width: 1000px) {
+  nav.toc {
+    display: block;
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + 32px);
+    align-self: start;
+    padding-top: 40px;
+  }
+}
+.toc-label { font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 12px; }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: toc; }
+.toc a {
+  display: grid; grid-template-columns: 22px 1fr; align-items: baseline;
+  padding: 6px 8px; border-radius: 6px;
+  color: var(--muted); text-decoration: none; font-size: 0.9rem; line-height: 1.35;
+}
+.toc a::before { counter-increment: toc; content: counter(toc); font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+.toc a:hover { background: var(--surface); color: var(--ink); }
+.toc a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+.toc a.active::before { color: var(--accent); }
+
+main { min-width: 0; }
+header.hero { padding-block: 48px 8px; max-width: 760px; }
+.eyebrow { font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 12px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: var(--step-4); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 20px; text-wrap: balance; }
+.lede { font-size: var(--step-1); color: var(--muted); margin: 0; max-width: 62ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+section { padding-top: 56px; scroll-margin-top: 16px; }
+section > h2 {
+  font-family: var(--display); font-weight: 700; font-size: var(--step-3);
+  line-height: 1.15; letter-spacing: -0.015em; margin: 0 0 8px; text-wrap: balance;
+  display: flex; gap: 14px; align-items: baseline;
+}
+section > h2 .num { font-family: var(--mono); font-size: 0.95rem; font-weight: 500; color: var(--accent); letter-spacing: 0; }
+h3 { font-family: var(--display); font-weight: 500; font-size: var(--step-1); margin: 0 0 6px; line-height: 1.3; }
+p { margin: 0 0 14px; }
+.prose { max-width: 66ch; }
+.prose p:last-child { margin-bottom: 0; }
+.sub { color: var(--muted); max-width: 66ch; margin-bottom: 24px; }
+code { font-family: var(--mono); font-size: 0.88em; background: var(--accent-soft); color: var(--accent); padding: 1px 5px; border-radius: 4px; }
+.small { font-size: var(--step--1); color: var(--muted); }
+
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; min-width: 0; }
+
+/* 1. Comparison */
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
+.compare .panel { display: grid; gap: 12px; align-content: start; }
+.tag { display: inline-block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; padding: 3px 8px; border-radius: 999px; justify-self: start; }
+.tag.grey { background: #EEF0F4; color: var(--muted); }
+.tag.blue { background: var(--accent-soft); color: var(--accent); }
+.bubble { font-size: 0.94rem; background: #F1F3F7; border-radius: 8px; padding: 12px 14px; color: var(--ink); }
+.answer-line { font-family: var(--mono); font-size: 0.9rem; display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 8px 12px; background: #F1F3F7; border-radius: 6px; }
+.answer-line b { font-weight: 500; color: var(--accent); }
+.sec-h3 { margin-top: 36px; }
+.example-in { margin-top: 12px; max-width: 760px; }
+.fit { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 12px; }
+.fit .panel { display: grid; gap: 12px; align-content: start; }
+.fit .panel.hl { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.fit dl { margin: 0; display: grid; gap: 10px; }
+.fit dt { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
+.fit dd { margin: 0; font-size: 0.93rem; }
+.why { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 28px; }
+.why div { border-top: 2px solid var(--ink); padding-top: 10px; }
+.why h3 { font-size: 1.02rem; font-family: var(--body); font-weight: 600; }
+.why p { font-size: 0.93rem; color: var(--muted); margin: 0; }
+
+/* 2. Flow */
+.diagram { overflow-x: auto; margin: 24px 0; }
+.diagram svg { display: block; min-width: 640px; width: 100%; height: auto; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); margin-bottom: 0; }
+.tabs button {
+  font: inherit; font-size: 0.92rem; font-weight: 500; color: var(--muted);
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 10px 14px; cursor: pointer; margin-bottom: -1px;
+}
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.code-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+@media (min-width: 860px) { .code-wrap.split { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; } }
+pre.json {
+  margin: 0; background: var(--code-bg); color: var(--code-fg);
+  font-family: var(--mono); font-size: 0.82rem; line-height: 1.6;
+  padding: 18px 20px; border-radius: 0 0 10px 10px; overflow-x: auto;
+}
+pre.json.mini { border-radius: 8px; padding: 12px 14px; font-size: 0.8rem; }
+pre.json .k { color: var(--code-key); }
+pre.json .s { color: var(--code-str); }
+pre.json .n { color: var(--code-num); }
+.fields { display: grid; gap: 12px; align-content: start; padding-top: 16px; }
+.field { display: grid; grid-template-columns: 112px 1fr; gap: 12px; font-size: 0.92rem; }
+.field dt { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); padding-top: 2px; }
+.field dd { margin: 0; color: var(--muted); }
+dl { margin: 0; }
+
+/* 3. Types */
+.types { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; margin-top: 24px; }
+.type-card { display: grid; grid-template-rows: auto auto 1fr auto; gap: 12px; }
+.type-card .q { font-size: 0.93rem; color: var(--muted); font-style: italic; margin: 0; }
+.type-card .use { font-size: 0.88rem; border-top: 1px solid var(--rule); padding-top: 12px; margin: 0; }
+.type-card .use b { font-weight: 600; }
+.meter { position: relative; height: 18px; background: #EEF0F4; border-radius: 4px; margin-top: 26px; }
+.meter .fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 4px; }
+.meter .cut { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--ink); }
+.meter .cut span { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.72rem; white-space: nowrap; color: var(--ink); font-family: var(--mono); }
+.meter-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 6px; }
+.big-num { font-family: var(--mono); font-size: 1.6rem; font-weight: 500; color: var(--accent); line-height: 1; }
+
+.bars { display: grid; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: minmax(84px, 38%) 1fr 44px; align-items: center; gap: 10px; font-size: 0.86rem; }
+.bar-row .lbl { overflow-wrap: anywhere; line-height: 1.3; }
+.bar-row .trk { height: 12px; background: #EEF0F4; border-radius: 3px; overflow: hidden; }
+.bar-row .trk i { display: block; height: 100%; background: #AFC0F0; border-radius: 3px; }
+.bar-row.win .trk i { background: var(--accent); }
+.bar-row.win .lbl { font-weight: 600; }
+.bar-row .val { font-family: var(--mono); font-size: 0.8rem; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.bar-row.win .val { color: var(--ink); }
+
+.cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-items: end; height: 120px; }
+.cols .c { display: grid; grid-template-rows: auto 1fr; justify-items: center; height: 100%; align-items: end; }
+.cols .c span { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; }
+.cols .c i { width: 100%; background: #AFC0F0; border-radius: 3px 3px 0 0; display: block; }
+.cols .c.win i { background: var(--accent); }
+.cols .c.win span { color: var(--ink); }
+.cols-x { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; border-top: 1px solid var(--ink); padding-top: 6px; font-size: 0.75rem; text-align: center; color: var(--muted); line-height: 1.25; }
+
+.pitfall { margin-top: 20px; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; background: var(--review-soft); border-radius: 8px; padding: 14px 16px; font-size: 0.93rem; max-width: 760px; }
+.pitfall b { color: var(--review); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.08em; padding-top: 3px; }
+
+/* 4. Questions */
+.pairs { display: grid; gap: 16px; margin-top: 24px; }
+.pair { display: grid; grid-template-columns: 1fr; gap: 0; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--surface); }
+@media (min-width: 760px) { .pair { grid-template-columns: 1fr 1fr; } }
+.pair > div { padding: 16px 18px; min-width: 0; }
+.pair .before { background: #FBFBFC; border-bottom: 1px solid var(--rule); }
+@media (min-width: 760px) { .pair .before { border-bottom: none; border-right: 1px solid var(--rule); } }
+.pair .mark { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; display: flex; gap: 8px; align-items: center; }
+.pair .before .mark { color: var(--no); }
+.pair .after .mark { color: var(--yes); }
+.pair .text { font-family: var(--mono); font-size: 0.83rem; line-height: 1.55; overflow-wrap: anywhere; }
+.pair .note { font-size: 0.88rem; color: var(--muted); margin: 10px 0 0; }
+.checklist { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 28px; max-width: 900px; }
+.checklist li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; font-size: 0.93rem; }
+.checklist li::before { content: ""; width: 14px; height: 14px; margin-top: 5px; border: 2px solid var(--accent); border-radius: 3px; }
+
+/* 5. Scenarios */
+.scenario { border: 1px solid var(--rule); border-top: none; border-radius: 0 0 10px 10px; background: var(--surface); padding: 20px; display: grid; gap: 20px; }
+.scenario-top { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 820px) { .scenario-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); } }
+.state-box { background: #F1F3F7; border-radius: 8px; padding: 14px 16px; font-size: 0.93rem; }
+.state-box .label, .result-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; }
+.results { display: grid; gap: 18px; }
+.result h4 { margin: 0 0 8px; font-size: 0.93rem; font-weight: 600; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.result h4 .ty { font-family: var(--mono); font-size: 0.72rem; font-weight: 500; color: var(--accent); background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; }
+.takeaway { font-size: 0.93rem; border-left: 3px solid var(--accent); padding: 2px 0 2px 14px; margin: 0; }
+.scen-tabs { border-bottom: 1px solid var(--rule); }
+
+/* 6. Thresholds */
+.thresh { display: grid; gap: 20px; margin-top: 24px; }
+.sliders { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.sliders label { display: grid; gap: 6px; font-size: 0.9rem; font-weight: 500; }
+.sliders output { font-family: var(--mono); color: var(--accent); }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.strip { overflow-x: auto; }
+.strip svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.stat { border-radius: 8px; padding: 12px 14px; display: grid; gap: 2px; }
+.stat .n { font-family: var(--mono); font-size: 1.5rem; font-weight: 500; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat .t { font-size: 0.82rem; }
+.stat.yes { background: var(--yes-soft); color: var(--yes); }
+.stat.review { background: var(--review-soft); color: var(--review); }
+.stat.no { background: var(--no-soft); color: var(--no); }
+.stat.err { background: #EEF0F4; color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.82rem; color: var(--muted); }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.dot.filled { background: var(--ink); }
+.dot.hollow { border: 2px solid var(--ink); background: var(--surface); }
+
+.two { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 32px; align-items: start; }
+@media (min-width: 860px) { .two { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.two svg { display: block; width: 100%; height: auto; max-width: 420px; }
+
+/* 7. Repeatability */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); overflow: hidden; margin-top: 16px; }
+.metrics div { padding: 12px 16px; border-right: 1px solid var(--rule); display: grid; gap: 2px; }
+.metrics div:last-child { border-right: none; }
+.metrics .n { font-family: var(--mono); font-size: 1.25rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.metrics .t { font-size: 0.8rem; color: var(--muted); }
+.measure { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 14px; max-width: 70ch; }
+.measure li { display: grid; grid-template-columns: 170px 1fr; gap: 16px; font-size: 0.94rem; }
+.measure li b { font-weight: 600; }
+@media (max-width: 560px) { .measure li { grid-template-columns: 1fr; gap: 2px; } .field { grid-template-columns: 1fr; gap: 2px; } }
+
+/* 8. Responsible use */
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
+.rules .panel h3 { font-family: var(--body); font-weight: 600; font-size: 1rem; }
+.rules .panel p { font-size: 0.93rem; color: var(--muted); margin: 0; }
+.split-line { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 28px; border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); }
+@media (min-width: 720px) { .split-line { grid-template-columns: 1fr 1fr 1fr; } }
+.split-line > div { padding: 16px 18px; background: var(--surface); border-bottom: 1px solid var(--rule); }
+@media (min-width: 720px) { .split-line > div { border-bottom: none; border-right: 1px solid var(--rule); } .split-line > div:last-child { border-right: none; } }
+.split-line .who { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+.split-line ul { margin: 0; padding-left: 18px; font-size: 0.92rem; }
+
+footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: var(--step--1); color: var(--muted); }
+
+/* Reference tables, calculator */
+.table-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+table.ref { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.9rem; }
+table.ref th, table.ref td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.ref th { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--muted); background: #F8F9FB; }
+table.ref tr:last-child td { border-bottom: none; }
+table.ref td.num { font-family: var(--mono); font-size: 0.86rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.ref tr.group td { background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 0.8rem; padding: 6px 14px; }
+table.ref a, .why a { color: var(--accent); }
+.fn { font-family: var(--body); font-size: 0.72rem; color: var(--muted); }
+.sources { font-size: var(--step--1); color: var(--muted); margin-top: 16px; max-width: 80ch; }
+.sources a { color: var(--muted); }
+.calc-in { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px 20px; }
+.calc-in label { display: grid; gap: 4px; font-size: 0.85rem; color: var(--muted); align-content: end; }
+.calc-in input { font: inherit; font-family: var(--mono); font-size: 0.95rem; color: var(--ink); padding: 8px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); width: 100%; }
+.calc .bars { margin-top: 22px; }
+.calc .bar-row { grid-template-columns: minmax(130px, 34%) 1fr 92px; }
+.calc .bar-row .val { font-size: 0.9rem; }
+
+/* Workflow steps */
+.steps { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; max-width: 760px; counter-reset: step; }
+.steps li { display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; counter-increment: step; }
+.steps li::before { content: counter(step); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-family: var(--mono); font-size: 0.85rem; font-weight: 500; }
+.steps b { display: block; font-weight: 600; margin-bottom: 2px; }
+.steps span { font-size: 0.93rem; color: var(--muted); }
+
+/* ---- Additions for the System 1 edition ---- */
+body { margin: 0; }
+.toc { counter-reset: toc; }
+.toc ol { counter-reset: none; }
+@media (min-width: 1000px) { nav.toc { max-height: calc(100vh - 48px); overflow-y: auto; padding-bottom: 16px; } }
+.toc-label + ol + .toc-label { margin-top: 20px; }
+.crumb { font-size: var(--step--1); margin: 0 0 20px; }
+.crumb a { color: var(--muted); }
+.paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0; margin-top: 28px; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--surface); max-width: 760px; }
+.paths a { display: grid; gap: 4px; padding: 14px 18px; text-decoration: none; color: var(--ink); border-bottom: 1px solid var(--rule); }
+.paths a:last-child { border-bottom: none; }
+@media (min-width: 560px) { .paths a { border-bottom: none; border-right: 1px solid var(--rule); } .paths a:last-child { border-right: none; } }
+.paths a:hover { background: var(--accent-soft); }
+.paths .who { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--accent); }
+.paths .go { font-size: 0.93rem; color: var(--muted); }
+.part { margin-top: 72px; padding-top: 14px; border-top: 2px solid var(--ink); font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
+.part + section { padding-top: 28px; }
+.uses { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 24px; }
+.uses .panel { display: grid; gap: 8px; align-content: start; }
+.uses h3 { font-family: var(--body); font-weight: 600; font-size: 1rem; margin: 0; }
+.uses p { font-size: 0.93rem; color: var(--muted); margin: 0; }
+.uses .q { font-family: var(--mono); font-size: 0.8rem; color: var(--ink); background: #F1F3F7; border-radius: 6px; padding: 8px 10px; }
+.fitlist { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 12px; }
+@media (min-width: 760px) { .fitlist { grid-template-columns: 1fr 1fr; } }
+.fitlist .panel { border-top-width: 3px; }
+.fitlist .good { border-top-color: var(--yes); }
+.fitlist .poor { border-top-color: var(--no); }
+.fitlist .who { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+.fitlist .good .who { color: var(--yes); }
+.fitlist .poor .who { color: var(--no); }
+.fitlist ul { margin: 0; padding-left: 18px; font-size: 0.93rem; display: grid; gap: 6px; }
+pre.code { margin: 12px 0 0; background: var(--code-bg); color: var(--code-fg); font-family: var(--mono); font-size: 0.8rem; line-height: 1.6; padding: 16px 18px; border-radius: 10px; overflow-x: auto; max-width: 100%; }
+.pat { display: grid; gap: 14px; min-width: 0; }
+.pat h3 { margin: 0; }
+.pat p { margin: 0; max-width: 70ch; }
+.pat pre.code { margin: 0; }
+.pat .note { font-size: 0.88rem; color: var(--muted); }
+table.ref td:first-child { font-weight: 600; }
+table.ref.models td:first-child { font-weight: 400; }
+table.limits { min-width: 760px; }
+table.limits td { width: 33%; }
+.srclist { margin: 12px 0 0; padding-left: 18px; font-size: 0.9rem; display: grid; gap: 6px; max-width: 80ch; }
+.srclist a { color: var(--accent); }
+.prose a, .sub a, .small a, .pitfall a, .steps a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-label">Overview</p>
+    <ol>
+      <li><a href="#what">What a System 1 model is</a></li>
+      <li><a href="#payoff">Where it pays off</a></li>
+      <li><a href="#fastslow">Fast and slow together</a></li>
+    </ol>
+    <p class="toc-label">In depth</p>
+    <ol>
+      <li><a href="#flow">How a request flows</a></li>
+      <li><a href="#types">The three question types</a></li>
+      <li><a href="#questions">Writing good questions</a></li>
+      <li><a href="#patterns">Design patterns</a></li>
+      <li><a href="#scenarios">Scenario gallery</a></li>
+      <li><a href="#actions">From probability to action</a></li>
+      <li><a href="#repeat">Repeatability</a></li>
+      <li><a href="#limits">Limits and failure modes</a></li>
+      <li><a href="#cost">Cost and latency</a></li>
+      <li><a href="#responsible">Using it responsibly</a></li>
+      <li><a href="#workflow">Putting it together</a></li>
+      <li><a href="#models">Models you can use</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <header class="hero">
+      <p class="crumb"><a href="https://vikasgoyal.github.io/agentic/">Agentic AI</a> / Models</p>
+      <p class="eyebrow">A practical guide · Updated November 2026</p>
+      <h1>System 1 models answer questions with probabilities</h1>
+      <p class="lede">A System 1 model, also called a decision model, takes some text and a set of typed questions. It doesn't write a reply. It returns <strong>a number for each question</strong>: how likely something is true, which option fits best, or where the case sits on a scale. The answer usually arrives in well under a second, and your software can set thresholds on it, test it, and act on it.</p>
+      <div class="paths">
+        <a href="#what"><span class="who">If you lead a team</span><span class="go">Sections 1 to 3 explain what these models are, where they pay off, and what to ask before a pilot.</span></a>
+        <a href="#flow"><span class="who">If you build</span><span class="go">Sections 4 to 15 cover requests, question design, patterns with code, testing, failure modes and models.</span></a>
+      </div>
+    </header>
+
+    <!-- 01 -->
+    <section id="what">
+      <h2><span class="num">01</span>What a System 1 model is</h2>
+      <div class="prose">
+        <p>Every organisation makes a steady stream of small judgement calls about text. A support agent reads a ticket and decides how urgent it is. A claims handler decides whether a claim needs an adjuster. A lawyer skims a contract to see who should review it. Each call takes a person a minute, but there are thousands of them, and they don't fit simple rules because the input is free text.</p>
+        <p>A <b>System 1 model</b> is a language model built for these calls. You give it the text, the questions you want answered, and the answers it is allowed to give. In return you get <b>a probability for each allowed answer</b>, and your software decides what to do with those numbers.</p>
+        <p>You will see two names for this category. <b>System 1</b> comes from Daniel Kahneman's <i>Thinking, Fast and Slow</i>, where System 1 is fast, intuitive judgement and System 2 is slow, deliberate reasoning. TypeSafe AI introduced the term with its Jev model in September 2026. Microsoft, OpenAI, Perplexity and others call the same thing a <b>System 1 model</b>. This guide treats the two names as the same thing, and calls chat and reasoning models System 2.</p>
+      </div>
+
+      <h3 class="sec-h3">Same message, two kinds of model</h3>
+      <div class="state-box example-in"><span class="label">Customer message</span>“I've been charged twice for this month's invoice. Our finance team closes the books tonight, so I need this fixed today.”</div>
+      <div class="compare">
+        <div class="panel">
+          <span class="tag grey">Chat model</span>
+          <div class="bubble">“This sounds fairly urgent: a duplicate charge with a same-day deadline. I'd probably send it to billing with high priority.”</div>
+          <p class="small" style="margin:0">Helpful for a person to read. But your code has to interpret “fairly” and “probably”, and the next run may word it differently.</p>
+        </div>
+        <div class="panel">
+          <span class="tag blue">System 1 model</span>
+          <div style="display:grid; gap:6px">
+            <div class="answer-line"><span>needs urgent help?</span><b>0.91</b></div>
+            <div class="answer-line"><span>which team?</span><b>billing · 0.78</b></div>
+            <div class="answer-line"><span>priority (0–3)?</span><b>level 2 · 0.64</b></div>
+          </div>
+          <p class="small" style="margin:0">You chose the questions and the allowed answers. Each comes back as a number your code can compare with a threshold.</p>
+        </div>
+      </div>
+
+      <h3 class="sec-h3">Where it fits</h3>
+      <div class="fit">
+        <div class="panel">
+          <span class="tag grey">Rules in code</span>
+          <dl>
+            <div><dt>Reads</dt><dd>Structured fields such as amounts, dates and status codes</dd></div>
+            <div><dt>Returns</dt><dd>A fixed answer, identical every time</dd></div>
+            <div><dt>Best when</dt><dd>The decision follows a written rule exactly</dd></div>
+          </dl>
+        </div>
+        <div class="panel">
+          <span class="tag grey">Chat model</span>
+          <dl>
+            <div><dt>Reads</dt><dd>Any text</dd></div>
+            <div><dt>Returns</dt><dd>Written language</dd></div>
+            <div><dt>Best when</dt><dd>A person will read the result: drafting, summarising, explaining</dd></div>
+          </dl>
+        </div>
+        <div class="panel hl">
+          <span class="tag blue">System 1 model</span>
+          <dl>
+            <div><dt>Reads</dt><dd>Any text, plus the questions and allowed answers you define</dd></div>
+            <div><dt>Returns</dt><dd>A probability for each allowed answer</dd></div>
+            <div><dt>Best when</dt><dd>Software has to act on a judgement about free text, at volume</dd></div>
+          </dl>
+        </div>
+      </div>
+      <p class="small" style="margin-top:12px; max-width:70ch">These work together rather than compete: code checks the hard facts, the System 1 model judges the text, and people handle what stays uncertain. If you already have thousands of labelled examples for one narrow task, a purpose-trained classifier is another option.</p>
+
+      <h3 class="sec-h3">What about structured outputs?</h3>
+      <div class="prose">
+        <p>Many chat models can reply in a fixed JSON shape. That fixes the <b>format</b> of the answer, not the information in it. You still get one answer the model wrote, and a “confidence” field is just more generated text: the model's description of how sure it is, not a measured probability.</p>
+      </div>
+      <div class="compare">
+        <div class="panel">
+          <span class="tag grey">Chat model, structured output</span>
+          <pre class="json mini">{
+  <span class="k">"team"</span>: <span class="s">"billing"</span>,
+  <span class="k">"confidence"</span>: <span class="n">0.9</span>
+}</pre>
+          <p class="small" style="margin:0">One answer. The 0.9 is written like any other word, so nothing shows that “payments” was a close second, and a threshold on it means little.</p>
+        </div>
+        <div class="panel">
+          <span class="tag blue">System 1 model</span>
+          <div class="bars">
+            <div class="bar-row win"><span class="lbl">billing</span><span class="trk"><i style="width:48%"></i></span><span class="val">0.48</span></div>
+            <div class="bar-row"><span class="lbl">payments</span><span class="trk"><i style="width:44%"></i></span><span class="val">0.44</span></div>
+            <div class="bar-row"><span class="lbl">account</span><span class="trk"><i style="width:8%"></i></span><span class="val">0.08</span></div>
+          </div>
+          <p class="small" style="margin:0">Every allowed answer gets a probability you can check against labelled cases. The near tie is visible, so this case can go to a person.</p>
+        </div>
+      </div>
+      <p class="small" style="margin-top:12px; max-width:70ch">The two combine well. Use structured outputs to <b>extract</b> facts such as names, amounts and dates, check those facts in code, then put them in the state and let the System 1 model make the <b>judgement</b>.</p>
+
+      <h3 class="sec-h3">Why numbers help</h3>
+      <div class="why" style="margin-top:12px">
+        <div><h3>Thresholds</h3><p>Pick a cut-off such as 0.8 and act automatically above it.</p></div>
+        <div><h3>Testing</h3><p>Compare outputs with labelled cases and measure accuracy and calibration.</p></div>
+        <div><h3>Routing</h3><p>Send work to a queue, a team or a person based on the answer.</p></div>
+        <div><h3>Auditing</h3><p>Store the inputs, questions and probabilities so you can explain every decision later.</p></div>
+      </div>
+      <p class="sub" style="margin:28px 0 0">The next two sections cover where these models pay off and how they work alongside chat and reasoning models. After that the guide turns technical.</p>
+    </section>
+
+    <section id="payoff">
+      <h2><span class="num">02</span>Where it pays off</h2>
+      <p class="sub">A System 1 model earns its place where software makes the same kind of judgement about text thousands of times a day. Five kinds of work cover most uses so far.</p>
+      <div class="uses">
+        <div class="panel"><h3>Triage and routing</h3><p>Send each ticket, claim or email to the right team, queue or workflow.</p><div class="q">Which team should handle this request?</div></div>
+        <div class="panel"><h3>Guardrails and checks</h3><p>Check an AI agent's inputs, planned actions and answers before they go further.</p><div class="q">Is this command hard to undo?</div></div>
+        <div class="panel"><h3>Choosing the next step</h3><p>Pick the tool, skill or model for a request, and send only the hard ones to an expensive model.</p><div class="q">Which of these skills fits the request?</div></div>
+        <div class="panel"><h3>Screening before a costly step</h3><p>Filter out what doesn't need a reasoning model or a person at all.</p><div class="q">Is this passage relevant to the question?</div></div>
+        <div class="panel"><h3>Judging data in bulk</h3><p>Ask the same questions of a million reviews, records or log lines and analyse the answers.</p><div class="q">Does this review mention a safety problem?</div></div>
+      </div>
+
+      <h3 class="sec-h3">Good fit, poor fit</h3>
+      <div class="fitlist">
+        <div class="panel good"><div class="who">Good fit when</div><ul>
+          <li>The answer is one of a fixed set you can write down.</li>
+          <li>The decision happens at volume, and speed or cost matters.</li>
+          <li>You can label 50 to 100 real cases to test against.</li>
+          <li>Uncertain cases have somewhere to go: a person or a slower model.</li>
+          <li>A wrong automatic answer is cheap to catch or reverse.</li>
+        </ul></div>
+        <div class="panel poor"><div class="who">Poor fit when</div><ul>
+          <li>You need written output or an explanation of the answer.</li>
+          <li>The task needs multi-step reasoning, arithmetic or date logic.</li>
+          <li>The answer depends on facts that aren't in the text you send.</li>
+          <li>The input comes from someone who gains by steering the outcome, and nothing screens it first.</li>
+          <li>The output would be the final word on a decision about a person.</li>
+        </ul></div>
+      </div>
+
+      <h3 class="sec-h3">Five questions to ask before a pilot</h3>
+      <ul class="checklist" style="margin-top:12px">
+        <li>Which decision is this, how many do we make each month, and what does a wrong one cost?</li>
+        <li>Do we have past cases with known answers to measure against?</li>
+        <li>Where do uncertain cases go, and who reviews them?</li>
+        <li>Who could gain by manipulating the input?</li>
+        <li>Which vendor numbers have we re-measured on our own data?</li>
+      </ul>
+      <div class="pitfall"><b>On the numbers</b><span>The launch claims of roughly 190 times faster and 440 times cheaper than a frontier chat model come from the vendor's own benchmarks, and the vendor says they sit at the high end of what to expect. One independent test on 20 payment transactions found accuracy level with most frontier chat models, using one 0.4-second call where the chat models needed 20 calls and 33 to 81 seconds. Expect real savings in time and cost, and measure accuracy yourself.</span></div>
+    </section>
+
+
+    <section id="fastslow">
+      <h2><span class="num">03</span>Fast and slow together</h2>
+      <p class="sub">System 1 models work beside chat and reasoning models. In the usual design the fast model handles the routine cases and passes the rest up, to a reasoning model or to a person.</p>
+
+      <div class="diagram" role="img" aria-label="Diagram: a request goes to a System 1 model. Confident answers are acted on in code, uncertain ones go to a System 2 reasoning model, and high-impact or unresolved cases go to a person.">
+        <svg viewBox="0 0 760 236" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#586274"/></marker>
+          </defs>
+          <rect x="10" y="84" width="130" height="68" rx="8" fill="#FFFFFF" stroke="#DCE1E8"/>
+          <text x="75" y="114" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="600" fill="#18202E">Request</text>
+          <text x="75" y="134" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#586274">ticket, claim, action</text>
+          <path d="M142,118 L196,118" fill="none" stroke="#586274" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="200" y="72" width="180" height="92" rx="10" fill="#2B55D9"/>
+          <text x="290" y="110" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">System 1 model</text>
+          <text x="290" y="132" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#E7EDFC">typed questions, about 0.1 s</text>
+          <path d="M382,100 C430,100 430,42 478,42" fill="none" stroke="#586274" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <path d="M382,118 L478,118" fill="none" stroke="#586274" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <path d="M382,136 C430,136 430,194 478,194" fill="none" stroke="#586274" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="482" y="10" width="268" height="64" rx="8" fill="#E3F3EB" stroke="#1E8459"/>
+          <text x="498" y="36" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#1E8459" letter-spacing="0.8">CONFIDENT</text>
+          <text x="498" y="58" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">Your code acts on the answer</text>
+          <rect x="482" y="86" width="268" height="64" rx="8" fill="#FBF1DF" stroke="#A86A12"/>
+          <text x="498" y="112" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#A86A12" letter-spacing="0.8">UNCERTAIN</text>
+          <text x="498" y="134" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">System 2 model reasons it through</text>
+          <rect x="482" y="162" width="268" height="64" rx="8" fill="#FBE9E4" stroke="#B8432A"/>
+          <text x="498" y="188" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#B8432A" letter-spacing="0.8">HIGH IMPACT OR STILL UNCLEAR</text>
+          <text x="498" y="210" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">A person decides</text>
+        </svg>
+      </div>
+
+      <div class="table-wrap">
+        <table class="ref">
+          <thead><tr><th></th><th>System 1 model</th><th>System 2 model (chat, reasoning)</th></tr></thead>
+          <tbody>
+            <tr><td>Returns</td><td>Probabilities for answers you define</td><td>Written language, plans, code</td></tr>
+            <tr><td>Speed</td><td>One pass, usually tens to hundreds of milliseconds</td><td>Seconds, and longer with reasoning</td></tr>
+            <tr><td>Billing</td><td>Input tokens only, at most providers</td><td>Input and output tokens</td></tr>
+            <tr><td>Strong at</td><td>Routing, gating, scoring, checking</td><td>Reasoning, drafting, explaining, using tools</td></tr>
+            <tr><td>Weak at</td><td>Writing, multi-step reasoning, numbers and dates</td><td>Cost and speed at volume; its self-reported confidence is just more generated text</td></tr>
+            <tr><td>Role in an agent</td><td>The reflex around each step: route, check, gate</td><td>The deliberate worker inside the step</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sec-h3">What escalation does to cost and speed</h3>
+      <div class="panel thresh" style="margin-top:12px">
+        <div class="sliders">
+          <label for="e-rate">Share of requests escalated to System 2 <output id="e-rate-out">15%</output>
+            <input type="range" id="e-rate" min="0" max="100" step="1" value="15">
+          </label>
+        </div>
+        <div class="calc-in">
+          <label>System 1 cost per request, $ <input type="number" id="e-c1" value="0.00003" min="0" step="0.00001"></label>
+          <label>System 2 cost per request, $ <input type="number" id="e-c2" value="0.01" min="0" step="0.001"></label>
+          <label>System 1 latency, seconds <input type="number" id="e-l1" value="0.1" min="0" step="0.05"></label>
+          <label>System 2 latency, seconds <input type="number" id="e-l2" value="8" min="0" step="0.5"></label>
+        </div>
+        <div class="stats">
+          <div class="stat yes"><span class="n" id="e-fast">0</span><span class="t">of requests finish on the fast path</span></div>
+          <div class="stat err"><span class="n" id="e-cost">0</span><span class="t">per 1,000 requests, with escalation</span></div>
+          <div class="stat err"><span class="n" id="e-all">0</span><span class="t">per 1,000 requests, all on System 2</span></div>
+          <div class="stat review"><span class="n" id="e-lat">0</span><span class="t">average response time</span></div>
+        </div>
+        <p class="small" style="margin:0" id="e-note"></p>
+      </div>
+      <p class="small" style="margin-top:12px; max-width:70ch">The defaults are illustrative: about 700 input tokens at $0.04 per million for System 1, and a one-cent, eight-second reasoning call for System 2. Every request pays for the System 1 call; escalated requests pay for both. Replace the figures with your own. The <a href="https://vikasgoyal.github.io/agentic/patterns/">agentic design pattern library</a> on this site covers System 1 / System 2 escalation alongside the other patterns.</p>
+    </section>
+
+    <p class="part">In depth</p>
+    <section id="flow">
+      <h2><span class="num">04</span>How a request flows</h2>
+      <p class="sub">Every request has two parts: the <b>state</b>, which is the text being judged, and the <b>questions</b>, each with a type, instructions and criteria. The response has one answer per question, plus token usage.</p>
+
+      <div class="diagram" role="img" aria-label="Diagram: state and questions go into the System 1 model, which returns answers with probabilities and usage.">
+        <svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#586274"/>
+            </marker>
+          </defs>
+          <!-- inputs -->
+          <rect x="10" y="20" width="200" height="72" rx="8" fill="#FFFFFF" stroke="#DCE1E8"/>
+          <text x="26" y="46" font-family="IBM Plex Mono, monospace" font-size="12" fill="#2B55D9">state</text>
+          <text x="26" y="68" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">The text to judge: a</text>
+          <text x="26" y="84" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">message, case or record</text>
+          <rect x="10" y="118" width="200" height="72" rx="8" fill="#FFFFFF" stroke="#DCE1E8"/>
+          <text x="26" y="144" font-family="IBM Plex Mono, monospace" font-size="12" fill="#2B55D9">questions</text>
+          <text x="26" y="166" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">Type, instructions and</text>
+          <text x="26" y="182" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">criteria (allowed answers)</text>
+          <!-- arrows in -->
+          <path d="M212,56 C250,56 250,105 288,105" fill="none" stroke="#586274" stroke-width="1.5" marker-end="url(#arr)"/>
+          <path d="M212,154 C250,154 250,105 288,105" fill="none" stroke="#586274" stroke-width="1.5" marker-end="url(#arr)"/>
+          <!-- model -->
+          <rect x="292" y="60" width="176" height="90" rx="10" fill="#2B55D9"/>
+          <text x="380" y="98" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">System 1 model</text>
+          <text x="380" y="122" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#E7EDFC">reads state, scores each question</text>
+          <!-- arrow out -->
+          <path d="M470,105 L540,105" fill="none" stroke="#586274" stroke-width="1.5" marker-end="url(#arr)"/>
+          <!-- output -->
+          <rect x="544" y="20" width="206" height="170" rx="8" fill="#FFFFFF" stroke="#DCE1E8"/>
+          <text x="560" y="46" font-family="IBM Plex Mono, monospace" font-size="12" fill="#2B55D9">answers</text>
+          <text x="560" y="72" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">noul → 0.93</text>
+          <text x="560" y="94" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">choice → refund (0.64)</text>
+          <text x="560" y="116" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#18202E">score → 1.92 (level 2)</text>
+          <line x1="560" y1="134" x2="734" y2="134" stroke="#DCE1E8"/>
+          <text x="560" y="158" font-family="IBM Plex Mono, monospace" font-size="12" fill="#2B55D9">usage</text>
+          <text x="560" y="178" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#586274">input and output tokens</text>
+        </svg>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Example payload">
+        <button role="tab" id="tab-req" aria-selected="true" aria-controls="json-pane">Request</button>
+        <button role="tab" id="tab-res" aria-selected="false" aria-controls="json-pane">Response</button>
+      </div>
+      <div class="code-wrap split">
+        <pre class="json" id="json-pane" role="tabpanel" aria-labelledby="tab-req"></pre>
+        <dl class="fields" id="json-fields"></dl>
+      </div>
+      <p class="small" style="margin-top:12px; max-width:70ch">The values are invented. The shape follows the <code>/v1/systemone</code> format used by TypeSafe and Microsoft Foundry. Other providers use different field names, so check the documentation for the model you use.</p>
+
+      <h3 class="sec-h3">Under the hood</h3>
+      <div class="why" style="margin-top:12px">
+        <div><h3>One pass, no writing</h3><p>A chat model runs once for every token it writes. A System 1 model reads the input once and returns the distribution for every question.</p></div>
+        <div><h3>Questions are independent</h3><p>Each question is judged against the same state without seeing the others, so adding questions barely changes response time.</p></div>
+        <div><h3>Valid by construction</h3><p>The answer is always one of the answers you defined. That guarantees the format. It says nothing about whether the answer is right.</p></div>
+        <div><h3>Trained for calibration</h3><p>Providers train these models so that stated probabilities track how often answers are right. TypeSafe calls its method RLCD. Check the result on your own data.</p></div>
+      </div>
+
+      <h3 class="sec-h3">Call it from Python</h3>
+      <p class="sub" style="margin-bottom:0">Standard library only. The later code examples reuse this <code>ask()</code> helper.</p>
+      <pre class="code">import json, os, urllib.request
+
+# Microsoft Foundry: https://&lt;resource&gt;.services.ai.azure.com/providers/microsoft/v1/systemone
+URL = os.environ["S1_ENDPOINT"]
+TOKEN = os.environ["S1_TOKEN"]
+MODEL = os.environ["S1_MODEL"]      # model name, or your deployment name on Foundry
+
+def ask(state, questions):
+    body = json.dumps({"model": MODEL, "state": state, "questions": questions}).encode()
+    req = urllib.request.Request(URL, body, {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {TOKEN}",
+    })
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.load(r)["answers"]
+
+a = ask(
+    "My account payment has failed twice today. I need help before the end of the day.",
+    {
+        "urgent": {"type": "noul", "instructions": "Does the customer need help today?"},
+        "team": {
+            "type": "choice",
+            "instructions": "Which team should handle the request?",
+            "criteria": {"billing": "Payment and invoice issues",
+                         "technical": "Software and integration issues"},
+        },
+    },
+)
+print(a["urgent"]["noul"], a["team"]["choice"], a["team"]["probabilities"])</pre>
+    </section>
+
+    <section id="types">
+      <h2><span class="num">05</span>The three question types</h2>
+      <p class="sub">Most decisions fit one of three shapes. APIs that follow TypeSafe's format call them <code>noul</code> (a yes/no probability), <code>choice</code> and <code>score</code>. Other providers say binary or boolean for the first. The type you choose determines what the answer looks like and what you can do with it.</p>
+      <div class="types">
+        <article class="panel type-card">
+          <div>
+            <span class="tag blue">Noul</span>
+            <h3 style="margin-top:10px">Is this true?</h3>
+          </div>
+          <p class="q">“Does the customer report a charge they did not authorize?”</p>
+          <div>
+            <div class="big-num">0.86</div>
+            <div class="meter" aria-label="Probability 0.86 against a threshold of 0.70">
+              <div class="fill" style="width:86%"></div>
+              <div class="cut" style="left:70%"><span>cut-off 0.70</span></div>
+            </div>
+            <div class="meter-scale"><span>0</span><span>0.5</span><span>1</span></div>
+          </div>
+          <p class="use"><b>Returns</b> one probability from 0 to 1. <b>Use it for</b> flags, gates and yes/no checks.</p>
+        </article>
+
+        <article class="panel type-card">
+          <div>
+            <span class="tag blue">Choice</span>
+            <h3 style="margin-top:10px">Which option is it?</h3>
+          </div>
+          <p class="q">“Which team should handle this request?”</p>
+          <div class="bars" id="choice-demo"></div>
+          <p class="use"><b>Returns</b> the most likely option and a probability for every option, adding up to 1. <b>Use it for</b> routing and categories with no natural order.</p>
+        </article>
+
+        <article class="panel type-card">
+          <div>
+            <span class="tag blue">Score</span>
+            <h3 style="margin-top:10px">How much?</h3>
+          </div>
+          <p class="q">“How quickly does this need a response?”</p>
+          <div>
+            <div class="cols" id="score-demo"></div>
+            <div class="cols-x"><span>0<br>a week</span><span>1<br>3 days</span><span>2<br>24 hours</span><span>3<br>2 hours</span></div>
+          </div>
+          <p class="use"><b>Returns</b> a probability for each level and a score, which is the probability-weighted average (1.83 here). <b>Use it for</b> severity, priority and risk.</p>
+        </article>
+      </div>
+      <div class="pitfall"><b>Watch for</b><span>Two different numbers get called confidence. The <strong>probability</strong> of the top answer says how likely that answer is. The <strong>confidence</strong> field that some APIs return is calculated from the same distribution and summarises how concentrated it is. It adds no separate evidence of accuracy. Keep the full distribution: “level 2 at 0.58” with 0.22 on level 1 is far less settled than “level 2 at 0.90”. If your options have a natural order (low, medium, high), use a score, not a choice. An ordered answer lets you sort, set thresholds, and count “one level off” as a smaller miss than “three levels off”.</span></div>
+    </section>
+
+    <section id="questions">
+      <h2><span class="num">06</span>Writing good questions</h2>
+      <p class="sub">The model only knows what the question tells it. Clear instructions and well-separated options matter more than anything else you control.</p>
+      <div class="pairs">
+        <div class="pair">
+          <div class="before"><div class="mark">Vague</div><div class="text">Is this bad?</div><p class="note">“Bad” for whom, and judged on what? The answer will drift with tone and wording.</p></div>
+          <div class="after"><div class="mark">Specific</div><div class="text">Does the message report a failed payment or a charge the customer did not authorize? Consider only what the message states.</div><p class="note">Names the condition and limits the evidence to the input.</p></div>
+        </div>
+        <div class="pair">
+          <div class="before"><div class="mark">Overlapping options</div><div class="text">billing · payments · account</div><p class="note">A failed card payment fits all three, so probability gets spread across them.</p></div>
+          <div class="after"><div class="mark">Distinct options</div><div class="text">billing: invoices, refunds, plan changes<br>payments: card or bank transfer failures<br>account: login, profile, access</div><p class="note">Each option has a definition, and the definitions don't overlap.</p></div>
+        </div>
+        <div class="pair">
+          <div class="before"><div class="mark">Unanchored scale</div><div class="text">low · medium · high</div><p class="note">“Medium” means different things to different readers, and to the model.</p></div>
+          <div class="after"><div class="mark">Anchored levels</div><div class="text">0: no customer impact<br>1: one customer, workaround exists<br>2: one customer, blocked<br>3: many customers blocked</div><p class="note">Each level is tied to something observable.</p></div>
+        </div>
+        <div class="pair">
+          <div class="before"><div class="mark">Bundled judgement</div><div class="text">How good is this sales lead?</div><p class="note">Several judgements hide in one question, and you can't see or adjust how they were weighed.</p></div>
+          <div class="after"><div class="mark">Atomic questions</div><div class="text">Does the message state a budget?<br>Does it state a purchase deadline?<br>Does the sender make the buying decision?</div><p class="note">Three narrow answers, combined in your code with weights you control.</p></div>
+        </div>
+      </div>
+      <ul class="checklist">
+        <li>Ask one thing per question. Split “urgent and angry” into two.</li>
+        <li>Say what evidence counts, for example “only the facts stated”.</li>
+        <li>Define every option and level in a single sentence.</li>
+        <li>Add a fallback option such as “none of these” when it's realistic.</li>
+        <li>Keep wording stable once you start testing, so results stay comparable.</li>
+        <li>Put rules and facts the model needs into the state, not into your head.</li>
+        <li>Write literally. The model answers the wording, not the intent, so spell out boundary cases.</li>
+        <li>Give each question only the state it needs. Irrelevant detail lowers accuracy.</li>
+        <li>Shuffle the option order when you test. Some models lean toward the first option.</li>
+      </ul>
+    </section>
+
+    <section id="patterns">
+      <h2><span class="num">07</span>Design patterns</h2>
+      <p class="sub">Six patterns cover most production use. Each keeps the model's job narrow and leaves control flow, weights and thresholds in your code. The snippets use the <code>ask()</code> helper from section 04.</p>
+      <div class="tabs scen-tabs" role="tablist" aria-label="Patterns" id="pat-tabs"></div>
+      <div class="scenario" id="pat-panel" role="tabpanel"></div>
+    </section>
+
+    <section id="scenarios">
+      <h2><span class="num">08</span>Scenario gallery</h2>
+      <p class="sub">The same three question types cover very different work. These are invented examples with illustrative results.</p>
+      <div class="tabs scen-tabs" role="tablist" aria-label="Scenarios" id="scen-tabs"></div>
+      <div class="scenario" id="scen-panel" role="tabpanel"></div>
+    </section>
+
+    <section id="actions">
+      <h2><span class="num">09</span>From probability to action</h2>
+      <p class="sub">A probability becomes an action once you choose thresholds. A common pattern uses two: act automatically when the model is confident in either direction, and send the uncertain middle to a person. Drag the sliders to see the trade-off on 16 labelled example cases.</p>
+
+      <div class="panel thresh">
+        <div class="sliders">
+          <label for="lo">Auto-decline below <output id="lo-out">0.30</output>
+            <input type="range" id="lo" min="0" max="1" step="0.01" value="0.30">
+          </label>
+          <label for="hi">Auto-approve above <output id="hi-out">0.85</output>
+            <input type="range" id="hi" min="0" max="1" step="0.01" value="0.85">
+          </label>
+        </div>
+        <div class="strip"><svg id="strip" viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Example cases placed by probability, with decline, review and approve zones"></svg></div>
+        <div class="legend">
+          <span><i class="dot filled"></i>Should be approved</span>
+          <span><i class="dot hollow"></i>Should be declined</span>
+        </div>
+        <div class="stats">
+          <div class="stat yes"><span class="n" id="s-yes">0</span><span class="t">auto-approved</span></div>
+          <div class="stat review"><span class="n" id="s-rev">0</span><span class="t">sent to a person</span></div>
+          <div class="stat no"><span class="n" id="s-no">0</span><span class="t">auto-declined</span></div>
+          <div class="stat err"><span class="n" id="s-err">0</span><span class="t">wrong automatic decisions</span></div>
+        </div>
+        <p class="small" style="margin:0" id="s-note"></p>
+      </div>
+
+      <div class="two">
+        <div class="prose">
+          <h3>Calibration: what should 0.8 mean?</h3>
+          <p>A model is <b>calibrated</b> when its probabilities match reality. Of all the cases scored 0.8, about 80% should turn out true. You check this by grouping labelled cases by predicted probability and comparing each group's prediction with how often it was actually true.</p>
+          <p>The chart shows two models. The blue one follows the diagonal, so its numbers can be read at face value. The orange one is overconfident: when it says 0.9, it's right only about 70% of the time. Thresholds set on an uncalibrated model don't mean what they appear to mean.</p>
+          <h3 style="margin-top:20px">Margins</h3>
+          <p>For choices and scores, look at the gap between the top two answers. “Billing 0.48, payments 0.44” is a near tie and a good candidate for review, even though billing technically wins.</p>
+          <h3 style="margin-top:20px">Which number to threshold</h3>
+          <p>For a noul, use the probability itself. For a choice, use the probability of the option you are about to act on. For a score, first check that the distribution is settled, then route on the score. Set a higher bar for actions that are harder to undo.</p>
+        </div>
+        <div class="panel">
+          <svg id="calib" viewBox="0 0 340 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reliability diagram comparing a calibrated model with an overconfident one"></svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="repeat">
+      <h2><span class="num">10</span>Repeatability</h2>
+      <p class="sub">Send the exact same request many times and the answers may vary slightly. Before you automate anything, measure how much. The example below shows 20 identical runs of one noul question, with a 0.70 cut-off.</p>
+      <div class="panel">
+        <div class="strip"><svg id="runs" viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Twenty repeated runs of the same request plotted by probability"></svg></div>
+        <div class="metrics" id="run-metrics"></div>
+        <p class="takeaway" id="run-note" style="margin-top:16px"></p>
+      </div>
+      <ul class="measure">
+        <li><b>Spread</b><span>Minimum, maximum and standard deviation of each probability across runs. A small spread is normal.</span></li>
+        <li><b>Decision flips</b><span>How often the final action changes. A 0.03 wobble doesn't matter at 0.95, but it flips the outcome near a cut-off.</span></li>
+        <li><b>Top-answer agreement</b><span>For choices and scores, the share of runs that pick the same top answer.</span></li>
+        <li><b>Identical input</b><span>Hash the request body and confirm every run sent the same bytes, so you know any variation came from the service, not your code.</span></li>
+      </ul>
+      <div class="pitfall"><b>Keep in mind</b><span>A repeatability test describes one input, one model version and one time window. It doesn't prove the model is deterministic for other inputs or after an update. Re-run it when the model, the questions or the input format changes.</span></div>
+    </section>
+
+    <section id="limits">
+      <h2><span class="num">11</span>Known limits and failure modes</h2>
+      <p class="sub">The category is weeks old, and the first independent tests are in. These are the failures reported so far, with what each one means for your design.</p>
+      <div class="table-wrap">
+        <table class="ref limits">
+          <thead><tr><th>What goes wrong</th><th>What was found</th><th>What to do</th></tr></thead>
+          <tbody>
+            <tr><td>Manipulated input changes the decision</td><td>Check Point added plausible fake evidence to a due-diligence report. Jev's verdict flipped in 59% of attempts, and in 25 of 27 for the strongest attacker, at about $0.50 per success. A written warning against manipulation changed almost nothing.</td><td>Screen untrusted text before the model sees it. Typed output limits the format of an answer, not what can influence it. Keep irreversible actions behind a person, and attack the whole system before launch.</td></tr>
+            <tr><td>Confident and wrong on unfamiliar input</td><td>A small open model scored 0.000 accuracy on Khmer text while reporting 0.952 confidence.</td><td>Check language, script and format in code before the call. A confidence threshold cannot catch this.</td></tr>
+            <tr><td>Numbers, dates and counting</td><td>TypeSafe's documentation says Jev “is not a calculator”, treats dates as text, and counts less reliably as lists grow.</td><td>Do arithmetic, date logic and counting in code and pass the results in the state.</td></tr>
+            <tr><td>Literal reading</td><td>The model answers the wording, not the intent. Double negatives and questions that need several hops lower accuracy.</td><td>Write direct instructions with boundary cases. Split an interpretive question into literal ones.</td></tr>
+            <tr><td>Forced choice and option order</td><td>A choice always returns one of your options, even when none fits. Jev's documentation notes a lean toward the first option.</td><td>Add a “none of these” option or a companion noul (section 07). Shuffle the order in testing and check answers hold.</td></tr>
+            <tr><td>Too much state</td><td>Irrelevant detail lowers accuracy. Context limits run from 512 tokens on small encoder models to tens of thousands on hosted ones, and oversized requests are rejected.</td><td>Give each question only the context it needs. Filter in code or with a noul first.</td></tr>
+            <tr><td>Bundled questions on very small models</td><td>In one audit, putting several questions in one request flipped 11.7% to 22.4% of yes/no decisions on a 0.8B model, against 0.1% to 0.2% on a 4B model.</td><td>Use models of about 4B parameters or more for bundled requests, or compare bundled and separate answers on your own cases.</td></tr>
+            <tr><td>No explanation</td><td>You get numbers and no rationale. The same audit found attribution methods fast enough to use interactively, at 1.3 to 3.2 seconds per input.</td><td>Log state, questions and probabilities. Where an explanation is required, escalate to a System 2 model or a person.</td></tr>
+            <tr><td>Small models without fine-tuning</td><td>The 421M-parameter Laya model is reported at 0.362 accuracy zero-shot, close to a 0.318 random baseline, and 0.766 after fine-tuning.</td><td>Fine-tune small models on labelled data, or start with a larger one.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sec-h3">What the first independent audit supports</h3>
+      <div class="why" style="margin-top:12px">
+        <div><h3>Calibration held up</h3><p>Under shifted wording, models of 4B parameters or more had calibration error of 0.030 to 0.087. Generative baselines scored 0.144 using token probabilities and 0.378 using JSON output.</p></div>
+        <div><h3>Injection detection was strong</h3><p>Asked to spot prompt-injection attempts aimed at an LLM, the same models reached 0.988 to 0.998 AUROC at 48 to 60 ms per decision.</p></div>
+        <div><h3>Confidence is a formula</h3><p>The reported confidence was an exact function of the probabilities, such as how evenly they are spread. It is not an estimate of accuracy.</p></div>
+      </div>
+      <div class="pitfall"><b>Read with care</b><span>The audit is a single-author preprint from November 2026 covering five open models, and it has not been peer reviewed. The two security results fit together: these models are good at detecting attacks on other models, and they can still be misled by fake evidence placed in their own input.</span></div>
+      <p class="sources">Sources: <a href="https://blog.checkpoint.com/ai-security/jev-is-not-a-language-model-but-it-breaks-like-one-prompt-injection-against-a-typed-decision-model/" target="_blank" rel="noopener">Check Point</a> (manipulation test), <a href="https://arxiv.org/abs/2611.12521" target="_blank" rel="noopener">Delaunay, arXiv 2611.12521</a> (audit), <a href="https://docs.typesafe.ai/model-jaggedness.md" target="_blank" rel="noopener">TypeSafe documentation</a> (known rough edges), <a href="https://sanjayshankar.me/system-one-models/" target="_blank" rel="noopener">Sanjay Shankar</a> (Khmer result, context limits), <a href="https://47billion.com/blog/system-1-ai-models-jev-laya-and-the-rise-of-decision-ai/" target="_blank" rel="noopener">47Billion</a> (Laya figures). Retrieved November 2026.</p>
+    </section>
+
+    <section id="cost">
+      <h2><span class="num">12</span>Cost and latency</h2>
+      <p class="sub">A System 1 model reads your text and returns a few numbers. A chat model reads the same text and then writes its answer one token at a time. Most of the difference in cost and speed comes from that writing step.</p>
+
+      <div class="why" style="margin-top:0">
+        <div><h3>Output is nearly free</h3><p>Decision APIs typically bill input tokens only, because nothing is written back. Chat models bill every output token, usually at several times the input price.</p></div>
+        <div><h3>No writing step</h3><p>Chat latency grows with every output token, and more again with reasoning. A System 1 model's answers arrive in one pass.</p></div>
+        <div><h3>Many questions, one call</h3><p>Extra questions add a little input, not a longer answer. One provider reports 67 ms for one question and 81 ms for fifty. In an independent test, one call judged 20 transactions in 0.4 s.</p></div>
+        <div><h3>Smaller models</h3><p>Open models in this category range from under half a billion to 27 billion parameters, so many are cheap to serve and can run on your own hardware.</p></div>
+      </div>
+
+      <h3 class="sec-h3">Estimate your monthly cost</h3>
+      <div class="panel calc">
+        <div class="calc-in">
+          <label>Requests per month <input type="number" id="c-req" value="1000000" min="0" step="10000"></label>
+          <label>Input tokens per request <input type="number" id="c-in" value="600" min="0" step="50"></label>
+          <label>Chat output tokens per request <input type="number" id="c-out" value="80" min="0" step="10"></label>
+          <label>System 1 model, $ per 1M input tokens <input type="number" id="c-dp" value="0.04" min="0" step="0.01"></label>
+          <label>Chat model, $ per 1M input tokens <input type="number" id="c-ci" value="0.10" min="0" step="0.01"></label>
+          <label>Chat model, $ per 1M output tokens <input type="number" id="c-co" value="0.50" min="0" step="0.05"></label>
+          <label>Chat samples per request to estimate probabilities <input type="number" id="c-n" value="10" min="1" step="1"></label>
+        </div>
+        <div class="bars" id="c-bars"></div>
+        <p class="small" id="c-note" style="margin:14px 0 0"></p>
+      </div>
+      <p class="small" style="margin-top:12px; max-width:70ch">Defaults: $0.04 is typical of the hosted decision APIs in section 15. $0.10 and $0.50 are the published input and output prices for OpenAI's GPT-6 Luna as reported in October 2026. Both sides include the questions in the input tokens. Sampling a chat model several times and counting the answers is the usual way to get rough probabilities from it.</p>
+
+      <h3 class="sec-h3">Reported latency</h3>
+      <div class="table-wrap">
+        <table class="ref">
+          <thead><tr><th>Model</th><th>Median latency</th><th>Measured by</th></tr></thead>
+          <tbody>
+            <tr class="group"><td colspan="3">System 1 models</td></tr>
+            <tr><td>Cloudflare Clef-flash</td><td class="num">39 ms</td><td>Cloudflare, on its own platform</td></tr>
+            <tr><td>Celeris-1 Decision</td><td class="num">67 ms</td><td>Celeris, from AWS us-east-1 (81 ms with 50 questions)</td></tr>
+            <tr><td>Microsoft-Decision-1</td><td class="num">85 ms</td><td>Microsoft (P95: 125 ms)</td></tr>
+            <tr><td>TypeSafe Jev</td><td class="num">135–524 ms</td><td>Celeris measured 135 ms; Cloudflare measured 524 ms; TypeSafe states 70–500 ms</td></tr>
+            <tr class="group"><td colspan="3">Chat model</td></tr>
+            <tr><td>GPT-6 Luna, strict JSON schema, reasoning off</td><td class="num">1.3–2.6 s</td><td>eesel.ai test</td></tr>
+            <tr><td>GPT-6 Luna, single short answer</td><td class="num">110 ms</td><td>Celeris</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pitfall"><b>Read with care</b><span>These figures come from different setups, regions and dates, and most were measured by a vendor about its own product. The two Luna rows show the pattern: a chat model asked for one short word can be fast, but full structured output with several fields takes seconds. Measure on your own workload, from the region you will deploy in, before you decide.</span></div>
+      <p class="sources">Sources: <a href="https://benchlm.ai/decision-models" target="_blank" rel="noopener">benchlm.ai</a> (Celeris figures), <a href="https://www.eesel.ai/blog/decision-models" target="_blank" rel="noopener">eesel.ai</a> (Cloudflare figures, Luna test and price), <a href="https://www.marktechpost.com/2026/10/09/microsoft-ai-releases-microsoft-decision-1-a-qwen3-5-9b-decision-scoring-model/" target="_blank" rel="noopener">MarkTechPost</a> (Microsoft figures), <a href="https://dwmkerr.com/understanding-jev-decision-models/" target="_blank" rel="noopener">Dave Kerr</a> (20-transaction test). Retrieved November 2026.</p>
+    </section>
+
+    <section id="responsible">
+      <h2><span class="num">13</span>Using it responsibly</h2>
+      <p class="sub">A System 1 model is good at judgement calls on messy text. It shouldn't be the only thing standing between a request and an irreversible action.</p>
+      <div class="rules">
+        <div class="panel"><h3>Compute the hard facts in code</h3><p>Money limits, date comparisons, eligibility rules and anything mandatory should be checked with ordinary code. Pass the results to the model as part of the state.</p></div>
+        <div class="panel"><h3>Recommend, don't approve</h3><p>Use the output to route, prioritise and pre-fill. Keep people in charge of approvals, especially for legal, financial and safety decisions.</p></div>
+        <div class="panel"><h3>Never skip mandatory steps</h3><p>A routing answer picks where the work starts. Steps your process requires, such as a compliance or security check, still happen whatever the model says.</p></div>
+        <div class="panel"><h3>Validate on labelled cases</h3><p>Measure accuracy and calibration on real examples before you set thresholds, and keep measuring after launch.</p></div>
+        <div class="panel"><h3>Log everything</h3><p>Store the state, questions, model version and probabilities. Without that record you can't explain or correct a decision later.</p></div>
+        <div class="panel"><h3>Protect the input</h3><p>The state often holds personal or confidential data. Treat logs, stored requests and exports with the same care as the source.</p></div>
+      </div>
+      <div class="split-line">
+        <div><div class="who">Code decides</div><ul><li>Limits and dates</li><li>Mandatory rules</li><li>Permissions</li></ul></div>
+        <div><div class="who">Model recommends</div><ul><li>Urgency and severity</li><li>Routing</li><li>Risk signals in text</li></ul></div>
+        <div><div class="who">People approve</div><ul><li>Uncertain cases</li><li>High-impact actions</li><li>Exceptions</li></ul></div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <h2><span class="num">14</span>Putting it together</h2>
+      <p class="sub">Each section above covers one piece. This is the order to use them in, from first draft to production.</p>
+      <ol class="steps">
+        <li><div><b>Write the questions</b><span>One thing per question, distinct options, anchored levels. Put the policy and any facts computed in code into the state (section 06).</span></div></li>
+        <li><div><b>Label real cases</b><span>Collect 50 to 100 real inputs and record the answer a skilled person would give. Include hard and borderline cases, not just easy ones.</span></div></li>
+        <li><div><b>Measure accuracy and calibration</b><span>For nouls, compare against the labels at several cut-offs and draw a reliability chart. For choices, build a confusion matrix to see which options get mixed up. For scores, report exact matches and the share that are off by one level. Track false positives separately.</span></div></li>
+        <li><div><b>Set thresholds</b><span>Choose cut-offs from the labelled results: how many automatic errors you can accept, and how much work the review queue can absorb (section 09).</span></div></li>
+        <li><div><b>Test repeatability and option order</b><span>Send the same request 20 or more times and count decision flips near your cut-offs. Shuffle the options and check the answers hold (section 10).</span></div></li>
+        <li><div><b>Attack it</b><span>Add misleading or injected content to realistic inputs and count how often the decision changes. Decide what screens the input before the model sees it (section 11).</span></div></li>
+        <li><div><b>Decide what escalates</b><span>Choose which uncertain cases go to a reasoning model and which go to a person, and what each path costs (sections 03 and 07).</span></div></li>
+        <li><div><b>Launch with people in the loop</b><span>Route and recommend rather than approve, log every request and answer, and repeat steps 3 to 6 whenever the model, the questions or the input format changes (section 13).</span></div></li>
+      </ol>
+    </section>
+
+
+    <section id="models">
+      <h2><span class="num">15</span>System 1 models you can use</h2>
+      <p class="sub">System 1 models became a product category in autumn 2026, and new ones appear every few weeks. These are widely discussed options as of November 2026. Prices are reported list prices per million input tokens; none of these providers lists a charge for output. Check each provider's page before you rely on a figure.</p>
+      <div class="table-wrap">
+        <table class="ref models">
+          <thead><tr><th>Model</th><th>Provider</th><th>Notes</th><th>Input, per 1M tokens</th></tr></thead>
+          <tbody>
+            <tr class="group"><td colspan="4">Hosted APIs</td></tr>
+            <tr><td><a href="https://docs.typesafe.ai/introduction" target="_blank" rel="noopener">Jev</a></td><td>TypeSafe AI</td><td>Launched the category in September 2026 (<a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" target="_blank" rel="noopener">launch post</a>). Text, JSON and image state; up to 255 options per choice</td><td class="num">$0.042</td></tr>
+            <tr><td><a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-microsoft-decision" target="_blank" rel="noopener">Microsoft-Decision-1</a></td><td>Microsoft Foundry</td><td>Deployed in your own Foundry resource; same <code>/v1/systemone</code> request shape; docs include a labelled-example test script</td><td class="num">$0.042 <span class="fn">reported</span></td></tr>
+            <tr><td><a href="https://www.implicator.ai/typesafe-ai-raises-870-million-for-jev-as-openai-amazon-and-cloudflare-ship-rivals/" target="_blank" rel="noopener">Decisions API</a></td><td>OpenAI</td><td>Runs on GPT-6 Luna with text and image input; opened in October 2026</td><td class="num">$0.10 <span class="fn">reported</span></td></tr>
+            <tr><td><a href="https://celeris.ai/celeris-1-decision" target="_blank" rel="noopener">Celeris-1 Decision</a></td><td>Celeris</td><td>Cached input billed at the same rate (<a href="https://docs.celeris.ai/pricing" target="_blank" rel="noopener">pricing</a>)</td><td class="num">$0.04</td></tr>
+            <tr><td><a href="https://www.liquid.ai/blog/d1-ultra" target="_blank" rel="noopener">d1-ultra</a></td><td>Liquid AI</td><td>Hosted on the Liquid API (<a href="https://docs.liquid.ai/lfm/models/decision-models" target="_blank" rel="noopener">docs</a>)</td><td class="num">$0.042</td></tr>
+            <tr><td><a href="https://docs.perplexity.ai/docs/decisions/quickstart" target="_blank" rel="noopener">Decider v1.2 and Decider Flash</a></td><td>Perplexity</td><td>27B and 4B models (<a href="https://docs.perplexity.ai/docs/getting-started/pricing" target="_blank" rel="noopener">pricing</a>)</td><td class="num">$0.02</td></tr>
+            <tr><td><a href="https://fastino.ai/blog/introducing-glide-the-first-thinking-decision-model" target="_blank" rel="noopener">GLiDE</a></td><td>Fastino</td><td>Described by Fastino as a decision model that reasons before it answers; weights under a community licence (<a href="https://docs.fastino.ai/pricing" target="_blank" rel="noopener">pricing</a>)</td><td class="num">$0.04</td></tr>
+            <tr><td><a href="https://benchlm.ai/decision-models" target="_blank" rel="noopener">Drex Max</a></td><td>Nace.AI</td><td>Listed on BenchLM; hosted, with open weights for one version</td><td class="num">$0.03 <span class="fn">reported</span></td></tr>
+            <tr><td><a href="https://developers.cloudflare.com/workers-ai/models/clef/" target="_blank" rel="noopener">Clef and Clef-flash</a></td><td>Cloudflare Workers AI</td><td>27B and 9B; image and video input; open weights too (<a href="https://blog.cloudflare.com/clef-decision-models/" target="_blank" rel="noopener">announcement</a>)</td><td class="num">$0.24 / $0.09</td></tr>
+            <tr class="group"><td colspan="4">Open weights: run on your own hardware</td></tr>
+            <tr><td><a href="https://github.com/strands-labs/strands-decider" target="_blank" rel="noopener">Strands Decider 2B</a></td><td>AWS Strands Labs</td><td>Apache 2.0; runs on a single consumer GPU (<a href="https://strandsagents.com/blog/introducing-strands-decider/" target="_blank" rel="noopener">announcement</a>)</td><td class="num">Your hardware</td></tr>
+            <tr><td><a href="https://www.liquid.ai/blog/d1-open" target="_blank" rel="noopener">d1 open models</a></td><td>Liquid AI</td><td>Small text, image and speech models from about 600M to 3B; LFM Open License</td><td class="num">Your hardware</td></tr>
+            <tr><td><a href="https://huggingface.co/perplexity-ai/pplx-decider-v1-27b" target="_blank" rel="noopener">Decider v1 27B</a></td><td>Perplexity</td><td>Apache 2.0 weights of the hosted model</td><td class="num">Your hardware</td></tr>
+            <tr><td><a href="https://47billion.com/blog/system-1-ai-models-jev-laya-and-the-rise-of-decision-ai/" target="_blank" rel="noopener">Laya</a></td><td>Convai Innovations</td><td>Apache 2.0; 421M-parameter encoder with a 512-token context; about 33 ms on a GPU; needs fine-tuning for good accuracy</td><td class="num">Your hardware</td></tr>
+            <tr><td><a href="https://dev.to/francisco_riveros/beyond-autoregression-running-jev-and-open-system-1-decision-models-on-google-cloud-23kp" target="_blank" rel="noopener">SemIf</a></td><td>Community (formerly OpenJev)</td><td>MIT licence; built on a 4B base model; serves a Jev-compatible endpoint</td><td class="num">Your hardware</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small" style="margin-top:12px; max-width:70ch">The Microsoft-Decision-1 price is not on its documentation page; the figure shown is from press coverage. The OpenAI price is from press coverage of the October release. Several community fine-tunes of 4B open models sit near the top of the JevBench leaderboard alongside Jev; they are not listed here because they change weekly.</p>
+
+      <h3 class="sec-h3">Comparing and switching</h3>
+      <div class="why" style="margin-top:12px">
+        <div><h3>One API for many models</h3><p><a href="https://docs.litellm.ai/docs/decisions" target="_blank" rel="noopener">LiteLLM</a> exposes several providers behind one decisions endpoint, so you can test models without rewriting your code.</p></div>
+        <div><h3>Leaderboards</h3><p><a href="https://benchlm.ai/decision-models" target="_blank" rel="noopener">BenchLM</a> tracks JevBench, a composite of accuracy, calibration, speed and cost, and links each provider's own results.</p></div>
+      </div>
+      <div class="pitfall"><b>Before you choose</b><span>Benchmarks use different protocols, and many scores are reported by the model's own provider. Treat a leaderboard as a shortlist, then run your own labelled cases through two or three candidates (section 14, steps 2 and 3).</span></div>
+      <p class="sources">Sources: provider pages linked above; prices as reported by <a href="https://benchlm.ai/decision-models" target="_blank" rel="noopener">benchlm.ai</a> and <a href="https://www.eesel.ai/blog/decision-models" target="_blank" rel="noopener">eesel.ai</a>, October and November 2026.</p>
+
+      <h3 class="sec-h3">Further reading</h3>
+      <ul class="srclist">
+        <li><a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" target="_blank" rel="noopener">Introducing System One Models and Jev</a>, TypeSafe AI. The launch post that named the category.</li>
+        <li><a href="https://docs.typesafe.ai/confidence.md" target="_blank" rel="noopener">Confidence</a> and <a href="https://docs.typesafe.ai/patterns.md" target="_blank" rel="noopener">Patterns</a>, TypeSafe documentation. How confidence is calculated, and the patterns in section 07.</li>
+        <li><a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-microsoft-decision" target="_blank" rel="noopener">Use Microsoft-Decision-1</a>, Microsoft Learn. Request examples, limitations and responsible-use guidance.</li>
+        <li><a href="https://dwmkerr.com/understanding-jev-decision-models/" target="_blank" rel="noopener">Understanding Jev and System 1 models</a>, Dave Kerr. A worked fraud-triage example with timings.</li>
+        <li><a href="https://sanjayshankar.me/system-one-models/" target="_blank" rel="noopener">System One Models: 6 Rules</a>, Sanjay Shankar. Lessons from building a product on these models.</li>
+        <li><a href="https://sandeepalur.substack.com/p/73-the-system-1-models-decisions" target="_blank" rel="noopener">The System 1 Models: Decisions with Confidence</a>, Sandeep Alur. Hybrid System 1 and System 2 designs for enterprises.</li>
+        <li><a href="https://arxiv.org/abs/2611.12521" target="_blank" rel="noopener">Can the Confidence and Decisions of System 1 Models Be Trusted?</a>, Julien Delaunay. The first independent audit.</li>
+        <li><a href="https://blog.checkpoint.com/ai-security/jev-is-not-a-language-model-but-it-breaks-like-one-prompt-injection-against-a-typed-decision-model/" target="_blank" rel="noopener">Jev is not a language model, but it breaks like one</a>, Check Point. The manipulation test.</li>
+      </ul>
+    </section>
+
+    <footer>The examples, scenarios and demo numbers on this page are invented for illustration. Prices, latency figures, test results and model listings come from the public sources cited in each section, as of November 2026. Many are reported by vendors about their own products, and all of them change often.</footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fmt = v => v.toFixed(2);
+
+  /* ---------- Bars helper ---------- */
+  function bars(items) {
+    const max = Math.max(...items.map(i => i[1]));
+    return items.map(([label, p]) =>
+      `<div class="bar-row${p === max ? " win" : ""}"><span class="lbl">${esc(label)}</span><span class="trk"><i style="width:${(p * 100).toFixed(0)}%"></i></span><span class="val">${fmt(p)}</span></div>`
+    ).join("");
+  }
+  function cols(ps) {
+    const max = Math.max(...ps);
+    return ps.map(p => `<div class="c${p === max ? " win" : ""}"><span>${fmt(p)}</span><i style="height:${Math.max(p * 100 / max * 0.82, 2).toFixed(1)}%"></i></div>`).join("");
+  }
+
+  $("#choice-demo").innerHTML = bars([["Billing", 0.71], ["Technical", 0.18], ["Account", 0.08], ["Other", 0.03]]);
+  $("#score-demo").innerHTML = cols([0.05, 0.22, 0.58, 0.15]);
+
+  /* ---------- Request / response viewer ---------- */
+  const request = {
+    model: "<model-or-deployment-name>",
+    state: "Order 48213 arrived with a cracked screen. The customer sent two photos and asked for a refund.\n\nPolicy: damaged items can be refunded within 30 days of delivery when the damage is documented.\n\nVerified by the order system: delivered 2 days ago, inside the 30-day window.",
+    questions: {
+      refund_eligible: {
+        type: "noul",
+        instructions: "Does the request meet the damaged-item refund policy in the state, based only on the facts stated?"
+      },
+      resolution: {
+        type: "choice",
+        instructions: "Which resolution fits best?",
+        criteria: {
+          refund: "Return the full payment",
+          replacement: "Ship the same item again",
+          repair: "Fix the item under warranty",
+          decline: "No remedy applies"
+        }
+      },
+      priority: {
+        type: "score",
+        instructions: "How quickly should support respond?",
+        criteria: ["Within a week", "Within 3 days", "Within 24 hours", "Within 2 hours"]
+      }
+    }
+  };
+  const response = {
+    answers: {
+      refund_eligible: { type: "noul", noul: 0.93 },
+      resolution: {
+        type: "choice",
+        choice: "refund",
+        probabilities: { refund: 0.64, replacement: 0.31, repair: 0.03, decline: 0.02 },
+        confidence: 0.52
+      },
+      priority: {
+        type: "score",
+        score: 1.92,
+        probabilities: { "0": 0.03, "1": 0.19, "2": 0.61, "3": 0.17 },
+        confidence: 0.58
+      }
+    },
+    usage: { input_tokens: 212, output_tokens: 9 }
+  };
+  const fieldNotes = {
+    req: [
+      ["state", "The text or JSON being judged, plus the policy and any facts already checked in code. The date check here was done by the order system, not the model."],
+      ["questions", "A named set of questions. Each name becomes a key in the answers."],
+      ["type", "noul, choice or score. It sets the shape of the answer. Jev also offers box, for locating something in an image."],
+      ["instructions", "What to decide, and what evidence to use."],
+      ["criteria", "The allowed answers. For a choice, option names with definitions. For a score, levels listed from lowest to highest. Optional for a noul."]
+    ],
+    res: [
+      ["noul", "The probability that the answer is yes."],
+      ["choice", "The option with the highest probability."],
+      ["probabilities", "The full distribution. Use it to spot near ties."],
+      ["score", "The probability-weighted average of the level numbers, so it can fall between levels."],
+      ["confidence", "Calculated from the probabilities: 1 when they sit on one answer, 0 when they are spread evenly. A noul has none."],
+      ["usage", "Tokens consumed, for cost tracking."]
+    ]
+  };
+  function highlight(obj) {
+    const src = JSON.stringify(obj, null, 2);
+    const re = /("(?:\\.|[^"\\])*")(\s*:)?|(-?\d+(?:\.\d+)?)/g;
+    let out = "", last = 0, m;
+    while ((m = re.exec(src))) {
+      out += esc(src.slice(last, m.index));
+      if (m[1]) out += m[2] ? `<span class="k">${esc(m[1])}</span>${m[2]}` : `<span class="s">${esc(m[1])}</span>`;
+      else out += `<span class="n">${m[3]}</span>`;
+      last = re.lastIndex;
+    }
+    return out + esc(src.slice(last));
+  }
+  function showJson(which) {
+    $("#json-pane").innerHTML = highlight(which === "req" ? request : response);
+    $("#json-pane").setAttribute("aria-labelledby", which === "req" ? "tab-req" : "tab-res");
+    $("#json-fields").innerHTML = fieldNotes[which].map(([k, v]) => `<div class="field"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
+    $("#tab-req").setAttribute("aria-selected", which === "req");
+    $("#tab-res").setAttribute("aria-selected", which === "res");
+  }
+  $("#tab-req").addEventListener("click", () => showJson("req"));
+  $("#tab-res").addEventListener("click", () => showJson("res"));
+  showJson("req");
+
+  /* ---------- Scenarios ---------- */
+  const scenarios = [
+    {
+      name: "Insurance claim",
+      state: "Water damage claim for $3,800. The policy has been active for 14 months. Photos and a plumber's invoice are attached. This is the policyholder's second claim this year.",
+      results: [
+        { q: "Does the claim need an on-site adjuster?", type: "noul", p: 0.72 },
+        { q: "Which handling route fits?", type: "choice", items: [["Standard", 0.58], ["Fast track", 0.22], ["Special investigation", 0.12], ["Coverage review", 0.08]] },
+        { q: "How severe is the loss?", type: "score", items: [["0 Minor", 0.08], ["1 Moderate", 0.61], ["2 Major", 0.26], ["3 Severe", 0.05]] }
+      ],
+      takeaway: "Standard handling with an adjuster visit. The second claim this year lifts special investigation to 0.12, which is low but worth logging."
+    },
+    {
+      name: "IT incident",
+      state: "Checkout API error rate rose to 12% after the 09:40 deploy. Customers in Europe are affected. A rollback is in progress.",
+      results: [
+        { q: "Is this a customer-facing outage?", type: "noul", p: 0.95 },
+        { q: "Which team owns the first response?", type: "choice", items: [["Platform", 0.55], ["Payments", 0.35], ["Network", 0.06], ["Database", 0.04]] },
+        { q: "What severity is it?", type: "score", items: [["0 SEV4 Minor", 0.02], ["1 SEV3 Degraded", 0.08], ["2 SEV2 Major", 0.41], ["3 SEV1 Critical", 0.49]] }
+      ],
+      takeaway: "SEV1 and SEV2 are close (0.49 against 0.41). A near tie on severity is a good reason for the on-call lead to make the call."
+    },
+    {
+      name: "Content moderation",
+      state: "A forum post offers two concert tickets at face value and includes the seller's personal phone number.",
+      results: [
+        { q: "Does the post publicly share someone's personal contact details?", type: "noul", p: 0.88 },
+        { q: "What action fits best?", type: "choice", items: [["Allow", 0.21], ["Allow, remove phone number", 0.52], ["Remove", 0.17], ["Escalate", 0.10]] },
+        { q: "How urgently should it be reviewed?", type: "score", items: [["0 Routine", 0.34], ["1 Today", 0.46], ["2 Within an hour", 0.16], ["3 Immediately", 0.04]] }
+      ],
+      takeaway: "Selling tickets at face value is allowed; the phone number is the problem. A narrow yes/no question plus an option for “allow with an edit” separates the two, so a moderator can remove the number today without taking down the post."
+    },
+    {
+      name: "Customer renewal",
+      state: "An enterprise customer writes that they are “evaluating alternatives” after a third outage this quarter. Their contract renews in 30 days.",
+      results: [
+        { q: "Is the customer at risk of leaving?", type: "noul", p: 0.81 },
+        { q: "What should happen next?", type: "choice", items: [["Account manager call", 0.62], ["Technical review", 0.24], ["Discount offer", 0.10], ["No action", 0.04]] },
+        { q: "How urgent is follow-up?", type: "score", items: [["0 This month", 0.03], ["1 This week", 0.27], ["2 Within 2 days", 0.52], ["3 Today", 0.18]] }
+      ],
+      takeaway: "High churn risk with a clear next step. The model recommends a call. The account team decides what to offer."
+    },
+    {
+      name: "Agent tool call",
+      state: "A coding agent was asked to “fix the failing unit test”. It now wants to run: rm -rf ./build && git push --force origin main",
+      results: [
+        { q: "Is any part of this command hard to undo?", type: "noul", p: 0.94 },
+        { q: "What should the harness do?", type: "choice", items: [["Run it", 0.07], ["Ask the user first", 0.71], ["Block it", 0.22]] },
+        { q: "How far is the command from the stated task?", type: "score", items: [["0 On task", 0.06], ["1 Related", 0.21], ["2 Unrelated", 0.55], ["3 Works against it", 0.18]] }
+      ],
+      takeaway: "Deleting a build folder is routine; the force-push is the problem. The check adds a fraction of a second before the tool call, and the harness asks the user instead of deciding alone."
+    }
+  ];
+  const tabsEl = $("#scen-tabs"), panel = $("#scen-panel");
+  scenarios.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("role", "tab"); b.id = "scen-" + i; b.textContent = s.name;
+    b.setAttribute("aria-selected", i === 0);
+    b.addEventListener("click", () => showScenario(i));
+    tabsEl.appendChild(b);
+  });
+  function resultHtml(r) {
+    let body;
+    if (r.type === "noul") {
+      body = `<div class="bar-row win"><span class="lbl">true</span><span class="trk"><i style="width:${(r.p * 100).toFixed(0)}%"></i></span><span class="val">${fmt(r.p)}</span></div>`;
+    } else {
+      body = bars(r.items);
+    }
+    return `<div class="result"><h4><span class="ty">${r.type}</span>${esc(r.q)}</h4><div class="bars">${body}</div></div>`;
+  }
+  function showScenario(i) {
+    const s = scenarios[i];
+    tabsEl.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-selected", i === j));
+    panel.setAttribute("aria-labelledby", "scen-" + i);
+    panel.innerHTML = `
+      <div class="scenario-top">
+        <div class="state-box"><span class="label">State</span>${esc(s.state)}</div>
+        <div><span class="result-label">Answers</span><div class="results">${s.results.map(resultHtml).join("")}</div></div>
+      </div>
+      <p class="takeaway">${esc(s.takeaway)}</p>`;
+  }
+  showScenario(0);
+
+  /* ---------- SVG helpers ---------- */
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent, text) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  const C = { ink: "#18202E", muted: "#586274", rule: "#DCE1E8", accent: "#2B55D9", yes: "#1E8459", yesSoft: "#E3F3EB", review: "#A86A12", reviewSoft: "#FBF1DF", no: "#B8432A", noSoft: "#FBE9E4", surface: "#FFFFFF", orange: "#D9822B" };
+  const mono = "IBM Plex Mono, monospace", sans = "IBM Plex Sans, sans-serif";
+
+  /* ---------- Threshold demo ---------- */
+  const cases = [[0.97,1],[0.93,1],[0.91,1],[0.88,0],[0.84,1],[0.79,1],[0.72,0],[0.66,1],[0.58,0],[0.52,1],[0.45,0],[0.37,0],[0.29,1],[0.21,0],[0.12,0],[0.05,0]];
+  const lo = $("#lo"), hi = $("#hi"), strip = $("#strip");
+  const X0 = 30, X1 = 690, sx = p => X0 + (X1 - X0) * p;
+  function drawStrip() {
+    let l = +lo.value, h = +hi.value;
+    if (l > h) { if (document.activeElement === lo) { h = l; hi.value = h; } else { l = h; lo.value = l; } }
+    $("#lo-out").textContent = fmt(l); $("#hi-out").textContent = fmt(h);
+    strip.innerHTML = "";
+    el("rect", { x: sx(0), y: 18, width: sx(l) - sx(0), height: 84, fill: C.noSoft }, strip);
+    el("rect", { x: sx(l), y: 18, width: sx(h) - sx(l), height: 84, fill: C.reviewSoft }, strip);
+    el("rect", { x: sx(h), y: 18, width: sx(1) - sx(h), height: 84, fill: C.yesSoft }, strip);
+    const zl = (x1, x2, label, color) => { if (x2 - x1 > 70) el("text", { x: (x1 + x2) / 2, y: 12, "text-anchor": "middle", "font-family": sans, "font-size": 11, "font-weight": 600, fill: color }, strip, label); };
+    zl(sx(0), sx(l), "DECLINE", C.no); zl(sx(l), sx(h), "REVIEW", C.review); zl(sx(h), sx(1), "APPROVE", C.yes);
+    [l, h].forEach(t => el("line", { x1: sx(t), x2: sx(t), y1: 18, y2: 102, stroke: C.ink, "stroke-width": 1.5 }, strip));
+    el("line", { x1: X0, x2: X1, y1: 102, y2: 102, stroke: C.ink }, strip);
+    for (let t = 0; t <= 10; t++) {
+      const x = sx(t / 10);
+      el("line", { x1: x, x2: x, y1: 102, y2: 107, stroke: C.ink }, strip);
+      if (t % 2 === 0) el("text", { x, y: 122, "text-anchor": "middle", "font-family": mono, "font-size": 11, fill: C.muted }, strip, (t / 10).toFixed(1));
+    }
+    el("text", { x: (X0 + X1) / 2, y: 142, "text-anchor": "middle", "font-family": sans, "font-size": 11, fill: C.muted }, strip, "model probability that the case should be approved");
+    let nYes = 0, nRev = 0, nNo = 0, err = 0, missed = 0;
+    cases.forEach(([p, y], i) => {
+      const cy = 38 + (i % 3) * 22;
+      const c = el("circle", { cx: sx(p), cy, r: 7, fill: y ? C.ink : C.surface, stroke: C.ink, "stroke-width": 2 }, strip);
+      el("title", {}, c, `Case ${i + 1}: probability ${fmt(p)}, should be ${y ? "approved" : "declined"}`);
+      if (p > h) { nYes++; if (!y) { err++; el("circle", { cx: sx(p), cy, r: 11, fill: "none", stroke: C.no, "stroke-width": 2 }, strip); } }
+      else if (p < l) { nNo++; if (y) { err++; el("circle", { cx: sx(p), cy, r: 11, fill: "none", stroke: C.no, "stroke-width": 2 }, strip); } }
+      else nRev++;
+    });
+    $("#s-yes").textContent = nYes; $("#s-rev").textContent = nRev; $("#s-no").textContent = nNo; $("#s-err").textContent = err;
+    const auto = nYes + nNo;
+    $("#s-note").textContent = auto
+      ? `${auto} of 16 cases are decided automatically, and ${err} of those ${err === 1 ? "is" : "are"} wrong (circled in red). Widening the review band lowers errors but sends more work to people.`
+      : "Every case goes to a person. No automatic errors, but no time saved either.";
+  }
+  lo.addEventListener("input", drawStrip); hi.addEventListener("input", drawStrip);
+  drawStrip();
+
+  /* ---------- Calibration chart ---------- */
+  (function () {
+    const svg = $("#calib");
+    const L = 50, R = 320, T = 20, B = 240;
+    const px = p => L + (R - L) * p, py = p => B - (B - T) * p;
+    for (let t = 0; t <= 5; t++) {
+      const v = t / 5;
+      el("line", { x1: L, x2: R, y1: py(v), y2: py(v), stroke: C.rule }, svg);
+      el("text", { x: L - 8, y: py(v) + 4, "text-anchor": "end", "font-family": mono, "font-size": 10, fill: C.muted }, svg, v.toFixed(1));
+      el("text", { x: px(v), y: B + 16, "text-anchor": "middle", "font-family": mono, "font-size": 10, fill: C.muted }, svg, v.toFixed(1));
+    }
+    el("line", { x1: L, x2: R, y1: B, y2: B, stroke: C.ink }, svg);
+    el("line", { x1: L, x2: L, y1: T, y2: B, stroke: C.ink }, svg);
+    el("line", { x1: px(0), y1: py(0), x2: px(1), y2: py(1), stroke: C.muted, "stroke-dasharray": "4 4" }, svg);
+    el("text", { x: px(0.80), y: py(0.86), "font-family": sans, "font-size": 10, fill: C.muted, transform: `rotate(-39 ${px(0.80)} ${py(0.86)})` }, svg, "perfect");
+    const series = [
+      { pts: [[0.1, 0.12], [0.3, 0.28], [0.5, 0.52], [0.7, 0.69], [0.9, 0.88]], color: C.accent, label: "Calibrated" },
+      { pts: [[0.1, 0.25], [0.3, 0.38], [0.5, 0.5], [0.7, 0.6], [0.9, 0.7]], color: C.orange, label: "Overconfident" }
+    ];
+    series.forEach((s, si) => {
+      el("polyline", { points: s.pts.map(([a, b]) => `${px(a)},${py(b)}`).join(" "), fill: "none", stroke: s.color, "stroke-width": 2 }, svg);
+      s.pts.forEach(([a, b]) => el("circle", { cx: px(a), cy: py(b), r: 4, fill: s.color }, svg));
+      el("rect", { x: L + 12, y: T + 6 + si * 18, width: 12, height: 3, fill: s.color }, svg);
+      el("text", { x: L + 30, y: T + 11 + si * 18, "font-family": sans, "font-size": 11, fill: C.ink }, svg, s.label);
+    });
+    el("text", { x: (L + R) / 2, y: B + 36, "text-anchor": "middle", "font-family": sans, "font-size": 11, fill: C.muted }, svg, "predicted probability");
+    el("text", { x: 14, y: (T + B) / 2, "text-anchor": "middle", "font-family": sans, "font-size": 11, fill: C.muted, transform: `rotate(-90 14 ${(T + B) / 2})` }, svg, "share actually true");
+  })();
+
+  /* ---------- Repeatability ---------- */
+  (function () {
+    const runs = [0.71, 0.73, 0.72, 0.70, 0.74, 0.72, 0.69, 0.73, 0.72, 0.71, 0.75, 0.72, 0.73, 0.70, 0.72, 0.68, 0.73, 0.72, 0.71, 0.74];
+    const cut = 0.70, svg = $("#runs");
+    const lo = 0.60, hiV = 0.80, X0 = 40, X1 = 690;
+    const x = v => X0 + (X1 - X0) * (v - lo) / (hiV - lo);
+    el("rect", { x: x(lo), y: 14, width: x(cut) - x(lo), height: 66, fill: C.noSoft }, svg);
+    el("rect", { x: x(cut), y: 14, width: x(hiV) - x(cut), height: 66, fill: C.yesSoft }, svg);
+    el("line", { x1: x(cut), x2: x(cut), y1: 10, y2: 80, stroke: C.ink, "stroke-width": 1.5 }, svg);
+    el("text", { x: x(cut) - 6, y: 24, "text-anchor": "end", "font-family": mono, "font-size": 11, fill: C.ink }, svg, "cut-off 0.70");
+    const stacks = {};
+    runs.forEach((v, i) => {
+      const k = v.toFixed(2); stacks[k] = (stacks[k] || 0) + 1;
+      const cy = 72 - (stacks[k] - 1) * 11;
+      const c = el("circle", { cx: x(v), cy, r: 5, fill: v < cut ? C.no : C.accent }, svg);
+      el("title", {}, c, `Run ${i + 1}: ${fmt(v)}`);
+    });
+    el("line", { x1: X0, x2: X1, y1: 80, y2: 80, stroke: C.ink }, svg);
+    for (let t = 0; t <= 4; t++) {
+      const v = lo + t * 0.05;
+      el("line", { x1: x(v), x2: x(v), y1: 80, y2: 85, stroke: C.ink }, svg);
+      el("text", { x: x(v), y: 100, "text-anchor": "middle", "font-family": mono, "font-size": 11, fill: C.muted }, svg, v.toFixed(2));
+    }
+    el("text", { x: (X0 + X1) / 2, y: 120, "text-anchor": "middle", "font-family": sans, "font-size": 11, fill: C.muted }, svg, "probability returned on each run (axis zoomed to 0.60–0.80)");
+    const m = runs.reduce((a, b) => a + b, 0) / runs.length;
+    const sd = Math.sqrt(runs.reduce((a, b) => a + (b - m) ** 2, 0) / (runs.length - 1));
+    const flips = runs.filter(v => v < cut).length;
+    const items = [
+      [runs.length, "identical runs"], [fmt(m), "mean probability"],
+      [`${fmt(Math.min(...runs))}–${fmt(Math.max(...runs))}`, "range"], [sd.toFixed(3), "standard deviation"],
+      [`${flips} of ${runs.length}`, "runs below the cut-off"]
+    ];
+    $("#run-metrics").innerHTML = items.map(([n, t]) => `<div><span class="n">${n}</span><span class="t">${t}</span></div>`).join("");
+    $("#run-note").textContent = `The mean of ${fmt(m)} sits only ${fmt(Math.abs(m - cut))} ${m >= cut ? "above" : "below"} the ${fmt(cut)} cut-off, so ${flips} of ${runs.length} identical runs land on the other side and flip the decision. The same wobble around 0.95 would never change the outcome.`;
+  })();
+
+  /* ---------- Cost calculator ---------- */
+  (function () {
+    const ids = ["c-req", "c-in", "c-out", "c-dp", "c-ci", "c-co", "c-n"];
+    const num = id => Math.max(0, parseFloat($("#" + id).value) || 0);
+    const money = v => "$" + v.toLocaleString("en-US", { maximumFractionDigits: v >= 100 ? 0 : 2, minimumFractionDigits: v >= 100 ? 0 : 2 });
+    function draw() {
+      const req = num("c-req"), tin = num("c-in"), tout = num("c-out");
+      const n = Math.max(1, Math.round(num("c-n")));
+      const dec = req * tin / 1e6 * num("c-dp");
+      const chat = req * (tin * num("c-ci") + tout * num("c-co")) / 1e6;
+      const rows = [["System 1 model", dec], ["Chat model, one answer", chat], [`Chat model, ${n} samples`, chat * n]];
+      const max = Math.max(...rows.map(r => r[1]), 1e-9);
+      $("#c-bars").innerHTML = rows.map(([label, v], i) =>
+        `<div class="bar-row${i === 0 ? " win" : ""}"><span class="lbl">${esc(label)}</span><span class="trk"><i style="width:${(v / max * 100).toFixed(1)}%"></i></span><span class="val">${money(v)}</span></div>`
+      ).join("");
+      $("#c-note").textContent = dec > 0
+        ? `Per month. The chat model costs ${(chat / dec).toFixed(1)}× as much for one answer with no probabilities, and ${(chat * n / dec).toFixed(0)}× as much when sampled ${n} times to estimate them.`
+        : "Per month. Enter a System 1 model price to compare.";
+    }
+    ids.forEach(id => $("#" + id).addEventListener("input", draw));
+    draw();
+  })();
+
+  /* ---------- Contents highlight ---------- */
+  const links = [...document.querySelectorAll(".toc a")];
+  const secs = links.map(a => document.querySelector(a.getAttribute("href")));
+  function onScroll() {
+    let idx = 0;
+    secs.forEach((s, i) => { if (s.getBoundingClientRect().top < window.innerHeight * 0.35) idx = i; });
+    links.forEach((a, i) => a.classList.toggle("active", i === idx));
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  /* ---------- Escalation calculator ---------- */
+  const num = id => Math.max(0, parseFloat($("#" + id).value) || 0);
+  const money = v => "$" + v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function drawEsc() {
+    const e = num("e-rate") / 100, c1 = num("e-c1"), c2 = num("e-c2"), l1 = num("e-l1"), l2 = num("e-l2");
+    const blended = 1000 * (c1 + e * c2), all = 1000 * c2, lat = l1 + e * l2;
+    $("#e-rate-out").textContent = Math.round(e * 100) + "%";
+    $("#e-fast").textContent = Math.round((1 - e) * 100) + "%";
+    $("#e-cost").textContent = money(blended);
+    $("#e-all").textContent = money(all);
+    $("#e-lat").textContent = lat.toFixed(lat < 10 ? 2 : 1) + " s";
+    $("#e-note").textContent = blended > 0 && all > blended
+      ? `Sending everything to System 2 costs ${(all / blended).toFixed(1)}× as much and takes ${l2.toFixed(1)} s per request. The saving depends almost entirely on how few requests escalate, so the review band you choose in section 09 sets your cost.`
+      : "At this escalation rate the fast path saves nothing: every request pays for both calls.";
+  }
+  ["e-rate", "e-c1", "e-c2", "e-l1", "e-l2"].forEach(id => $("#" + id).addEventListener("input", drawEsc));
+  drawEsc();
+
+  /* ---------- Patterns ---------- */
+  const patterns = [
+    {
+      name: "Screen first",
+      title: "Screen with a noul before an expensive step",
+      when: "Put a cheap yes/no question in front of anything slow or costly: a reasoning model, a search, a person. Most inputs never need the expensive step.",
+      code: `a = ask(email, {"complaint": {
+    "type": "noul",
+    "instructions": "Is this email a customer complaint about a delivered order?"}})
+
+p = a["complaint"]["noul"]
+if p >= 0.7:
+    draft = reasoning_model.draft_reply(email)   # the slow, costly step
+elif p <= 0.3:
+    archive(email)
+else:
+    send_to_review(email)`,
+      note: "0.7 and 0.3 are the starting thresholds TypeSafe suggests. Tune them on your labelled cases."
+    },
+    {
+      name: "Fan-out",
+      title: "Ask many questions in one request",
+      when: "Send shared context once and attach one question per item, or every question you might need about one item. Each is judged independently, so the call takes about as long as a single question.",
+      code: `questions = {
+    f"txn_{t.id}": {
+        "type": "choice",
+        "instructions": f"{t.amount} to '{t.payee}', {t.payee_age}. Reason given: '{t.reason}'.",
+        "criteria": {"safe": "Matches the customer's normal behaviour",
+                     "check": "Unusual, ask the customer to confirm",
+                     "hold": "Matches a known scam pattern"},
+    }
+    for t in transactions
+}
+answers = ask({"scam_patterns_today": patterns, "flagged_payees": flagged}, questions)`,
+      note: "On very small models, bundling questions has been shown to change answers (section 11). Compare bundled and separate requests once on your model."
+    },
+    {
+      name: "Companion noul",
+      title: "Detect when no option fits",
+      when: "A choice always picks one of your options. Pair it with a noul that asks whether any option applies, and send the misfits to a default queue.",
+      code: `a = ask(ticket, {
+    "team": {"type": "choice",
+             "instructions": "Which team should handle this ticket?",
+             "criteria": TEAMS},
+    "fits": {"type": "noul",
+             "instructions": "Is this ticket clearly about billing, a technical fault, or account access?"},
+})
+team = a["team"]["choice"] if a["fits"]["noul"] >= 0.7 else "triage_queue"`,
+      note: "A “none of these” option does a similar job. The companion noul keeps the option list clean and gives you a separate number to threshold."
+    },
+    {
+      name: "Threshold by risk",
+      title: "Set a higher bar for riskier actions",
+      when: "Use one threshold per action, set by what a mistake costs. Labelling a ticket can run at 0.6. Sending money should need much more, or always go to a person.",
+      code: `THRESHOLD = {"add_label": 0.60, "send_reply": 0.85, "issue_refund": 0.97}
+
+action = a["next_action"]["choice"]
+p = a["next_action"]["probabilities"][action]
+
+if p >= THRESHOLD[action]:
+    run(action)
+else:
+    ask_person(action, p)`,
+      note: "Threshold the probability of the action you are about to take, not the confidence field."
+    },
+    {
+      name: "Composite score",
+      title: "Combine atomic answers in code",
+      when: "Break a broad judgement into narrow questions and weigh them yourself. Changing a priority means changing a coefficient, and every part of the score can be inspected.",
+      code: `a = ask(lead, {
+    "budget":   {"type": "noul", "instructions": "Does the message state a budget?"},
+    "deadline": {"type": "noul", "instructions": "Does the message state a purchase deadline?"},
+    "buyer":    {"type": "noul", "instructions": "Does the sender say they make the buying decision?"},
+})
+lead_score = (0.5 * a["budget"]["noul"]
+            + 0.3 * a["deadline"]["noul"]
+            + 0.2 * a["buyer"]["noul"])`,
+      note: "The model supplies the judgements. The reasoning that joins them stays in code, where you can test it."
+    },
+    {
+      name: "Escalate to System 2",
+      title: "Pass unsettled cases to a reasoning model or a person",
+      when: "Act on settled, low-impact answers in code. Send unsettled ones to a reasoning model, which is slower and can explain itself. Send high-impact ones to a person whatever the number says.",
+      code: `a = ask(claim, QUESTIONS)
+route = a["route"]["choice"]
+settled = a["route"]["probabilities"][route] >= 0.85
+
+if high_impact(claim):
+    send_to_person(claim, a)
+elif settled:
+    apply(route)
+else:
+    verdict = reasoning_model.review(claim, a)   # slower, returns a written rationale`,
+      note: "Pass the System 1 answers along. The reasoning model or reviewer starts from them and doesn't repeat the work."
+    }
+  ];
+  const tabs = $("#pat-tabs"), panel = $("#pat-panel");
+  function show(i) {
+    const p = patterns[i];
+    tabs.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-selected", i === j));
+    panel.setAttribute("aria-labelledby", "pat-" + i);
+    panel.innerHTML = `<div class="pat"><h3>${esc(p.title)}</h3><p>${esc(p.when)}</p><pre class="code">${esc(p.code)}</pre><p class="note">${esc(p.note)}</p></div>`;
+  }
+  patterns.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("role", "tab"); b.id = "pat-" + i; b.textContent = p.name;
+    b.addEventListener("click", () => show(i));
+    tabs.appendChild(b);
+  });
+  show(0);
+})();
+</script>
+
+</body>
+</html>
