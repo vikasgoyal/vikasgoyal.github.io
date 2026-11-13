@@ -91,6 +91,18 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
 #pin{position:absolute;top:-5px;bottom:-5px;width:3px;margin-left:-1.5px;background:var(--needle);border-radius:2px;pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 #pin::before{content:"";position:absolute;top:-4px;left:-4px;width:11px;height:11px;border-radius:50%;background:var(--needle);box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 
+.sharebtn{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:14px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  font:700 12px/1 var(--f-sign);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--sign);border:2px solid #fff;border-radius:999px;padding:9px 15px 8px 12px;box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.sharebtn svg{width:18px;height:18px;flex:none}
+.sharebtn:active{transform:translateY(2px);box-shadow:none}
+.sharebox{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(10,20,24,.72);padding:16px}
+.sharecard{width:min(640px,100%);max-height:100%;overflow:auto;background:var(--enamel);color:var(--ink);border:4px solid #fff;box-shadow:0 18px 40px rgba(0,0,0,.45);padding:12px}
+.sharecard img{display:block;width:100%;height:auto;border:1px solid rgba(0,0,0,.2)}
+.sharecard p{margin:10px 2px 0;font-size:13px;line-height:1.45}
+.sharecard .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sharecard button{font:700 12px/1 var(--f-sign);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;color:#fff;background:var(--sign);border:0;border-radius:999px;padding:11px 16px 10px}
+.sharecard button.alt{background:none;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.sharecard input{flex:1 1 220px;min-width:0;font:13px var(--f-sign);padding:8px 10px;border:1px solid #9aa3a6;border-radius:6px;background:#fff;color:var(--ink)}
 .controls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:center}
 .pedals,.switches{display:flex;gap:7px}
 .controls button{font:700 12px/1 var(--f-sign);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);cursor:pointer;
@@ -145,6 +157,16 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
       <svg id="map" viewBox="0 0 366 144" role="img" aria-label="Map of Route 66 across eight states, with your current position"></svg>
     </figure>
     <div class="tripsign" id="tripSign" aria-live="polite"><p id="tripTop"></p><p id="tripMain"></p></div>
+    <button class="sharebtn" id="shareBtn" type="button" aria-label="Share a picture of this view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7.5 7.5 12 3l4.500 4.500M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
+    <div class="sharebox" id="shareBox" hidden role="dialog" aria-modal="true" aria-label="Share this view">
+      <div class="sharecard">
+        <img id="shareImg" alt="A snapshot of the current view with the place, date and time">
+        <p id="shareTxt"></p>
+        <div class="row"><input id="shareUrl" readonly aria-label="Link to this page"><button id="shareCopy" type="button">Copy link</button></div>
+        <div class="row"><button id="shareGo" type="button">Share picture</button><button id="shareSave" type="button">Save picture</button><button id="shareCap" type="button">Copy caption</button><button id="shareClose" class="alt" type="button">Close</button></div>
+        <p id="shareNote" hidden></p>
+      </div>
+    </div>
     <aside class="postcard" id="card" aria-live="polite">
       <div class="pc-meta" id="cMeta">Mile 0 &middot; Illinois</div>
       <h2 id="cTown">Chicago</h2>
@@ -856,6 +878,7 @@ const SKYB=[[-12,[60,76,112]],[-6,[120,96,130]],[-1.5,[240,128,96]],[4,[246,190,
 const TINT=[[-12,[40,52,110,.8]],[-5,[170,130,190,.5]],[1,[255,200,150,.28]],[8,[255,214,170,0]]];
 const zoneAt=m=>m<1249?'America/Chicago':m<1733?'America/Denver':m<2134?'America/Phoenix':'America/Los_Angeles';
 const fmts={};
+function localDate(m,d,yr){const z=zoneAt(m),k=z+(yr?'Y':'D');try{if(!fmts[k])fmts[k]=new Intl.DateTimeFormat('en-US',yr?{timeZone:z,weekday:'short',month:'short',day:'numeric',year:'numeric'}:{timeZone:z,weekday:'short',month:'short',day:'numeric'});return fmts[k].format(d||new Date());}catch(e){return '';}}
 function localTime(m,d){const z=zoneAt(m);try{if(!fmts[z])fmts[z]=new Intl.DateTimeFormat('en-US',{timeZone:z,hour:'numeric',minute:'2-digit'});return fmts[z].format(d||new Date()).toLowerCase();}catch(e){return '';}}
 
 /* ---------- real weather right now, from Open-Meteo, sampled at 18 places along the route ---------- */
@@ -1435,7 +1458,7 @@ function hud(dt){
   const mile=mileNow(),west=DIR>0,key=shared?Math.round(mile*10):(arrived?TOTAL:Math.min(TOTAL-1,Math.round(mile)));
   clockT-=dt||0;
   if(key!==lastOdo||clockT<=0){clockT=1;
-    if(live)setText(ui.clock,localTime(mile)+' there now');
+    if(live)setText(ui.clock,localDate(mile)+' · '+localTime(mile)+' there now');
     else{const hr=5.75+mile/TOTAL*14.5,h=Math.floor(hr),mn=Math.floor((hr-h)*60);setText(ui.clock,((h+11)%12+1)+':'+String(mn).padStart(2,'0')+(h<12?' am':' pm'));}
     if(shared&&trip)tripText(mile);
   }
@@ -1473,7 +1496,7 @@ function tripText(mile){
     if(t.phase==='stop')s=(t.what==='lunch'?'Stopped for lunch at the diner in '+t.place:t.what==='fuel'?'Stopped for fuel in '+t.place:'Stopped at '+t.place+(t.why?' '+t.why:''))+'.'+back;
     else if(t.arr&&Date.now()-t.arr<75*6e4)s='Stopped for dinner '+(motel?'at the diner in ':'in ')+t.place+', then '+(motel?'the motel':'parked')+' for the night.'+back;   /* the first hour and a quarter after arriving */
     else s=(motel?'Parked for the night at the motel in ':'Parked for the night in ')+t.place+'.'+back;}
-  setText(ui.tripTop,'The centennial car · Day '+(t.d%8+1)+' of 8, '+(t.dir>0?'westbound':'eastbound'));setText(ui.tripMain,s);setText(ui.next,s);
+  setText(ui.tripTop,'The centennial car · Day '+(t.d%8+1)+' of 8, '+(t.dir>0?'westbound':'eastbound')+' · '+localDate(mile)+', '+localTime(mile));setText(ui.tripMain,s);setText(ui.next,s);
 }
 function syncSwitches(){ui.snd.setAttribute('aria-pressed',soundOn);ui.rad.setAttribute('aria-pressed',radioOn);ui.sky.setAttribute('aria-pressed',live);ui.wxb.setAttribute('aria-pressed',wxOn);
   ui.slow.hidden=ui.fast.hidden=ui.pull.hidden=shared;$('app').classList.toggle('shared',shared);
@@ -1483,6 +1506,43 @@ function syncSwitches(){ui.snd.setAttribute('aria-pressed',soundOn);ui.rad.setAt
 /* leave the shared car for your own fast drive from the same spot, or go back to it */
 function takeWheel(){if(!shared)return;const m=mileNow();fuelOwn=fuelShared(Date.now());shared=false;useWorld(1,FAST);pos=clamp(posOf(m),3*SEG,END-300);cars=[];cardIdx=-2;lastOdo=-1;live=userLive;elevT=0;pulled=false;arrived=false;playerX=LANE;syncSwitches();}
 function rejoin(){shared=true;trip=sched(Date.now());useWorld(trip.dir,REAL);pos=clamp(posOf(trip.mile),3*SEG,END);cars=[];cardIdx=-2;lastOdo=-1;live=true;elevT=0;v=trip.moving?CRUISE:0;playerX=trip.moving?LANE:parkX();syncSwitches();}
+
+/* ---------- share: a snapshot of the windshield with the place, the date and the time there ---------- */
+const SITE='https://vikasgoyal.github.io/showcase/route-66.html';
+let shareBlob=null,shareUrlObj=null,shareLine='';
+function shareInfo(){const mile=mileNow();let b=L[0];for(const p of L)if(Math.abs(p.mile-mile)<Math.abs(b.mile-mile))b=p;
+  const st=ui.st.textContent||'',place=(Math.abs(b.mile-mile)<1.5?'In ':'Near ')+b.town+(st&&b.town!==st?', '+st:''),now=new Date();
+  const when=live?localDate(mile,now,true)+' · '+localTime(mile,now)+' local time':localDate(mile,now,true);
+  let wxs='';if(live&&wxOn&&wx&&wx.length){const q=wxNear(mile);wxs=Math.round(q.temp)+'°F, '+wxWord(q.code);}
+  return{mile:Math.round(mile),place,when,wxs,who:shared?'The centennial car':'My own drive'};}
+function shareCanvas(){const o=shareInfo(),Wc=1200,Hv=630,Hc=118,c=document.createElement('canvas');c.width=Wc;c.height=Hv+Hc;const x=c.getContext('2d');
+  const sw=cv.width,sh=cv.height,k=Math.max(Wc/sw,Hv/sh),dw=sw*k,dh=sh*k;x.fillStyle='#27335f';x.fillRect(0,0,Wc,Hv);x.drawImage(cv,(Wc-dw)/2,(Hv-dh)*.5,dw,dh);
+  x.fillStyle='#1d6a49';x.fillRect(0,Hv,Wc,Hc);x.fillStyle='#fff';x.fillRect(0,Hv,Wc,4);
+  x.save();x.translate(26,Hv+20);x.scale(1.7,1.7);x.fillStyle='#fff';x.strokeStyle='#111';x.lineWidth=2;const sp=new Path2D('M5 7Q14 10 22 3Q30 10 39 7Q45 22 38 34Q31 42 22 46Q13 42 6 34Q-1 22 5 7Z');x.fill(sp);x.stroke(sp);
+  x.fillStyle='#111';x.font='900 20px Overpass, Arial, sans-serif';x.textAlign='center';x.fillText('66',22,32);x.restore();
+  x.textAlign='left';x.fillStyle='#fff';x.font='800 34px Overpass, Arial, sans-serif';x.fillText(o.place+' · Mile '+o.mile,118,Hv+50,760);
+  x.fillStyle='#d9efe4';x.font='700 22px Overpass, Arial, sans-serif';x.fillText(o.when+(o.wxs?' · '+o.wxs:''),118,Hv+86,760);
+  x.textAlign='right';x.fillStyle='#fff';x.font='400 40px Yellowtail, cursive';x.fillText('Mother Road',Wc-26,Hv+52);
+  x.fillStyle='#d9efe4';x.font='700 15px Overpass, Arial, sans-serif';x.fillText(o.who.toUpperCase()+' · ROUTE 66 · 1926–2026',Wc-26,Hv+80);x.fillText('vikasgoyal.github.io/showcase/route-66.html',Wc-26,Hv+102);
+  shareLine=(shared?'Riding the Route 66 centennial car':'Driving Route 66')+' '+o.place.charAt(0).toLowerCase()+o.place.slice(1)+', mile '+o.mile+'. '+o.when+(o.wxs?', '+o.wxs:'')+'.';
+  return c;}
+function shareFile(){return shareBlob&&typeof File==='function'?new File([shareBlob],'route-66-mile-'+shareInfo().mile+'.png',{type:'image/png'}):null;}
+function shareNote(t){const n=$('shareNote');n.textContent=t;n.hidden=!t;}
+function openShare(){let c;try{c=shareCanvas();}catch(e){return;}
+  $('shareTxt').textContent=shareLine;$('shareUrl').value=SITE;shareNote('');$('shareBox').hidden=false;$('shareClose').focus();
+  const done=b=>{shareBlob=b;if(shareUrlObj)URL.revokeObjectURL(shareUrlObj);if(b){shareUrlObj=URL.createObjectURL(b);$('shareImg').src=shareUrlObj;}
+    let can=false;try{const f=shareFile();can=!!(f&&navigator.canShare&&navigator.canShare({files:[f]}));}catch(e){}
+    $('shareGo').hidden=!can;};
+  try{c.toBlob(done,'image/png');}catch(e){done(null);}}
+function closeShare(){$('shareBox').hidden=true;$('shareBtn').focus();}
+$('shareBtn').addEventListener('click',openShare);$('shareClose').addEventListener('click',closeShare);
+$('shareBox').addEventListener('click',e=>{if(e.target===$('shareBox'))closeShare();});
+$('shareGo').addEventListener('click',()=>{const f=shareFile();if(!f)return;navigator.share({files:[f],title:'Mother Road · Route 66',text:shareLine+' '+SITE}).catch(()=>{});});
+$('shareSave').addEventListener('click',()=>{if(!shareUrlObj)return;try{const a=document.createElement('a');a.href=shareUrlObj;a.download='route-66-mile-'+shareInfo().mile+'.png';document.body.appendChild(a);a.click();a.remove();}catch(e){}
+  shareNote('If nothing was saved, right-click the picture (or press and hold it on a phone) and choose Save image.');});
+const copyOut=(t,msg)=>{const u=$('shareUrl'),ok=()=>shareNote(msg),no=()=>{u.focus();u.select();shareNote('Press Ctrl+C or Cmd+C to copy the link.');};try{navigator.clipboard.writeText(t).then(ok,no);}catch(e){no();}};
+$('shareCopy').addEventListener('click',()=>copyOut(SITE,'Link copied.'));
+$('shareCap').addEventListener('click',()=>copyOut(shareLine,'Caption copied.'));
 
 /* ---------- input ---------- */
 const faster=()=>{if(shared)return;pulled=false;cruise=clamp(cruise+5,15,75);},slower=()=>{if(shared)return;cruise=clamp(cruise-5,15,75);};
@@ -1494,6 +1554,7 @@ const toggleWx=()=>{wxOn=!wxOn;if(wxOn)wxT=0;try{localStorage.setItem('mother-ro
 $('fast').addEventListener('click',faster);$('slow').addEventListener('click',slower);ui.pull.addEventListener('click',togglePull);
 ui.snd.addEventListener('click',toggleSound);ui.rad.addEventListener('click',toggleRadio);ui.sky.addEventListener('click',toggleLive);ui.wheel.addEventListener('click',()=>{shared?takeWheel():rejoin();});ui.wxb.addEventListener('click',toggleWx);
 window.addEventListener('keydown',e=>{
+  if(!$('shareBox').hidden){if(e.key==='Escape')closeShare();return;}
   if(e.metaKey||e.ctrlKey||e.altKey)return;
   const k=e.key.length===1?e.key.toLowerCase():e.key,onDial=e.target&&e.target.id==='dial';
   if(onDial&&(k==='ArrowLeft'||k==='ArrowRight')){jump(mileNow()+(k==='ArrowRight'?20:-20));e.preventDefault();return;}
