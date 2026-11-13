@@ -11,9 +11,59 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mother Road</title>
-<meta name="description" content="Drive all 2,448 miles of Route 66 from Chicago to Santa Monica, with the real sky and weather along the way.">
+<title>Mother Road: Drive Route 66 Live, Chicago to Santa Monica</title>
+<meta name="description" content="Ride the Route 66 centennial car in real time, or take the wheel and drive all 2,448 miles from Chicago to Santa Monica, with the real sky and weather, 48 stops and the story behind each one.">
 <link rel="canonical" href="https://vikasgoyal.github.io/showcase/route-66.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vikas Goyal">
+<meta property="og:title" content="Mother Road: Drive Route 66 Live, Chicago to Santa Monica">
+<meta property="og:description" content="Ride the Route 66 centennial car in real time, or take the wheel and drive all 2,448 miles from Chicago to Santa Monica, with the real sky and weather, 48 stops and the story behind each one.">
+<meta property="og:url" content="https://vikasgoyal.github.io/showcase/route-66.html">
+<meta property="og:image" content="https://vikasgoyal.github.io/showcase/route-66-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The view through a car windshield of Route 66 running toward red mesas, with the words Mother Road.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mother Road: Drive Route 66 Live, Chicago to Santa Monica">
+<meta name="twitter:description" content="Ride the Route 66 centennial car in real time, or take the wheel and drive all 2,448 miles from Chicago to Santa Monica, with the real sky and weather, 48 stops and the story behind each one.">
+<meta name="twitter:image" content="https://vikasgoyal.github.io/showcase/route-66-card.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Mother Road",
+ "alternateName": "Route 66 centennial drive",
+ "url": "https://vikasgoyal.github.io/showcase/route-66.html",
+ "image": "https://vikasgoyal.github.io/showcase/route-66-card.png",
+ "description": "Ride the Route 66 centennial car in real time, or take the wheel and drive all 2,448 miles from Chicago to Santa Monica, with the real sky and weather, 48 stops and the story behind each one.",
+ "applicationCategory": "EntertainmentApplication",
+ "operatingSystem": "Any",
+ "browserRequirements": "Requires JavaScript and a canvas-capable browser",
+ "isAccessibleForFree": true,
+ "inLanguage": "en",
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "author": {
+  "@type": "Person",
+  "name": "Vikas Goyal",
+  "url": "https://vikasgoyal.github.io/"
+ },
+ "about": [
+  {
+   "@type": "Thing",
+   "name": "U.S. Route 66",
+   "sameAs": "https://en.wikipedia.org/wiki/U.S._Route_66"
+  },
+  {
+   "@type": "Thing",
+   "name": "Route 66 centennial, 1926 to 2026"
+  }
+ ]
+}
+</script>
 <link rel="icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -103,6 +153,18 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
 .sharecard button{font:700 12px/1 var(--f-sign);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;color:#fff;background:var(--sign);border:0;border-radius:999px;padding:11px 16px 10px}
 .sharecard button.alt{background:none;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
 .sharecard input{flex:1 1 220px;min-width:0;font:13px var(--f-sign);padding:8px 10px;border:1px solid #9aa3a6;border-radius:6px;background:#fff;color:var(--ink)}
+#logBox{position:fixed;z-index:50}
+.logbtn{right:auto;left:max(16px,env(safe-area-inset-left,0px))}
+.logcard{width:min(760px,100%);padding:16px 20px 20px;position:relative}
+.logcard h2{margin:0 90px 8px 0;font-family:var(--f-script);font-weight:400;font-size:30px;line-height:1.1;color:var(--needle);text-wrap:balance}
+.logcard h3{margin:18px 0 0;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+.logcard h4{margin:16px 0 4px;font-size:15px}
+.logcard h4 small{font-weight:400;font-size:12px;color:#5a676b}
+.logcard p{margin:6px 0 0;font-size:14px;line-height:1.55;max-width:66ch}
+.logcard ul{margin:0;padding-left:18px}
+.logcard li{font-size:13.5px;line-height:1.5;margin:5px 0;max-width:68ch}
+.logcard a{color:#1d6a49}
+.logcard #logClose{position:absolute;top:14px;right:16px}
 .controls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:center}
 .pedals,.switches{display:flex;gap:7px}
 .controls button{font:700 12px/1 var(--f-sign);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);cursor:pointer;
@@ -146,6 +208,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
 
 </head>
 <body>
+<noscript><p style="padding:16px;color:#fff">Mother Road is an interactive drive along Route 66 and needs JavaScript to run. The road log on this page lists all 48 stops.</p></noscript>
 <div id="app">
   <div id="scene">
     <canvas id="c" aria-label="View through the windshield of a car driving Route 66"></canvas>
@@ -167,6 +230,92 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
         <p id="shareNote" hidden></p>
       </div>
     </div>
+    <button class="sharebtn logbtn" id="logBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21a2 2 0 0 0 2 2h13v-4M9 8h6M9 12h6"/></svg>Road log</button>
+    <section class="sharebox" id="logBox" hidden aria-labelledby="logH">
+      <div class="sharecard logcard">
+        <button id="logClose" class="alt" type="button">Close</button>
+        <h2 id="logH">Mother Road: a Route 66 road log</h2>
+        <p>This page lets you experience driving U.S. Route 66, the 2,448-mile highway from Chicago, Illinois, to Santa Monica, California, in its centennial year. The route was commissioned on November 11, 1926. You look out through the windshield of a car at the road, the towns, the signs and the landmarks of all eight states.</p>
+        <h3>The centennial car</h3>
+        <p>When the page opens you are riding in one shared car that every visitor sees in the same place. It left Chicago on November 11, 2026, and follows the clock: eight days west to the Pacific at about 50 miles an hour, then eight days back east, and so on. It stops for fuel and lunch, and each night it parks at a motel in a town on the route. The sky is the real sky for that place and hour, and rain, snow or fog appear when the weather service reports them there.</p>
+        <h3>Your own drive</h3>
+        <p>Press <b>Take the wheel</b> to leave the shared car and drive the whole road yourself in a few minutes, with speed and steering controls, a radio station for each stretch, and a map and dial for skipping ahead. Press <b>Share</b> to make a picture of the view with the place, date and local time.</p>
+        <h3>The 48 stops, east to west</h3>
+        <h4>Illinois <small>miles 0 to 301 · <a href="#illinois">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 0 · Chicago.</b> The Begin sign stands on Adams Street at Michigan Avenue, across from the Art Institute. The highway was commissioned on November 11, 1926.</li>
+          <li><b>Mile 40 · Joliet.</b> A steel and limestone town on the Des Plaines River. The old Joliet prison, built of local stone, is now a stop for travelers.</li>
+          <li><b>Mile 58 · Wilmington.</b> The Gemini Giant, a 30-foot fiberglass spaceman holding a rocket, has watched over Wilmington since the 1960s.</li>
+          <li><b>Mile 98 · Pontiac.</b> Home of the Illinois Route 66 Hall of Fame and more than twenty downtown murals.</li>
+          <li><b>Mile 140 · Funks Grove.</b> The Funk family has sold maple sirup here, spelled with an i, since 1891.</li>
+          <li><b>Mile 195 · Springfield.</b> Lincoln’s hometown, and home of the Cozy Dog, a corn dog on a stick first sold here in 1946.</li>
+          <li><b>Mile 250 · Litchfield.</b> The Ariston Café has fed travelers from the same building since 1935.</li>
+          <li><b>Mile 296 · Chain of Rocks.</b> A mile-long bridge over the Mississippi with a 22-degree bend in the middle. Today it carries only walkers and cyclists.</li>
+        </ul>
+        <h4>Missouri <small>miles 301 to 618 · <a href="#missouri">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 310 · St. Louis.</b> The Gateway Arch rises over the river. On Chippewa Street, Ted Drewes has sold frozen custard to Route 66 traffic since 1941.</li>
+          <li><b>Mile 372 · Stanton.</b> Meramec Caverns opened to visitors in 1935 and was advertised for decades on barns and billboards across the Midwest.</li>
+          <li><b>Mile 398 · Cuba.</b> Cuba is known as Route 66 Mural City. Four miles on, Fanning keeps a giant rocking chair, billed as the second largest in the world.</li>
+          <li><b>Mile 455 · Lebanon.</b> The Munger Moss Motel opened in 1946. It is apartments now, but the city restored its neon sign and relit it in June 2026.</li>
+          <li><b>Mile 520 · Springfield.</b> Known as the birthplace of Route 66. On April 30, 1926, officials meeting here proposed the name for the new Chicago to Los Angeles highway.</li>
+          <li><b>Mile 595 · Joplin.</b> A lead and zinc mining town, and the last big stop in Missouri before the road slips into Kansas.</li>
+        </ul>
+        <h4>Kansas <small>miles 618 to 631 · <a href="#kansas">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 624 · Riverton.</b> Only 13 miles of Route 66 cross Kansas. The Rainbow Bridge, built in 1923, is the last arch bridge of its kind on the route.</li>
+        </ul>
+        <h4>Oklahoma <small>miles 631 to 1063 · <a href="#oklahoma">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 648 · Miami.</b> Near Miami the old road narrows to nine feet across. Locals call this stretch the Sidewalk Highway.</li>
+          <li><b>Mile 712 · Catoosa.</b> Hugh Davis built the Blue Whale in the early 1970s as an anniversary gift for his wife Zelta, who collected whale figurines. It became a favorite swimming hole.</li>
+          <li><b>Mile 728 · Tulsa.</b> Home of Cyrus Avery, the highway commissioner who pushed for a Chicago to Los Angeles route. He is remembered as the father of Route 66.</li>
+          <li><b>Mile 810 · Arcadia.</b> The Round Barn was built in 1898 from bur oak boards, soaked while green and bent into curves.</li>
+          <li><b>Mile 832 · Oklahoma City.</b> Oklahoma carries about 432 miles of the route, more than any state except New Mexico.</li>
+          <li><b>Mile 930 · Clinton.</b> The Oklahoma Route 66 Museum is devoted to the stories, images and legends of the Mother Road.</li>
+        </ul>
+        <h4>Texas <small>miles 1063 to 1249 · <a href="#texas">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 1078 · Shamrock.</b> The U-Drop Inn opened in 1936 as a gas station and café in full Art Deco, with two flared towers.</li>
+          <li><b>Mile 1128 · Groom.</b> The Leaning Tower of Texas is an old water tower that Ralph Britten bought and set up as a sign for his truck stop.</li>
+          <li><b>Mile 1158 · Amarillo.</b> West of town, ten Cadillacs stand nose-down in a field. Cadillac Ranch was planted in 1974, and visitors are welcome to add spray paint.</li>
+          <li><b>Mile 1224 · Adrian.</b> Adrian bills itself as the midpoint of Route 66, as far from Chicago as from the Pacific.</li>
+          <li><b>Mile 1244 · Glenrio.</b> A ghost town that straddles the Texas and New Mexico line. When the interstate bypassed it in 1973, nearly everyone left.</li>
+        </ul>
+        <h4>New Mexico <small>miles 1249 to 1733 · <a href="#new-mexico">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 1290 · Tucumcari.</b> Roadside signs once promised 2,000 motel rooms and the slogan Tucumcari Tonite. The Blue Swallow Motel, open since 1942, still lights its neon.</li>
+          <li><b>Mile 1350 · Santa Rosa.</b> The Blue Hole is an artesian pool more than 80 feet deep, clear and blue, in the middle of the high desert.</li>
+          <li><b>Mile 1470 · Santa Fe.</b> Until 1937 the road looped north through Santa Fe. A straighter cut-off then took the city off the route.</li>
+          <li><b>Mile 1535 · Albuquerque.</b> Central Avenue carries Route 66 for 18 miles from east to west across the city.</li>
+          <li><b>Mile 1640 · Continental Divide.</b> Rain that falls west of here runs toward the Pacific. Behind you, it runs toward the Atlantic.</li>
+          <li><b>Mile 1700 · Gallup.</b> The El Rancho Hotel opened in 1936 and housed the stars and crews of Westerns filmed nearby.</li>
+        </ul>
+        <h4>Arizona <small>miles 1733 to 2134 · <a href="#arizona">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 1775 · Petrified Forest.</b> The only national park with a stretch of old Route 66 inside it. A rusted 1932 Studebaker and a line of telephone poles show where the road ran.</li>
+          <li><b>Mile 1800 · Holbrook.</b> At the Wigwam Motel you sleep in a concrete teepee. Fifteen of them have stood here since 1950.</li>
+          <li><b>Mile 1840 · Winslow.</b> A railroad town the interstate bypassed in 1979. La Posada, the grand railway hotel finished in 1930, is open again.</li>
+          <li><b>Mile 1895 · Flagstaff.</b> At about 6,800 feet the desert gives way to the largest ponderosa pine forest in North America, under the San Francisco Peaks.</li>
+          <li><b>Mile 1928 · Williams.</b> The last Route 66 town to be bypassed by the interstate, on October 13, 1984.</li>
+          <li><b>Mile 1975 · Seligman.</b> Barber Angel Delgadillo refused to let the road die. In 1987 he founded the association that won it its first historic designation.</li>
+          <li><b>Mile 2060 · Kingman.</b> From here the old road leaves the interstate behind and heads for the Black Mountains.</li>
+          <li><b>Mile 2087 · Oatman.</b> A gold-mining town in the Black Mountains, reached by the tight turns of Sitgreaves Pass. Wild burros wander the main street.</li>
+        </ul>
+        <h4>California <small>miles 2134 to 2448 · <a href="#california">drive from here</a></small></h4>
+        <ul>
+          <li><b>Mile 2140 · Needles.</b> Across the Colorado River and into California. Needles is known for some of the hottest summer days in the country.</li>
+          <li><b>Mile 2215 · Amboy.</b> Roy’s Motel and Café, with its 1959 boomerang sign, sits alone in the Mojave near the cinder cone of Amboy Crater.</li>
+          <li><b>Mile 2290 · Barstow.</b> A railroad junction in the high desert. The old Harvey House depot now holds a Route 66 museum.</li>
+          <li><b>Mile 2312 · Oro Grande.</b> Elmer Long built more than 200 bottle trees here from metal pipe and old glass.</li>
+          <li><b>Mile 2340 · Cajon Pass.</b> The road drops between the San Gabriel and San Bernardino mountains into the Los Angeles basin.</li>
+          <li><b>Mile 2364 · San Bernardino.</b> A second Wigwam Motel, built in the late 1940s, on the eastern edge of greater Los Angeles.</li>
+          <li><b>Mile 2415 · Pasadena.</b> Colorado Boulevard, then the Arroyo Seco Parkway, which opened in 1940 as the first freeway in the West.</li>
+          <li><b>Mile 2448 · Santa Monica.</b> End of the trail. The route technically stopped a few blocks inland at Lincoln and Olympic, but an End of the Trail sign has stood on the pier since 2009.</li>
+        </ul>
+        <p>Businesses on billboards and trucks are invented for this page. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. Made by <a href="https://vikasgoyal.github.io/" target="_blank" rel="noopener">Vikas Goyal</a>; more experiments are in the <a href="https://vikasgoyal.github.io/showcase/" target="_blank" rel="noopener">showcase</a>.</p>
+      </div>
+    </section>
     <aside class="postcard" id="card" aria-live="polite">
       <div class="pc-meta" id="cMeta">Mile 0 &middot; Illinois</div>
       <h2 id="cTown">Chicago</h2>
@@ -1544,6 +1693,11 @@ const copyOut=(t,msg)=>{const u=$('shareUrl'),ok=()=>shareNote(msg),no=()=>{u.fo
 $('shareCopy').addEventListener('click',()=>copyOut(SITE,'Link copied.'));
 $('shareCap').addEventListener('click',()=>copyOut(shareLine,'Caption copied.'));
 
+/* the road log: the same stops and facts as the postcards, as plain text for readers, search engines and agents */
+const openLog=()=>{$('logBox').hidden=false;$('logBox').scrollTop=0;$('logClose').focus();},closeLog=()=>{$('logBox').hidden=true;$('logBtn').focus();};
+$('logBtn').addEventListener('click',openLog);$('logClose').addEventListener('click',closeLog);
+$('logBox').addEventListener('click',e=>{if(e.target===$('logBox'))closeLog();else if(e.target.closest&&e.target.closest('a[href^="#"]'))closeLog();});
+
 /* ---------- input ---------- */
 const faster=()=>{if(shared)return;pulled=false;cruise=clamp(cruise+5,15,75);},slower=()=>{if(shared)return;cruise=clamp(cruise-5,15,75);};
 function togglePull(){if(shared)return;if(arrived){jump(0);pulled=false;try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}return;}pulled=!pulled;}
@@ -1555,6 +1709,7 @@ $('fast').addEventListener('click',faster);$('slow').addEventListener('click',sl
 ui.snd.addEventListener('click',toggleSound);ui.rad.addEventListener('click',toggleRadio);ui.sky.addEventListener('click',toggleLive);ui.wheel.addEventListener('click',()=>{shared?takeWheel():rejoin();});ui.wxb.addEventListener('click',toggleWx);
 window.addEventListener('keydown',e=>{
   if(!$('shareBox').hidden){if(e.key==='Escape')closeShare();return;}
+  if(!$('logBox').hidden){if(e.key==='Escape')closeLog();return;}
   if(e.metaKey||e.ctrlKey||e.altKey)return;
   const k=e.key.length===1?e.key.toLowerCase():e.key,onDial=e.target&&e.target.id==='dial';
   if(onDial&&(k==='ArrowLeft'||k==='ArrowRight')){jump(mileNow()+(k==='ArrowRight'?20:-20));e.preventDefault();return;}
@@ -1577,7 +1732,7 @@ const dialTo=e=>{const r=ui.dial.getBoundingClientRect();jump(clamp((e.clientX-r
 ui.dial.addEventListener('pointerdown',e=>{dragging=true;try{ui.dial.setPointerCapture(e.pointerId);}catch(_){}dialTo(e);});
 ui.dial.addEventListener('pointermove',e=>{if(dragging)dialTo(e);});
 const endDrag=()=>{dragging=false;};ui.dial.addEventListener('pointerup',endDrag);ui.dial.addEventListener('pointercancel',endDrag);
-function fromHash(){const s=STATES.find(s=>'#'+s.id===location.hash);if(s){jump(s.a);return true;}return false;}
+function fromHash(){const s=STATES.find(s=>'#'+s.id===location.hash);if(s){if(shared)takeWheel();jump(s.a);return true;}return false;}
 window.addEventListener('hashchange',fromHash);
 window.addEventListener('resize',resize);
 
