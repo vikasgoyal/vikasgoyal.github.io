@@ -165,6 +165,8 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
 .logcard li{font-size:13.5px;line-height:1.5;margin:5px 0;max-width:68ch}
 .logcard a{color:#1d6a49}
 .logcard #logClose{position:absolute;top:14px;right:16px}
+.strip{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:min(640px,calc(100% - 360px));height:50px;display:block;border-radius:8px;pointer-events:none}
+@media (max-width:860px){.strip{left:max(16px,env(safe-area-inset-left,0px));width:calc(100% - max(16px,env(safe-area-inset-left,0px)) - max(16px,env(safe-area-inset-right,0px)));transform:none;bottom:60px}}
 .controls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:center}
 .pedals,.switches{display:flex;gap:7px}
 .controls button{font:700 12px/1 var(--f-sign);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);cursor:pointer;
@@ -220,6 +222,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
       <svg id="map" viewBox="0 0 366 144" role="img" aria-label="Map of Route 66 across eight states, with your current position"></svg>
     </figure>
     <div class="tripsign" id="tripSign" aria-live="polite"><p id="tripTop"></p><p id="tripMain"></p></div>
+    <canvas class="strip" id="strip" role="img" aria-label="The towns just behind and ahead of the car"></canvas>
     <button class="sharebtn" id="shareBtn" type="button" aria-label="Share a picture of this view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7.5 7.5 12 3l4.500 4.500M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
     <div class="sharebox" id="shareBox" hidden role="dialog" aria-modal="true" aria-label="Share this view">
       <div class="sharecard">
@@ -240,7 +243,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
         <p>When the page opens you are riding in one shared car that every visitor sees in the same place. It left Chicago on November 11, 2026, and follows the clock: eight days west to the Pacific at about 50 miles an hour, then eight days back east, and so on. It stops for fuel and lunch, and each night it parks at a motel in a town on the route. The sky is the real sky for that place and hour, and rain, snow or fog appear when the weather service reports them there.</p>
         <h3>Your own drive</h3>
         <p>Press <b>Take the wheel</b> to leave the shared car and drive the whole road yourself in a few minutes, with speed and steering controls, a radio station for each stretch, and a map and dial for skipping ahead. Press <b>Share</b> to make a picture of the view with the place, date and local time.</p>
-        <h3>The 48 stops, east to west</h3>
+        <h3>The 48 stops and the towns between them, east to west</h3>
         <h4>Illinois <small>miles 0 to 301 · <a href="#illinois">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 0 · Chicago.</b> The Begin sign stands on Adams Street at Michigan Avenue, across from the Art Institute. The highway was commissioned on November 11, 1926.</li>
@@ -252,6 +255,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
           <li><b>Mile 250 · Litchfield.</b> The Ariston Café has fed travelers from the same building since 1935.</li>
           <li><b>Mile 296 · Chain of Rocks.</b> A mile-long bridge over the Mississippi with a 22-degree bend in the middle. Today it carries only walkers and cyclists.</li>
         </ul>
+        <p><b>Also on the road in Illinois:</b> Cicero, Berwyn, Lyons, McCook, Countryside, Willowbrook, Romeoville, Elwood, Braidwood, Godley, Braceville, Gardner, Dwight, Odell, Chenoa, Lexington, Towanda, Normal, Bloomington, Shirley, McLean, Atlanta, Lincoln, Broadwell, Elkhart, Williamsville, Sherman, Glenarm, Divernon, Farmersville, Waggoner, Mt. Olive, Staunton, Hamel, Edwardsville, Mitchell.</p>
         <h4>Missouri <small>miles 301 to 618 · <a href="#missouri">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 310 · St. Louis.</b> The Gateway Arch rises over the river. On Chippewa Street, Ted Drewes has sold frozen custard to Route 66 traffic since 1941.</li>
@@ -261,10 +265,12 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
           <li><b>Mile 520 · Springfield.</b> Known as the birthplace of Route 66. On April 30, 1926, officials meeting here proposed the name for the new Chicago to Los Angeles highway.</li>
           <li><b>Mile 595 · Joplin.</b> A lead and zinc mining town, and the last big stop in Missouri before the road slips into Kansas.</li>
         </ul>
+        <p><b>Also on the road in Missouri:</b> Kirkwood, Eureka, Pacific, Gray Summit, Villa Ridge, St. Clair, Sullivan, Bourbon, Fanning, St. James, Rolla, Doolittle, Devil&#x27;s Elbow, St. Robert, Waynesville, Hazelgreen, Phillipsburg, Conway, Marshfield, Strafford, Halltown, Paris Springs, Spencer, Avilla, Carthage, Carterville, Webb City.</p>
         <h4>Kansas <small>miles 618 to 631 · <a href="#kansas">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 624 · Riverton.</b> Only 13 miles of Route 66 cross Kansas. The Rainbow Bridge, built in 1923, is the last arch bridge of its kind on the route.</li>
         </ul>
+        <p><b>Also on the road in Kansas:</b> Galena, Baxter Springs.</p>
         <h4>Oklahoma <small>miles 631 to 1063 · <a href="#oklahoma">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 648 · Miami.</b> Near Miami the old road narrows to nine feet across. Locals call this stretch the Sidewalk Highway.</li>
@@ -274,6 +280,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
           <li><b>Mile 832 · Oklahoma City.</b> Oklahoma carries about 432 miles of the route, more than any state except New Mexico.</li>
           <li><b>Mile 930 · Clinton.</b> The Oklahoma Route 66 Museum is devoted to the stories, images and legends of the Mother Road.</li>
         </ul>
+        <p><b>Also on the road in Oklahoma:</b> Quapaw, Commerce, Afton, Vinita, Chelsea, Foyil, Claremore, Verdigris, Sapulpa, Kellyville, Bristow, Depew, Stroud, Davenport, Chandler, Wellston, Luther, Edmond, Bethany, Yukon, El Reno, Calumet, Geary, Bridgeport, Hydro, Weatherford, Foss, Canute, Elk City, Sayre, Erick, Texola.</p>
         <h4>Texas <small>miles 1063 to 1249 · <a href="#texas">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 1078 · Shamrock.</b> The U-Drop Inn opened in 1936 as a gas station and café in full Art Deco, with two flared towers.</li>
@@ -282,6 +289,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
           <li><b>Mile 1224 · Adrian.</b> Adrian bills itself as the midpoint of Route 66, as far from Chicago as from the Pacific.</li>
           <li><b>Mile 1244 · Glenrio.</b> A ghost town that straddles the Texas and New Mexico line. When the interstate bypassed it in 1973, nearly everyone left.</li>
         </ul>
+        <p><b>Also on the road in Texas:</b> Lela, McLean, Alanreed, Conway, Bushland, Wildorado, Vega, Landergin.</p>
         <h4>New Mexico <small>miles 1249 to 1733 · <a href="#new-mexico">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 1290 · Tucumcari.</b> Roadside signs once promised 2,000 motel rooms and the slogan Tucumcari Tonite. The Blue Swallow Motel, open since 1942, still lights its neon.</li>
@@ -291,6 +299,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
           <li><b>Mile 1640 · Continental Divide.</b> Rain that falls west of here runs toward the Pacific. Behind you, it runs toward the Atlantic.</li>
           <li><b>Mile 1700 · Gallup.</b> The El Rancho Hotel opened in 1936 and housed the stars and crews of Westerns filmed nearby.</li>
         </ul>
+        <p><b>Also on the road in New Mexico:</b> San Jon, Montoya, Newkirk, Cuervo, Dilia, Romeroville, Tecolote, Bernal, San Jose, Rowe, Pecos, Glorieta, Santo Domingo, Algodones, Bernalillo, Mesita, Laguna, Budville, Cubero, San Fidel, McCartys, Grants, Bluewater, Prewitt, Thoreau, Fort Wingate, Rehoboth, Manuelito.</p>
         <h4>Arizona <small>miles 1733 to 2134 · <a href="#arizona">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 1775 · Petrified Forest.</b> The only national park with a stretch of old Route 66 inside it. A rusted 1932 Studebaker and a line of telephone poles show where the road ran.</li>
@@ -302,6 +311,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
           <li><b>Mile 2060 · Kingman.</b> From here the old road leaves the interstate behind and heads for the Black Mountains.</li>
           <li><b>Mile 2087 · Oatman.</b> A gold-mining town in the Black Mountains, reached by the tight turns of Sitgreaves Pass. Wild burros wander the main street.</li>
         </ul>
+        <p><b>Also on the road in Arizona:</b> Lupton, Houck, Sanders, Chambers, Navajo, Joseph City, Two Guns, Twin Arrows, Winona, Bellemont, Parks, Ash Fork, Peach Springs, Truxton, Valentine, Hackberry, Topock.</p>
         <h4>California <small>miles 2134 to 2448 · <a href="#california">drive from here</a></small></h4>
         <ul>
           <li><b>Mile 2140 · Needles.</b> Across the Colorado River and into California. Needles is known for some of the hottest summer days in the country.</li>
@@ -313,6 +323,7 @@ body{margin:0;background:var(--dash-deep);color:var(--enamel);font-family:var(--
           <li><b>Mile 2415 · Pasadena.</b> Colorado Boulevard, then the Arroyo Seco Parkway, which opened in 1940 as the first freeway in the West.</li>
           <li><b>Mile 2448 · Santa Monica.</b> End of the trail. The route technically stopped a few blocks inland at Lincoln and Olympic, but an End of the Trail sign has stood on the pier since 2009.</li>
         </ul>
+        <p><b>Also on the road in California:</b> Goffs, Fenner, Essex, Chambless, Ludlow, Newberry Springs, Daggett, Lenwood, Helendale, Victorville, Rialto, Fontana, Rancho Cucamonga, Upland, Claremont, La Verne, San Dimas, Glendora, Azusa, Duarte, Monrovia, Arcadia, South Pasadena, Los Angeles, West Hollywood, Beverly Hills.</p>
         <p>Businesses on billboards and trucks are invented for this page. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. Made by <a href="https://vikasgoyal.github.io/" target="_blank" rel="noopener">Vikas Goyal</a>; more experiments are in the <a href="https://vikasgoyal.github.io/showcase/" target="_blank" rel="noopener">showcase</a>.</p>
       </div>
     </section>
@@ -832,6 +843,8 @@ function urbAt(w,i){if(w.cz)for(const z of w.cz){const d=Math.abs(i-z[0])/z[1];i
 const tsW=t=>Math.max(5,t.length*.62+1.4);
 const BIG=['Springfield','St. Louis','Tulsa','Oklahoma City','Amarillo','Albuquerque','Flagstaff','Barstow','San Bernardino','Pasadena'];
 const MOTELT=['St. Louis','Joplin','Clinton','Adrian','Albuquerque','Winslow','Needles'];   /* where the shared car spends its nights on the road */
+/* real towns the road passes between the 48 stops: [mile, name, 1 = large enough for a sign on the fast drive]. The order follows the route; the miles are placed between the stops by road distance */
+const TOWNS=[[7,"Cicero"],[9,"Berwyn"],[11,"Lyons"],[13,"McCook"],[16,"Countryside"],[21,"Willowbrook"],[30,"Romeoville",1],[49,"Elwood"],[63,"Braidwood"],[66,"Godley"],[68,"Braceville"],[71,"Gardner"],[80,"Dwight",1],[88,"Odell"],[108,"Chenoa"],[115,"Lexington"],[122,"Towanda"],[127.5,"Normal"],[130,"Bloomington",1],[136.5,"Shirley"],[144,"McLean",1],[149.5,"Atlanta"],[161,"Lincoln",1],[168.5,"Broadwell"],[173,"Elkhart"],[181,"Williamsville"],[186.5,"Sherman"],[209,"Glenarm"],[217,"Divernon"],[228,"Farmersville"],[235,"Waggoner"],[258,"Mt. Olive"],[265,"Staunton"],[274,"Hamel"],[282,"Edwardsville",1],[293,"Mitchell"],[324,"Kirkwood",1],[340,"Eureka"],[345,"Pacific",1],[350,"Gray Summit"],[353,"Villa Ridge"],[362,"St. Clair"],[379,"Sullivan",1],[387,"Bourbon"],[401,"Fanning"],[407,"St. James"],[414,"Rolla",1],[419,"Doolittle"],[430.5,"Devil's Elbow"],[432.5,"St. Robert"],[435.5,"Waynesville",1],[443,"Hazelgreen"],[468,"Phillipsburg"],[474,"Conway"],[490,"Marshfield",1],[504,"Strafford"],[541,"Halltown"],[545,"Paris Springs"],[547.5,"Spencer"],[568,"Avilla"],[579,"Carthage",1],[586,"Carterville"],[589,"Webb City"],[620,"Galena",1],[628,"Baxter Springs",1],[634,"Quapaw"],[644,"Commerce"],[659,"Afton"],[671.5,"Vinita",1],[687,"Chelsea"],[695,"Foyil"],[702,"Claremore",1],[707,"Verdigris"],[740,"Sapulpa",1],[746.5,"Kellyville"],[759,"Bristow"],[766,"Depew"],[774.5,"Stroud",1],[780,"Davenport"],[786,"Chandler",1],[795.5,"Wellston"],[804,"Luther"],[818,"Edmond",1],[841,"Bethany"],[849,"Yukon"],[864,"El Reno",1],[876,"Calumet"],[887,"Geary"],[895,"Bridgeport"],[903,"Hydro"],[912.5,"Weatherford",1],[954,"Foss"],[968,"Canute"],[983,"Elk City",1],[1013,"Sayre",1],[1044,"Erick"],[1060,"Texola"],[1084,"Lela"],[1099,"McLean",1],[1107,"Alanreed"],[1139,"Conway"],[1176.5,"Bushland"],[1187,"Wildorado"],[1205.5,"Vega",1],[1215,"Landergin"],[1264,"San Jon",1],[1311,"Montoya"],[1322,"Newkirk"],[1332,"Cuervo"],[1368,"Dilia"],[1404,"Romeroville"],[1411,"Tecolote"],[1418,"Bernal"],[1426,"San Jose"],[1440,"Rowe"],[1445,"Pecos",1],[1453,"Glorieta"],[1502.5,"Santo Domingo"],[1514,"Algodones"],[1519,"Bernalillo",1],[1574,"Mesita"],[1578,"Laguna"],[1587,"Budville"],[1589,"Cubero"],[1593,"San Fidel"],[1598,"McCartys"],[1608,"Grants",1],[1619.5,"Bluewater"],[1626,"Prewitt"],[1635.5,"Thoreau"],[1675,"Fort Wingate"],[1687,"Rehoboth"],[1724,"Manuelito"],[1734,"Lupton"],[1742,"Houck"],[1751,"Sanders",1],[1756,"Chambers"],[1763.5,"Navajo"],[1813,"Joseph City",1],[1866.5,"Two Guns"],[1874,"Twin Arrows"],[1882,"Winona"],[1906,"Bellemont"],[1913.5,"Parks"],[1947.5,"Ash Fork",1],[2011,"Peach Springs",1],[2019,"Truxton"],[2028,"Valentine"],[2032.5,"Hackberry"],[2132,"Topock",1],[2168.5,"Goffs"],[2178,"Fenner"],[2184,"Essex"],[2204.5,"Chambless"],[2242,"Ludlow",1],[2271,"Newberry Springs"],[2281,"Daggett",1],[2293.5,"Lenwood"],[2304,"Helendale"],[2317,"Victorville",1],[2368,"Rialto"],[2372,"Fontana"],[2379,"Rancho Cucamonga",1],[2383.5,"Upland"],[2387,"Claremont"],[2391,"La Verne"],[2393,"San Dimas"],[2395.5,"Glendora"],[2398.5,"Azusa"],[2402,"Duarte"],[2404,"Monrovia"],[2407,"Arcadia"],[2418,"South Pasadena"],[2427,"Los Angeles",1],[2436,"West Hollywood"],[2440,"Beverly Hills"]];
 /* extra signals by stop (keyed by mile): cities get a run of them, larger towns one or two */
 const CITYL={0:6,40:2,195:6,310:7,520:6,595:1,728:7,832:7,1158:6,1535:7,1895:4,2364:6,2415:6,2448:6};
 const TOWNK=['town','motel','chair','udrop','swallow','boomer','wigwam','burros','giant','whale'];   /* stops with a main street */
@@ -926,6 +939,7 @@ function place(w){
       if(!real){if(c>=6&&k>0&&k<last)xing(s+42);return;}
       let a=0,b=0;for(let j=0;j<c;j++){if(k===0)xing(70+95*a++);else if(k===last)xing(n-(100+95*b++)-9);else if(j%2===0)xing(s+82+95*a++);else xing(s-(125+95*b++));}});
     if(real)for(const m of [160,1010,1400])xing(w.seg(m),true);}
+  {const real=w.mpm>100;for(const t of TOWNS){if(!real&&!t[2])continue;const i=w.seg(t[0]),nm=t[1].toUpperCase();addSign(i-(real?6:0),5,'tsign',{t:nm},tsW(nm)/2,i+(real?60:6));}}
   RHYMES.forEach(r=>r[1].forEach((t,k)=>addSign(w.seg(r[0])+k*9,4.8,'red',{t},1.4)));
   /* green guide signs: an overhead gantry before each big town, a distance board after every stop, a shield to reassure you, and mile markers */
   const endName=west?'Santa Monica':'Chicago';
@@ -1611,6 +1625,7 @@ function hud(dt){
     else{const hr=5.75+mile/TOTAL*14.5,h=Math.floor(hr),mn=Math.floor((hr-h)*60);setText(ui.clock,((h+11)%12+1)+':'+String(mn).padStart(2,'0')+(h<12?' am':' pm'));}
     if(shared&&trip)tripText(mile);
   }
+  drawStrip(mile);
   if(key!==lastOdo){lastOdo=key;ui.odo.textContent=shared?mile.toFixed(1).padStart(6,'0'):String(key).padStart(4,'0');ui.dial.setAttribute('aria-valuenow',Math.round(mile));
     setText(ui.st,stateAt(mile).name);
     const here=locAt(mile);mk.setAttribute('transform','translate('+MXs(here.lon).toFixed(1)+','+MYs(here.lat).toFixed(1)+')');
@@ -1656,11 +1671,35 @@ function syncSwitches(){ui.snd.setAttribute('aria-pressed',soundOn);ui.rad.setAt
 function takeWheel(){if(!shared)return;const m=mileNow();fuelOwn=fuelShared(Date.now());shared=false;useWorld(1,FAST);pos=clamp(posOf(m),3*SEG,END-300);cars=[];cardIdx=-2;lastOdo=-1;live=userLive;elevT=0;pulled=false;arrived=false;playerX=LANE;syncSwitches();}
 function rejoin(){shared=true;trip=sched(Date.now());useWorld(trip.dir,REAL);pos=clamp(posOf(trip.mile),3*SEG,END);cars=[];cardIdx=-2;lastOdo=-1;live=true;elevT=0;v=trip.moving?CRUISE:0;playerX=trip.moving?LANE:parkX();syncSwitches();}
 
+/* ---------- the road strip: the real towns just behind and just ahead, with the car between them ---------- */
+const PLACES=L.map(p=>[p.mile,p.town,2]).concat(TOWNS.map(t=>[t[0],t[1],0])).sort((a,b)=>a[0]-b[0]);
+const nearPlace=m=>{let b=PLACES[0];for(const p of PLACES)if(Math.abs(p[0]-m)<Math.abs(b[0]-m))b=p;return b;};
+const stripC=$('strip'),sx2=stripC.getContext('2d');let stripKey='';
+function drawStrip(mile){
+  const r=stripC.getBoundingClientRect(),w=Math.round(r.width),h=Math.round(r.height);if(w<80)return;
+  const key=w+'|'+DIR+'|'+(mile*8|0);if(key===stripKey)return;stripKey=key;
+  const dp=Math.min(2,window.devicePixelRatio||1);if(stripC.width!==w*dp||stripC.height!==h*dp){stripC.width=w*dp;stripC.height=h*dp;}
+  const x=sx2;x.setTransform(dp,0,0,dp,0,0);x.clearRect(0,0,w,h);
+  x.fillStyle='rgba(16,44,48,.78)';x.beginPath();x.roundRect?x.roundRect(0,0,w,h,8):x.rect(0,0,w,h);x.fill();
+  const BEH=11,AH=w<420?26:42,x0=14+(w-28)*BEH/(BEH+AH),ppm=(w-28)/(BEH+AH),ym=h/2;
+  x.strokeStyle='rgba(255,255,255,.55)';x.lineWidth=2;x.beginPath();x.moveTo(8,ym);x.lineTo(w-8,ym);x.stroke();
+  const vis=[];for(const p of PLACES){const d=(p[0]-mile)*DIR;if(d>-BEH&&d<AH)vis.push([d,p]);}
+  let nx=null;for(const q of vis)if(q[0]>.15&&(!nx||q[0]<nx[0]))nx=q;
+  vis.sort((a,b)=>(b===nx)-(a===nx)||b[1][2]-a[1][2]||Math.abs(a[0])-Math.abs(b[0]));
+  const rows=[[],[]];x.textBaseline='middle';
+  for(const q of vis){const px=x0+q[0]*ppm,st=q[1][2]>0,past=q[0]<=.15;
+    x.fillStyle=past?'rgba(255,255,255,.45)':st?'#f2c94c':'#fff';x.beginPath();x.arc(px,ym,st?4:2.6,0,6.2832);x.fill();
+    const txt=q[1][1]+(q===nx?' · '+Math.max(1,Math.round(q[0]))+' mi':'');x.font=(st||q===nx?'700 ':'400 ')+'11px Overpass, Arial, sans-serif';
+    const tw=x.measureText(txt).width,a=clamp(px-tw/2,6,w-6-tw),b=a+tw;
+    for(let k=0;k<2;k++){const rw=rows[q===nx?k:(k+(vis.indexOf(q)&1))%2];if(rw.every(o=>b+8<o[0]||a-8>o[1])){rw.push([a,b]);x.textAlign='left';x.fillText(txt,a,rw===rows[0]?ym-13:ym+14);break;}}}
+  x.fillStyle='#e2452f';x.strokeStyle='#fff';x.lineWidth=1.5;x.beginPath();x.moveTo(x0+7,ym);x.lineTo(x0-5,ym-5.5);x.lineTo(x0-5,ym+5.5);x.closePath();x.fill();x.stroke();
+}
+
 /* ---------- share: a snapshot of the windshield with the place, the date and the time there ---------- */
 const SITE='https://vikasgoyal.github.io/showcase/route-66.html';
 let shareBlob=null,shareUrlObj=null,shareLine='';
-function shareInfo(){const mile=mileNow();let b=L[0];for(const p of L)if(Math.abs(p.mile-mile)<Math.abs(b.mile-mile))b=p;
-  const st=ui.st.textContent||'',place=(Math.abs(b.mile-mile)<1.5?'In ':'Near ')+b.town+(st&&b.town!==st?', '+st:''),now=new Date();
+function shareInfo(){const mile=mileNow(),b=nearPlace(mile);
+  const st=ui.st.textContent||'',place=(Math.abs(b[0]-mile)<1.5?'In ':'Near ')+b[1]+(st&&b[1]!==st?', '+st:''),now=new Date();
   const when=live?localDate(mile,now,true)+' · '+localTime(mile,now)+' local time':localDate(mile,now,true);
   let wxs='';if(live&&wxOn&&wx&&wx.length){const q=wxNear(mile);wxs=Math.round(q.temp)+'°F, '+wxWord(q.code);}
   return{mile:Math.round(mile),place,when,wxs,who:shared?'The centennial car':'My own drive'};}
