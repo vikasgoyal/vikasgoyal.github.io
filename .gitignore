@@ -25,3 +25,4 @@ md/
 *.md
 # Pattern library cards
 !_patterns/*.md
+*copy.html
