@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Showcase | Vikas Goyal</title>
-  <meta name="description" content="Small ideas, made tangible. Explore Vikas Goyal's interactive experiments in weather, human connection, everyday rhythms, and seasonal dot art.">
+  <meta name="description" content="Small ideas, made tangible. Explore Vikas Goyal's interactive experiments in weather, human connection, everyday rhythms, seasonal dot art, and a live Route 66 road trip.">
   <link rel="canonical" href="https://vikasgoyal.github.io/showcase/">
   <link rel="icon" href="../favicon.ico">
   <script>
@@ -130,10 +130,11 @@
     .svg-paper { fill: var(--cp-surface); stroke: var(--cp-border-strong); }
     .svg-text { fill: var(--cp-text); }
     .svg-muted { fill: var(--cp-text-soft); }
-    .chart-bars, .greeting-bubble, .sun { transition: transform .45s ease; transform-box: fill-box; transform-origin: center; }
+    .chart-bars, .greeting-bubble, .sun, .road-dash { transition: transform .45s ease; transform-box: fill-box; transform-origin: center; }
     .project-link:hover .chart-bars { transform: scaleY(1.08); }
     .project-link:hover .greeting-bubble { transform: translateY(-5px) rotate(-2deg); }
     .project-link:hover .sun { transform: rotate(30deg); }
+    .project-link:hover .road-dash { transform: translateY(6px); }
     .project-body { display: flex; flex: 1; flex-direction: column; padding: 28px; }
     .project-category { color: var(--cp-accent); margin: 0 0 12px; font-size: 10px; }
     h3 { margin: 0; font-size: 27px; line-height: 1.2; letter-spacing: -.035em; font-weight: 600; }
@@ -183,7 +184,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; }
-      .project-link:hover, .project-link:hover .chart-bars, .project-link:hover .greeting-bubble, .project-link:hover .sun { transform: none; }
+      .project-link:hover, .project-link:hover .chart-bars, .project-link:hover .greeting-bubble, .project-link:hover .sun, .project-link:hover .road-dash { transform: none; }
     }
   </style>
 </head>
@@ -215,7 +216,7 @@
       </section>
       <section id="projects" aria-labelledby="collection-title">
         <div class="collection-heading">
-          <h2 class="section-label" id="collection-title">Selected experiments <span aria-hidden="true">/</span> 05</h2>
+          <h2 class="section-label" id="collection-title">Selected experiments <span aria-hidden="true">/</span> 06</h2>
           <p class="collection-note">Built to be explored, not just viewed.</p>
         </div>
         <div class="project-grid">
@@ -331,6 +332,28 @@
                 <h3 id="dawn-title">Dawn Line</h3>
                 <p class="project-description" id="dawn-description">Watch the sunrise cross the Earth in real time. See which cities are waking up right now, turn the globe to another hour, and browse what people spotted in nature there.</p>
                 <span class="project-cta">Find the sunrise <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </div>
+            </a>
+          </article>
+          <article class="project">
+            <a class="project-link" href="route-66.html" aria-labelledby="route66-title" aria-describedby="route66-description">
+              <div class="preview" aria-hidden="true">
+                <span class="preview-number">06 / THE MOTHER ROAD AT 100</span>
+                <svg viewBox="0 0 380 256">
+                  <path class="svg-soft" d="M0 150v-22h34l10-14h46l8 14h62l6-8h30l8 8h176v22Z"/>
+                  <path class="svg-rule" d="M0 150h380" stroke-width="1.2"/>
+                  <g class="sun svg-accent" stroke-width="1.5"><path d="M268 150a22 22 0 0 1 44 0"/><path d="M290 118v-8M268 128l-6-6M312 128l6-6M254 142h-8M326 142h8"/></g>
+                  <path class="svg-paper" d="M184 150h12l130 106H54Z"/>
+                  <g class="road-dash svg-solid"><rect x="188.5" y="158" width="3" height="8" rx="1.5"/><rect x="188" y="176" width="4" height="13" rx="2"/><rect x="187" y="203" width="6" height="19" rx="3"/><rect x="186" y="238" width="8" height="18" rx="3"/></g>
+                  <g transform="translate(62 44)"><path class="svg-paper" d="M6 6q14 5 22-4q8 9 22 4q8 20-3 34q-9 10-19 14q-10-4-19-14q-11-14-3-34Z" stroke-width="1.6"/><text class="svg-text" x="28" y="36" text-anchor="middle" font-size="19" font-weight="700">66</text></g>
+                </svg>
+                <p class="preview-caption">2,448 miles. One shared car.</p>
+              </div>
+              <div class="project-body">
+                <p class="project-category">Live road trip</p>
+                <h3 id="route66-title">Mother Road</h3>
+                <p class="project-description" id="route66-description">Ride a shared car down Route 66 in its centennial year, in real time and real weather, from Chicago to Santa Monica. Or take the wheel and drive all eight states yourself.</p>
+                <span class="project-cta">Get on the road <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
               </div>
             </a>
           </article>
