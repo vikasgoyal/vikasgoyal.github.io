@@ -1034,8 +1034,14 @@ function sunElev(lat,lon,now){
     dec=.006918-.399912*Math.cos(gm)+.070257*Math.sin(gm)-.006758*Math.cos(2*gm)+.000907*Math.sin(2*gm)-.002697*Math.cos(3*gm)+.00148*Math.sin(3*gm),
     eq=229.18*(.000075+.001868*Math.cos(gm)-.032077*Math.sin(gm)-.014615*Math.cos(2*gm)-.040849*Math.sin(2*gm)),
     ha=((hr*60+eq+4*lon)/4-180)*Math.PI/180,la=lat*Math.PI/180;
+  sunAz=(Math.atan2(Math.sin(ha),Math.cos(ha)*Math.sin(la)-Math.tan(dec)*Math.cos(la))*180/Math.PI+180)%360;   /* compass bearing of the sun, kept alongside its height */
   return Math.asin(Math.sin(la)*Math.sin(dec)+Math.cos(la)*Math.cos(dec)*Math.cos(ha))*180/Math.PI;
 }
+let sunAz=180;
+/* which way the car is pointing (compass degrees), from the lie of the route here; and where the sun sits relative to straight ahead, -180..180 */
+function headingAt(mile){const a=locAt(clamp(mile-3,0,TOTAL)),b=locAt(clamp(mile+3,0,TOTAL)),r=Math.PI/180,dl=(b.lon-a.lon)*r,
+    brg=Math.atan2(Math.sin(dl)*Math.cos(b.lat*r),Math.cos(a.lat*r)*Math.sin(b.lat*r)-Math.sin(a.lat*r)*Math.cos(b.lat*r)*Math.cos(dl))*180/Math.PI;return (brg+(DIR>0?0:180)+360)%360;}
+const sunRel=mile=>((sunAz-headingAt(mile)+540)%360)-180;
 const SKYT=[[-12,[22,30,60]],[-6,[34,42,92]],[-1.5,[52,62,128]],[4,[70,112,184]],[12,[74,140,212]]];
 const SKYB=[[-12,[60,76,112]],[-6,[120,96,130]],[-1.5,[240,128,96]],[4,[246,190,134]],[12,[222,234,240]]];
 const TINT=[[-12,[40,52,110,.8]],[-5,[170,130,190,.5]],[1,[255,200,150,.28]],[8,[255,214,170,0]]];
@@ -1085,6 +1091,8 @@ let shared=true,trip=null,userLive=false;
 /* ---------- the centennial car: one shared trip that runs on the clock. Eight days west, eight days back east, then again ---------- */
 const T0=Date.UTC(2026,10,11,13,30);                     /* 7:30 am in Chicago on November 11, 2026 */
 const NIGHTS=[0,310,595,930,1224,1535,1840,2140,2448];    /* Chicago, St. Louis, Joplin, Clinton, Adrian, Albuquerque, Winslow, Needles, Santa Monica */
+/* hours on the road each day, stops included, for the eight legs west (the trip home runs them in reverse). Every day leaves at 7:30 am; in November the sun sets around 5, so most days end with an hour or two of driving after dark */
+const LEGH=[10.75,10,11.75,10.5,11,10.5,12,10.75];
 const DAYMS=864e5,ROADDAY=11*36e5,CRUISE=50,SHORT=30/REAL; /* on the road for eleven hours, stops included; pull up 30 m short of each stop */
 const tzShift=m=>m<1249?0:m<2134?1:2;                    /* hours behind Chicago, so the day starts in local morning */
 let planD=null,plan=null;
@@ -1095,13 +1103,27 @@ function dayPlan(D){
   /* lunch at the town nearest the middle of the day, fuel at one in the afternoon; the rest are sights */
   const hrs=m=>Math.abs(m)/CRUISE*36e5,frac=p=>Math.abs(p.mile-from)/Math.abs(to-from);
   const pick=(fq,not)=>{let b=null;for(const p of mids)if(TOWNK.includes(p.kind)&&p!==not&&(!b||Math.abs(frac(p)-fq)<Math.abs(frac(b)-fq)))b=p;return b;};
-  const lunch=pick(.45),fuel=pick(.78,lunch),wt=p=>p===lunch?1.7:p===fuel?.45:1,cap=p=>(p===lunch?60:p===fuel?14:45)*6e4;
-  const sum=mids.reduce((a,p)=>a+wt(p),0)||1,budget=ROADDAY-hrs(to-from),ev=[];
+  const lunch=pick(.45),fuel=pick(.78,lunch),wt=p=>p===lunch?1.7:p===fuel?.45:1,cap=p=>(p===lunch?75:p===fuel?20:90)*6e4,base=T0+D*DAYMS;
+  const SUNSTOP=30*6e4,sum=mids.reduce((a,p)=>a+wt(p),0)||1,budget=Math.max(0,LEGH[west?d:15-d]*36e5-hrs(to-from)),ev=[];
   let t=tzShift(from)*36e5,m=from;const start=t;
-  for(const p of mids){const pm=p.mile-sg*SHORT,dt=hrs(pm-m),st=Math.min(cap(p),budget*wt(p)/sum);
+  /* share the spare time among the stops by weight; a stop that reaches its cap passes the rest on to the others */
+  const alloc=new Map();{let free=mids.slice(),left=budget;for(let it=0;it<5&&free.length&&left>1;it++){const ws=free.reduce((a,p)=>a+wt(p),0),nxt=[];let used=0;
+    for(const p of free){const want=(alloc.get(p)||0)+left*wt(p)/ws,got=Math.min(cap(p),want);used+=got-(alloc.get(p)||0);alloc.set(p,got);if(got<cap(p))nxt.push(p);}left-=used;free=nxt;}}
+  for(const p of mids){const pm=p.mile-sg*SHORT,dt=hrs(pm-m),st=alloc.get(p)||0;
     ev.push({t0:t,t1:t+dt,m0:m,m1:pm});t+=dt;ev.push({t0:t,t1:t+st,m0:pm,m1:pm,stop:p,what:p===lunch?'lunch':p===fuel?'fuel':''});t+=st;m=pm;}
   const end=to-sg*SHORT;ev.push({t0:t,t1:t+hrs(end-m),m0:m,m1:end});
-  planD=D;plan={d,west,from,to:end,toName:to,ev,start,base:T0+D*DAYMS};return plan;
+  /* pull over for a few minutes where the sun goes down, if it goes down while the car is driving */
+  {const az=sunAz;let done=false;
+    for(let k=0;k<ev.length&&!done;k++){const e=ev[k];if(e.stop)continue;
+      for(let tt=e.t0;tt<e.t1;tt+=5*6e4){const mm=e.m0+(e.m1-e.m0)*(tt-e.t0)/(e.t1-e.t0),q=locAt(mm);if(sunElev(q.lat,q.lon,base+tt)>2.5)continue;   /* stop while the sun is still a hand above the horizon, and watch it go */
+        if(tt-e.t0<6e4||e.t1-tt<6e4)break;
+        let nm=L[0].town,bd=1e9;for(const p of L)if(Math.abs(p.mile-mm)<bd){bd=Math.abs(p.mile-mm);nm=p.town;}for(const p of TOWNS)if(Math.abs(p[0]-mm)<bd){bd=Math.abs(p[0]-mm);nm=p[1];}
+        const a={t0:e.t0,t1:tt,m0:e.m0,m1:mm},st={t0:tt,t1:tt+SUNSTOP,m0:mm,m1:mm,stop:{town:nm,why:''},what:'sunset'};
+        for(let j=k+1;j<ev.length;j++){ev[j].t0+=SUNSTOP;ev[j].t1+=SUNSTOP;}
+        ev.splice(k,1,a,st,{t0:tt+SUNSTOP,t1:e.t1+SUNSTOP,m0:mm,m1:e.m1});
+        done=true;break;}}
+    sunAz=az;}
+  planD=D;plan={d,west,from,to:end,toName:to,ev,start,base};return plan;
 }
 /* the shared car's tank: full each morning, topped up at the fuel stop, about 340 miles to empty */
 function fuelShared(now){
@@ -1118,6 +1140,7 @@ function sched(now){
     :{dir,mile:e.m0+(e.m1-e.m0)*(t-e.t0)/(e.t1-e.t0),moving:true,phase:'drive',d:P.d};
   return {dir,mile:P.to,moving:false,phase:'night',place:nearTown(P.toName),arr:P.base+P.ev[P.ev.length-1].t1,resume:P.base+DAYMS+tzShift(P.toName)*36e5,d:P.d};
 }
+let rear=[];
 let playerX=LANE,steerIn=0,steerV=0,lastSteer=-99,offRoad=false,elevNow=30,elevT=0;
 let fuelOwn=.8,leadT=10,train=null,trainT=14,weeds=[],weedT=4,devil=null,hawk=null,star=null,trainLight=null,bG=0,hyG=0,cG=0;
 const CARC=['#c0392b','#2a8f8f','#e6c34a','#f0ead6','#3b5f8a','#6a8f5a'];
@@ -1181,6 +1204,8 @@ function update(dt){
     else{if(c.ph===0&&c.z-pos<34)c.ph=1;if(c.ph===1){c.pt-=dt;if(c.pt<=0)c.ph=2;}
       c.vz=c.ph===0?Math.max(6,vm*.5):c.ph===1?Math.max(9,vm):vm+7;c.z+=c.vz*dt;}
   }
+  for(const c of cars)if(c.dir<0&&c.z<=pos-4&&rear.length<6)rear.push({d:5,c:c.c,kind:c.kind,b:c.b,tt:c.tt,u:c.u,ld:c.ld});
+  for(const q of rear)q.d+=(v*.44704+20)*dt;rear=rear.filter(q=>q.d<420);
   cars=cars.filter(c=>c.z>pos-4&&c.z<pos+DRAW*SEG+40&&!(c.dir>0&&c.ph===2&&c.z-pos>800));
   const mile=mileNow(),bs=Math.floor(pos/SEG),day=!live||elevNow>5;
   /* the railroad beside the road: a long freight now and then, either way */
@@ -1311,7 +1336,8 @@ function draw(){
     if(star){const u=star.t/.9,hx=star.x*W+Math.cos(star.a)*u*W*.3,hyy=star.y*hy+Math.sin(star.a)*u*W*.3;g.strokeStyle='rgba(255,255,255,'+(1-u).toFixed(3)+')';g.lineWidth=2;g.lineCap='round';
       g.beginPath();g.moveTo(hx,hyy);g.lineTo(hx-Math.cos(star.a)*90,hyy-Math.sin(star.a)*90);g.stroke();}}
   const st=clamp((mile-1150)/(TOTAL-1150),0,1),se=live?clamp(1-elevNow/14,0,1):st*st*(3-2*st);
-  if(live?elevNow>-3:st>0){const sx=W*.44,sy=live?hy-clamp(elevNow,-3,62)/62*hy*.92:-H*.25+(hy-H*.01+H*.25)*se,r=Math.max(18,W*.034),c=css(mix([255,244,200],[255,128,84],se));
+  const srel=live?sunRel(mile):0;   /* the real sun is only in the windshield when the car is pointing toward it: sunset when heading west, sunrise when heading east */
+  if(live?elevNow>-3&&Math.abs(srel)<64:st>0){const sx=live?W*.5+srel/52*W*.5:W*.44,sy=live?hy-clamp(elevNow,-3,62)/62*hy*.92:-H*.25+(hy-H*.01+H*.25)*se,r=Math.max(18,W*.034),c=css(mix([255,244,200],[255,128,84],se));
     g.globalAlpha=.1*sa;C(sx,sy,r*3.2,c);g.globalAlpha=.17*sa;C(sx,sy,r*2.1,c);g.globalAlpha=sa;C(sx,sy,r,c);g.globalAlpha=1;}
   let ca=live?mix(mix([255,255,255],[250,186,170],clamp(1-elevNow/10,0,1)),[86,92,128],hl):mix([255,255,255],[250,186,170],Math.max(se,clamp(1-mile/110,0,1)));
   ca=mix(ca,[140,146,158],wxv.over*.7);const cc=css(ca);g.globalAlpha=.82+wxv.over*.14;
@@ -1456,6 +1482,31 @@ function draw(){
     for(const px of [W*.2,W*.58]){const cx=Math.cos(th),sy=Math.sin(th);g.lineWidth=4;g.beginPath();g.moveTo(px,py);g.lineTo(px+cx*len,py-sy*len);g.stroke();
       g.lineWidth=7;g.beginPath();g.moveTo(px+cx*len*.3,py-sy*len*.3);g.lineTo(px+cx*len,py-sy*len);g.stroke();}}
   if(wxv.flash>.02){g.globalCompositeOperation='lighter';g.fillStyle='rgba(235,240,255,'+(wxv.flash*.55).toFixed(3)+')';g.fillRect(0,0,W,H);g.globalCompositeOperation='source-over';}
+  /* rear-view mirror: the road already driven, whoever just went by, and the sun when it is behind the car */
+  {const narrow=W<860,mw=narrow?Math.min(176,W-214):Math.min(clamp(W*.19,150,290),W-800),mh=mw*.27;
+   if(mw>=118){const cxm=narrow?W-16-mw/2:W/2,tsg=ui.tripSign,y0=narrow?16:(tsg.offsetHeight?tsg.offsetTop+tsg.offsetHeight+4:14),x0=cxm-mw/2,yb=y0+mh,hz=y0+mh*.46,F=(yb-hz)*5/1.3;
+    g.fillStyle='#161b1e';g.fillRect(cxm-5,0,10,y0+4);
+    g.save();g.beginPath();g.roundRect?g.roundRect(x0,y0,mw,mh,mh*.3):g.rect(x0,y0,mw,mh);g.clip();
+    const mg=g.createLinearGradient(0,y0-mh*.5,0,hz);mg.addColorStop(0,css(top));mg.addColorStop(1,css(bot));g.fillStyle=mg;g.fillRect(x0,y0,mw,mh);
+    /* the sun: behind a westbound car in the morning, behind an eastbound one in the evening */
+    let sel=-9,sxo=0;if(live){if(elevNow>-2&&Math.abs(srel)>128){sel=elevNow;sxo=Math.sign(srel)*(180-Math.abs(srel))/52;}}else if(mile<300){sel=1.5+mile/300*24;sxo=.2;}
+    if(sel>-9&&sel<24){const k=clamp(1-sel/14,0,1),c=css(mix([255,244,200],[255,140,90],k)),sxm=cxm+sxo*mw/2,sym=hz-sel/24*(hz-y0)*1.05,r=mh*.13;
+      g.globalAlpha=.16*sa;C(sxm,sym,r*3,c);g.globalAlpha=.3*sa;C(sxm,sym,r*1.8,c);g.globalAlpha=sa;C(sxm,sym,r,c);g.globalAlpha=1;}
+    g.fillStyle=css(mix(e.far,[226,233,242],snowK*.85));g.beginPath();g.moveTo(x0,hz+1);for(let k=0;k<=24;k++)g.lineTo(x0+mw*k/24,hz-mh*(.03+.1*vn((k+Math.floor(pos/900))*.6,31)*e.famp/60+.05));g.lineTo(x0+mw,hz+1);g.fill();
+    const colm=Wd.col(Math.max(0,base-2));g.fillStyle=colm[0];g.fillRect(x0,hz,mw,yb-hz);if(snowK>.02){g.fillStyle='rgba(240,245,250,'+(snowK*.9).toFixed(3)+')';g.fillRect(x0,hz,mw,yb-hz);}
+    const mx=(lat,d)=>cxm+(lat-playerX)*F/d,my=(d,hgt)=>hz+(1.3-(hgt||0))*F/d,DN=4.6,DF=600;
+    g.fillStyle=colm[2];g.beginPath();g.moveTo(mx(-ROADW,DN),my(DN));g.lineTo(mx(ROADW,DN),my(DN));g.lineTo(mx(ROADW,DF),my(DF));g.lineTo(mx(-ROADW,DF),my(DF));g.fill();
+    if(snowK>.02){g.globalAlpha=snowK*.6;g.fillStyle='#dfe6ee';g.fill();g.globalAlpha=1;}
+    g.fillStyle='#f4f1e6';for(const sd of [-1,1]){g.beginPath();g.moveTo(mx(sd*ROADW*.96,DN),my(DN));g.lineTo(mx(sd*ROADW*.9,DN),my(DN));g.lineTo(mx(sd*ROADW*.9,DF),my(DF));g.lineTo(mx(sd*ROADW*.96,DF),my(DF));g.fill();}
+    g.fillStyle='#e8c13a';const z0=pos%15;for(let k=0;k<14;k++){const d1=Math.max(DN,z0+k*15),d2=z0+k*15+5;if(d2<=DN)continue;g.beginPath();g.moveTo(mx(-.1,d1),my(d1));g.lineTo(mx(.1,d1),my(d1));g.lineTo(mx(.1,d2),my(d2));g.lineTo(mx(-.1,d2),my(d2));g.fill();}
+    g.fillStyle='#4a3a2c';const p0=pos%45;for(let k=5;k>=0;k--){const d=p0+k*45+3;if(d<DN)continue;const px=mx(-5.9,d),wv=Math.max(1,.28*F/d);g.fillRect(px-wv/2,my(d,9),wv,my(d)-my(d,9));g.fillRect(px-1.3*F/d,my(d,8.4),2.6*F/d,Math.max(1,.14*F/d));}
+    for(let k=rear.length-1;k>=0;k--){const q=rear[k],sc=F/q.d;if(sc<.35)continue;g.save();g.translate(mx(-LANE,q.d),my(q.d));g.scale(sc,sc);cs=sc;D[q.kind==='truck'?'truckR':'carR'](q);g.restore();}
+    if(hl>.02){g.fillStyle='rgba(12,14,26,'+(hl*.78).toFixed(3)+')';g.fillRect(x0,hz-mh*.2,mw,yb-hz+mh*.2);
+      if(hl>.3)for(const q of rear){const sc=F/q.d;g.fillStyle='rgba(255,60,50,.95)';for(const o of [-.75,.75])g.fillRect(mx(-LANE+o,q.d)-Math.max(1,sc*.14),my(q.d,.8),Math.max(2,sc*.28),Math.max(1.5,sc*.16));}}
+    const gl=g.createLinearGradient(x0,y0,x0+mw,yb);gl.addColorStop(0,'rgba(255,255,255,.16)');gl.addColorStop(.4,'rgba(255,255,255,0)');g.fillStyle=gl;g.fillRect(x0,y0,mw,mh);
+    g.restore();
+    g.strokeStyle='#161b1e';g.lineWidth=4;g.beginPath();g.roundRect?g.roundRect(x0,y0,mw,mh,mh*.3):g.rect(x0,y0,mw,mh);g.stroke();
+   }}
 }
 
 /* ---------- sound: engine, wind, shoulder rumble, and a made-up AM station for each stretch ---------- */
@@ -1657,7 +1708,7 @@ function tripText(mile){
   if(t.phase==='drive'){const nx=(t.dir>0?L:L.slice().reverse()).find(p=>t.dir>0?p.mile>mile+.05:p.mile<mile-.05);
     s=nx?'On the road to '+nx.town+', '+Math.max(1,Math.round(Math.abs(nx.mile-mile)))+' miles ahead.':'On the road.';}
   else{const back=' Back on the road at '+localTime(mile,new Date(t.resume))+'.',motel=MOTELT.includes(t.place);
-    if(t.phase==='stop')s=(t.what==='lunch'?'Stopped for lunch at the diner in '+t.place:t.what==='fuel'?'Stopped for fuel in '+t.place:'Stopped at '+t.place+(t.why?' '+t.why:''))+'.'+back;
+    if(t.phase==='stop')s=(t.what==='sunset'?'Pulled over near '+t.place+' to watch the sun go down':t.what==='lunch'?'Stopped for lunch at the diner in '+t.place:t.what==='fuel'?'Stopped for fuel in '+t.place:'Stopped at '+t.place+(t.why?' '+t.why:''))+'.'+back;
     else if(t.arr&&Date.now()-t.arr<75*6e4)s='Stopped for dinner '+(motel?'at the diner in ':'in ')+t.place+', then '+(motel?'the motel':'parked')+' for the night.'+back;   /* the first hour and a quarter after arriving */
     else s=(motel?'Parked for the night at the motel in ':'Parked for the night in ')+t.place+'.'+back;}
   setText(ui.tripTop,'The centennial car · Day '+(t.d%8+1)+' of 8, '+(t.dir>0?'westbound':'eastbound')+' · '+localDate(mile)+', '+localTime(mile));setText(ui.tripMain,s);setText(ui.next,s);
