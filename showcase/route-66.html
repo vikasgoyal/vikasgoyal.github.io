@@ -543,7 +543,7 @@ const RHYMES=[
 ];
 
 /* ---------- canvas + sprite drawers (units are meters, y is up-negative) ---------- */
-const cv=document.getElementById('c'),g=cv.getContext('2d');
+const cv=document.getElementById('c');let g=cv.getContext('2d');
 let W=0,H=0,DPR=1,f=0,cy=0,cs=1,tm=0,live=false;
 function resize(){const r=cv.getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);W=Math.max(50,r.width);H=Math.max(50,r.height);
   cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);f=.84*Math.max(W/2,H*.62);cy=H*.47;}
@@ -1164,6 +1164,50 @@ function spawnTrain(){
   for(let k=0;k<n;k++){const loco=k<2,Lc=loco?21:16.5;list.push({o,L:Lc,ty:loco?0:1+((Math.random()*3)|0),c:RCOL[(Math.random()*7)|0],c2:RCOL[(Math.random()*7)|0]});o+=Lc+1;}
   train={dirn,z0:dirn<0?pos+DRAW*SEG+20:pos-240,len:o,cars:list,v:dirn<0?-21:27};trainHorn();
 }
+/* ---------- a dog rides shotgun: she watches the road, naps on the long stretches, and loves a pat ---------- */
+const dog={look:0,perk:0,up:0,sleep:0,worry:0,music:0,wag:0,calm:0,cool:0,pet:0,seen:-1,wasStop:false,say:'',sayT:0,hearts:[],box:null,hx:0,hy:0,sc:1};
+function dogSay(s,t){dog.say=s;dog.sayT=t||1.5;}
+function dogSound(k){
+  if(!soundOn||!AC||!au)return;const t=AC.currentTime;
+  if(k===0)for(const st of [0,.2]){const o=AC.createOscillator(),fl=AC.createBiquadFilter(),ga=AC.createGain();o.type='sawtooth';fl.type='lowpass';fl.frequency.value=1500;
+    o.frequency.setValueAtTime(540,t+st);o.frequency.exponentialRampToValueAtTime(240,t+st+.11);
+    ga.gain.setValueAtTime(.0001,t+st);ga.gain.linearRampToValueAtTime(.07,t+st+.015);ga.gain.exponentialRampToValueAtTime(.0008,t+st+.13);
+    o.connect(fl);fl.connect(ga);ga.connect(au.master);o.start(t+st);o.stop(t+st+.15);}
+  else{const o=AC.createOscillator(),ga=AC.createGain();o.type='sine';o.frequency.setValueAtTime(640,t);o.frequency.linearRampToValueAtTime(900,t+.25);o.frequency.linearRampToValueAtTime(620,t+.55);
+    ga.gain.setValueAtTime(.0001,t);ga.gain.linearRampToValueAtTime(.04,t+.08);ga.gain.linearRampToValueAtTime(.0001,t+.6);o.connect(ga);ga.connect(au.master);o.start(t);o.stop(t+.65);}
+}
+function dogBark(s){if(dog.cool>0)return;dog.cool=6;dog.calm=0;dog.sleep=Math.min(dog.sleep,.2);dog.perk=1;dogSay(s||'Woof!',1.4);dogSound(0);}
+function petDog(){const d=dog;d.pet=2;d.calm=0;d.sleep=0;d.sayT=0;for(let i=0;i<3;i++)d.hearts.push({x:(Math.random()-.5)*50,t:-i*.25});dogSound(1);}
+function dogUpdate(dt){
+  const d=dog,ez=(a,b,r)=>a+(b-a)*Math.min(1,dt*r);
+  d.cool-=dt;d.sayT-=dt;d.pet=Math.max(0,d.pet-dt);
+  for(const h of d.hearts)h.t+=dt;d.hearts=d.hearts.filter(h=>h.t<1.6);
+  let look=0,perk=0,up=0,wag=0,worry=0;
+  const night=shared&&trip.phase==='night',stopped=!night&&(shared?!trip.moving:(pulled||arrived)&&v<2);
+  const see=(p,l)=>{if(p>perk){perk=p;look=l;}};
+  /* ears go up as a landmark comes into view; the burros get a proper bark */
+  for(let i=0;i<L.length;i++){const z=posOf(L[i][0])-pos;if(z<-80||z>420)continue;const kd=L[i][2];
+    see(kd==='town'||kd==='begin'?.3:kd==='sign'?.5:1,(hsh(i+3)<.5?-1:1)*.9);
+    if(d.seen!==i&&z<260){d.seen=i;if(kd==='burros')dogBark('Woof woof!');else if(kd==='giant')dogBark('Woof!');if(!/town|begin|sign/.test(kd))wag=1;}}
+  if(train){const a=train.dirn<0?train.z0:train.z0-train.len;if(pos>a-250&&pos<a+train.len+120)see(.9,-1);}
+  for(const x of Wd.xings)if(x.st&&Math.abs(x.z-pos)<300)see(1,0);
+  for(const c of cars)if(c.dir<0){const z=c.z-pos;if(z>0&&z<70)see(.6,.5);}
+  for(const q of weeds)if(q.z>pos&&q.z-pos<45)see(.45,-.7);
+  if(devil&&devil.z-pos<420)see(.8,devil.x<0?-1:1);
+  if(hawk){up=1;see(.5,0);}if(star){up=1;see(.6,0);}
+  if(offRoad&&v>3){see(.8,0);worry=.55;}
+  worry=Math.max(worry,clamp(wxv.rain*1.1+wxv.flash*.8+wxv.snow*.3,0,1));
+  if(stopped){see(.6,1);wag=1;if(!d.wasStop)dogSay('Yay!',1.6);}
+  d.wasStop=stopped;if(night)perk=0;
+  /* nothing happening for a good while, or a night parked at the motel: curl up for a nap */
+  const excited=perk>.25||worry>.2||up>0||stopped||d.pet>0||d.cool>4;
+  d.calm=excited||(v<1&&!night)?0:d.calm+dt;
+  const nap=night||d.calm>(hl>.5?12:30)?1:0;
+  d.sleep=ez(d.sleep,nap,nap?.5:3);
+  d.look=ez(d.look,look,4);d.perk=ez(d.perk,perk,perk>d.perk?8:2);d.up=ez(d.up,up,5);d.worry=ez(d.worry,worry,1.5);
+  d.music=ez(d.music,radioOn&&soundOn&&v>1&&d.sleep<.5?1:0,2);
+  d.wag=ez(d.wag,Math.max(wag,d.pet>0?1:0,perk>=.9?.6:0),5);
+}
 /* where a stopped car sits: on the shoulder, or in the motel lot for the night */
 const parkX=()=>shared&&trip&&trip.phase==='night'&&((Wd.marks.get(Math.floor(pos/SEG))|0)&16)?7.6:ROADW+1.25;
 function update(dt){
@@ -1231,6 +1275,91 @@ function update(dt){
   wxv.rain+=(tg.rain-wxv.rain)*kk;wxv.snow+=(tg.snow-wxv.snow)*kk;wxv.fog+=(tg.fog-wxv.fog)*kk;wxv.over+=(tg.over-wxv.over)*kk;
   wxv.flash=Math.max(0,wxv.flash-dt*3);if(tg.storm&&Math.random()<dt*.18)wxv.flash=1;
   if(wxOn){wxT-=dt;if(wxT<=0){wxT=900;loadWx();}}
+  dogUpdate(dt);
+}
+
+/* the dog, seen from the driver's seat: head and shoulders above the dash on the passenger side */
+function drawDog(){
+  const d=dog,sc=Math.min(clamp(H/720,.6,1.5)*1.35,W/480),bx=Math.min(W*.86,W-84*sc),by=H+6*sc,am=reduce?0:1,t=tm,sl=d.sleep,ex=d.perk*(1-sl),lk=d.look*(1-sl);
+  const bpm=ST[stationAt(mileNow())].bpm,sp=Math.min(1,v/60),lift=clamp((600-W)/120,0,1)*66;
+  const bob=Math.sin(t*9)*.7*sp*am,sh=Math.sin(t*53)*.65*d.worry*am,lean=clamp(-hoodX/(W*.1),-1,1)*.035*am;
+  const hxp=lk*7+sh-5*sl,hyp=-105-lift+23*sl+5*d.worry-4*ex-5*d.up+Math.sin(t*Math.PI*bpm/60)*2*d.music*am;
+  const rot=lk*.09-.2*sl+Math.sin(t*Math.PI*bpm/120)*.045*d.music*am+.04*d.worry;
+  const turn=clamp(-.64+lk*1.5,-1,1),a=Math.abs(turn),s=turn<0?-1:1,blink=sl>.55||(!reduce&&t%6.4>6.24);
+  d.sc=sc;d.hx=bx+hxp*sc;d.hy=by+(hyp+bob)*sc;d.box={x:bx-70*sc,y:by-(178+lift)*sc,w:150*sc,h:(178+lift)*sc};
+  g.save();g.translate(bx,by);g.scale(sc,sc);g.translate(sh*.5,bob);g.rotate(lean);
+  /* she rides facing forward, so from the driver's seat we see her back, the back of her head and ears, and her muzzle in profile when she turns toward the side window */
+  const BR='#a46c3a',BRD='#7f5231',BRL='#c38c54',BRLL='#d9a86e',NOSE='#3b2a20';
+  const tw=Math.sin(t*8)*d.wag*am;
+  g.save();g.translate(30,-9);g.rotate(-.16+tw*.38);
+  g.fillStyle=BRD;g.beginPath();g.moveTo(-6,10);g.bezierCurveTo(16,-12,38,-8,44,-30);g.bezierCurveTo(57,-10,43,9,25,14);g.quadraticCurveTo(8,21,-6,10);g.fill();
+  g.fillStyle=BRL;g.beginPath();g.moveTo(5,9);g.quadraticCurveTo(31,2,44,-22);g.quadraticCurveTo(39,7,5,9);g.fill();g.restore();
+  g.save();g.scale(1,1+Math.sin(t*(sl>.5?1.5:2.6))*.009*am);
+  g.fillStyle=BR;g.beginPath();g.moveTo(-48,10);g.bezierCurveTo(-51,-25,-41,-57-lift*.7,-26,-68-lift);g.quadraticCurveTo(-16,-77-lift,-2,-76-lift);g.bezierCurveTo(28,-77-lift,46,-46,49,10);g.closePath();g.fill();
+  /* light falls on the near shoulder; the spine runs a shade darker */
+  g.fillStyle=BRL;g.beginPath();g.moveTo(-44,8);g.bezierCurveTo(-46,-22,-38,-50-lift*.7,-24,-62-lift);g.quadraticCurveTo(-30,-30,-28,8);g.closePath();g.fill();
+  g.fillStyle=BRD;g.globalAlpha=.3;g.beginPath();g.moveTo(-6,8);g.bezierCurveTo(-8,-30,-6,-56-lift*.8,0,-72-lift);g.bezierCurveTo(8,-56-lift*.8,10,-30,8,8);g.closePath();g.fill();g.globalAlpha=1;
+  g.strokeStyle=BRD;g.lineWidth=1.2;g.lineCap='round';g.beginPath();g.moveTo(-34,-20);g.quadraticCurveTo(-37,-6,-36,8);g.moveTo(30,-18);g.quadraticCurveTo(33,-4,33,8);g.moveTo(16,-40-lift*.6);g.quadraticCurveTo(20,-28,19,-16);g.stroke();
+  g.restore();
+  g.save();g.translate(hxp,hyp);g.rotate(rot);g.scale(1.12,1.12);
+  /* h: which way she faces. 0 is straight ahead out through the windshield, so only the back of her head shows; she turns, and her muzzle shows in profile, when something catches her eye on one side */
+  const h=clamp(lk*.85,-1,1),ah=Math.abs(h),hs=h<0?-1:1;
+  /* back of the neck, with a ruff of fur where it meets the shoulders */
+  g.fillStyle=BR;g.beginPath();g.moveTo(-21,-2);g.quadraticCurveTo(-27,18,-36,34);g.lineTo(-28,33);g.lineTo(-34,45);g.lineTo(-22,41);g.lineTo(-20,53);g.lineTo(-8,46);g.lineTo(0,56);g.lineTo(8,47);g.lineTo(20,53);g.lineTo(21,41);g.lineTo(33,45);g.lineTo(28,33);g.lineTo(36,34);g.quadraticCurveTo(27,18,21,-2);g.closePath();g.fill();
+  g.strokeStyle=BRD;g.lineWidth=1;g.beginPath();g.moveTo(-14,22);g.lineTo(-11,30);g.moveTo(-4,26);g.lineTo(-2,35);g.moveTo(8,24);g.lineTo(9,33);g.moveTo(17,20);g.lineTo(19,28);g.stroke();
+  g.scale(hs,1);
+  /* the muzzle, on the side she has turned to; drawn before the head so the head covers its root */
+  const mx=10+8*ah,ml=8+26*ah,my=2-3*d.up;
+  if(ah>.08){
+    g.fillStyle=BRL;g.beginPath();g.moveTo(mx-6,-6);g.quadraticCurveTo(mx+ml*.5,-7,mx+ml,my-3);g.quadraticCurveTo(mx+ml+6,my+2,mx+ml,my+7);g.quadraticCurveTo(mx+ml*.5,my+13,mx-4,my+14);g.closePath();g.fill();
+    g.fillStyle=BR;g.beginPath();g.moveTo(mx-2,my+10);g.quadraticCurveTo(mx+ml*.5,my+13,mx+ml-3,my+7);g.quadraticCurveTo(mx+ml*.5,my+17,mx-2,my+16);g.closePath();g.fill();
+    g.strokeStyle=BRD;g.lineWidth=1.1;g.beginPath();g.moveTo(mx+ml-1,my+6);g.quadraticCurveTo(mx+ml*.5,my+10,mx+2,my+9);g.stroke();
+    g.fillStyle=NOSE;g.beginPath();g.ellipse(mx+ml+1,my,3.6*ah+1.2,3,0,0,6.2832);g.fill();
+    if(d.pet>0&&sl<.5){g.fillStyle='#d77a86';g.beginPath();g.moveTo(mx+ml*.5-3,my+11);g.lineTo(mx+ml*.5+4,my+11);g.quadraticCurveTo(mx+ml*.5+4,my+22,mx+ml*.5,my+21);g.quadraticCurveTo(mx+ml*.5-4,my+20,mx+ml*.5-3,my+11);g.fill();}
+  }
+  /* ears from behind: the backs of both, with a little of the near ear's inside showing as she turns */
+  for(const far of [false,true]){
+    const e=far?1:-1;g.save();g.translate(far?13-4*ah:-13-4*ah,-15);g.rotate(e*(.16+.45*sl+.5*d.worry-.08*ex));g.scale(1.1,.9);
+    g.fillStyle=BRD;g.beginPath();g.moveTo(-11,6);g.bezierCurveTo(-13,-8,-8,-30,-1,-44-4*ex);g.quadraticCurveTo(1,-47-4*ex,3,-42);g.bezierCurveTo(10,-28,12,-10,11,5);g.quadraticCurveTo(0,10,-11,6);g.fill();
+    g.fillStyle=BR;g.beginPath();g.moveTo(-7,4);g.quadraticCurveTo(-9,-12,-1,-36-3*ex);g.quadraticCurveTo(7,-16,7,4);g.closePath();g.fill();
+    if(far&&ah>.2){g.fillStyle=BRLL;g.globalAlpha=Math.min(1,(ah-.2)*2);g.beginPath();g.moveTo(5,2);g.quadraticCurveTo(9,-14,1,-38-3*ex);g.quadraticCurveTo(11,-18,11,4);g.closePath();g.fill();g.globalAlpha=1;}
+    g.restore();}
+  /* back of the head, with the cheek and the eye on the side she faces */
+  g.fillStyle=BR;g.beginPath();g.ellipse(0,-3,20.5,19,0,0,6.2832);g.fill();
+  if(ah>.15){g.fillStyle=BRL;g.globalAlpha=Math.min(1,(ah-.15)*2.5);g.beginPath();g.moveTo(8,-10);g.quadraticCurveTo(21,-8,21,3);g.quadraticCurveTo(19,14,8,16);g.quadraticCurveTo(13,4,8,-10);g.fill();
+    const ex2=14+4*ah,ey=-6-2*d.up;
+    if(blink){g.strokeStyle=NOSE;g.lineWidth=1.3;g.beginPath();g.moveTo(ex2-2.5,ey);g.quadraticCurveTo(ex2,ey+1.8,ex2+2.5,ey-.3);g.stroke();}
+    else{g.fillStyle=NOSE;g.beginPath();g.ellipse(ex2,ey,3,2.4,.2,0,6.2832);g.fill();g.fillStyle='#fff4dc';g.beginPath();g.arc(ex2+.7,ey-.7,.7,0,6.2832);g.fill();}
+    g.globalAlpha=1;}
+  g.strokeStyle=BRD;g.lineWidth=.9;g.beginPath();g.moveTo(-17,4);g.lineTo(-12,8);g.moveTo(-14,11);g.lineTo(-9,13);g.moveTo(-6,13);g.lineTo(-2,16);g.stroke();
+  g.restore();g.restore();
+}
+/* the dog is drawn on her own layer and then lit like the scene, so headlights and glowing signs never show through her */
+const dcv=document.createElement('canvas'),dgx=dcv.getContext('2d');
+function drawDogLit(tc,ta){
+  if(dcv.width!==cv.width||dcv.height!==cv.height){dcv.width=cv.width;dcv.height=cv.height;}
+  const mg=g;g=dgx;g.setTransform(DPR,0,0,DPR,0,0);g.globalAlpha=1;g.globalCompositeOperation='source-over';g.clearRect(0,0,W,H);
+  try{drawDog();
+    g.setTransform(DPR,0,0,DPR,0,0);g.globalCompositeOperation='source-atop';
+    if(ta>.01){g.globalAlpha=Math.min(.75,ta*.8);g.fillStyle='#1c130d';g.fillRect(0,0,W,H);g.globalAlpha=ta*.18;g.fillStyle=tc;g.fillRect(0,0,W,H);}   /* darken her, keeping her brown, with only a hint of the sky's colour */
+    if(wxv.rain>.02){g.globalAlpha=.25*wxv.rain;g.fillStyle='#96a2b4';g.fillRect(0,0,W,H);}
+    if(hl>.05){g.globalAlpha=.12*hl;g.fillStyle='#ffd9a0';g.fillRect(0,0,W,H);}   /* a little warm light from the dash */
+  }finally{g.globalAlpha=1;g.globalCompositeOperation='source-over';g=mg;}
+  g.save();g.setTransform(1,0,0,1,0,0);g.drawImage(dcv,0,0);g.restore();
+}
+/* what the dog says and feels, drawn after the light of the hour so it stays readable */
+function dogTalk(){
+  const d=dog;if(!d.box)return;const sc=d.sc;
+  g.save();g.textAlign='center';g.textBaseline='middle';
+  if(d.sleep>.35){for(let i=0;i<3;i++){const ph=reduce?(i+.5)/3:(tm*.45+i/3)%1;g.globalAlpha=Math.sin(ph*Math.PI)*Math.min(1,(d.sleep-.35)*3);g.fillStyle='#f4f7f7';
+    g.font='800 '+((10+ph*10)*sc|0)+'px Overpass,Arial,sans-serif';g.fillText('z',d.hx+(28+ph*18)*sc,d.hy-(26+ph*34)*sc);}g.globalAlpha=1;}
+  if(d.sayT>0&&d.say){
+    g.font='800 '+(15*sc|0)+'px Overpass,Arial,sans-serif';const w=g.measureText(d.say).width+22*sc,h=26*sc,x=clamp(d.hx-w/2,8,W-w-8),y=d.hy-64*sc-h,r=h/2;
+    g.globalAlpha=clamp(d.sayT/.3,0,1);g.fillStyle='#fff';g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();g.fill();
+    const px=clamp(d.hx,x+r,x+w-r);g.beginPath();g.moveTo(px-6*sc,y+h-1);g.lineTo(px+6*sc,y+h-1);g.lineTo(px+2*sc,y+h+8*sc);g.closePath();g.fill();
+    g.fillStyle='#1b2326';g.fillText(d.say,x+w/2,y+h/2+1);g.globalAlpha=1;}
+  for(const q of d.hearts){if(q.t<0)continue;g.globalAlpha=1-q.t/1.6;g.fillStyle='#e2452f';g.font=(18*sc|0)+'px sans-serif';g.fillText('\u2665',d.hx+q.x*sc,d.hy-(36+q.t*55)*sc);}
+  g.restore();
 }
 
 /* ---------- render ---------- */
@@ -1441,6 +1570,7 @@ function draw(){
   P([hx-3,y0+2,hx+3,y0+2,hx+W*.012,H,hx-W*.012,H],'#e7ecec');
   P([hx-16,y0+3,hx+16,y0+3,hx+5,y0-9,hx,y0-15,hx-5,y0-9],'#dfe5e6');P([hx-16,y0+3,hx+16,y0+3,hx+12,y0+7,hx-12,y0+7],'#9aa5a8');
 
+
   /* light of the hour */
   let tc=null,ta=0;
   if(live){const tk=keyed(TINT,elevNow);tc=css(tk);ta=tk[3];}
@@ -1462,6 +1592,8 @@ function draw(){
     if(trainLight&&hl>.2){const q=trainLight;cs=q[2];g.save();g.translate(q[0],q[1]);g.scale(q[2],q[2]);g.globalAlpha=hl;glow(0,0,7,'rgba(255,244,200,.9)');g.restore();}
     g.globalAlpha=1;
   }
+  drawDogLit(tc,ta);
+  dogTalk();
   /* snowfall: a cool light, slow flakes drifting down, and flakes that rush out of the distance past the car as it moves */
   if(wxv.snow>.02){const sn=wxv.snow;
     g.globalCompositeOperation='multiply';g.globalAlpha=.3*sn;g.fillStyle='#b9c8de';g.fillRect(0,0,W,H);g.globalAlpha=1;g.globalCompositeOperation='source-over';
@@ -1573,9 +1705,9 @@ function schedStep(S,s,t,beat){
     if(S.long)au.leadUntil=t+dur*.9;
   }
 }
-function trainHorn(){if(!soundOn||!AC)return;const t=AC.currentTime;for(const st of [0,1.05])for(const fq of [277,330,415]){const o=AC.createOscillator(),ga=AC.createGain();o.type='sawtooth';o.frequency.value=fq;
+function trainHorn(){dogBark();if(!soundOn||!AC)return;const t=AC.currentTime;for(const st of [0,1.05])for(const fq of [277,330,415]){const o=AC.createOscillator(),ga=AC.createGain();o.type='sawtooth';o.frequency.value=fq;
   ga.gain.setValueAtTime(.0001,t+st);ga.gain.linearRampToValueAtTime(.03,t+st+.08);ga.gain.setValueAtTime(.03,t+st+.7);ga.gain.linearRampToValueAtTime(.0001,t+st+.9);o.connect(ga);ga.connect(au.master);o.start(t+st);o.stop(t+st+1);}}
-function honk(){if(!soundOn||!AC)return;const t=AC.currentTime;for(const fq of [392,494]){const o=AC.createOscillator(),ga=AC.createGain();o.type='square';o.frequency.value=fq;
+function honk(){dogBark();if(!soundOn||!AC)return;const t=AC.currentTime;for(const fq of [392,494]){const o=AC.createOscillator(),ga=AC.createGain();o.type='square';o.frequency.value=fq;
   ga.gain.setValueAtTime(.05,t);ga.gain.setValueAtTime(.05,t+.3);ga.gain.linearRampToValueAtTime(.0001,t+.36);o.connect(ga);ga.connect(au.master);o.start(t);o.stop(t+.4);}}
 function audioTick(dt,mile){
   if(!soundOn||!au)return;const t=AC.currentTime,s=(p,val,tc)=>p.setTargetAtTime(val,t,tc||.12);
@@ -1812,7 +1944,11 @@ window.addEventListener('keydown',e=>{
   else if(k==='m'&&!e.repeat)toggleSound();
   else if(k==='r'&&!e.repeat)toggleRadio();
   else if(k==='l'&&!e.repeat)toggleLive();
+  else if(k==='p'&&!e.repeat)petDog();
 });
+const overDog=e=>{const b=dog.box;if(!b||(e.target.closest&&e.target.closest('button,a,input')))return false;const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;return x>=b.x&&x<=b.x+b.w&&y>=b.y&&y<=b.y+b.h;};
+$('scene').addEventListener('click',e=>{if(overDog(e))petDog();});
+$('scene').addEventListener('pointermove',e=>{const on=overDog(e);$('scene').style.cursor=on?'pointer':'';$('scene').title=on?'Pet the dog (P)':'';});
 window.addEventListener('keyup',e=>{const k=e.key.length===1?e.key.toLowerCase():e.key;
   if((k==='ArrowLeft'||k==='a')&&steerIn<0){steerIn=0;lastSteer=tm;}if((k==='ArrowRight'||k==='d')&&steerIn>0){steerIn=0;lastSteer=tm;}});
 window.addEventListener('blur',()=>{steerIn=0;});
