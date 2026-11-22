@@ -2,29 +2,191 @@
   "series": "Agentic Math Models",
   "url": "https://vikasgoyal.github.io/agentic/patterns/math/",
   "author": "Vikas Goyal",
-  "page_sections": ["takeaway", "why", "intuition", "math", "calculator", "example", "breaks", "apply", "say", "related", "agents", "derivations", "refs"],
+  "page_sections": [
+    "takeaway",
+    "why",
+    "intuition",
+    "math",
+    "calculator",
+    "example",
+    "breaks",
+    "apply",
+    "say",
+    "related",
+    "agents",
+    "derivations",
+    "refs"
+  ],
   "families": [
-    {"id": "reliability", "name": "Reliability", "question": "Will the agent finish, and how fast?"},
-    {"id": "evaluation", "name": "Evaluation", "question": "Can I trust the numbers my evals report?"},
-    {"id": "multi-model", "name": "Multi-model interactions", "question": "How should several models vote, cascade or route?"},
-    {"id": "planning", "name": "Planning and uncertainty", "question": "When should the agent act, search or abstain?"}
+    {
+      "id": "reliability",
+      "name": "Reliability",
+      "question": "Will the agent finish, and how fast?"
+    },
+    {
+      "id": "evaluation",
+      "name": "Evaluation",
+      "question": "Can I trust the numbers my evals report?"
+    },
+    {
+      "id": "multi-model",
+      "name": "Multi-model interactions",
+      "question": "How should several models vote, cascade or route?"
+    },
+    {
+      "id": "planning",
+      "name": "Planning and uncertainty",
+      "question": "When should the agent act, search or abstain?"
+    }
   ],
   "models": [
-    {"number": "M01", "id": "compounding-error", "name": "Compounding error", "family": "reliability", "status": "live", "answers": "What end-to-end success should a multi-step agent expect?", "formula": "p**n", "url": "compounding-error/"},
-    {"number": "M02", "id": "redundancy-retries", "name": "Redundancy and retries", "family": "reliability", "status": "planned", "answers": "How much do k retries or verifiers raise success?", "formula": "1-(1-p)**k"},
-    {"number": "M03", "id": "markov-agent-loops", "name": "Markov chains for agent loops", "family": "reliability", "status": "planned", "answers": "How many steps will a looping agent take, and how often does it get stuck?", "formula": "absorbing-chain fundamental matrix N=(I-Q)^-1"},
-    {"number": "M04", "id": "littles-law", "name": "Little's Law and queueing", "family": "reliability", "status": "planned", "answers": "How many agents, tool slots or GPUs keep latency acceptable?", "formula": "L = lambda * W"},
-    {"number": "M05", "id": "pass-at-k", "name": "pass@k vs pass^k", "family": "evaluation", "status": "planned", "answers": "Is the agent capable, or consistently reliable?", "formula": "pass@k = 1-(1-p)**k; pass^k = p**k"},
-    {"number": "M06", "id": "confidence-intervals", "name": "Confidence intervals (Wilson and bootstrap)", "family": "evaluation", "status": "planned", "answers": "Is version B really better than version A?", "formula": "Wilson score interval"},
-    {"number": "M07", "id": "bradley-terry-elo", "name": "Bradley–Terry and Elo", "family": "evaluation", "status": "planned", "answers": "How do pairwise judgments become a ranking?", "formula": "P(i beats j) = s_i/(s_i+s_j)"},
-    {"number": "M08", "id": "cohens-kappa", "name": "Cohen's kappa", "family": "evaluation", "status": "planned", "answers": "Does my LLM judge agree with humans beyond chance?", "formula": "kappa = (p_o - p_e)/(1 - p_e)"},
-    {"number": "M09", "id": "item-response-theory", "name": "Item Response Theory", "family": "evaluation", "status": "planned", "answers": "Which test cases are hard, and which actually discriminate?", "formula": "2PL logistic model"},
-    {"number": "M10", "id": "condorcet-voting", "name": "Condorcet jury theorem and voting", "family": "multi-model", "status": "planned", "answers": "When does majority voting across models help?", "formula": "sum over majorities of binomial(k, p)"},
-    {"number": "M11", "id": "model-cascades", "name": "Model cascades", "family": "multi-model", "status": "planned", "answers": "When should a cheap model escalate to an expensive one?", "formula": "expected cost vs accuracy at a confidence threshold"},
-    {"number": "M12", "id": "bandits-routing", "name": "Multi-armed bandits for routing", "family": "multi-model", "status": "planned", "answers": "Which model or prompt should get the next request?", "formula": "Thompson sampling, UCB"},
-    {"number": "M13", "id": "game-theory-debate", "name": "Game theory for debate and critics", "family": "multi-model", "status": "planned", "answers": "When do debating or critiquing agents converge on the truth?", "formula": "equilibria of multi-agent games"},
-    {"number": "M14", "id": "mdp-pomdp", "name": "MDPs and POMDPs", "family": "planning", "status": "planned", "answers": "When should the agent gather more context instead of acting?", "formula": "Bellman equation; belief-state update"},
-    {"number": "M15", "id": "mcts-beam-search", "name": "MCTS and beam search", "family": "planning", "status": "planned", "answers": "How should an agent search over possible plans?", "formula": "UCT selection rule"},
-    {"number": "M16", "id": "conformal-prediction", "name": "Conformal prediction", "family": "planning", "status": "planned", "answers": "When should the agent abstain or hand off to a human?", "formula": "quantile of calibration nonconformity scores"}
+    {
+      "number": "M01",
+      "id": "compounding-error",
+      "name": "Compounding error",
+      "family": "reliability",
+      "status": "live",
+      "answers": "What end-to-end success should a multi-step agent expect?",
+      "formula": "p**n",
+      "url": "compounding-error/"
+    },
+    {
+      "number": "M02",
+      "id": "redundancy-retries",
+      "name": "Redundancy and retries",
+      "family": "reliability",
+      "status": "live",
+      "answers": "How much do k retries or verifiers raise success?",
+      "formula": "1-(1-p)**k",
+      "url": "redundancy-retries/"
+    },
+    {
+      "number": "M03",
+      "id": "markov-agent-loops",
+      "name": "Markov chains for agent loops",
+      "family": "reliability",
+      "status": "live",
+      "answers": "How many steps will a looping agent take, and how often does it get stuck?",
+      "formula": "absorbing-chain fundamental matrix N=(I-Q)^-1",
+      "url": "markov-agent-loops/"
+    },
+    {
+      "number": "M04",
+      "id": "littles-law",
+      "name": "Little's Law and queueing",
+      "family": "reliability",
+      "status": "live",
+      "answers": "How many agents, tool slots or GPUs keep latency acceptable?",
+      "formula": "L = lambda * W",
+      "url": "littles-law/"
+    },
+    {
+      "number": "M05",
+      "id": "pass-at-k",
+      "name": "pass@k vs pass^k",
+      "family": "evaluation",
+      "status": "planned",
+      "answers": "Is the agent capable, or consistently reliable?",
+      "formula": "pass@k = 1-(1-p)**k; pass^k = p**k"
+    },
+    {
+      "number": "M06",
+      "id": "confidence-intervals",
+      "name": "Confidence intervals (Wilson and bootstrap)",
+      "family": "evaluation",
+      "status": "planned",
+      "answers": "Is version B really better than version A?",
+      "formula": "Wilson score interval"
+    },
+    {
+      "number": "M07",
+      "id": "bradley-terry-elo",
+      "name": "Bradley–Terry and Elo",
+      "family": "evaluation",
+      "status": "planned",
+      "answers": "How do pairwise judgments become a ranking?",
+      "formula": "P(i beats j) = s_i/(s_i+s_j)"
+    },
+    {
+      "number": "M08",
+      "id": "cohens-kappa",
+      "name": "Cohen's kappa",
+      "family": "evaluation",
+      "status": "planned",
+      "answers": "Does my LLM judge agree with humans beyond chance?",
+      "formula": "kappa = (p_o - p_e)/(1 - p_e)"
+    },
+    {
+      "number": "M09",
+      "id": "item-response-theory",
+      "name": "Item Response Theory",
+      "family": "evaluation",
+      "status": "planned",
+      "answers": "Which test cases are hard, and which actually discriminate?",
+      "formula": "2PL logistic model"
+    },
+    {
+      "number": "M10",
+      "id": "condorcet-voting",
+      "name": "Condorcet jury theorem and voting",
+      "family": "multi-model",
+      "status": "planned",
+      "answers": "When does majority voting across models help?",
+      "formula": "sum over majorities of binomial(k, p)"
+    },
+    {
+      "number": "M11",
+      "id": "model-cascades",
+      "name": "Model cascades",
+      "family": "multi-model",
+      "status": "planned",
+      "answers": "When should a cheap model escalate to an expensive one?",
+      "formula": "expected cost vs accuracy at a confidence threshold"
+    },
+    {
+      "number": "M12",
+      "id": "bandits-routing",
+      "name": "Multi-armed bandits for routing",
+      "family": "multi-model",
+      "status": "planned",
+      "answers": "Which model or prompt should get the next request?",
+      "formula": "Thompson sampling, UCB"
+    },
+    {
+      "number": "M13",
+      "id": "game-theory-debate",
+      "name": "Game theory for debate and critics",
+      "family": "multi-model",
+      "status": "planned",
+      "answers": "When do debating or critiquing agents converge on the truth?",
+      "formula": "equilibria of multi-agent games"
+    },
+    {
+      "number": "M14",
+      "id": "mdp-pomdp",
+      "name": "MDPs and POMDPs",
+      "family": "planning",
+      "status": "planned",
+      "answers": "When should the agent gather more context instead of acting?",
+      "formula": "Bellman equation; belief-state update"
+    },
+    {
+      "number": "M15",
+      "id": "mcts-beam-search",
+      "name": "MCTS and beam search",
+      "family": "planning",
+      "status": "planned",
+      "answers": "How should an agent search over possible plans?",
+      "formula": "UCT selection rule"
+    },
+    {
+      "number": "M16",
+      "id": "conformal-prediction",
+      "name": "Conformal prediction",
+      "family": "planning",
+      "status": "planned",
+      "answers": "When should the agent abstain or hand off to a human?",
+      "formula": "quantile of calibration nonconformity scores"
+    }
   ]
 }

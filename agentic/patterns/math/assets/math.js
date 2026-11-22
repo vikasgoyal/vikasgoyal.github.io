@@ -34,7 +34,7 @@
         if (!(k in s)) return;
         const f = o.dataset.fmt;
         o.textContent = f === "pct" ? MM.pct(s[k], parseInt(o.dataset.dp || "1", 10))
-          : f === "int" ? String(Math.round(s[k])) : MM.num(s[k], 2);
+          : f === "int" ? String(Math.round(s[k])) : MM.num(s[k], parseInt(o.dataset.dp || "2", 10));
       });
       render(s);
     };
@@ -102,6 +102,50 @@
     });
     (o.dots || []).forEach((p) => el("circle", { class: p.cls, cx: sx(p.x), cy: sy(p.y), r: 4.5 }));
   };
+  /* ---------- Bar chart (SVG) ----------
+     MM.barChart(svg, {
+       bars: [{x, y, y0, cls}],        // x: category position, y: value, y0: optional base for stacking
+       x: {min, max, label, tickEvery}, y: {max, label, pct: true},
+       markerX: number                 // optional dashed vertical line, e.g. a budget
+     }) */
+  MM.barChart = function (svg, o) {
+    const W = 640, H = 320, m = { t: 14, r: 16, b: 46, l: 52 };
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.innerHTML = "";
+    const iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const span = o.x.max - o.x.min + 1, bw = iw / span;
+    const sx = (x) => m.l + (x - o.x.min) * bw;
+    const sy = (y) => m.t + ih - (y / o.y.max) * ih;
+    const el = (tag, attrs) => {
+      const n = document.createElementNS(SVG_NS, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      svg.appendChild(n);
+      return n;
+    };
+    const yStep = niceStep(o.y.max / 4);
+    for (let v = 0; v <= o.y.max + 1e-9; v += yStep) {
+      el("line", { class: "gridline", x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v) });
+      el("text", { x: m.l - 8, y: sy(v) + 4, "text-anchor": "end" }).textContent =
+        o.y.pct ? +(v * 100).toFixed(1) + "%" : +v.toFixed(2);
+    }
+    const every = o.x.tickEvery || 5;
+    for (let x = o.x.min; x <= o.x.max; x++) {
+      if (x % every === 0 || x === o.x.min)
+        el("text", { x: sx(x) + bw / 2, y: H - m.b + 18, "text-anchor": "middle" }).textContent = x;
+    }
+    o.bars.forEach((b) => {
+      const y0 = b.y0 || 0, top = sy(Math.min(o.y.max, y0 + b.y)), h = Math.max(0, sy(y0) - top);
+      el("rect", { class: "bar " + (b.cls || ""), x: sx(b.x) + Math.min(1, bw * 0.1), y: top, width: Math.max(1, bw - Math.min(2, bw * 0.2)), height: h });
+    });
+    if (o.markerX != null) {
+      const x = sx(o.markerX) + bw;
+      el("line", { class: "marker", x1: x, x2: x, y1: m.t, y2: m.t + ih });
+    }
+    el("line", { class: "axis-base", x1: m.l, x2: W - m.r, y1: sy(0), y2: sy(0) });
+    if (o.x.label) el("text", { class: "axis-label", x: m.l + iw / 2, y: H - 8, "text-anchor": "middle" }).textContent = o.x.label;
+    if (o.y.label) el("text", { class: "axis-label", x: -(m.t + ih / 2), y: 14, transform: "rotate(-90)", "text-anchor": "middle" }).textContent = o.y.label;
+  };
+
   function niceStep(raw) {
     const p = Math.pow(10, Math.floor(Math.log10(raw)));
     const f = raw / p;

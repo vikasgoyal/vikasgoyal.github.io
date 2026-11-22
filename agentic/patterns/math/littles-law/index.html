@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Little's Law and Queueing | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Size concurrency limits, GPU slots and rate limits for AI agents with Little's Law and the Erlang C queueing model. Math, derivations, capacity calculator and a worked customer-support example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/littles-law/">
+<meta property="og:title" content="Little’s Law and queueing: why agent latency explodes near capacity">
+<meta property="og:description" content="At 92% busy, every model call waits 2.5 s in line. Three more slots cut it to 0.2 s. The math and a capacity calculator.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/littles-law/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Little's Law and Queueing",
+  "about": "Capacity planning for AI agent model calls and tool slots",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/littles-law/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Little’s Law and queueing</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M04</span>
+          <span class="tag">Reliability</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Tool/action</span>
+          <span class="tag dof">Coordination</span>
+        </div>
+        <h1>Little’s Law and queueing</h1>
+        <p class="formula-name">\(L = \lambda W\), plus Erlang C for rate-limited model calls</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          At
+          <input class="inline-num" type="number" min="0.5" max="40" step="0.5" data-key="lam" aria-label="Model calls per second">
+          model calls a second taking
+          <input class="inline-num" type="number" min="0.5" max="20" step="0.5" data-key="S" aria-label="Seconds per call">
+          s each, a limit of
+          <input class="inline-num" type="number" min="1" max="100" step="1" data-key="c" aria-label="Concurrent calls allowed">
+          concurrent calls keeps slots <span class="result-num" id="hero-rho">92%</span> busy, and every call waits about
+          <span class="result-num" id="hero-wait">2.5 s</span> in line before it even starts.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Agents multiply load, and latency does not grow in a straight line with it.</p>
+        <p>One user request becomes many model calls and tool calls, and each one holds a slot while it runs: a provider concurrency limit, a GPU, a connection pool, a share of a tokens-per-minute quota. Below about 70% busy, queues are short and invisible. Past about 85%, random bursts stop draining and waiting time climbs steeply. Little's Law tells you how much is in flight; queueing theory tells you how long it waits. Together they size concurrency limits and capacity before the latency complaints arrive.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Picture a coffee shop. If 2 customers arrive a minute and each stays 15 minutes, about 30 people are inside at any moment. That is Little's Law, and it holds whatever the shop looks like inside.</p>
+        <p>Now look at the line. When the baristas are busy half the time, a customer rarely waits. When they are busy 90% of the time, every small burst of arrivals builds a line that never quite clears before the next burst. For a single server, total time in the shop relative to service time looks like this:</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">50% busy</span><div class="track"><div class="fill" style="width:10%"></div></div><span class="pct">2×</span></div>
+          <div class="row"><span class="lbl">80% busy</span><div class="track"><div class="fill" style="width:25%"></div></div><span class="pct">5×</span></div>
+          <div class="row"><span class="lbl">90% busy</span><div class="track"><div class="fill bad" style="width:50%"></div></div><span class="pct">10×</span></div>
+          <div class="row"><span class="lbl">95% busy</span><div class="track"><div class="fill bad" style="width:100%"></div></div><span class="pct">20×</span></div>
+        </div>
+        <p>More servers sharing one line soften the curve a lot, which is why one shared pool of model capacity beats many small dedicated ones. But no pool escapes the steep climb near 100%.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>Little's Law holds for any stable system, with no assumptions about arrival or service patterns:</p>
+        <div class="math-block">$$L = \lambda W$$</div>
+        <p>For \(c\) slots serving calls that arrive at random, the Erlang C model gives the probability a call has to wait and the average wait:</p>
+        <div class="math-block">$$a = \lambda S,\quad \rho = \frac{a}{c},\qquad C(c,a) = \frac{\dfrac{a^c}{c!}\dfrac{c}{c-a}}{\displaystyle\sum_{k=0}^{c-1}\frac{a^k}{k!} + \frac{a^c}{c!}\frac{c}{c-a}},\qquad W_q = \frac{C(c,a)\,S}{c-a}$$</div>
+        <dl class="symbols">
+          <dt>\(\lambda\)</dt><dd>arrival rate: model calls (or tasks) per second, at peak</dd>
+          <dt>\(S\)</dt><dd>average time one call holds a slot, in seconds; \(\mu = 1/S\)</dd>
+          <dt>\(c\)</dt><dd>number of slots: concurrency limit, GPUs, workers</dd>
+          <dt>\(a,\ \rho\)</dt><dd>offered load in Erlangs (busy slots on average), and utilization per slot; needs \(\rho &lt; 1\)</dd>
+          <dt>\(C(c,a)\)</dt><dd>probability an arriving call finds every slot busy and waits</dd>
+          <dt>\(W_q,\ W\)</dt><dd>average wait in line, and total time per call \(W = W_q + S\)</dd>
+          <dt>\(c_a,\ c_s\)</dt><dd>variability of arrivals and of call times (standard deviation over mean); 1 for purely random</dd>
+        </dl>
+        <p>Real traffic is burstier than random and LLM call times vary with output length. A standard correction scales the wait by the variability:</p>
+        <div class="math-block">$$W_q \approx W_q^{\text{Erlang C}} \cdot \frac{c_a^2 + c_s^2}{2} \qquad\qquad \Pr(\text{wait} > t) \approx C(c,a)\, e^{-(c-a)\,t/S}$$</div>
+        <ul>
+          <li><strong>Little's Law at two levels:</strong> conversations in flight = conversations per second × conversation length sizes session state; calls in flight = calls per second × time per call sizes the slot pool.</li>
+          <li><strong>The wall:</strong> \(W_q\) has \(c-a\) in the denominator. As load approaches capacity, the wait grows without bound.</li>
+          <li><strong>The tail:</strong> waiting time beyond \(t\) falls off exponentially at rate \((c-a)/S\), so spare capacity buys short tails.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Enter peak load, call time and your slot limit. The curve shows how latency bends as utilization rises; the second view shows what each extra slot buys.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-lam">Model calls per second, \(\lambda\) <output data-out="lam" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-lam" type="range" min="0.5" max="40" step="0.5" data-key="lam">
+              </div>
+              <div class="control">
+                <label for="c-S">Seconds per call, \(S\) <output data-out="S" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-S" type="range" min="0.5" max="20" step="0.5" data-key="S">
+              </div>
+              <div class="control">
+                <label for="c-c">Concurrent slots, \(c\) <output data-out="c" data-fmt="int"></output></label>
+                <input id="c-c" type="range" min="1" max="100" step="1" data-key="c">
+              </div>
+              <div class="control">
+                <label for="c-ca">Burstiness of arrivals, \(c_a\) <output data-out="ca" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-ca" type="range" min="0" max="2" step="0.1" data-key="ca">
+                <div class="note">1 is random arrivals. Batch jobs and retry storms push it above 1.</div>
+              </div>
+              <div class="control">
+                <label for="c-cs">Variability of call time, \(c_s\) <output data-out="cs" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-cs" type="range" min="0" max="2" step="0.1" data-key="cs">
+                <div class="note">Standard deviation of call time divided by its mean, from your logs.</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout" id="r-rho"><div class="v" id="o-rho">–</div><div class="k">Slot utilization</div></div>
+                <div class="readout"><div class="v" id="o-pw">–</div><div class="k">Calls that have to wait</div></div>
+                <div class="readout alarm"><div class="v" id="o-wq">–</div><div class="k">Average wait per call</div></div>
+                <div class="readout"><div class="v" id="o-w">–</div><div class="k">Average total time per call</div></div>
+                <div class="readout"><div class="v" id="o-L">–</div><div class="k">Calls in flight, \(L=\lambda W\)</div></div>
+                <div class="readout primary"><div class="v" id="o-need">–</div><div class="k">Slots to keep waits under 10% of call time</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-curve" id="tab-curve">Latency curve</button>
+                <button role="tab" aria-selected="false" aria-controls="view-slots" id="tab-slots">Slots vs wait</button>
+              </div>
+
+              <div id="view-curve" role="tabpanel" aria-labelledby="tab-curve">
+                <div class="chart-wrap">
+                  <svg class="chart" id="curve" role="img" aria-label="Average time per call versus slot utilization"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>Your slots, one shared queue</span>
+                    <span><i style="background:var(--fault)"></i>Same slots, split into separate queues</span>
+                    <span><i style="background:var(--ink)"></i>Your utilization now</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="view-slots" role="tabpanel" aria-labelledby="tab-slots" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="slots" role="img" aria-label="Average wait per call for each number of slots"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--fault)"></i>Wait above 10% of call time</span>
+                    <span><i style="background:var(--ok)"></i>Wait under 10% of call time</span>
+                    <span><i style="background:var(--accent)"></i>Your current slots</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a customer-support agent</h2>
+        <p>A support agent handles <strong>1,800 conversations an hour</strong> at peak. Each conversation makes <strong>8 model calls</strong> that average <strong>3 seconds</strong>, and lasts about <strong>4 minutes</strong> including the customer's typing. The model deployment allows <strong>13 concurrent requests</strong>. From the logs, arrivals are somewhat bursty (\(c_a = 1.3\)) and call times vary (\(c_s = 0.8\)).</p>
+        <p>Little's Law first, at both levels. Conversations: \(0.5/\text{s} \times 240\,\text{s} = 120\) open at once, which sizes the session store. Calls: \(0.5 \times 8 = 4\) per second, each holding a slot for 3 s, so \(a = 12\): on average twelve of the thirteen slots are busy.</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Slots</th><th class="num">Utilization</th><th class="num">Calls that wait</th><th class="num">Avg wait per call</th><th class="num">Added per conversation</th></tr></thead>
+            <tbody>
+              <tr class="weak"><td>13 (current)</td><td class="num">92%</td><td class="num">70%</td><td class="num">2.5 s</td><td class="num">19.7 s</td></tr>
+              <tr><td>14</td><td class="num">86%</td><td class="num">48%</td><td class="num">0.84 s</td><td class="num">6.7 s</td></tr>
+              <tr><td>16</td><td class="num">75%</td><td class="num">21%</td><td class="num">0.18 s</td><td class="num">1.4 s</td></tr>
+              <tr><td>20</td><td class="num">60%</td><td class="num">2%</td><td class="num">0.01 s</td><td class="num">0.1 s</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Customers were waiting an extra 20 seconds per conversation, entirely in queues, while dashboards showed the model answering in 3 seconds. Raising the limit from 13 to 16, 23% more capacity, cut the added wait by 93%. The team also found that their retry-on-timeout logic fired hardest exactly when the queue was longest, pushing \(c_a\) up at the worst moment; adding backoff with jitter fixed that.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>The system must be stable over the window.</strong> Little's Law relates long-run averages. During a spike, the number in flight and the time in system lag each other; measure over windows longer than a typical call.</li>
+          <li><strong>The variability correction is approximate.</strong> It is accurate to within roughly 10–20% for moderate variability, which is good enough for sizing, not for promising an exact SLO. Validate with load tests near your planned utilization.</li>
+          <li><strong>Rate limits are often tokens, not requests.</strong> Convert a tokens-per-minute quota into slots: capacity in calls per second is quota ÷ 60 ÷ tokens per call, and that plays the role of \(c/S\).</li>
+          <li><strong>Retries and timeouts feed back.</strong> A slow queue triggers timeouts, timeouts trigger retries, and retries add load, so \(\lambda\) rises just as capacity runs out. Count retries in \(\lambda\) and back off with jitter.</li>
+          <li><strong>Not all calls are equal.</strong> Interactive chat and background batch work sharing one pool will hurt each other. Use priorities or separate pools, and model each class on its own.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Measure peak, not average.</strong> Take \(\lambda\) from the busiest 15 minutes of the week, and \(S\), \(c_a\), \(c_s\) from the same logs.</li>
+          <li><strong>Sanity-check with Little's Law.</strong> Calls in flight \(= \lambda \times W\). If that is close to your concurrency limit, you are already queueing.</li>
+          <li><strong>Keep interactive paths under about 75% busy.</strong> Batch work can run hotter; it cares about throughput, not waits.</li>
+          <li><strong>Pool capacity.</strong> One shared pool with routing beats many small dedicated ones at the same total size.</li>
+          <li><strong>Size retries into the load.</strong> Use exponential backoff with jitter, and budget for retry traffic in \(\lambda\).</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"A model endpoint is a checkout lane. At 60% busy there's no line; at 90% busy the line is most of the wait. We buy a few more lanes than the average says, because customers arrive in bunches."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">Parallel attempts and retries multiply \(\lambda\).</span></li>
+              <li><a href="../markov-agent-loops/">M03 Markov chains for agent loops</a><span class="why">Expected steps per task times tasks per second gives calls per second.</span></li>
+              <li><a href="../compounding-error/">M01 Compounding error</a><span class="why">Fewer steps per task means less load as well as fewer failures.</span></li>
+              <li><span class="planned">M11 Model cascades</span><span class="why">Routing easy calls to a cheaper model splits load across pools.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/parallelization/">No. 07 Parallelization</a><span class="why">Fan-out raises the number of calls in flight per request.</span></li>
+              <li><a href="/agentic/patterns/orchestrator-workers/">No. 08 Orchestrator–Workers</a><span class="why">Worker pools are queues; size them with this page.</span></li>
+              <li><a href="/agentic/patterns/routing/">No. 06 Routing</a><span class="why">Separate pools per route, or one shared pool with priorities.</span></li>
+              <li><a href="/agentic/patterns/agent-harness/">No. 22 Agent Harness</a><span class="why">Where concurrency limits, backoff and queues live.</span></li>
+              <li><a href="/agentic/patterns/budget-aware-planning/">No. 26 Budget-aware Planning</a><span class="why">Agents that adapt when capacity or budget is tight.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: littles-law
+number: M04
+name: Little's Law and Erlang C queueing
+family: reliability
+answers: "How many slots keep model-call latency acceptable at peak load?"
+formula:
+  littles_law: "L = lam * W"
+  offered_load: "a = lam * S"
+  utilization: "rho = a / c   (must be < 1)"
+  erlang_c: "C(c, a) = P(arriving call waits)"
+  mean_wait: "Wq = C(c, a) * S / (c - a)"
+  variability_correction: "Wq_GGc ~= Wq * (ca**2 + cs**2) / 2"
+  wait_tail: "P(wait > t) ~= C(c, a) * exp(-(c - a) * t / S)"
+inputs:
+  lam: {type: float, meaning: arrivals per second at peak}
+  S: {type: float, meaning: mean seconds a call holds a slot}
+  c: {type: int, meaning: concurrent slots}
+  ca: {type: float, meaning: coefficient of variation of inter-arrival times}
+  cs: {type: float, meaning: coefficient of variation of call times}
+assumptions:
+  - stable system (rho < 1) over the measurement window
+  - one shared first-come-first-served queue
+  - variability correction is an approximation
+use_when:
+  - setting concurrency limits, worker pools or GPU counts
+  - explaining queueing delay that does not show up in model latency metrics
+related_patterns: [parallelization, orchestrator-workers, routing, agent-harness, budget-aware-planning]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>import math
+
+def erlang_c(c, a):
+    """Probability an arrival waits, for c slots and offered load a = lam * S."""
+    if a >= c:
+        return 1.0
+    b = 1.0                       # Erlang B by stable recurrence
+    for k in range(1, c + 1):
+        b = a * b / (k + a * b)
+    return c * b / (c - a * (1 - b))
+
+def queue_stats(lam, S, c, ca=1.0, cs=1.0):
+    a = lam * S
+    if a >= c:
+        return {"stable": False, "utilization": a / c}
+    pw = erlang_c(c, a)
+    wq = pw * S / (c - a) * (ca ** 2 + cs ** 2) / 2
+    w = wq + S
+    return {"stable": True, "utilization": a / c, "p_wait": pw,
+            "mean_wait": wq, "mean_time": w, "in_flight": lam * w}
+
+def slots_for_wait(lam, S, max_wait, ca=1.0, cs=1.0, c_max=10_000):
+    for c in range(max(1, math.floor(lam * S) + 1), c_max):
+        if queue_stats(lam, S, c, ca, cs)["mean_wait"] <= max_wait:
+            return c
+    return None
+
+if __name__ == "__main__":
+    print(queue_stats(lam=4, S=3, c=13, ca=1.3, cs=0.8))
+    # utilization 0.923, p_wait 0.704, mean_wait 2.46 s, in_flight 21.8
+    print(slots_for_wait(lam=4, S=3, max_wait=0.3, ca=1.3, cs=0.8))  # 16</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>Little's Law from one picture</summary>
+          <div class="body">
+            <p>Plot \(N(t)\), the number of calls in the system, over a long window of length \(T\). The area under that curve can be counted two ways. Over time, it is \(\int_0^T N(t)\,dt = L\,T\), where \(L\) is the average number in the system. Over calls, each call contributes its own time in the system, so the area is also \(\sum_i W_i = (\lambda T)\,W\), where \(\lambda T\) is the number of calls and \(W\) their average time. Equating the two, \(L T = \lambda T W\), so \(L = \lambda W\). Nothing about arrival patterns or service order was assumed.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>One slot: why the wait blows up near capacity</summary>
+          <div class="body">
+            <p>With random arrivals at rate \(\lambda\) and random service at rate \(\mu\), the number in the system is a birth-death chain. In steady state, flow up between \(n\) and \(n+1\) equals flow down: \(\lambda p_n = \mu p_{n+1}\). So \(p_n = \rho^n(1-\rho)\) with \(\rho = \lambda/\mu\). The mean number in the system is \(L = \rho/(1-\rho)\), and by Little's Law \(W = L/\lambda = S/(1-\rho)\). That is the 2×, 5×, 10×, 20× table in the intuition: at \(\rho = 0.9\), \(1/(1-\rho) = 10\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Many slots: the Erlang C formula</summary>
+          <div class="body">
+            <p>With \(c\) slots, the down-rate from state \(n\) is \(\min(n,c)\,\mu\). Balancing flows gives</p>
+            $$p_n = p_0\,\frac{a^n}{n!}\ (n &lt; c), \qquad p_n = p_0\,\frac{a^c}{c!}\,\rho^{\,n-c}\ (n \ge c).$$
+            <p>A call waits when it arrives to find \(n \ge c\). Summing the geometric tail, \(\sum_{n\ge c} p_n = p_0\,\frac{a^c}{c!}\frac{1}{1-\rho}\). Normalizing so all \(p_n\) sum to 1 gives \(C(c,a)\) as stated. The expected queue length is \(L_q = C\,\rho/(1-\rho)\), and Little's Law applied to the queue alone gives \(W_q = L_q/\lambda = C\,S/(c-a)\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The waiting-time tail</summary>
+          <div class="body">
+            <p>Given that a call must wait, all \(c\) slots are busy and they free up at combined rate \(c\mu\), while new arrivals join behind it at rate \(\lambda\). The line ahead drains at net rate \(c\mu - \lambda = (c-a)/S\), and with first-come-first-served order the conditional wait is exponential with that rate. So \(\Pr(\text{wait} > t) = C(c,a)\,e^{-(c-a)t/S}\). Each extra slot adds \(1/S\) to the drain rate, which is why a little spare capacity shortens the tail so much.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Variability and the pooling effect</summary>
+          <div class="body">
+            <p>For a single server with general arrival and service patterns, Kingman's approximation is \(W_q \approx \frac{\rho}{1-\rho}\cdot\frac{c_a^2+c_s^2}{2}\cdot S\). With random arrivals and service, \(c_a = c_s = 1\), the factor is 1 and the formula matches the exact single-slot result. The Allen–Cunneen approximation applies the same factor to the multi-slot Erlang C wait.</p>
+            <p>Pooling: split \(c\) slots into \(c\) separate single-slot queues, each taking \(\lambda/c\). Utilization is unchanged at \(\rho\), but each queue waits \(\frac{\rho}{1-\rho}S\), while one shared queue waits \(\frac{C\,S}{c-a} = \frac{C}{a}\cdot\frac{\rho}{1-\rho}S\), using \(c-a = c(1-\rho)\). Since \(C &lt; 1\), the shared queue waits at least \(a\) times less at the same total capacity: with twelve busy slots, at least twelve times less. The red curve in the calculator shows the split version.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Little, J. D. C. (1961). <a href="https://doi.org/10.1287/opre.9.3.383">A Proof for the Queuing Formula: L = λW</a>. <em>Operations Research</em> 9(3), 383–387.</li>
+          <li>Harchol-Balter, M. (2013). <em>Performance Modeling and Design of Computer Systems: Queueing Theory in Action</em>. Cambridge University Press. A practitioner-friendly treatment of M/M/c, variability and pooling.</li>
+          <li>Kingman, J. F. C. (1961). The single server queue in heavy traffic. <em>Mathematical Proceedings of the Cambridge Philosophical Society</em> 57(4), 902–904. The source of the variability factor \((c_a^2+c_s^2)/2\).</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"littles-law","number":"M04","family":"reliability",
+ "formula":{"littles_law":"L=lam*W","offered_load":"a=lam*S","utilization":"a/c","mean_wait":"erlang_c(c,a)*S/(c-a)","variability":"Wq*(ca**2+cs**2)/2","wait_tail":"C*exp(-(c-a)*t/S)"},
+ "inputs":["lam","S","c","ca","cs"],
+ "assumptions":["stable system rho<1","single shared FCFS queue","variability correction approximate"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Model ---------- */
+  function erlangC(c, a) {
+    if (a >= c) return 1;
+    let b = 1;
+    for (let k = 1; k <= c; k++) b = (a * b) / (k + a * b);
+    return (c * b) / (c - a * (1 - b));
+  }
+  function stats(lam, S, c, ca, cs) {
+    const a = lam * S;
+    if (a >= c) return { stable: false, rho: a / c };
+    const pw = erlangC(c, a), vf = (ca * ca + cs * cs) / 2;
+    const wq = (pw * S) / (c - a) * vf;
+    return { stable: true, rho: a / c, pw, wq, w: wq + S, L: lam * (wq + S) };
+  }
+  const secs = (x) => (x < 0.095 ? (x * 1000).toFixed(0) + " ms" : x < 10 ? x.toFixed(x < 1 ? 2 : 1) + " s" : x.toFixed(0) + " s");
+
+  MM.tabs(document.getElementById("lab-tabs"));
+
+  /* ---------- Render ---------- */
+  function render(s) {
+    const c = Math.round(s.c), r = stats(s.lam, s.S, c, s.ca, s.cs);
+    const rhoBox = document.getElementById("r-rho");
+    const heroRho = document.getElementById("hero-rho"), heroWait = document.getElementById("hero-wait");
+    heroRho.textContent = MM.pct(r.rho, 0);
+    heroRho.classList.toggle("good", r.rho <= 0.75);
+    rhoBox.classList.toggle("alarm", r.rho > 0.85);
+    rhoBox.classList.toggle("primary", r.rho <= 0.75);
+    document.getElementById("o-rho").textContent = MM.pct(r.rho, 0);
+
+    // slots needed for wait <= 10% of call time
+    let need = null;
+    for (let k = Math.max(1, Math.floor(s.lam * s.S) + 1); k <= 2000; k++) {
+      if (stats(s.lam, s.S, k, s.ca, s.cs).wq <= 0.1 * s.S) { need = k; break; }
+    }
+    document.getElementById("o-need").textContent = need == null ? "–" : String(need);
+
+    if (!r.stable) {
+      heroWait.textContent = "forever, because the queue never drains";
+      ["o-pw", "o-wq", "o-w", "o-L"].forEach((id) => (document.getElementById(id).textContent = "Overloaded"));
+    } else {
+      heroWait.textContent = secs(r.wq);
+      heroWait.classList.toggle("good", r.wq <= 0.1 * s.S);
+      document.getElementById("o-pw").textContent = MM.pct(r.pw, 0);
+      document.getElementById("o-wq").textContent = secs(r.wq);
+      document.getElementById("o-w").textContent = secs(r.w);
+      document.getElementById("o-L").textContent = MM.num(r.L, 1);
+    }
+
+    /* Latency curve: shared queue vs c separate queues, across utilization */
+    const vf = (s.ca * s.ca + s.cs * s.cs) / 2;
+    const ymax = Math.max(4 * s.S, r.stable ? Math.min(r.w * 1.6, 25 * s.S) : 0);
+    const shared = [], split = [];
+    for (let u = 0.01; u <= 0.991; u += 0.01) {
+      const a = u * c, pw = erlangC(c, a);
+      shared.push([u * 100, Math.min(ymax, s.S + (pw * s.S) / (c - a) * vf)]);
+      split.push([u * 100, Math.min(ymax, s.S + (u / (1 - u)) * s.S * vf)]);
+    }
+    MM.lineChart(document.getElementById("curve"), {
+      x: { min: 0, max: 100, label: "Slot utilization (%)" },
+      y: { min: 0, max: ymax, label: "Average time per call (s)" },
+      series: [{ cls: "s-fault", points: split }, { cls: "s-accent", points: shared }],
+      markerX: Math.min(99, r.rho * 100),
+      dots: r.stable ? [{ x: r.rho * 100, y: Math.min(ymax, r.w), cls: "dot-ok" }] : []
+    });
+
+    /* Slots vs wait */
+    const c0 = Math.max(1, Math.floor(s.lam * s.S) + 1), bars = [];
+    let top = 0;
+    for (let k = c0; k < c0 + 16; k++) {
+      const st = stats(s.lam, s.S, k, s.ca, s.cs);
+      const ok = st.wq <= 0.1 * s.S;
+      bars.push({ x: k, y: st.wq, cls: k === c ? "b-accent" : ok ? "" : "b-fault" });
+      if (k > c0) top = Math.max(top, st.wq);
+    }
+    const capY = Math.max(0.1 * s.S * 2, r.stable ? r.wq * 1.3 : 0, top * 0.6);
+    MM.barChart(document.getElementById("slots"), {
+      bars, x: { min: c0, max: c0 + 15, label: "Concurrent slots", tickEvery: 2 },
+      y: { max: capY, label: "Average wait per call (s)" }
+    });
+  }
+
+  MM.state({ lam: 4, S: 3, c: 13, ca: 1.3, cs: 0.8 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

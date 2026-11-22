@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redundancy and Retries | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="How much k retries or parallel attempts raise an AI agent's success rate, why correlated failures cap the gain, and how to measure that cap. Math, derivations, calculator and a worked text-to-SQL example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/redundancy-retries/">
+<meta property="og:title" content="Redundancy and retries: why “just retry” plateaus">
+<meta property="og:description" content="Three attempts at 70% should give 97%. With shared failure causes you get 90%, and no number of retries passes 91%.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/redundancy-retries/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Redundancy and Retries",
+  "about": "Retries, best-of-k and parallel attempts in AI agents",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/redundancy-retries/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Redundancy and retries</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M02</span>
+          <span class="tag">Reliability</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Verification</span>
+          <span class="tag dof">Decision</span>
+        </div>
+        <h1>Redundancy and retries</h1>
+        <p class="formula-name">Parallel reliability, \(1-(1-p)^k\), and the common-cause ceiling</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          Retrying up to
+          <input class="inline-num" type="number" min="1" max="10" step="1" data-key="k" aria-label="Attempts">
+          times at
+          <span class="nowrap"><input class="inline-num wide" type="number" min="30" max="99" step="1" data-key="p" data-scale="100" aria-label="Per-attempt success, percent">%</span>
+          per attempt should succeed <span class="result-num good" id="hero-ind">97%</span> of the time. When
+          <span class="nowrap"><input class="inline-num wide" type="number" min="0" max="100" step="5" data-key="b" data-scale="100" aria-label="Share of failures with a shared cause, percent">%</span>
+          of failures share a cause, it succeeds <span class="result-num" id="hero-cor">90%</span>, and no number of retries gets past <span class="result-num" id="hero-ceil">91%</span>.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Retries are the cheapest reliability fix in an agent, and the most over-trusted one.</p>
+        <p>The textbook formula assumes every attempt fails for its own reasons. Real attempts share a model, a prompt, an input and a context window, so when one fails for a structural reason (a missing table, an ambiguous question, a tool that is down) the next attempt usually fails the same way. That shared part sets a ceiling that no retry count can cross. This page shows how to find the ceiling, how to measure it from your own traces, and how to raise it.</p>
+        <p class="muted small">Everything here assumes you can tell a good attempt from a bad one: a test, a schema check, a verifier. Without a checker, choosing among k answers is a voting problem, covered in M10.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Asking the same colleague the same question three times helps if they misheard you. It does nothing if they don't know the answer. Independent failures are the mishearing kind; common-cause failures are the not-knowing kind.</p>
+        <figure style="margin: 18px 0 8px;">
+          <svg id="intuition-fig" viewBox="0 0 640 210" role="img" aria-label="Left: three independent attempts each fail 30% of the time, so all three fail 2.7% of the time. Right: when 30% of failures share a cause, all three fail 10.1% of the time." style="width:100%;height:auto;font-family:var(--sans)"></svg>
+          <figcaption class="small muted">Three attempts at 70% success each. The shaded band on the right is the shared cause: when it strikes, every attempt fails together.</figcaption>
+        </figure>
+        <p>Only the independent slice shrinks as you add attempts. The shared slice stays exactly where it is, so the success curve flattens at \(1-\beta q\) instead of climbing to 100%.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>With \(k\) attempts that fail independently, the task fails only if every attempt fails:</p>
+        <div class="math-block">$$P_{\text{success}} = 1-(1-p)^k = 1-q^k$$</div>
+        <p>To allow for shared causes, split each attempt's failure probability \(q\) into a common-cause part \(\beta q\) that knocks out every attempt at once, and an independent part. This is the beta-factor model from safety engineering:</p>
+        <div class="math-block">$$P_{\text{all fail}} = \beta q + (1-\beta q)\,q_i^{\,k}, \qquad q_i = \frac{(1-\beta)\,q}{1-\beta q}$$</div>
+        <dl class="symbols">
+          <dt>\(p\)</dt><dd>probability a single attempt succeeds; \(q = 1-p\)</dd>
+          <dt>\(k\)</dt><dd>maximum number of attempts (retries plus the first try, or parallel samples)</dd>
+          <dt>\(\beta\)</dt><dd>share of failures that come from a cause every attempt shares</dd>
+          <dt>\(q_i\)</dt><dd>failure probability of an attempt once the shared cause is ruled out</dd>
+          <dt>\(r\)</dt><dd>repeat-failure rate: share of failed cases that fail again on one retry</dd>
+        </dl>
+        <p>Four results matter in practice:</p>
+        <div class="math-block">$$\lim_{k\to\infty} P_{\text{success}} = 1-\beta q \qquad \beta = \frac{r-q}{1-2q+rq} \qquad \mathbb{E}[\text{attempts}] = \sum_{j=0}^{k-1} P(\text{first } j \text{ fail})$$</div>
+        <ul>
+          <li><strong>The ceiling:</strong> with infinitely many attempts you still fail on the shared slice, \(\beta q\). At \(p = 0.7\) and \(\beta = 0.3\), that caps success at 91%.</li>
+          <li><strong>Measuring \(\beta\):</strong> retry each failed case once. If failures were independent, a share \(q\) would fail again. The excess over \(q\) gives \(\beta\) exactly, with the formula above.</li>
+          <li><strong>Cost:</strong> sequential retries stop at the first success, so you pay far fewer than \(k\) attempts on average. Parallel attempts always pay \(k\), in exchange for one round of latency.</li>
+          <li><strong>Attempts for a target \(T\):</strong> with independent failures, \(k^* = \lceil \ln(1-T)/\ln q \rceil\). With a shared cause, a target above \(1-\beta q\) is unreachable at any \(k\).</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Set attempt quality and how correlated failures are. The curve compares what the independence math promises with what shared causes allow; the simulation runs 40 requests attempt by attempt.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-p">Success per attempt <output data-out="p" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-p" type="range" min="30" max="99" step="1" data-key="p" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-k">Attempts allowed <output data-out="k" data-fmt="int"></output></label>
+                <input id="c-k" type="range" min="1" max="10" step="1" data-key="k">
+              </div>
+              <div class="control">
+                <label for="c-b">Failures with a shared cause, \(\beta\) <output data-out="b" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-b" type="range" min="0" max="100" step="5" data-key="b" data-scale="100">
+                <div class="note">0% means every retry is a fresh, independent try. 100% means a retry never helps.</div>
+              </div>
+              <div class="control">
+                <label for="c-t">Target success <output data-out="T" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-t" type="range" min="50" max="99" step="1" data-key="T" data-scale="100">
+              </div>
+              <div class="control">
+                <label id="mode-label">How attempts run</label>
+                <div class="seg" role="group" aria-labelledby="mode-label">
+                  <button type="button" data-mode="seq" aria-pressed="true">One after another</button>
+                  <button type="button" data-mode="par" aria-pressed="false">All at once</button>
+                </div>
+                <div class="note">One after another stops at the first success. All at once pays for every attempt but finishes in one round.</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-cor">–</div><div class="k">Success with shared causes</div></div>
+                <div class="readout"><div class="v" id="o-ind">–</div><div class="k">What independence math promises</div></div>
+                <div class="readout alarm"><div class="v" id="o-ceil">–</div><div class="k">Ceiling at any number of attempts</div></div>
+                <div class="readout"><div class="v" id="o-need">–</div><div class="k" id="o-need-k">Attempts needed for target</div></div>
+                <div class="readout"><div class="v" id="o-cost">–</div><div class="k" id="o-cost-k">Attempts paid per request</div></div>
+                <div class="readout"><div class="v" id="o-r">–</div><div class="k">Failures that fail again on one retry</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-curve" id="tab-curve">Curve</button>
+                <button role="tab" aria-selected="false" aria-controls="view-sim" id="tab-sim">Simulate 40 requests</button>
+              </div>
+
+              <div id="view-curve" role="tabpanel" aria-labelledby="tab-curve">
+                <div class="chart-wrap">
+                  <svg class="chart" id="curve" role="img" aria-label="Success versus number of attempts, independent and with shared causes"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>If failures were independent</span>
+                    <span><i style="background:var(--ok)"></i>With shared causes</span>
+                    <span><i class="dash"></i>Ceiling, \(1-\beta q\)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="view-sim" role="tabpanel" aria-labelledby="tab-sim" hidden>
+                <div class="sim">
+                  <div class="sim-head">
+                    <span><strong id="sim-count">–</strong> of 40 requests succeeded (expected <strong id="sim-exp">–</strong>)</span>
+                    <button class="btn ghost" type="button" id="sim-again">Run 40 again</button>
+                  </div>
+                  <canvas id="sim-canvas" width="1200" height="640" aria-label="Grid of 40 simulated requests; each row is one request, each cell one attempt."></canvas>
+                  <div class="sim-key">
+                    <span><i style="background:var(--ok)"></i>Attempt succeeded</span>
+                    <span><i style="background:var(--retry)"></i>Independent failure, retried</span>
+                    <span><i style="background:var(--fault)"></i>Shared-cause failure</span>
+                    <span><i style="background:var(--grid)"></i>Not needed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a text-to-SQL step</h2>
+        <p>An analytics agent turns business questions into SQL. A checker runs each query against a test copy of the warehouse and rejects anything that errors or returns the wrong columns. On 1,000 labeled questions, one attempt passes <strong>70%</strong> of the time.</p>
+        <p>The team allowed up to three attempts and expected \(1 - 0.3^3 = \) <strong>97.3%</strong>. Production showed <strong>89.9%</strong>. Retrying every failed question once explained the gap: <strong>46%</strong> failed again, where independent failures would give 30%. Plugging that in, \(\beta = (0.46-0.3)/(1-0.6+0.3\times0.46) \approx 0.3\). Reading the failures confirmed it: about a third came from questions about tables that were never in the agent's schema context, and no retry can fix a table the model cannot see.</p>
+        <h3>What each change buys</h3>
+        <div class="compare">
+          <div class="row"><span class="lbl">One attempt</span><div class="track"><div class="fill bad" style="width:70%"></div></div><span class="pct">70.0%</span></div>
+          <div class="row"><span class="lbl">Three attempts, what the independence math promised</span><div class="track"><div class="fill" style="width:97.3%;opacity:.45"></div></div><span class="pct">97.3%</span></div>
+          <div class="row"><span class="lbl">Three attempts, as measured (\(\beta \approx 0.3\))</span><div class="track"><div class="fill bad" style="width:89.9%"></div></div><span class="pct">89.9%</span></div>
+          <div class="row"><span class="lbl">Ten attempts, same setup</span><div class="track"><div class="fill bad" style="width:91.0%"></div></div><span class="pct">91.0%</span></div>
+          <div class="row"><span class="lbl">Three attempts, made different: error fed back, schema re-retrieved, second try on another model (\(\beta \approx 0.1\))</span><div class="track"><div class="fill" style="width:94.9%"></div></div><span class="pct">94.9%</span></div>
+        </div>
+        <p>Going from three to ten attempts bought 1.1 points and tripled the worst-case cost. Making the attempts different bought 5 points for free, because sequential retries stop at the first success and still average only 1.4 attempts per question. Fixing the schema context itself, which removes the shared cause rather than working around it, is the change that eventually took the step past 95%.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>The checker is assumed perfect.</strong> A retry only happens when a failure is detected, and a passing-but-wrong answer is final. Combine with the detection rate \(d\) from M01: only detected failures get another attempt.</li>
+          <li><strong>\(\beta\) is not one number.</strong> It varies by input. Easy questions have a low shared-cause share; questions outside the agent's knowledge have \(\beta\) near 1. Measure it per segment when segments differ.</li>
+          <li><strong>Later attempts are not copies.</strong> A retry that sees the error message is a different attempt, often with higher \(p\) and lower \(\beta\). The model treats attempts as identical, so it understates well-designed retries.</li>
+          <li><strong>Retries have side effects.</strong> Repeating a step that sends an email, charges a card or writes a record can do it twice. Retry only idempotent steps, or attach an idempotency key.</li>
+          <li><strong>Parallel attempts are not free.</strong> They cost \(k\) times the tokens, consume \(k\) slots against your rate limit, and if you wait for all of them, latency is the slowest of \(k\). See M04 for the queueing cost.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Measure the repeat-failure rate.</strong> Take 100+ failed cases, retry each once, and count how many fail again. Compute \(\beta = (r-q)/(1-2q+rq)\).</li>
+          <li><strong>Check the ceiling before adding attempts.</strong> If \(1-\beta q\) is below your target, more retries cannot get you there.</li>
+          <li><strong>Make retries different.</strong> Feed back the error, re-retrieve context, raise temperature, or switch to a second model. Each lowers \(\beta\).</li>
+          <li><strong>Attack the shared cause directly.</strong> Read the cases that fail every time; they usually point to missing context or a broken tool, and fixing that raises the ceiling itself.</li>
+          <li><strong>Cap attempts where the curve flattens.</strong> Two or three is typical. Make every retried step idempotent.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"Retrying is asking the same person the same question again. It helps when they misheard, and does nothing when they don't know. So the second time, we ask differently, or we ask someone else."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../compounding-error/">M01 Compounding error</a><span class="why">The series counterpart; retries raise each step's \(p_{\text{eff}}\).</span></li>
+              <li><a href="../markov-agent-loops/">M03 Markov chains for agent loops</a><span class="why">A retry is a self-loop; Markov chains handle loops of any shape.</span></li>
+              <li><a href="../littles-law/">M04 Little’s Law and queueing</a><span class="why">What parallel attempts and retry storms do to latency.</span></li>
+              <li><span class="planned">M05 pass@k vs pass^k</span><span class="why">The same \(1-(1-p)^k\), read as an evaluation metric.</span></li>
+              <li><span class="planned">M10 Condorcet jury theorem and voting</span><span class="why">Choosing among attempts when there is no checker.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/parallelization/">No. 07 Parallelization</a><span class="why">Parallel attempts, with a gather step that picks the winner.</span></li>
+              <li><a href="/agentic/patterns/evaluator-optimizer/">No. 09 Evaluator–Optimizer</a><span class="why">Retries that carry feedback, which lowers \(\beta\).</span></li>
+              <li><a href="/agentic/patterns/fast-slow-escalation/">No. 33 Fast/Slow Escalation</a><span class="why">Retry on a different model: diversity by design.</span></li>
+              <li><a href="/agentic/patterns/test-first-loop/">No. 45 Test-First Agent Loop</a><span class="why">Tests as the checker that makes retries safe to automate.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: redundancy-retries
+number: M02
+name: Redundancy and retries (beta-factor model)
+family: reliability
+answers: "How much do k retries or parallel attempts raise success, and where do they stop helping?"
+formula:
+  independent_success: "1 - q**k,  q = 1 - p"
+  all_fail: "b*q + (1 - b*q) * qi**k,  qi = (1 - b)*q / (1 - b*q)"
+  ceiling: "1 - b*q"
+  beta_from_repeat_failures: "(r - q) / (1 - 2*q + r*q)"
+  expected_attempts_sequential: "sum_{j=0}^{k-1} P(first j attempts fail)"
+inputs:
+  p: {type: float, range: [0, 1], meaning: single-attempt success}
+  k: {type: int, meaning: maximum attempts}
+  b: {type: float, range: [0, 1], meaning: share of failures with a shared cause (beta)}
+  r: {type: float, range: [0, 1], meaning: share of failed cases that fail again on one retry}
+assumptions:
+  - a checker identifies failed attempts perfectly
+  - attempts are exchangeable (same p and beta every time)
+  - retried steps are idempotent
+use_when:
+  - deciding how many retries or samples to allow
+  - explaining why retries plateau below target
+related_patterns: [parallelization, evaluator-optimizer, fast-slow-escalation, test-first-loop]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>import math
+
+def p_all_fail(p, k, beta=0.0):
+    """Probability that all k attempts fail under the beta-factor model."""
+    q = 1 - p
+    if beta * q >= 1:
+        return 1.0
+    qi = (1 - beta) * q / (1 - beta * q)
+    return beta * q + (1 - beta * q) * qi ** k
+
+def success(p, k, beta=0.0):
+    return 1 - p_all_fail(p, k, beta)
+
+def ceiling(p, beta):
+    return 1 - beta * (1 - p)
+
+def beta_from_repeat_failures(p, r):
+    """r: share of failed cases that fail again when retried once."""
+    q = 1 - p
+    return (r - q) / (1 - 2 * q + r * q)
+
+def expected_attempts(p, k, beta=0.0):
+    """Sequential retries that stop at the first success."""
+    return sum(p_all_fail(p, j, beta) if j else 1.0 for j in range(k))
+
+def attempts_for_target(p, target, beta=0.0, k_max=100):
+    for k in range(1, k_max + 1):
+        if success(p, k, beta) >= target:
+            return k
+    return None  # unreachable: target above the ceiling
+
+if __name__ == "__main__":
+    print(success(0.7, 3))                         # 0.973
+    print(success(0.7, 3, beta=0.3))               # 0.899
+    print(ceiling(0.7, 0.3))                       # 0.91
+    print(beta_from_repeat_failures(0.7, 0.4615))  # 0.30
+    print(expected_attempts(0.7, 3, beta=0.3))     # 1.44</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>Independent attempts: \(1-q^k\)</summary>
+          <div class="body">
+            <p>Let \(F_j\) be the event "attempt \(j\) fails", with \(\Pr(F_j) = q\). The task fails only if every attempt fails. If the attempts are independent, \(\Pr(F_1\cap\dots\cap F_k) = q^k\), so success is \(1-q^k\). Each extra attempt multiplies the remaining failure by \(q\): the curve rises fast at first and then flattens toward 1.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The beta-factor model and its ceiling</summary>
+          <div class="body">
+            <p>Model each request as facing two kinds of trouble. With probability \(\beta q\), a shared cause strikes and every attempt fails. Otherwise, attempts fail independently with some probability \(q_i\). For a single attempt to still fail with overall probability \(q\), the two parts must add up:</p>
+            $$q = \beta q + (1-\beta q)\,q_i \quad\Longrightarrow\quad q_i = \frac{(1-\beta)\,q}{1-\beta q}.$$
+            <p>All \(k\) attempts fail if the shared cause strikes, or if it doesn't and all \(k\) independent tries fail:</p>
+            $$P_{\text{all fail}} = \beta q + (1-\beta q)\,q_i^{\,k}.$$
+            <p>As \(k\to\infty\), \(q_i^{\,k}\to 0\) (since \(q_i<1\)), leaving \(P_{\text{all fail}}\to\beta q\) and success \(\to 1-\beta q\). Safety engineers often use the simpler approximation \(\beta q + ((1-\beta)q)^k\), which is close when \(\beta q\) is small; this page uses the exact form.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Measuring \(\beta\) from one retry of each failure</summary>
+          <div class="body">
+            <p>Retry every failed case once and record the share \(r\) that fails again. Under the model, that is \(\Pr(\text{both fail})/\Pr(\text{first fails})\):</p>
+            $$r = \frac{\beta q + (1-\beta q)q_i^2}{q} = \beta + \frac{(1-\beta)^2 q}{1-\beta q}.$$
+            <p>Multiply through by \(1-\beta q\) and expand. The \(\beta^2\) terms cancel, leaving an equation that is linear in \(\beta\):</p>
+            $$r - r\beta q = \beta + q - 2\beta q \quad\Longrightarrow\quad \beta = \frac{r-q}{1-2q+rq}.$$
+            <p>Sanity checks: if \(r = q\) (repeat failures happen at the base rate), \(\beta = 0\). If \(r = 1\) (every failure repeats), \(\beta = (1-q)/(1-q) = 1\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Expected attempts when retrying one after another</summary>
+          <div class="body">
+            <p>With sequential retries you make attempt \(j+1\) only if the first \(j\) all failed. The expected number of attempts is the sum of the probabilities of reaching each attempt:</p>
+            $$\mathbb{E}[\text{attempts}] = \sum_{j=0}^{k-1} \Pr(\text{first } j \text{ fail}) = 1 + \sum_{j=1}^{k-1}\big(\beta q + (1-\beta q)\,q_i^{\,j}\big).$$
+            <p>With \(\beta = 0\) this is the geometric sum \((1-q^k)/(1-q)\). At \(p=0.7\), \(k=3\), \(\beta=0.3\) it comes to 1.44: you allow three attempts but pay for about one and a half. In parallel mode the cost is exactly \(k\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Attempts needed for a target</summary>
+          <div class="body">
+            <p>With independent failures, solve \(1-q^k \ge T\): \(k \ge \ln(1-T)/\ln q\), rounded up. With a shared cause, \(P_{\text{success}}\) is increasing in \(k\) but bounded by \(1-\beta q\), so a solution exists only when \(T < 1-\beta q\). Then</p>
+            $$k^* = \left\lceil \frac{\ln\!\big((1-T-\beta q)/(1-\beta q)\big)}{\ln q_i} \right\rceil.$$
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Mosleh, A. et al. (1998). <a href="https://nrcoe.inl.gov/publicdocs/CCF/NUREGCR-5485_Guidelines%20on%20Modeling%20Common-Cause%20Failures%20in%20PRA.pdf">Guidelines on Modeling Common-Cause Failures in Probabilistic Risk Assessment</a> (NUREG/CR-5485). U.S. Nuclear Regulatory Commission. The standard reference for the beta-factor model.</li>
+          <li>Chen, M. et al. (2021). <a href="https://arxiv.org/abs/2107.03374">Evaluating Large Language Models Trained on Code</a>. Introduces pass@k, the evaluation form of \(1-(1-p)^k\).</li>
+          <li>Brown, B. et al. (2024). <a href="https://arxiv.org/abs/2407.21787">Large Language Monkeys: Scaling Inference Compute with Repeated Sampling</a>. Shows coverage rising with more samples, and how much depends on having a verifier to pick the right one.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"redundancy-retries","number":"M02","family":"reliability",
+ "formula":{"independent_success":"1-q**k; q=1-p","all_fail":"b*q+(1-b*q)*qi**k; qi=(1-b)*q/(1-b*q)","ceiling":"1-b*q","beta_from_repeat_failures":"(r-q)/(1-2*q+r*q)"},
+ "inputs":["p","k","b","r"],
+ "assumptions":["perfect checker","exchangeable attempts","idempotent retries"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Model ---------- */
+  const qi = (q, b) => (b * q >= 1 ? 0 : (1 - b) * q / (1 - b * q));
+  const allFail = (p, k, b) => { const q = 1 - p; return b * q + (1 - b * q) * Math.pow(qi(q, b), k); };
+  const success = (p, k, b) => 1 - allFail(p, k, b);
+  const expAttempts = (p, k, b) => { let s = 1; for (let j = 1; j < k; j++) s += allFail(p, j, b); return s; };
+  const repeatRate = (p, b) => { const q = 1 - p; return b + (1 - b) * (1 - b) * q / (1 - b * q); };
+  const attemptsFor = (p, T, b) => { for (let k = 1; k <= 100; k++) if (success(p, k, b) >= T) return k; return null; };
+
+  /* ---------- Intuition figure (static, p = 0.7, beta = 0.3) ---------- */
+  (function figure() {
+    const svg = document.getElementById("intuition-fig");
+    const q = 0.3, b = 0.3, shared = b * q, qi3 = Math.pow(qi(q, b), 3) * (1 - shared);
+    const col = (x, label, fail, shade) => {
+      const H = 120, top = 38;
+      let s = `<rect x="${x}" y="${top}" width="56" height="${H}" rx="3" fill="var(--ok-soft)" stroke="var(--ok)"/>`;
+      if (shade) s += `<rect x="${x}" y="${top}" width="56" height="${H * shade}" fill="var(--fault)" opacity=".85"/>`;
+      s += `<rect x="${x}" y="${top + H * (shade || 0)}" width="56" height="${H * fail}" fill="var(--retry)" opacity=".85"/>`;
+      s += `<text x="${x + 28}" y="${top + H + 18}" text-anchor="middle" font-size="12" fill="var(--ink-3)">${label}</text>`;
+      return s;
+    };
+    let out = `<text x="0" y="20" font-size="14" font-weight="650" fill="var(--ink)">Independent failures</text>`;
+    out += col(0, "try 1", 0.3) + col(76, "try 2", 0.3) + col(152, "try 3", 0.3);
+    out += `<text x="0" y="200" font-size="14" fill="var(--ink)">All three fail: <tspan font-weight="650" fill="var(--fault)">2.7%</tspan></text>`;
+    const ox = 340;
+    out += `<text x="${ox}" y="20" font-size="14" font-weight="650" fill="var(--ink)">30% of failures shared</text>`;
+    const qind = (1 - b) * q; // independent share of a single attempt's failure, as a fraction of all requests
+    out += col(ox, "try 1", qind, shared) + col(ox + 76, "try 2", qind, shared) + col(ox + 152, "try 3", qind, shared);
+    out += `<line x1="${ox - 6}" y1="38" x2="${ox + 214}" y2="38" stroke="var(--fault)" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+    out += `<line x1="${ox - 6}" y1="${38 + 120 * shared}" x2="${ox + 214}" y2="${38 + 120 * shared}" stroke="var(--fault)" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+    out += `<text x="${ox + 222}" y="${38 + 60 * shared + 4}" font-size="12" fill="var(--fault)">shared</text>`;
+    out += `<text x="${ox}" y="200" font-size="14" fill="var(--ink)">All three fail: <tspan font-weight="650" fill="var(--fault)">${((shared + qi3) * 100).toFixed(1)}%</tspan></text>`;
+    svg.innerHTML = out;
+  })();
+
+  /* ---------- Mode toggle ---------- */
+  let mode = "seq";
+  const modeBtns = document.querySelectorAll("[data-mode]");
+  modeBtns.forEach((btn) => btn.addEventListener("click", () => {
+    mode = btn.dataset.mode;
+    modeBtns.forEach((x) => x.setAttribute("aria-pressed", x === btn));
+    if (lastState) render(lastState);
+  }));
+
+  /* ---------- Simulation ---------- */
+  const canvas = document.getElementById("sim-canvas");
+  const ctx = canvas.getContext("2d");
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  let lastState = null;
+  function simulate(s) {
+    const runs = 40, k = Math.round(s.k), W = canvas.width, H = canvas.height;
+    const q = 1 - s.p, qq = qi(q, s.b), gap = 4, cw = W / k, ch = H / runs;
+    const col = { ok: css("--ok"), ind: css("--retry"), shared: css("--fault"), none: css("--grid") };
+    ctx.clearRect(0, 0, W, H);
+    let won = 0;
+    for (let run = 0; run < runs; run++) {
+      const sharedHit = Math.random() < s.b * q;
+      let done = false;
+      for (let i = 0; i < k; i++) {
+        let state;
+        if (done && mode === "seq") state = "none";
+        else if (sharedHit) state = "shared";
+        else state = Math.random() < qq ? "ind" : "ok";
+        if (state === "ok") done = true;
+        ctx.fillStyle = col[state];
+        ctx.fillRect(i * cw + gap / 2, run * ch + 2, cw - gap, ch - 4);
+      }
+      if (done) won++;
+    }
+    document.getElementById("sim-count").textContent = won;
+    document.getElementById("sim-exp").textContent = (40 * success(s.p, k, s.b)).toFixed(1);
+  }
+  const simView = document.getElementById("view-sim");
+  document.getElementById("sim-again").addEventListener("click", () => lastState && simulate(lastState));
+  MM.tabs(document.getElementById("lab-tabs"));
+  document.getElementById("lab-tabs").addEventListener("tabchange", (e) => {
+    if (e.detail === "view-sim" && lastState) simulate(lastState);
+  });
+
+  /* ---------- Render ---------- */
+  let simTimer;
+  function render(s) {
+    const k = Math.round(s.k), q = 1 - s.p;
+    const ind = 1 - Math.pow(q, k), cor = success(s.p, k, s.b), ceil = 1 - s.b * q;
+    const fmt = (x) => MM.pct(x, x > 0.995 ? 2 : 1);
+
+    document.getElementById("hero-ind").textContent = fmt(ind);
+    document.getElementById("hero-cor").textContent = fmt(cor);
+    document.getElementById("hero-ceil").textContent = fmt(ceil);
+
+    document.getElementById("o-cor").textContent = fmt(cor);
+    document.getElementById("o-ind").textContent = fmt(ind);
+    document.getElementById("o-ceil").textContent = fmt(ceil);
+    const need = attemptsFor(s.p, s.T, s.b);
+    document.getElementById("o-need").textContent = need == null ? "Never" : String(need);
+    document.getElementById("o-need-k").textContent = need == null
+      ? `${MM.pct(s.T, 0)} is above the ceiling at any number of attempts`
+      : `Attempts needed for ${MM.pct(s.T, 0)} success`;
+    document.getElementById("o-cost").textContent = mode === "seq" ? expAttempts(s.p, k, s.b).toFixed(2) : String(k);
+    document.getElementById("o-cost-k").textContent = mode === "seq"
+      ? "Attempts paid per request, on average" : "Attempts paid per request, every time";
+    document.getElementById("o-r").textContent = MM.pct(repeatRate(s.p, s.b), 1);
+
+    const ks = Array.from({ length: 10 }, (_, i) => i + 1);
+    const lo = Math.max(0, Math.floor((s.p - 0.1) * 10) / 10);
+    MM.lineChart(document.getElementById("curve"), {
+      x: { min: 1, max: 10, label: "Attempts allowed" },
+      y: { min: lo, max: 1, label: "Success", pct: true },
+      series: [
+        { cls: "s-accent", points: ks.map((x) => [x, 1 - Math.pow(q, x)]) },
+        { cls: "s-ok", points: ks.map((x) => [x, success(s.p, x, s.b)]) }
+      ],
+      markerX: k, targetY: ceil,
+      dots: [{ x: k, y: cor, cls: "dot-ok" }]
+    });
+
+    lastState = Object.assign({}, s);
+    if (!simView.hidden) { clearTimeout(simTimer); simTimer = setTimeout(() => simulate(lastState), 120); }
+  }
+
+  MM.state({ p: 0.7, k: 3, b: 0.3, T: 0.95 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

@@ -119,7 +119,7 @@ gtag('config', 'G-ZBXY60BLWE');
           <dt>\(d\)</dt><dd>share of failures your checks catch (schema validation, tests, a verifier)</dd>
           <dt>\(r\)</dt><dd>retries allowed after a caught failure</dd>
         </dl>
-        <p>Three results follow and are worth memorising:</p>
+        <p>Three results follow and are worth memorizing:</p>
         <div class="math-block">$$P_{\text{run}} \approx e^{-n\varepsilon} \qquad n_{1/2} = \frac{\ln 2}{-\ln p} \approx \frac{0.69}{\varepsilon} \qquad p^{*} = T^{1/n}$$</div>
         <ul>
           <li><strong>Exponential decay:</strong> success falls like \(e^{-n\varepsilon}\), so what matters is the product of steps and error rate. Doubling steps hurts as much as doubling errors.</li>
@@ -257,7 +257,7 @@ gtag('config', 'G-ZBXY60BLWE');
       <!-- 9. Customer conversation -->
       <section class="section">
         <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
-        <blockquote class="say">"Each step is a coin weighted 95 to 5 in our favour. Flip it twenty times and expect a miss in two runs out of three. So we either flip fewer coins, or we check each flip and re-flip the bad ones."</blockquote>
+        <blockquote class="say">"Each step is a coin weighted 95 to 5 in our favor. Flip it twenty times and expect a miss in two runs out of three. So we either flip fewer coins, or we check each flip and re-flip the bad ones."</blockquote>
       </section>
 
       <!-- 10. Related -->
@@ -267,8 +267,9 @@ gtag('config', 'G-ZBXY60BLWE');
           <div>
             <h3>Math models</h3>
             <ul class="link-list">
-              <li><span class="planned">M02 Redundancy and retries</span><span class="why">The parallel counterpart: \(1-(1-p)^k\) and why correlated errors cap it.</span></li>
-              <li><span class="planned">M03 Markov chains for agent loops</span><span class="why">When the step count is random, and loops can trap a run.</span></li>
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">The parallel counterpart: \(1-(1-p)^k\) and why correlated errors cap it.</span></li>
+              <li><a href="../markov-agent-loops/">M03 Markov chains for agent loops</a><span class="why">When the step count is random, and loops can trap a run.</span></li>
+              <li><a href="../littles-law/">M04 Little’s Law and queueing</a><span class="why">Every extra step is another call competing for capacity.</span></li>
               <li><span class="planned">M05 pass@k vs pass^k</span><span class="why">The evaluation version of the same multiplication.</span></li>
               <li><span class="planned">M06 Confidence intervals</span><span class="why">How sure you can be of a measured per-step \(p\).</span></li>
             </ul>

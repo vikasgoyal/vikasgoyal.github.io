@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markov Chains for Agent Loops | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Model a plan-act-verify agent loop as an absorbing Markov chain to get expected steps, success odds and the long tail of run lengths. Math, derivations, live state diagram and a worked research-agent example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/markov-agent-loops/">
+<meta property="og:title" content="Markov chains for agent loops: budget for the tail, not the average">
+<meta property="og:description" content="An agent that averages 6 steps still needs 15 or more on one task in twenty. The math, the fixes, and a live calculator.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/markov-agent-loops/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Markov Chains for Agent Loops",
+  "about": "Run length and success probability of looping AI agents",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/markov-agent-loops/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Markov chains for agent loops</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M03</span>
+          <span class="tag">Reliability</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Decision</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Markov chains for agent loops</h1>
+        <p class="formula-name">Absorbing Markov chains, \(N = (I-Q)^{-1}\)</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          An agent whose drafts pass its own check
+          <span class="nowrap"><input class="inline-num wide" type="number" min="10" max="95" step="5" data-key="v" data-scale="100" aria-label="Verify pass rate, percent">%</span>
+          of the time averages <span class="result-num good" id="hero-mean">6.3</span> steps per task, yet <span class="result-num" id="hero-tail">1 in 18</span> tasks needs
+          <span class="result-num" id="hero-p95">15</span> steps or more.
+        </p>
+        <p class="hint">Change the blue number. Every figure on this page updates with it.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Agent loops have no fixed length, and the average run hides the runs that cost you.</p>
+        <p>Plan, act, check, and go round again until the check passes or the agent gives up. Teams size step budgets, timeouts and cost estimates from the average run, then find that a minority of tasks loops many times longer and drives most of the spend and the slow responses. An absorbing Markov chain turns the loop diagram you already have into exact answers: how often a task finishes, how many steps it takes on average, and the whole distribution of run lengths, including the tail.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Think of a board game. Each square is a stage of the agent's work, and dice decide which square comes next. Two squares, Done and Give up, end the game: once you land there you never leave. Every other square can send you round the loop again.</p>
+        <figure style="margin: 18px 0 8px;">
+          <svg class="state-diagram" id="loop-symbolic" viewBox="0 0 660 300" role="img" aria-label="Plan leads to Act. Act succeeds to Verify with probability a, retries itself, or gives up. Verify passes to Done with probability v, or loops back to Plan or Act, or gives up."></svg>
+          <figcaption class="small muted">The plan-act-verify loop used on this page. Each arrow is a probability you can measure from traces; each move along an arrow is one step.</figcaption>
+        </figure>
+        <p>Two things follow. Finishing is almost guaranteed if the give-up arrows are rare, but the number of trips round the loop is random, and its spread is set mostly by the weakest arrow back. A verifier that passes 45% of drafts sends more than half of all tasks round again, and some of them round again after that.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>Write the transition probabilities as a matrix and put the absorbing states (Done, Give up) last. The top-left block \(Q\) holds moves between working states; \(R\) holds moves into absorbing states:</p>
+        <div class="math-block">$$P = \begin{pmatrix} Q & R \\ 0 & I \end{pmatrix}, \qquad N = (I-Q)^{-1}, \qquad \mathbf{t} = N\mathbf{1}, \qquad B = NR$$</div>
+        <dl class="symbols">
+          <dt>\(Q\)</dt><dd>probabilities of moving between working states (Plan, Act, Verify)</dd>
+          <dt>\(R\)</dt><dd>probabilities of moving from a working state to Done or Give up</dd>
+          <dt>\(N\)</dt><dd>fundamental matrix: \(N_{ij}\) is the expected number of visits to state \(j\) starting from \(i\)</dd>
+          <dt>\(\mathbf{t}\)</dt><dd>expected steps until the run ends, from each starting state</dd>
+          <dt>\(B\)</dt><dd>probability of ending in Done or in Give up, from each starting state</dd>
+        </dl>
+        <p>For the loop on this page, with tool success \(a\), give-up rate after a failure \(g\), verify pass rate \(v\), and share of failed checks that replan rather than revise \(m\):</p>
+        <div class="math-block">$$Q = \begin{pmatrix} 0 & 1 & 0 \\ 0 & (1-a)(1-g) & a \\ (1-v)(1-g)\,m & (1-v)(1-g)(1-m) & 0 \end{pmatrix}, \qquad R = \begin{pmatrix} 0 & 0 \\ 0 & (1-a)\,g \\ v & (1-v)\,g \end{pmatrix}$$</div>
+        <p>Three results to use:</p>
+        <ul>
+          <li><strong>Success odds:</strong> the first row of \(B\). For this loop it has a closed form, \(P(\text{done}) = \dfrac{s\,v}{1-(1-v)(1-g)\,s}\) with \(s = \dfrac{a}{a+g-ag}\).</li>
+          <li><strong>Expected steps:</strong> the first entry of \(\mathbf{t}\), and its variance \((2N-I)\mathbf{t} - \mathbf{t}\circ\mathbf{t}\).</li>
+          <li><strong>The tail:</strong> the probability a run is still going after \(n\) steps is \(\mathbf{e}_1^\top Q^{\,n}\mathbf{1}\). It shrinks geometrically, at the rate of \(Q\)'s largest eigenvalue, so long runs are rare but never impossible. Budgets belong at a high percentile, not the mean.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Set the probabilities on each arrow and a step budget. The diagram redraws with your numbers, and the histogram shows how many steps tasks take, exactly, from the chain.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-a">Tool step succeeds, \(a\) <output data-out="a" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-a" type="range" min="50" max="99" step="1" data-key="a" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-v">Verifier passes the draft, \(v\) <output data-out="v" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-v" type="range" min="10" max="95" step="5" data-key="v" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-m">Failed checks that replan, \(m\) <output data-out="m" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-m" type="range" min="0" max="100" step="10" data-key="m" data-scale="100">
+                <div class="note">The rest revise the draft directly. Replanning costs one extra step.</div>
+              </div>
+              <div class="control">
+                <label for="c-g">Gives up after a failure, \(g\) <output data-out="g" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-g" type="range" min="0" max="20" step="1" data-key="g" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-B">Step budget <output data-out="B" data-fmt="int"></output></label>
+                <input id="c-B" type="range" min="5" max="60" step="1" data-key="B">
+                <div class="note">Runs still going at the budget are cut off.</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-inbud">–</div><div class="k">Finish within the budget</div></div>
+                <div class="readout alarm"><div class="v" id="o-cut">–</div><div class="k">Cut off by the budget</div></div>
+                <div class="readout"><div class="v" id="o-fail">–</div><div class="k">Give up within the budget</div></div>
+                <div class="readout"><div class="v" id="o-mean">–</div><div class="k" id="o-mean-k">Average steps, no budget</div></div>
+                <div class="readout"><div class="v" id="o-pct">–</div><div class="k">Median and 95th percentile steps</div></div>
+                <div class="readout"><div class="v" id="o-done">–</div><div class="k">Finish eventually, no budget</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-hist" id="tab-hist">Run lengths</button>
+                <button role="tab" aria-selected="false" aria-controls="view-diag" id="tab-diag">State diagram</button>
+              </div>
+
+              <div id="view-hist" role="tabpanel" aria-labelledby="tab-hist">
+                <div class="chart-wrap">
+                  <svg class="chart" id="hist" role="img" aria-label="Probability that a task ends at each step count"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--ok)"></i>Finishes at this step</span>
+                    <span><i style="background:var(--fault)"></i>Gives up at this step</span>
+                    <span><i style="background:var(--rule)"></i>Would finish, but past the budget</span>
+                    <span><i class="dash"></i>Step budget</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="view-diag" role="tabpanel" aria-labelledby="tab-diag" hidden>
+                <div class="chart-wrap">
+                  <svg class="state-diagram" id="loop-live" viewBox="0 0 660 300" role="img" aria-label="The agent loop with your probabilities on each arrow"></svg>
+                  <p class="small muted" style="margin:4px 8px 6px">Arrow thickness follows the probability. Expected visits per task: <span id="visits"></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a research agent</h2>
+        <p>A research agent answers analysts' questions: it plans, runs searches and tool calls, drafts an answer, and a verifier checks the draft against its sources. The team counted transitions in 2,000 production traces:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Arrow</th><th class="num">Measured</th></tr></thead>
+            <tbody>
+              <tr><td>Tool step succeeds, \(a\)</td><td class="num">85%</td></tr>
+              <tr class="weak"><td>Verifier passes the draft, \(v\)</td><td class="num">45%</td></tr>
+              <tr><td>Failed checks that replan rather than revise, \(m\)</td><td class="num">50%</td></tr>
+              <tr><td>Gives up after a failure, \(g\)</td><td class="num">2%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>From those four numbers the chain gives: <strong>96.9%</strong> of tasks finish eventually, the average run is <strong>6.3 steps</strong> and the median 5, but the 95th percentile is <strong>15 steps</strong> and the 99th is 22. The orchestrator had a 15-step budget, so <strong>4.4%</strong> of tasks, roughly one in 23, were being cut off while still working.</p>
+        <h3>Four options, compared</h3>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Change</th><th class="num">Avg steps</th><th class="num">95th pct</th><th class="num">Done in 15 steps</th></tr></thead>
+            <tbody>
+              <tr><td>As built</td><td class="num">6.3</td><td class="num">15</td><td class="num">92.6%</td></tr>
+              <tr><td>Better tools: \(a\) from 85% to 95%</td><td class="num">6.0</td><td class="num">14</td><td class="num">93.8%</td></tr>
+              <tr><td>Bigger budget: 25 steps</td><td class="num">6.3</td><td class="num">15</td><td class="num">96.4%*</td></tr>
+              <tr><td>Better first drafts: \(v\) from 45% to 70%</td><td class="num">4.3</td><td class="num">9</td><td class="num">98.4%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted">* Within the 25-step budget, at the price of paying for every long run.</p>
+        <p>The tool fix, which the team had prioritized, barely moved anything: a tool failure costs one retry step, while a failed check sends the task all the way round. Raising the verify pass rate, by giving the drafting step the verifier's rubric up front, cut the average by a third and the 95th percentile from 15 steps to 9. That is the arrow worth working on, and the chain shows it before anyone writes code.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>The chain has no memory.</strong> Each move depends only on the current state, not on how many times the task has looped. Real agents carry context, so a second failed check may be more or less likely than the first. Fix it by splitting states, such as Verify-1 and Verify-2; the math is unchanged, the matrix just grows.</li>
+          <li><strong>Replanning looks free here.</strong> In this model replanning and revising lead to equally good drafts, so \(m\) changes the step count but not the odds of finishing. In practice they differ; give each path its own pass rate when you have the data.</li>
+          <li><strong>Rare arrows are noisy.</strong> A 2% give-up rate estimated from 200 traces could easily be 1% or 4%. Put confidence intervals on each measured arrow (M06) before trusting the tail.</li>
+          <li><strong>Steps are not equal.</strong> A planning call may cost ten times a tool call. Replace the step count with a cost per state: expected cost is \(N\mathbf{c}\) instead of \(N\mathbf{1}\).</li>
+          <li><strong>The agent may choose its moves.</strong> When transitions are decisions the agent optimizes rather than chances, the model becomes a Markov decision process (M14).</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Draw the loop from your traces.</strong> List the states your orchestrator actually moves through, including the ways a run ends.</li>
+          <li><strong>Count transitions.</strong> From 500 or more traces, divide each state's outgoing moves by its visits to get the arrow probabilities.</li>
+          <li><strong>Compute the distribution, not just the mean.</strong> Get the average, median, 95th and 99th percentile steps from the chain.</li>
+          <li><strong>Set budgets and timeouts from the tail.</strong> Size them at the 95th or 99th percentile, and decide what happens at the cap: hand off to a human, return a partial answer, or fail fast.</li>
+          <li><strong>Improve the arrow with the most leverage.</strong> Move each slider a little and see which shifts the tail most. Usually it is the check that sends work all the way round.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"Our agent is a board game with a loop in it. Most games end in five moves, but one in twenty goes round to fifteen or more. We budget for the long games, and we make the loop less likely to send work back."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../compounding-error/">M01 Compounding error</a><span class="why">The special case with no loops: a straight chain of steps.</span></li>
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">The Act self-loop is a retry; M02 covers when retries help.</span></li>
+              <li><a href="../littles-law/">M04 Little’s Law and queueing</a><span class="why">Steps per task times tasks per second is the load on your model.</span></li>
+              <li><span class="planned">M06 Confidence intervals</span><span class="why">How much to trust each measured arrow.</span></li>
+              <li><span class="planned">M14 MDPs and POMDPs</span><span class="why">When the agent chooses its next state instead of rolling for it.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/react/">No. 02 ReAct</a><span class="why">The reason-act-observe loop this chain describes.</span></li>
+              <li><a href="/agentic/patterns/plan-and-execute/">No. 03 Plan-and-Execute</a><span class="why">The replan arrow, made explicit.</span></li>
+              <li><a href="/agentic/patterns/evaluator-optimizer/">No. 09 Evaluator–Optimizer</a><span class="why">The verify-and-revise loop, whose pass rate drives the tail.</span></li>
+              <li><a href="/agentic/patterns/bounded-autonomy/">No. 20 Bounded Autonomy</a><span class="why">Step caps and what happens when a run hits one.</span></li>
+              <li><a href="/agentic/patterns/budget-aware-planning/">No. 26 Budget-aware Planning</a><span class="why">Agents that plan with the step budget in mind.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: markov-agent-loops
+number: M03
+name: Absorbing Markov chain for agent loops
+family: reliability
+answers: "How many steps will a looping agent take, how often does it finish, and how long is the tail?"
+formula:
+  fundamental_matrix: "N = inv(I - Q)"
+  expected_steps: "t = N @ 1"
+  absorption_probabilities: "B = N @ R"
+  step_variance: "(2N - I) @ t - t*t"
+  still_running_after_n: "e_start @ Q**n @ 1"
+inputs:
+  states: {type: list, meaning: working states first, absorbing states last}
+  P: {type: matrix, meaning: one-step transition probabilities from traces, rows sum to 1}
+  budget: {type: int, meaning: step cap applied by the orchestrator}
+assumptions:
+  - next state depends only on the current state (memoryless)
+  - transition probabilities are stable over time
+  - every step has equal cost (replace 1 with a cost vector otherwise)
+use_when:
+  - setting step budgets, timeouts and cost estimates for looping agents
+  - finding which transition most affects run length
+related_patterns: [react, plan-and-execute, evaluator-optimizer, bounded-autonomy, budget-aware-planning]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, NumPy)</div>
+        <div class="code"><pre>import numpy as np
+
+def loop_matrix(a, v, m, g):
+    """States: 0 Plan, 1 Act, 2 Verify, 3 Done, 4 Give up."""
+    P = np.zeros((5, 5))
+    P[0, 1] = 1
+    P[1, 2], P[1, 1], P[1, 4] = a, (1 - a) * (1 - g), (1 - a) * g
+    P[2, 3], P[2, 4] = v, (1 - v) * g
+    P[2, 0], P[2, 1] = (1 - v) * (1 - g) * m, (1 - v) * (1 - g) * (1 - m)
+    P[3, 3] = P[4, 4] = 1
+    return P
+
+def analyze(P, n_transient=3, start=0, budget=None, horizon=500):
+    Q, R = P[:n_transient, :n_transient], P[:n_transient, n_transient:]
+    N = np.linalg.inv(np.eye(n_transient) - Q)
+    t = N.sum(axis=1)
+    var = (2 * N - np.eye(n_transient)) @ t - t * t
+    B = N @ R
+    x = np.eye(len(P))[start]
+    ended = []                       # P(run has ended by step n)
+    for _ in range(horizon):
+        x = x @ P
+        ended.append(x[n_transient:].sum())
+    ended = np.array(ended)
+    pct = lambda q: int(np.argmax(ended >= q * ended[-1])) + 1
+    out = dict(p_done=B[start, 0], p_give_up=B[start, 1],
+               mean_steps=t[start], sd_steps=var[start] ** 0.5,
+               p50=pct(0.5), p95=pct(0.95), p99=pct(0.99))
+    if budget:
+        out["cut_off_at_budget"] = 1 - ended[budget - 1]
+    return out
+
+if __name__ == "__main__":
+    print(analyze(loop_matrix(a=0.85, v=0.45, m=0.5, g=0.02), budget=15))
+    # p_done 0.969, mean_steps 6.27, p50 5, p95 15, p99 22, cut_off 0.044</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>Why the working block shrinks to zero</summary>
+          <div class="body">
+            <p>Multiplying the block matrix by itself keeps its shape: \(P^n = \begin{pmatrix} Q^n & \ast \\ 0 & I\end{pmatrix}\). The entry \((Q^n)_{ij}\) is the probability of being in working state \(j\) after \(n\) steps, starting from \(i\). As long as every working state can reach an absorbing one, each row of \(Q\) sums to less than 1 somewhere along every path, so \(Q^n \to 0\): every run ends eventually.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The fundamental matrix counts visits</summary>
+          <div class="body">
+            <p>Let \(X^{(n)}_{ij}\) be 1 if a run started in \(i\) is in state \(j\) at step \(n\). Its expectation is \((Q^n)_{ij}\). Summing over all steps gives the expected number of visits:</p>
+            $$N = \sum_{n=0}^{\infty} Q^n = I + Q + Q^2 + \cdots$$
+            <p>This is the matrix version of the geometric series \(1 + x + x^2 + \cdots = 1/(1-x)\). Multiply both sides by \(I - Q\): everything telescopes to \(I\), so \(N = (I-Q)^{-1}\). The sum converges because \(Q^n \to 0\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Expected steps and the odds of each ending</summary>
+          <div class="body">
+            <p>Each visit to a working state costs one step, so the expected number of steps is the total expected visits: \(\mathbf{t} = N\mathbf{1}\).</p>
+            <p>To end in absorbing state \(k\), a run spends some time among working states and then takes one step from some \(j\) into \(k\). The expected number of such jumps is \(\sum_j N_{ij}R_{jk}\), and since it happens at most once it is also a probability: \(B = NR\).</p>
+            <p>The variance comes from the same first-step argument applied to \(T^2\), giving \(\operatorname{Var}(T) = (2N-I)\mathbf{t} - \mathbf{t}\circ\mathbf{t}\), where \(\circ\) squares each entry.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>A closed form for this loop</summary>
+          <div class="body">
+            <p>Let \(D_P, D_A, D_V\) be the probability of finishing from Plan, Act and Verify. Condition on the first move from each state:</p>
+            $$D_P = D_A, \quad D_A = (1-a)(1-g)\,D_A + a\,D_V, \quad D_V = v + (1-v)(1-g)\big(m\,D_P + (1-m)\,D_A\big).$$
+            <p>The second equation gives \(D_A = s\,D_V\) with \(s = a/(a+g-ag)\). Since \(D_P = D_A\), the replan and revise terms merge and \(m\) drops out: \(D_V = v + (1-v)(1-g)\,s\,D_V\). Solving,</p>
+            $$P(\text{done}) = D_P = \frac{s\,v}{1-(1-v)(1-g)\,s}.$$
+            <p>With the worked example's numbers, \(s = 0.85/0.853 = 0.9965\) and \(P(\text{done}) = 0.9965 \times 0.45 / 0.4629 = 0.969\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why the tail decays geometrically</summary>
+          <div class="body">
+            <p>The chance a run is still going after \(n\) steps is \(\Pr(T > n) = \mathbf{e}_1^\top Q^n \mathbf{1}\). Writing \(Q\) in terms of its eigenvalues, the largest one, \(\lambda_{\max} < 1\), dominates for large \(n\), so \(\Pr(T>n) \approx c\,\lambda_{\max}^{\,n}\). Each extra step multiplies the surviving share by roughly \(\lambda_{\max}\). When the verify pass rate is low, \(\lambda_{\max}\) is close to 1 and the tail is long, which is why budgets set from the mean cut off so many runs.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Grinstead, C. M. and Snell, J. L. <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Introduction to Probability</a>, chapter 11, "Markov Chains". American Mathematical Society; free PDF. The clearest treatment of absorbing chains and the fundamental matrix.</li>
+          <li>Kemeny, J. G. and Snell, J. L. (1960). <em>Finite Markov Chains</em>. Van Nostrand. The original source of the fundamental-matrix results.</li>
+          <li>Yao, S. et al. (2022). <a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing Reasoning and Acting in Language Models</a>. The reason-act-observe loop that most agent loops descend from.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"markov-agent-loops","number":"M03","family":"reliability",
+ "formula":{"fundamental_matrix":"N=inv(I-Q)","expected_steps":"t=N@1","absorption":"B=N@R","variance":"(2N-I)@t-t*t","survival":"e_start@Q**n@1"},
+ "inputs":["Q","R","start","budget"],
+ "example_loop":{"states":["plan","act","verify","done","give_up"],"params":["a","v","m","g"]},
+ "assumptions":["memoryless transitions","stable probabilities","equal step cost"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  const NS = "http://www.w3.org/2000/svg";
+
+  /* ---------- Model: states 0 Plan, 1 Act, 2 Verify, 3 Done, 4 Give up ---------- */
+  function matrix(s) {
+    const { a, v, m, g } = s, P = [...Array(5)].map(() => Array(5).fill(0));
+    P[0][1] = 1;
+    P[1][2] = a; P[1][1] = (1 - a) * (1 - g); P[1][4] = (1 - a) * g;
+    P[2][3] = v; P[2][4] = (1 - v) * g; P[2][0] = (1 - v) * (1 - g) * m; P[2][1] = (1 - v) * (1 - g) * (1 - m);
+    P[3][3] = 1; P[4][4] = 1;
+    return P;
+  }
+  function inv3(M) {
+    const [a, b, c] = M[0], [d, e, f] = M[1], [g, h, i] = M[2];
+    const A = e * i - f * h, B = -(d * i - f * g), C = d * h - e * g;
+    const det = a * A + b * B + c * C;
+    return [
+      [A / det, -(b * i - c * h) / det, (b * f - c * e) / det],
+      [B / det, (a * i - c * g) / det, -(a * f - c * d) / det],
+      [C / det, -(a * h - b * g) / det, (a * e - b * d) / det]
+    ];
+  }
+  function analyze(s) {
+    const P = matrix(s);
+    const IQ = [0, 1, 2].map((i) => [0, 1, 2].map((j) => (i === j ? 1 : 0) - P[i][j]));
+    const N = inv3(IQ);
+    const t = N.map((r) => r[0] + r[1] + r[2]);
+    const pDone = N[0][0] * P[0][3] + N[0][1] * P[1][3] + N[0][2] * P[2][3];
+    // step-by-step distribution of when runs end
+    let x = [1, 0, 0, 0, 0];
+    const done = [0], fail = [0];
+    for (let n = 1; n <= 1500; n++) {
+      const y = [0, 0, 0, 0, 0];
+      for (let i = 0; i < 5; i++) if (x[i]) for (let j = 0; j < 5; j++) y[j] += x[i] * P[i][j];
+      x = y; done.push(x[3]); fail.push(x[4]);
+      if (1 - x[3] - x[4] < 1e-9) break;
+    }
+    const ended = done.map((d, i) => d + fail[i]);
+    const pct = (q) => { for (let n = 1; n < ended.length; n++) if (ended[n] >= q) return n; return ended.length - 1; };
+    return { N, mean: t[0], pDone, done, fail, ended, pct };
+  }
+
+  /* ---------- State diagram ---------- */
+  const NODES = {
+    plan: { x: 80, y: 150, w: 100, label: "Plan" },
+    act: { x: 280, y: 150, w: 100, label: "Act" },
+    verify: { x: 480, y: 150, w: 100, label: "Verify" },
+    done: { x: 610, y: 150, w: 88, label: "Done", cls: "absorb-ok" },
+    fail: { x: 380, y: 265, w: 100, label: "Give up", cls: "absorb-fail" }
+  };
+  const EDGES = {
+    PA: { d: "M130,150 L226,150", lx: 178, ly: 140, cls: "" },
+    AV: { d: "M330,150 L426,150", lx: 378, ly: 140, cls: "e-ok" },
+    VD: { d: "M530,150 L562,150", lx: 548, ly: 118, cls: "e-ok" },
+    AA: { d: "M262,128 C250,80 310,80 298,126", lx: 280, ly: 78, cls: "e-loop" },
+    VP: { d: "M470,128 C420,26 140,26 90,126", lx: 280, ly: 48, cls: "e-loop" },
+    VA: { d: "M470,172 C440,212 320,212 292,175", lx: 380, ly: 214, cls: "e-loop" },
+    AF: { d: "M262,172 L338,240", lx: 268, ly: 226, cls: "e-fault" },
+    VF: { d: "M498,172 L422,240", lx: 492, ly: 226, cls: "e-fault" }
+  };
+  function drawLoop(svg, labels, widths) {
+    let s = `<defs>`;
+    [["base", "var(--ink-3)"], ["ok", "var(--ok)"], ["fault", "var(--fault)"], ["loop", "var(--retry)"]].forEach(([k, c]) => {
+      s += `<marker id="${svg.id}-arr-${k}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:${c}"/></marker>`;
+    });
+    s += `</defs>`;
+    for (const k in EDGES) {
+      const e = EDGES[k], mk = e.cls ? e.cls.replace("e-", "") : "base";
+      s += `<path class="edge ${e.cls}" d="${e.d}" style="stroke-width:${widths ? widths[k] : 1.5}" marker-end="url(#${svg.id}-arr-${mk})"/>`;
+    }
+    for (const k in NODES) {
+      const n = NODES[k];
+      s += `<g class="node ${n.cls || ""}"><rect x="${n.x - n.w / 2}" y="${n.y - 22}" width="${n.w}" height="44" rx="8"/>` +
+        `<text x="${n.x}" y="${n.y + 5}" text-anchor="middle">${n.label}</text></g>`;
+    }
+    for (const k in EDGES) {
+      const e = EDGES[k], text = labels[k], w = text.length * 6.6 + 10;
+      s += `<rect class="elabel-bg" x="${e.lx - w / 2}" y="${e.ly - 12}" width="${w}" height="17" rx="3"/>` +
+        `<text class="elabel" x="${e.lx}" y="${e.ly + 1}" text-anchor="middle">${text}</text>`;
+    }
+    svg.innerHTML = s;
+  }
+  drawLoop(document.getElementById("loop-symbolic"), {
+    PA: "1", AV: "a", VD: "v", AA: "retry (1−a)(1−g)", VP: "replan (1−v)(1−g)m",
+    VA: "revise (1−v)(1−g)(1−m)", AF: "(1−a)g", VF: "(1−v)g"
+  });
+
+  MM.tabs(document.getElementById("lab-tabs"));
+
+  /* ---------- Render ---------- */
+  const fmtP = (x) => (x < 0.1 ? MM.pctFixed(x, 1) : MM.pct(x, 0));
+  function render(s) {
+    s.B = Math.round(s.B);
+    const r = analyze(s), P = matrix(s);
+    const p50 = r.pct(0.5), p95 = r.pct(0.95), p99 = r.pct(0.99);
+    const atLeastP95 = 1 - r.ended[p95 - 1];
+
+    document.getElementById("hero-mean").textContent = MM.num(r.mean, 1);
+    document.getElementById("hero-p95").textContent = p95;
+    document.getElementById("hero-tail").textContent = "1 in " + Math.max(2, Math.round(1 / atLeastP95));
+
+    const B = Math.min(s.B, r.done.length - 1);
+    document.getElementById("o-inbud").textContent = MM.pct(r.done[B], 1);
+    document.getElementById("o-cut").textContent = MM.pct(Math.max(0, 1 - r.ended[B]), 1);
+    document.getElementById("o-fail").textContent = MM.pct(r.fail[B], 1);
+    document.getElementById("o-mean").textContent = MM.num(r.mean, 1);
+    document.getElementById("o-pct").textContent = `${p50} / ${p95}`;
+    document.getElementById("o-done").textContent = MM.pct(r.pDone, 1);
+
+    const xmax = Math.min(80, Math.max(s.B + 6, p99 + 4, 20));
+    const bars = [];
+    let ymax = 0;
+    for (let n = 1; n <= xmax; n++) {
+      const d = (r.done[n] || 0) - (r.done[n - 1] || 0), f = (r.fail[n] || 0) - (r.fail[n - 1] || 0);
+      bars.push({ x: n, y: d, cls: n > s.B ? "b-muted" : "" });
+      if (f > 1e-6) bars.push({ x: n, y: f, y0: d, cls: "b-fault" });
+      ymax = Math.max(ymax, d + f);
+    }
+    MM.barChart(document.getElementById("hist"), {
+      bars, x: { min: 1, max: xmax, label: "Steps until the run ends", tickEvery: xmax > 40 ? 10 : 5 },
+      y: { max: Math.max(0.05, Math.ceil(ymax * 20) / 20), label: "Share of tasks", pct: true },
+      markerX: s.B
+    });
+
+    const pc = (x) => (x >= 0.995 ? "100%" : x < 0.1 ? (x * 100).toFixed(1) + "%" : Math.round(x * 100) + "%");
+    const w = (x) => 1 + 5 * x;
+    drawLoop(document.getElementById("loop-live"), {
+      PA: "100%", AV: pc(P[1][2]), VD: pc(P[2][3]), AA: "retry " + pc(P[1][1]),
+      VP: "replan " + pc(P[2][0]), VA: "revise " + pc(P[2][1]), AF: "give up " + pc(P[1][4]), VF: "give up " + pc(P[2][4])
+    }, { PA: w(1), AV: w(P[1][2]), VD: w(P[2][3]), AA: w(P[1][1]), VP: w(P[2][0]), VA: w(P[2][1]), AF: w(P[1][4]), VF: w(P[2][4]) });
+    document.getElementById("visits").textContent =
+      `Plan ${r.N[0][0].toFixed(1)}, Act ${r.N[0][1].toFixed(1)}, Verify ${r.N[0][2].toFixed(1)}.`;
+  }
+
+  MM.state({ a: 0.85, v: 0.45, m: 0.5, g: 0.02, B: 15 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>
