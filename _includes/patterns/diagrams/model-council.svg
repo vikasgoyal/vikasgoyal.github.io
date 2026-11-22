@@ -1,0 +1,23 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="A question and sources go to three models from different families, which write independent reports in parallel without seeing each other. A judge compares the reports and produces an agreement map with three parts: shared conclusions, divergences and unique findings.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="104" width="100" height="56" rx="8"/><text class="t" x="60" y="128" text-anchor="middle">Question</text><text class="ts" x="60" y="146" text-anchor="middle">+ sources</text>
+ <rect class="nd-g" x="160" y="14" width="200" height="236" rx="10"/><text class="ts" x="260" y="34" text-anchor="middle">independent runs</text>
+ <rect class="nd-a" x="180" y="46" width="160" height="52" rx="8"/><text class="t" x="260" y="68" text-anchor="middle">Model A</text><text class="ts" x="260" y="86" text-anchor="middle">full report</text>
+ <rect class="nd-a" x="180" y="114" width="160" height="52" rx="8"/><text class="t" x="260" y="136" text-anchor="middle">Model B</text><text class="ts" x="260" y="154" text-anchor="middle">full report</text>
+ <rect class="nd-a" x="180" y="182" width="160" height="52" rx="8"/><text class="t" x="260" y="204" text-anchor="middle">Model C</text><text class="ts" x="260" y="222" text-anchor="middle">full report</text>
+ <rect class="nd" x="400" y="98" width="110" height="68" rx="8"/><text class="t" x="455" y="127" text-anchor="middle">Judge</text><text class="ts" x="455" y="146" text-anchor="middle">compares</text>
+ <rect class="nd" x="550" y="30" width="200" height="204" rx="10"/><text class="t" x="650" y="54" text-anchor="middle">Agreement map</text>
+ <rect class="nd-a" x="566" y="70" width="168" height="40" rx="6"/><text class="ts" x="650" y="94" text-anchor="middle">shared conclusions</text>
+ <rect class="nd-g" x="566" y="120" width="168" height="40" rx="6"/><text class="ts" x="650" y="144" text-anchor="middle">divergences + why</text>
+ <rect class="nd" x="566" y="170" width="168" height="40" rx="6"/><text class="ts" x="650" y="194" text-anchor="middle">unique → verify</text>
+ <path class="ln" d="M110 124 C 140 124, 145 72, 178 72" marker-end="url(#a)"/>
+ <line class="ln" x1="110" y1="132" x2="178" y2="140" marker-end="url(#a)"/>
+ <path class="ln" d="M110 140 C 140 140, 145 208, 178 208" marker-end="url(#a)"/>
+ <path class="ln" d="M340 72 C 370 72, 370 120, 398 122" marker-end="url(#a)"/>
+ <line class="ln" x1="340" y1="140" x2="398" y2="134" marker-end="url(#a)"/>
+ <path class="ln" d="M340 208 C 370 208, 370 148, 398 146" marker-end="url(#a)"/>
+ <line class="ln-a" x1="510" y1="132" x2="548" y2="132" marker-end="url(#aa)"/>
+</svg>
