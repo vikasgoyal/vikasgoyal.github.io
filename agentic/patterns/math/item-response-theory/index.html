@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Item Response Theory for Evals | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Find which eval cases are too easy, too hard or broken, and build smaller eval sets that rank agents the same way. The 2PL model, item information and pruning. Math, derivations, calculator and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/item-response-theory/">
+<meta property="og:title" content="Item Response Theory: a smaller eval that ranks agents the same">
+<meta property="og:description" content="Drop 74 of 200 test cases, keep 97% of the measurement precision. The math and an item explorer.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/item-response-theory/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Item Response Theory for Evals",
+  "about": "Item difficulty and discrimination in AI evaluation sets",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/item-response-theory/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Item Response Theory</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M09</span>
+          <span class="tag">Evaluation</span>
+          <span class="tag">Emerging</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Item Response Theory</h1>
+        <p class="formula-name">The two-parameter logistic model, \(\Pr(\text{pass}) = \sigma\big(a(\theta-b)\big)\)</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          A test case that even your weakest agent passes
+          <span class="nowrap"><input class="inline-num wide" type="number" min="50" max="99" step="1" data-key="pw" data-scale="100" aria-label="Pass rate of the weakest agent on this case, percent">%</span>
+          of the time carries only <span class="result-num" id="hero-share">2.5%</span> of the information of a well-placed case. It costs the same to run.
+        </p>
+        <p class="hint">Change the blue number. Every figure on this page updates with it.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Not every test case earns its place in an eval set.</p>
+        <p>Eval sets grow by accretion: every bug report and edge case gets added, and few are ever removed. Over time many cases pass for every version you try, some fail for every version, and a few have wrong reference answers, so they reward the wrong behavior. All of them cost tokens and time on every run, and they compress the differences you are trying to see. Item Response Theory, the method behind standardized tests, estimates each case's difficulty and how sharply it separates strong agents from weak ones, so you can keep the cases that carry signal.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Think of each test case as a hurdle. Its height is its difficulty: how capable an agent must be to have even odds of clearing it. Its sharpness is its discrimination: whether clearing it depends tightly on capability, or is closer to a coin flip.</p>
+        <p>A hurdle far below every agent tells you nothing, because everyone clears it. A hurdle far above every agent tells you nothing either. A hurdle at the right height but with a blurry edge tells you little, because strong and weak agents clear it about equally often. The informative cases sit inside the range of your agents' abilities and have a sharp edge.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">Well-placed, sharp case</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="pct">100%</span></div>
+          <div class="row"><span class="lbl">Well-placed, blurry case (a = 0.5)</span><div class="track"><div class="fill bad" style="width:15%"></div></div><span class="pct">15%</span></div>
+          <div class="row"><span class="lbl">Too easy: weakest agent passes 98%</span><div class="track"><div class="fill bad" style="width:2.5%"></div></div><span class="pct">2.5%</span></div>
+          <div class="row"><span class="lbl">Far too easy: weakest passes 99.9%</span><div class="track"><div class="fill bad" style="width:0.5%"></div></div><span class="pct">0.1%</span></div>
+        </div>
+        <p class="small muted">Average information about agents spread evenly between abilities −1.5 and +1.5, relative to a sharp case (a = 1.5) placed in the middle.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>The two-parameter logistic (2PL) model gives the probability that an agent with ability \(\theta\) passes case \(i\):</p>
+        <div class="math-block">$$\Pr(\text{pass}_i \mid \theta) = \frac{1}{1+e^{-a_i(\theta - b_i)}}$$</div>
+        <p>How much a case tells you about ability near \(\theta\) is its information, and information adds up across cases:</p>
+        <div class="math-block">$$I_i(\theta) = a_i^2\,P_i(\theta)\big(1-P_i(\theta)\big), \qquad I(\theta) = \sum_i I_i(\theta), \qquad \text{SE}(\hat\theta) \approx \frac{1}{\sqrt{I(\theta)}}$$</div>
+        <dl class="symbols">
+          <dt>\(\theta\)</dt><dd>ability of an agent version (model, prompt, configuration) on a common scale, centered at 0</dd>
+          <dt>\(b_i\)</dt><dd>difficulty: the ability at which an agent has a 50% chance of passing case \(i\)</dd>
+          <dt>\(a_i\)</dt><dd>discrimination: how steeply the pass probability rises around \(b_i\); near 0 means the case barely depends on ability, negative usually means a wrong reference answer</dd>
+          <dt>\(I(\theta)\)</dt><dd>test information: the precision with which the whole eval measures abilities near \(\theta\)</dd>
+        </dl>
+        <ul>
+          <li><strong>Peak information is \(a^2/4\),</strong> reached at \(\theta = b\). Doubling a case's sharpness quadruples what it can tell you.</li>
+          <li><strong>Information falls off exponentially away from \(b\).</strong> A case 5/\(a\) units from the nearest agent gives that agent under 3% of its peak information.</li>
+          <li><strong>Precision depends on information, not case count.</strong> Removing uninformative cases leaves \(I(\theta)\) and the standard errors nearly unchanged.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Inspect one test case: set its difficulty and sharpness and the ability range of the agents you compare. The second view shows the worked example's whole eval before and after pruning.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-b">Difficulty, \(b\) <output data-out="b" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-b" type="range" min="-5" max="5" step="0.1" data-key="b">
+              </div>
+              <div class="control">
+                <label for="c-a">Discrimination, \(a\) <output data-out="a" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-a" type="range" min="-1" max="3" step="0.1" data-key="a">
+                <div class="note">Below 0.4 the case barely tracks ability. Negative usually means the reference answer is wrong.</div>
+              </div>
+              <div class="control">
+                <label for="c-lo">Weakest agent's ability <output data-out="lo" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-lo" type="range" min="-3" max="0" step="0.1" data-key="lo">
+              </div>
+              <div class="control">
+                <label for="c-hi">Strongest agent's ability <output data-out="hi" data-fmt="num" data-dp="1"></output></label>
+                <input id="c-hi" type="range" min="0" max="3" step="0.1" data-key="hi">
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout" id="r-verdict"><div class="v" id="o-verdict">–</div><div class="k">Verdict for this case</div></div>
+                <div class="readout"><div class="v" id="o-plo">–</div><div class="k">Weakest agent passes</div></div>
+                <div class="readout"><div class="v" id="o-phi">–</div><div class="k">Strongest agent passes</div></div>
+                <div class="readout"><div class="v" id="o-info">–</div><div class="k">Information across your agents, vs a well-placed case</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-icc" id="tab-icc">This test case</button>
+                <button role="tab" aria-selected="false" aria-controls="view-test" id="tab-test">Whole eval, before and after</button>
+              </div>
+
+              <div id="view-icc" role="tabpanel" aria-labelledby="tab-icc">
+                <div class="chart-wrap">
+                  <svg class="chart" id="icc" role="img" aria-label="Pass probability and information for this case across agent ability"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>Chance of passing</span>
+                    <span><i style="background:var(--ok)"></i>Information (scaled)</span>
+                    <span><i style="background:var(--accent-soft)"></i>Your agents' ability range</span>
+                  </div>
+                </div>
+              </div>
+              <div id="view-test" role="tabpanel" aria-labelledby="tab-test" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="testinfo" role="img" aria-label="Test information of the full eval, the pruned eval and a random subset"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>All 200 cases</span>
+                    <span><i style="background:var(--ok)"></i>126 cases kept by screening</span>
+                    <span><i style="background:var(--fault)"></i>126 cases picked at random (one draw)</span>
+                    <span><i style="background:var(--ok);border-radius:50%;width:8px;height:8px"></i>The 30 agent configurations</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: pruning a 200-case eval</h2>
+        <p>This example is simulated, so the true answers are known. A team's agent eval has 200 cases and has been run on 30 agent configurations over the past quarter: different models, prompts and tool setups. The run history is a 30 × 200 table of passes and fails, enough to fit a 2PL model to every case.</p>
+        <p>Three screening rules flagged 74 cases:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Rule</th><th class="num">Cases flagged</th></tr></thead>
+            <tbody>
+              <tr><td>Passed by at least 97% of configurations (too easy)</td><td class="num">36</td></tr>
+              <tr><td>Failed by at least 97% of configurations (too hard)</td><td class="num">20</td></tr>
+              <tr class="weak"><td>Fitted discrimination below 0.4 (not tracking ability)</td><td class="num">18</td></tr>
+              <tr><td>Kept</td><td class="num">126</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Reading the 18 low-discrimination cases, the team found 15 with wrong reference answers or ambiguous instructions, which strong configurations were failing for doing the right thing. The other 3 were valid but noisy.</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th></th><th class="num">All 200</th><th class="num">Kept 126</th></tr></thead>
+            <tbody>
+              <tr><td>Test information at average ability</td><td class="num">42.3</td><td class="num">41.2 (97%)</td></tr>
+              <tr><td>Spread of scores, weakest to strongest configuration</td><td class="num">36%–78%</td><td class="num">22%–90%</td></tr>
+              <tr><td>Rank correlation with the full eval's ranking</td><td class="num">–</td><td class="num">0.996</td></tr>
+              <tr><td>Run cost</td><td class="num">100%</td><td class="num">63%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The pruned eval costs 37% less per run, ranks the configurations almost identically, and spreads their scores further apart, so real differences are easier to see. A random cut to 126 cases would also save 37%, but would keep only about 63% of the information, widening every standard error by roughly a quarter.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>You need many agents to fit it.</strong> Estimating two parameters per case takes results from dozens of agent configurations, not two or three. With few agents, use the simple screens: pass rate near 0% or 100%, and the correlation between passing a case and the overall score.</li>
+          <li><strong>One ability may not be enough.</strong> The 2PL assumes a single skill drives every case. If your eval mixes coding, retrieval and tone, fit each area separately or use a multidimensional model.</li>
+          <li><strong>Easy today is not easy forever.</strong> A case every current agent passes can catch a regression tomorrow. Move retired cases to a cheap regression suite rather than deleting them.</li>
+          <li><strong>Difficulty is relative to the agents you fit on.</strong> Add a much stronger model and yesterday's "too hard" cases become the informative ones. Refit as the agent population changes.</li>
+          <li><strong>Runs are random.</strong> A single run per case per agent adds noise to every estimate. Use several runs where cost allows (M05).</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Keep the run history.</strong> Store pass or fail per case per agent configuration, not just the overall score.</li>
+          <li><strong>Screen with simple statistics first.</strong> Flag cases nearly every configuration passes or fails, and cases whose results don't correlate with overall scores.</li>
+          <li><strong>Fit a 2PL model</strong> once you have results from 20 or more configurations, and rank cases by information over the ability range you care about.</li>
+          <li><strong>Read every low or negative discrimination case.</strong> These are usually labeling errors, and fixing them improves the eval more than adding new cases.</li>
+          <li><strong>Re-check the ranking</strong> on the pruned set against the full set before switching, and keep retired cases as a regression suite.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"A third of our test cases are ones every version passes, every version fails, or that have the wrong answer key. They cost us on every run and tell us nothing. We'll keep the cases that separate good agents from weak ones, and we'll get the same ranking for two-thirds of the cost."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../confidence-intervals/">M06 Confidence intervals</a><span class="why">Informative cases narrow intervals faster than extra cases do.</span></li>
+              <li><a href="../bradley-terry-elo/">M07 Bradley–Terry and Elo</a><span class="why">The same logistic model, for pairwise matchups instead of test cases.</span></li>
+              <li><a href="../pass-at-k/">M05 pass@k vs pass^k</a><span class="why">Repeated runs per case reduce the noise in item estimates.</span></li>
+              <li><a href="../cohens-kappa/">M08 Cohen’s kappa</a><span class="why">When a judge grades the cases, its errors look like low discrimination.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/llm-as-judge/">No. 30 Rubric LLM-as-Judge</a><span class="why">Grades the cases whose parameters this page estimates.</span></li>
+              <li><a href="/agentic/patterns/learning-loop/">No. 31 Self-Improving Learning Loop</a><span class="why">A lean, informative eval makes every iteration cheaper.</span></li>
+              <li><a href="/agentic/patterns/test-first-loop/">No. 45 Test-First Agent Loop</a><span class="why">The same pruning logic applies to large agent test suites.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: item-response-theory
+number: M09
+name: Item Response Theory (2PL) for eval sets
+family: evaluation
+answers: "Which test cases are too easy, too hard or broken, and how small can the eval be?"
+formula:
+  pass_probability: "1 / (1 + exp(-a * (theta - b)))"
+  item_information: "a**2 * P * (1 - P)"
+  test_information: "sum over items"
+  ability_se: "1 / sqrt(test_information)"
+inputs:
+  X: {type: matrix, meaning: "X[agent][case] = 1 if passed"}
+  theta_range: {type: pair, meaning: ability range of the agents being compared}
+screens:
+  too_easy: "pass rate >= 0.97"
+  too_hard: "pass rate <= 0.03"
+  low_discrimination: "a < 0.4 (review for label errors)"
+assumptions:
+  - one latent ability drives all cases
+  - results from 20+ agent configurations
+  - cases independent given ability
+use_when:
+  - an eval has grown large and slow
+  - suspecting wrong reference answers
+related_patterns: [llm-as-judge, learning-loop, test-first-loop]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, NumPy)</div>
+        <div class="code"><pre>import numpy as np
+
+def fit_2pl(X, iters=4000, lr=0.05):
+    """X: agents x cases matrix of 0/1. Joint maximum likelihood by gradient ascent.
+    Good enough for screening; use a dedicated IRT library for publication-grade fits."""
+    X = np.asarray(X, float)
+    m, n = X.shape
+    theta, a, b = np.zeros(m), np.ones(n), np.zeros(n)
+    for _ in range(iters):
+        p = 1 / (1 + np.exp(-a * (theta[:, None] - b)))
+        r = X - p
+        theta += lr * (r * a).sum(1) / n
+        a = np.clip(a + lr * (r * (theta[:, None] - b)).sum(0) / m, -3, 4)
+        b = np.clip(b + lr * (-r * a).sum(0) / m, -6, 6)
+        theta = (theta - theta.mean()) / theta.std()   # fix the scale
+    return theta, a, b
+
+def screen(X, a, easy=0.97, hard=0.03, min_a=0.4):
+    rate = np.asarray(X, float).mean(0)
+    too_easy, too_hard = rate >= easy, rate <= hard
+    weak = (a < min_a) & ~too_easy & ~too_hard
+    return {"too_easy": np.where(too_easy)[0], "too_hard": np.where(too_hard)[0],
+            "review": np.where(weak)[0], "keep": np.where(~(too_easy | too_hard | weak))[0]}
+
+def test_information(a, b, theta):
+    a = np.clip(a, 0, None)
+    p = 1 / (1 + np.exp(-a * (theta - b)))
+    return float((a ** 2 * p * (1 - p)).sum())</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>The 2PL as logistic regression on ability</summary>
+          <div class="body">
+            <p>Write the log-odds of passing as a straight line in ability: \(\ln\frac{P}{1-P} = a(\theta - b)\). Solving for \(P\) gives the logistic curve. At \(\theta = b\) the log-odds are 0, so \(P = 0.5\): that defines difficulty. The slope of \(P\) at that point is \(a/4\): that is why \(a\) measures sharpness. The scale of \(\theta\) is arbitrary, so it is fixed by centering the agents' abilities at 0 with standard deviation 1.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Where item information comes from</summary>
+          <div class="body">
+            <p>Fisher information is the expected squared slope of the log-likelihood. For one case, the log-likelihood of a result \(x \in \{0,1\}\) is \(x\ln P + (1-x)\ln(1-P)\). Its derivative with respect to \(\theta\) is \(a(x - P)\), because \(dP/d\theta = aP(1-P)\). The expected square is \(a^2\operatorname{Var}(x) = a^2P(1-P)\). Since cases are independent given ability, information adds, and the maximum-likelihood ability estimate has standard error about \(1/\sqrt{I(\theta)}\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why easy cases carry almost nothing</summary>
+          <div class="body">
+            <p>\(P(1-P)\) peaks at \(\tfrac14\) when \(P = 0.5\) and shrinks toward 0 as \(P\) approaches 0 or 1. A case the weakest agent passes 98% of the time has \(P(1-P) \le 0.0196\) for every agent at or above that ability, under 8% of the peak, and the stronger agents get even less. Far from \(b\), \(P(1-P) \approx e^{-a|\theta-b|}\), so information decays exponentially with distance.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The calculator's information score</summary>
+          <div class="body">
+            <p>The readout averages the case's information over the ability range \([\theta_{\text{lo}}, \theta_{\text{hi}}]\) and divides by the same average for a case with the same discrimination placed at the middle of the range. A value of 100% means the case is as well placed as it can be for your agents; low values mean it is too easy, too hard, or both relative to them. Its sharpness is judged separately, by \(a\).</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Polo, F. M. et al. (2024). <a href="https://arxiv.org/abs/2402.14992">tinyBenchmarks: evaluating LLMs with fewer examples</a>. Uses IRT to estimate full-benchmark scores of LLMs from around 100 well-chosen items.</li>
+          <li>Baker, F. B. (2001). <em>The Basics of Item Response Theory</em>, 2nd edition. ERIC Clearinghouse on Assessment and Evaluation. A free, short introduction to item curves and information.</li>
+          <li>Lord, F. M. (1980). <em>Applications of Item Response Theory to Practical Testing Problems</em>. Lawrence Erlbaum. The classic treatment of test information and test design.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"item-response-theory","number":"M09","family":"evaluation",
+ "formula":{"pass_probability":"1/(1+exp(-a*(theta-b)))","item_information":"a**2*P*(1-P)","test_information":"sum_i I_i(theta)","ability_se":"1/sqrt(I(theta))"},
+ "screens":{"too_easy":"pass_rate>=0.97","too_hard":"pass_rate<=0.03","review":"a<0.4"},
+ "inputs":["X","theta_range"],
+ "assumptions":["single latent ability","20+ agent configurations","local independence"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  const DATA = {"grid": [-3.0, -2.75, -2.5, -2.25, -2.0, -1.75, -1.5, -1.25, -1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0], "full": [18.96, 17.48, 17.01, 17.72, 19.61, 22.48, 25.98, 29.69, 33.25, 36.44, 39.1, 41.09, 42.32, 42.62, 41.79, 39.64, 36.16, 31.61, 26.52, 21.55, 17.25, 13.94, 11.7, 10.48, 10.13], "kept": [8.78, 9.65, 11.13, 13.34, 16.33, 19.99, 24.05, 28.13, 31.94, 35.29, 38.02, 40.04, 41.24, 41.47, 40.53, 38.23, 34.59, 29.89, 24.67, 19.57, 15.09, 11.47, 8.72, 6.74, 5.36], "random": [10.81, 10.25, 10.24, 10.87, 12.18, 14.14, 16.62, 19.43, 22.3, 24.96, 27.11, 28.53, 29.05, 28.58, 27.1, 24.71, 21.67, 18.35, 15.09, 12.18, 9.84, 8.15, 7.11, 6.69, 6.77], "theta": [-1.92, -1.85, -1.51, -1.49, -1.19, -0.87, -0.81, -0.67, -0.53, -0.51, -0.47, -0.38, -0.3, -0.2, -0.15, -0.14, -0.1, -0.06, 0.03, 0.04, 0.39, 0.46, 0.57, 0.68, 0.69, 0.75, 0.82, 1.22, 1.36, 1.57]};
+  const P = (a, b, t) => 1 / (1 + Math.exp(-a * (t - b)));
+  const info = (a, b, t) => { const p = P(a, b, t); return a * a * p * (1 - p); };
+  const avgInfo = (a, b, lo, hi) => { let s = 0; const n = 200; for (let i = 0; i <= n; i++) s += info(a, b, lo + (hi - lo) * i / n); return s / (n + 1); };
+
+  MM.tabs(document.getElementById("lab-tabs"));
+
+  /* Whole-eval information curves (static data from the worked example) */
+  MM.lineChart(document.getElementById("testinfo"), {
+    x: { min: -3, max: 3, label: "Agent ability, θ" },
+    y: { min: 0, max: 50, label: "Test information" },
+    series: [
+      { cls: "s-fault", points: DATA.grid.map((t, i) => [t, DATA.random[i]]) },
+      { cls: "s-accent", points: DATA.grid.map((t, i) => [t, DATA.full[i]]) },
+      { cls: "s-ok", points: DATA.grid.map((t, i) => [t, DATA.kept[i]]) }
+    ],
+    dots: DATA.theta.map((t) => ({ x: t, y: 1.2, cls: "dot-ok" }))
+  });
+
+  function render(s) {
+    // Takeaway: sharp case (a = 1.5), agents spread over [-1.5, 1.5]
+    const bt = -1.5 - Math.log(s.pw / (1 - s.pw)) / 1.5;
+    const share = avgInfo(1.5, bt, -1.5, 1.5) / avgInfo(1.5, 0, -1.5, 1.5);
+    document.getElementById("hero-share").textContent = share < 0.01 ? MM.pctFixed(share, 1) : MM.pct(share, share < 0.1 ? 1 : 0);
+
+    // Item under inspection
+    const { a, b } = s, lo = Math.min(s.lo, s.hi - 0.1), hi = Math.max(s.hi, lo + 0.1);
+    const plo = P(a, b, lo), phi = P(a, b, hi);
+    const rel = a > 0 ? avgInfo(a, b, lo, hi) / avgInfo(a, (lo + hi) / 2, lo, hi) : 0;
+    let verdict = "Keep", good = true;
+    if (a < 0) { verdict = "Check answer key"; good = false; }
+    else if (a < 0.4) { verdict = "Not tracking ability"; good = false; }
+    else if (plo >= 0.97) { verdict = "Too easy"; good = false; }
+    else if (phi <= 0.03) { verdict = "Too hard"; good = false; }
+    document.getElementById("o-verdict").textContent = verdict;
+    const box = document.getElementById("r-verdict");
+    box.classList.toggle("primary", good); box.classList.toggle("alarm", !good);
+    document.getElementById("o-plo").textContent = MM.pct(plo, plo > 0.99 || plo < 0.01 ? 1 : 0);
+    document.getElementById("o-phi").textContent = MM.pct(phi, phi > 0.99 || phi < 0.01 ? 1 : 0);
+    document.getElementById("o-info").textContent = a <= 0 ? "0%" : MM.pct(rel, rel < 0.1 ? 1 : 0);
+
+    const xs = []; for (let t = -4; t <= 4.0001; t += 0.05) xs.push(t);
+    const peak = Math.max(a * a / 4, 1e-9);
+    const svg = document.getElementById("icc");
+    MM.lineChart(svg, {
+      x: { min: -4, max: 4, label: "Agent ability, θ" },
+      y: { min: 0, max: 1, label: "Chance of passing", pct: true },
+      series: [
+        { cls: "s-ok", points: xs.map((t) => [t, a === 0 ? 0 : info(a, b, t) / peak]) },
+        { cls: "s-accent", points: xs.map((t) => [t, P(a, b, t)]) }
+      ],
+      markerX: Math.max(-4, Math.min(4, b))
+    });
+    // shade the agents' ability range (same scale as MM.lineChart)
+    const sx = (t) => 52 + ((t + 4) / 8) * 572;
+    const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    r.setAttribute("x", sx(lo)); r.setAttribute("y", 14); r.setAttribute("width", sx(hi) - sx(lo)); r.setAttribute("height", 280);
+    r.setAttribute("style", "fill:var(--accent-soft);opacity:.7");
+    svg.insertBefore(r, svg.firstChild);
+  }
+
+  MM.state({ pw: 0.98, a: 1.2, b: 0.4, lo: -1.5, hi: 1.5 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

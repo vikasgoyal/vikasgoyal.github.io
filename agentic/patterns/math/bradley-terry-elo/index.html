@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bradley–Terry and Elo | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Turn pairwise judgments from humans or an LLM judge into a ranking of prompts, models or agents. Bradley–Terry fitting, Elo updates, why Elo depends on match order, and bootstrap intervals. Math, derivations and a calculator.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/bradley-terry-elo/">
+<meta property="og:title" content="Bradley–Terry and Elo: from “A beat B” to a ranking you can trust">
+<meta property="og:description" content="Feed the same 600 judgments to Elo in a different order and the runner-up wins a quarter of the time. Bradley–Terry doesn’t care about order.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/bradley-terry-elo/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Bradley–Terry and Elo",
+  "about": "Ranking AI systems from pairwise comparisons",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/bradley-terry-elo/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Bradley–Terry and Elo</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M07</span>
+          <span class="tag">Evaluation</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Bradley–Terry and Elo</h1>
+        <p class="formula-name">\(\Pr(i \text{ beats } j) = \dfrac{1}{1+10^{(R_j-R_i)/400}}\)</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          A rating gap of
+          <input class="inline-num wide" type="number" min="0" max="800" step="10" data-key="gap" aria-label="Rating gap in points">
+          points means the stronger prompt wins only <span class="result-num good" id="hero-win">58.5%</span> of head-to-head judgments. Telling them apart reliably takes about <span class="result-num" id="hero-n">269</span> head-to-head comparisons.
+        </p>
+        <p class="hint">Change the blue number. Every figure on this page updates with it.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">"Which output is better, A or B?" is the easiest question to ask a human or an LLM judge, and the hardest to turn into a ranking.</p>
+        <p>Absolute scores drift: graders disagree on what a 7 out of 10 means, and an LLM judge's scale shifts with the prompt. Pairwise preferences are more stable, which is why model leaderboards and many internal evals use them. But a pile of "A beat B" judgments is not yet a ranking. Bradley–Terry turns the pile into ratings with error bars and a win probability for any pair. Elo, the chess system, approximates the same thing one game at a time, and that shortcut has a cost worth knowing.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Give every contestant a hidden strength. When two meet, each wins in proportion to its strength: a contestant twice as strong as another wins two times in three. Ratings are just strengths on a log scale, set so that every 400 points multiplies the odds of winning by ten.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">Equal ratings</span><div class="track"><div class="fill" style="width:50%"></div></div><span class="pct">50%</span></div>
+          <div class="row"><span class="lbl">100 points ahead</span><div class="track"><div class="fill" style="width:64%"></div></div><span class="pct">64%</span></div>
+          <div class="row"><span class="lbl">200 points ahead</span><div class="track"><div class="fill" style="width:76%"></div></div><span class="pct">76%</span></div>
+          <div class="row"><span class="lbl">400 points ahead</span><div class="track"><div class="fill" style="width:91%"></div></div><span class="pct">91%</span></div>
+        </div>
+        <p>Bradley–Terry looks at all the results at once and finds the strengths that best explain them. Elo nudges two ratings after every single game, so it can follow a contestant that changes over time, but its final answer depends on the order the games arrived in.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>Bradley–Terry gives each contestant a strength \(s_i &gt; 0\), or a rating \(R_i = 400\log_{10} s_i\):</p>
+        <div class="math-block">$$\Pr(i \text{ beats } j) = \frac{s_i}{s_i+s_j} = \frac{1}{1+10^{(R_j-R_i)/400}}$$</div>
+        <p>Fit it to all the judgments by maximum likelihood. A simple, reliable algorithm repeats this update until it settles:</p>
+        <div class="math-block">$$s_i \leftarrow \frac{W_i}{\displaystyle\sum_{j\ne i}\frac{n_{ij}}{s_i+s_j}}$$</div>
+        <p>Elo instead updates after each game, with a step size \(K\):</p>
+        <div class="math-block">$$R_i \leftarrow R_i + K\,(S_i - E_i), \qquad E_i = \frac{1}{1+10^{(R_j-R_i)/400}}$$</div>
+        <dl class="symbols">
+          <dt>\(s_i,\ R_i\)</dt><dd>strength and rating of contestant \(i\) (a prompt, model or agent version)</dd>
+          <dt>\(W_i\)</dt><dd>total wins of contestant \(i\)</dd>
+          <dt>\(n_{ij}\)</dt><dd>number of comparisons between \(i\) and \(j\)</dd>
+          <dt>\(S_i,\ E_i\)</dt><dd>result of one game for \(i\) (1 win, 0 loss, 0.5 tie) and its expected score</dd>
+          <dt>\(K\)</dt><dd>Elo step size: how far one game moves a rating</dd>
+        </dl>
+        <ul>
+          <li><strong>Only differences matter:</strong> adding the same number to every rating changes nothing, so ratings are anchored, here at an average of 1000.</li>
+          <li><strong>Error bars come from the bootstrap:</strong> resample the judgments, refit, and read the spread of each rating.</li>
+          <li><strong>Close contestants need many judgments:</strong> to detect a win rate \(p\) against 50% with 80% power takes roughly \(n \approx \big((1.96+0.84)/(p-0.5)\big)^2/4\) direct comparisons: about 270 for a 58.5–41.5 matchup, a 60-point gap.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Four prompts with known true ratings play a round-robin judged at random by their true win probabilities. Bradley–Terry fits all the results; Elo replays the same results in 60 random orders.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-n">Judgments per pair <output data-out="n" data-fmt="int"></output></label>
+                <input id="c-n" type="range" min="10" max="300" step="10" data-key="n">
+                <div class="note">Six pairs, so the total is six times this.</div>
+              </div>
+              <div class="control">
+                <label for="c-K">Elo step size, \(K\) <output data-out="K" data-fmt="int"></output></label>
+                <input id="c-K" type="range" min="4" max="64" step="4" data-key="K">
+                <div class="note">Chess uses 10–40. Small steps are steadier but slow to move from the starting rating.</div>
+              </div>
+              <div class="control">
+                <button class="btn" type="button" id="resample">New set of judgments</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-top">–</div><div class="k">Bootstrap runs where Bradley–Terry ranks A first</div></div>
+                <div class="readout alarm"><div class="v" id="o-elo">–</div><div class="k">Elo orders that put B above A</div></div>
+                <div class="readout"><div class="v" id="o-gap">–</div><div class="k">A minus B, Bradley–Terry 95% interval</div></div>
+                <div class="readout"><div class="v" id="o-total">–</div><div class="k">Total judgments</div></div>
+              </div>
+              <div class="chart-wrap">
+                <svg class="chart" id="ratings" role="img" aria-label="True ratings, Bradley–Terry estimates with intervals, and Elo results across orderings for four prompts"></svg>
+                <div class="legend">
+                  <span><i style="background:var(--ink)"></i>True rating</span>
+                  <span><i style="background:var(--accent)"></i>Bradley–Terry, 95% interval</span>
+                  <span><i style="background:var(--fault)"></i>Elo, one dot per match order</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: four prompt variants</h2>
+        <p>A team compared four system prompts for a sales-email agent. For 100 customer briefs per pair, an LLM judge saw two drafts side by side and picked the better one, with each pair shown in both orders to cancel the judge's preference for whichever draft comes first. That gave 600 judgments:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Wins (row beat column)</th><th class="num">A</th><th class="num">B</th><th class="num">C</th><th class="num">D</th></tr></thead>
+            <tbody>
+              <tr><td>Prompt A</td><td class="num">–</td><td class="num">58</td><td class="num">64</td><td class="num">81</td></tr>
+              <tr><td>Prompt B</td><td class="num">42</td><td class="num">–</td><td class="num">55</td><td class="num">74</td></tr>
+              <tr><td>Prompt C</td><td class="num">36</td><td class="num">45</td><td class="num">–</td><td class="num">69</td></tr>
+              <tr><td>Prompt D</td><td class="num">19</td><td class="num">26</td><td class="num">31</td><td class="num">–</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Bradley–Terry, with bootstrap 95% intervals, rated them <strong>A 1101</strong> (1072–1134), <strong>B 1040</strong> (1012–1073), <strong>C 1001</strong> (969–1029) and <strong>D 857</strong> (824–891). A beats B by 61 points with an interval of 11 to 110: probably better, predicted to win 58.7% of head-to-heads, and worth confirming with more judgments before a big rollout.</p>
+        <p>The team's dashboard used Elo with \(K = 32\), processing judgments as they streamed in. Replaying the same 600 judgments in 200 random orders, A's final Elo rating ranged from <strong>944 to 1204</strong>, and <strong>B finished above A in 26% of orders</strong>. Lowering \(K\) to 16 cut that to 12%; at \(K = 4\) it disappeared, but then ratings barely moved from 1000 until hundreds of games had passed. For a fixed batch of judgments, Bradley–Terry gives one answer with honest error bars; Elo is for streams where contestants change.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Judges have position bias.</strong> LLM judges often favor the first or the longer response. Show every pair in both orders and control for length, or the ratings measure the bias.</li>
+          <li><strong>Preferences may not be transitive.</strong> If A beats B, B beats C and C beats A, no single rating explains it. Check how well the fitted probabilities match observed win rates per pair.</li>
+          <li><strong>One number per contestant hides task mix.</strong> A prompt can win on short emails and lose on long ones. Fit separate ratings per task category when categories matter.</li>
+          <li><strong>Ties need handling.</strong> Count a tie as half a win each, or use the Davidson extension of Bradley–Terry, rather than dropping ties, which inflates differences.</li>
+          <li><strong>Sparse comparisons give shaky ratings.</strong> Contestants compared only a few times, or only against much weaker ones, get wide intervals. Spread comparisons across close pairs.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Collect pairwise judgments on the same inputs.</strong> Both candidates answer the same brief, so the judgment compares outputs, not tasks.</li>
+          <li><strong>Randomize and swap positions.</strong> Present each pair in both orders and log which was shown first.</li>
+          <li><strong>Fit Bradley–Terry on the whole batch.</strong> Use Elo only for live leaderboards over changing systems.</li>
+          <li><strong>Bootstrap the intervals.</strong> Resample judgments 500 times, refit, and report each rating's 2.5th–97.5th percentile.</li>
+          <li><strong>Add judgments where intervals overlap.</strong> Spend the next comparisons on the closest pairs, not on settled ones.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"We held a tournament between the prompts and let a judge pick the winner of each match. The ratings say how often each prompt would beat the others, with a range for how sure we are. A is ahead of B, and we'll run a few hundred more matches before we bet the launch on it."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../cohens-kappa/">M08 Cohen’s kappa</a><span class="why">Check the judge agrees with humans before trusting its preferences.</span></li>
+              <li><a href="../confidence-intervals/">M06 Confidence intervals</a><span class="why">The same uncertainty reasoning, for pass-or-fail scores.</span></li>
+              <li><a href="../item-response-theory/">M09 Item Response Theory</a><span class="why">The same logistic idea, applied to test cases instead of matchups.</span></li>
+              <li><a href="../bandits-routing/">M12 Multi-armed bandits for routing</a><span class="why">Choosing which pairs to compare next, adaptively.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/llm-as-judge/">No. 30 Rubric LLM-as-Judge</a><span class="why">The judge producing the pairwise verdicts.</span></li>
+              <li><a href="/agentic/patterns/debate/">No. 12 Debate / Multi-Critic</a><span class="why">Pairwise critique between candidate answers.</span></li>
+              <li><a href="/agentic/patterns/learning-loop/">No. 31 Self-Improving Learning Loop</a><span class="why">Promote the prompt that wins the tournament.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: bradley-terry-elo
+number: M07
+name: Bradley-Terry ratings and Elo
+family: evaluation
+answers: "How do pairwise judgments become a ranking with error bars?"
+formula:
+  win_probability: "1 / (1 + 10**((R_j - R_i)/400))"
+  bt_mm_update: "s_i = W_i / sum_j(n_ij / (s_i + s_j))"
+  rating: "R_i = 400 * log10(s_i), centered to mean 1000"
+  elo_update: "R_i += K * (S_i - E_i)"
+  intervals: "bootstrap: resample judgments, refit, take percentiles"
+inputs:
+  wins: {type: matrix, meaning: "wins[i][j] = times i beat j"}
+  K: {type: float, meaning: Elo step size, only for streaming updates}
+assumptions:
+  - one strength per contestant explains all matchups
+  - judgments independent; position bias removed by swapping order
+  - preferences transitive
+use_when:
+  - ranking prompts, models or agent versions from pairwise preferences
+  - building leaderboards from human or LLM-judge votes
+related_patterns: [llm-as-judge, debate, learning-loop]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, NumPy)</div>
+        <div class="code"><pre>import numpy as np
+
+def bradley_terry(wins, iters=1000):
+    """wins[i][j] = times i beat j. Returns ratings centered at 1000."""
+    W = np.asarray(wins, float)
+    n = len(W)
+    s = np.ones(n)
+    for _ in range(iters):
+        total = W + W.T
+        denom = np.array([sum(total[i, j] / (s[i] + s[j]) for j in range(n) if j != i)
+                          for i in range(n)])
+        s = W.sum(axis=1) / denom
+        s /= np.exp(np.log(s).mean())
+    r = 400 * np.log10(s)
+    return r - r.mean() + 1000
+
+def bootstrap(wins, reps=500, seed=0):
+    rng = np.random.default_rng(seed)
+    W = np.asarray(wins, float)
+    out = []
+    for _ in range(reps):
+        Wb = np.zeros_like(W)
+        for i in range(len(W)):
+            for j in range(i + 1, len(W)):
+                t = int(W[i, j] + W[j, i])
+                Wb[i, j] = rng.binomial(t, W[i, j] / t)
+                Wb[j, i] = t - Wb[i, j]
+        out.append(bradley_terry(Wb, iters=300))
+    return np.percentile(out, [2.5, 97.5], axis=0)
+
+if __name__ == "__main__":
+    wins = [[0, 58, 64, 81], [42, 0, 55, 74], [36, 45, 0, 69], [19, 26, 31, 0]]
+    print(bradley_terry(wins).round())   # [1101. 1040. 1001.  857.]
+    print(bootstrap(wins).round())       # roughly A 1072-1134, B 1012-1073, ...</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>From strengths to the 400-point scale</summary>
+          <div class="body">
+            <p>Write \(s_i = 10^{R_i/400}\). Then \(\frac{s_i}{s_i+s_j} = \frac{1}{1+s_j/s_i} = \frac{1}{1+10^{(R_j-R_i)/400}}\). The odds of \(i\) winning are \(s_i/s_j = 10^{(R_i-R_j)/400}\), so every 400 points multiplies the odds by ten. In natural-log units, Bradley–Terry is logistic regression on the rating difference: \(\Pr(i\text{ beats }j) = \sigma\big((R_i-R_j)\ln 10/400\big)\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The fitting update</summary>
+          <div class="body">
+            <p>The log-likelihood of all judgments is \(\ell(s) = \sum_{i\ne j} w_{ij}\big(\ln s_i - \ln(s_i+s_j)\big)\). Setting \(\partial\ell/\partial s_i = 0\) gives \(W_i/s_i = \sum_{j} n_{ij}/(s_i+s_j)\): at the best fit, each contestant's expected wins equal its actual wins. Solving that condition for \(s_i\) while holding the others fixed gives the update shown. Hunter (2004) showed it is a minorize-maximize algorithm, so each step increases the likelihood and the iteration converges whenever every contestant has at least one win and one loss against the connected group.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Elo is Bradley–Terry learned one game at a time</summary>
+          <div class="body">
+            <p>Take the log-likelihood of a single game in rating units. Its derivative with respect to \(R_i\) is \(\frac{\ln 10}{400}(S_i - E_i)\). A gradient-ascent step with learning rate \(\eta\) moves \(R_i\) by \(\eta\frac{\ln 10}{400}(S_i-E_i)\), which is the Elo update with \(K = \eta\ln 10/400\). So Elo is stochastic gradient ascent on the Bradley–Terry likelihood with a constant step size. A constant step never settles: it keeps weighting recent games more than old ones, which is why the final ratings depend on game order and keep fluctuating, more so the larger \(K\) is, unless the step shrinks over time.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>How many judgments to separate two contestants</summary>
+          <div class="body">
+            <p>If A beats B with probability \(p\), the observed win share over \(n\) head-to-head judgments has standard error \(\sqrt{p(1-p)/n} \approx 0.5/\sqrt n\). To be 95% sure A is ahead, the margin \(p - 0.5\) must exceed \(1.96 \times 0.5/\sqrt n\), so \(n \approx \big(1.96/(p-0.5)\big)^2/4\). At \(p = 0.585\) (a 60-point gap) that is about 130 direct comparisons; at 80% power it is about 270. Comparisons with other contestants help too, which is the advantage of fitting everything together.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Bradley, R. A. and Terry, M. E. (1952). Rank analysis of incomplete block designs: I. The method of paired comparisons. <em>Biometrika</em> 39(3/4), 324–345.</li>
+          <li>Hunter, D. R. (2004). MM algorithms for generalized Bradley–Terry models. <em>The Annals of Statistics</em> 32(1), 384–406.</li>
+          <li>Chiang, W.-L. et al. (2024). <a href="https://arxiv.org/abs/2403.04132">Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference</a>. Explains the move from online Elo to Bradley–Terry with bootstrap intervals for LLM leaderboards.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"bradley-terry-elo","number":"M07","family":"evaluation",
+ "formula":{"win_probability":"1/(1+10**((R_j-R_i)/400))","bt_update":"s_i=W_i/sum_j(n_ij/(s_i+s_j))","rating":"400*log10(s_i), centered to 1000","elo_update":"R_i+=K*(S_i-E_i)","intervals":"bootstrap"},
+ "inputs":["wins","K"],
+ "assumptions":["single strength per contestant","independent judgments, position bias removed","transitive preferences"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  const NAMES = ["A", "B", "C", "D"];
+  const TRUE = [1101, 1040, 1001, 857];
+  const winP = (ri, rj) => 1 / (1 + Math.pow(10, (rj - ri) / 400));
+
+  /* ---------- Small seeded RNG so a page load is reproducible until "New set" ---------- */
+  let seed = 12345;
+  const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+  const binom = (n, p) => { let x = 0; for (let i = 0; i < n; i++) if (rnd() < p) x++; return x; };
+
+  function simulate(n) {
+    const W = [...Array(4)].map(() => Array(4).fill(0));
+    for (let i = 0; i < 4; i++) for (let j = i + 1; j < 4; j++) {
+      const x = binom(n, winP(TRUE[i], TRUE[j])); W[i][j] = x; W[j][i] = n - x;
+    }
+    return W;
+  }
+  function fitBT(W, iters = 200) {
+    let s = [1, 1, 1, 1];
+    for (let it = 0; it < iters; it++) {
+      const ns = s.map((si, i) => {
+        let wins = 0, den = 0;
+        for (let j = 0; j < 4; j++) if (j !== i) { wins += W[i][j]; den += (W[i][j] + W[j][i]) / (si + s[j]); }
+        return Math.max(wins, 0.1) / den;
+      });
+      const g = Math.exp(ns.reduce((a, v) => a + Math.log(v), 0) / 4);
+      s = ns.map((v) => v / g);
+    }
+    const r = s.map((v) => 400 * Math.log10(v)), m = r.reduce((a, v) => a + v, 0) / 4;
+    return r.map((v) => v - m + 1000);
+  }
+  function bootstrap(W, reps = 150) {
+    const out = [];
+    for (let b = 0; b < reps; b++) {
+      const Wb = [...Array(4)].map(() => Array(4).fill(0));
+      for (let i = 0; i < 4; i++) for (let j = i + 1; j < 4; j++) {
+        const t = W[i][j] + W[j][i], x = binom(t, W[i][j] / t); Wb[i][j] = x; Wb[j][i] = t - x;
+      }
+      out.push(fitBT(Wb, 80));
+    }
+    return out;
+  }
+  function eloRuns(W, K, orders = 60) {
+    const games = [];
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) for (let g = 0; g < W[i][j]; g++) games.push([i, j]);
+    const finals = [];
+    for (let o = 0; o < orders; o++) {
+      for (let x = games.length - 1; x > 0; x--) { const y = Math.floor(rnd() * (x + 1)); [games[x], games[y]] = [games[y], games[x]]; }
+      const r = [1000, 1000, 1000, 1000];
+      for (const [i, j] of games) { const e = winP(r[i], r[j]); r[i] += K * (1 - e); r[j] -= K * (1 - e); }
+      finals.push(r);
+    }
+    return finals;
+  }
+  const pctile = (arr, q) => { const a = [...arr].sort((x, y) => x - y); return a[Math.min(a.length - 1, Math.floor(q * a.length))]; };
+
+  /* ---------- Chart ---------- */
+  function draw(svg, bt, ci, elo) {
+    const W = 640, H = 300, l = 70, r = 20, t = 20, rowH = 60;
+    const all = [...TRUE, ...ci.flat(), ...elo.flat()];
+    const lo = Math.floor((Math.min(...all) - 20) / 50) * 50, hi = Math.ceil((Math.max(...all) + 20) / 50) * 50;
+    const sx = (v) => l + ((v - lo) / (hi - lo)) * (W - l - r);
+    let s = "";
+    for (let v = lo; v <= hi; v += 50) {
+      s += `<line class="gridline" x1="${sx(v)}" x2="${sx(v)}" y1="${t}" y2="${t + rowH * 4}"/>`;
+      if ((v / 50) % 2 === 0) s += `<text x="${sx(v)}" y="${t + rowH * 4 + 16}" text-anchor="middle">${v}</text>`;
+    }
+    s += `<text class="axis-label" x="${l + (W - l - r) / 2}" y="${H - 4}" text-anchor="middle">Rating (average fixed at 1000)</text>`;
+    for (let i = 0; i < 4; i++) {
+      const y = t + rowH * i + rowH / 2;
+      s += `<text x="${l - 14}" y="${y + 5}" text-anchor="end" style="font-size:14px;font-weight:600;fill:var(--ink)">${NAMES[i]}</text>`;
+      elo.forEach((r, k) => { s += `<circle cx="${sx(r[i])}" cy="${y + 14 + (k % 5) * 2 - 4}" r="2.5" style="fill:var(--fault);opacity:.55"/>`; });
+      s += `<line x1="${sx(ci[i][0])}" x2="${sx(ci[i][1])}" y1="${y - 6}" y2="${y - 6}" style="stroke:var(--accent);stroke-width:6;stroke-linecap:round;opacity:.8"/>`;
+      s += `<circle cx="${sx(bt[i])}" cy="${y - 6}" r="5" style="fill:var(--accent)"/>`;
+      s += `<line x1="${sx(TRUE[i])}" x2="${sx(TRUE[i])}" y1="${y - 18}" y2="${y + 18}" style="stroke:var(--ink);stroke-width:2"/>`;
+    }
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.innerHTML = s;
+  }
+
+  /* ---------- Render ---------- */
+  let W = null, lastN = null, cache = null;
+  document.getElementById("resample").addEventListener("click", () => { W = null; cache = null; if (last) render(last); });
+  let last = null;
+  function render(s) {
+    last = s;
+    const g = Math.max(0, s.gap), p = winP(g, 0);
+    document.getElementById("hero-win").textContent = MM.pct(p, 1);
+    document.getElementById("hero-n").textContent = g > 0
+      ? Math.ceil(Math.pow((1.96 + 0.8416) / (p - 0.5), 2) / 4).toLocaleString() : "∞";
+
+    const n = Math.round(s.n), K = Math.round(s.K);
+    if (!W || n !== lastN) { W = simulate(n); lastN = n; cache = null; }
+    if (!cache) {
+      const bt = fitBT(W), boots = bootstrap(W);
+      cache = { bt, boots };
+    }
+    const { bt, boots } = cache;
+    const ci = [0, 1, 2, 3].map((i) => [pctile(boots.map((b) => b[i]), 0.025), pctile(boots.map((b) => b[i]), 0.975)]);
+    if (!cache.elo || cache.K !== K) { cache.elo = eloRuns(W, K); cache.K = K; }
+    const elo = cache.elo;
+    const aFirst = boots.filter((b) => b[0] === Math.max(...b)).length / boots.length;
+    const bOverA = elo.filter((r) => r[1] > r[0]).length / elo.length;
+    const gaps = boots.map((b) => b[0] - b[1]);
+    document.getElementById("o-top").textContent = MM.pct(aFirst, 0);
+    document.getElementById("o-elo").textContent = MM.pct(bOverA, 0);
+    document.getElementById("o-gap").textContent = `${Math.round(pctile(gaps, 0.025))} to ${Math.round(pctile(gaps, 0.975))}`;
+    document.getElementById("o-total").textContent = (6 * n).toLocaleString();
+    draw(document.getElementById("ratings"), bt, ci, elo);
+  }
+
+  MM.state({ gap: 60, n: 100, K: 32 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

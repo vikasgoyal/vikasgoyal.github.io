@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cohen's Kappa | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Check whether an LLM judge agrees with human experts beyond chance. Cohen's kappa, the prevalence paradox, and what a judge's agreement really tells you. Math, derivations, calculator and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/cohens-kappa/">
+<meta property="og:title" content="Cohen’s kappa: your LLM judge agrees 90% of the time, and it may still be weak">
+<meta property="og:description" content="When most outputs pass, chance alone agrees 80% of the time. Kappa shows what the judge adds.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/cohens-kappa/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cohen's Kappa",
+  "about": "Validating LLM-as-judge agreement with human raters",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/cohens-kappa/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Cohen’s kappa</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M08</span>
+          <span class="tag">Evaluation</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Cohen’s kappa</h1>
+        <p class="formula-name">\(\kappa = \dfrac{p_o - p_e}{1 - p_e}\): agreement beyond chance</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          A judge that catches
+          <span class="nowrap"><input class="inline-num wide" type="number" min="0" max="100" step="1" data-key="s" data-scale="100" aria-label="Share of real failures the judge catches, percent">%</span>
+          of real failures agrees with your experts <span class="result-num good" id="hero-po">90%</span> of the time when
+          <span class="nowrap"><input class="inline-num wide" type="number" min="1" max="50" step="1" data-key="pi" data-scale="100" aria-label="Share of outputs that truly fail, percent">%</span>
+          of outputs fail. Its kappa is only <span class="result-num" id="hero-k">0.49</span>.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Every eval that uses an LLM judge is only as good as the judge.</p>
+        <p>The usual check is to have experts label a sample and report how often the judge agrees. When most outputs are good, a judge that passes almost everything agrees most of the time without judging anything. Cohen's kappa subtracts the agreement you would get by chance from the raters' own pass rates, and asks how much of the remaining room the judge actually covers. It is the validation step most teams skip, and the one that tells you whether your eval numbers mean anything.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Imagine a judge that never reads the output and stamps "pass" on everything. If 87% of outputs are genuinely good, it agrees with your experts 87% of the time. That number sounds respectable and means nothing.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">Always-pass judge: agreement</span><div class="track"><div class="fill" style="width:87%"></div></div><span class="pct">87%</span></div>
+          <div class="row"><span class="lbl">Always-pass judge: kappa</span><div class="track"><div class="fill bad" style="width:0%"></div></div><span class="pct">0.00</span></div>
+          <div class="row"><span class="lbl">Weak judge: agreement</span><div class="track"><div class="fill" style="width:90%"></div></div><span class="pct">90%</span></div>
+          <div class="row"><span class="lbl">Weak judge: kappa</span><div class="track"><div class="fill bad" style="width:49%"></div></div><span class="pct">0.49</span></div>
+        </div>
+        <p>Kappa puts chance at zero and perfect agreement at one. The weak judge's 90% looks only three points better than the stamp, and kappa shows that it covers about half of the distance from chance to perfect.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>Lay out expert and judge verdicts on the same \(N\) items as a 2×2 table: \(a\) both pass, \(b\) expert passes and judge fails, \(c\) expert fails and judge passes, \(d\) both fail.</p>
+        <div class="math-block">$$p_o = \frac{a+d}{N}, \qquad p_e = p_H\,p_J + (1-p_H)(1-p_J), \qquad \kappa = \frac{p_o-p_e}{1-p_e}$$</div>
+        <dl class="symbols">
+          <dt>\(p_o\)</dt><dd>observed agreement: share of items where expert and judge give the same verdict</dd>
+          <dt>\(p_H,\ p_J\)</dt><dd>pass rates of the expert, \((a+b)/N\), and the judge, \((a+c)/N\)</dd>
+          <dt>\(p_e\)</dt><dd>agreement expected by chance if the two rated independently at those pass rates</dd>
+          <dt>\(\kappa\)</dt><dd>share of the possible improvement over chance that the judge achieves</dd>
+        </dl>
+        <p>For an eval judge, two more numbers explain the kappa: how many real failures it catches, and how much good work it wrongly fails. With \(\pi\) the share of outputs that truly fail:</p>
+        <div class="math-block">$$\text{catch rate } s = \frac{d}{c+d}, \qquad \text{false-fail rate } f = \frac{b}{a+b}, \qquad \kappa = \frac{2\,\pi(1-\pi)(s-f)}{(1-\pi)(1-p_J) + \pi\,p_J}$$</div>
+        <ul>
+          <li><strong>Read kappa on a scale:</strong> a common rule of thumb is below 0.4 poor to fair, 0.4–0.6 moderate, 0.6–0.8 substantial, above 0.8 almost perfect. For an eval judge, aim for 0.7 or better.</li>
+          <li><strong>Rare failures pull kappa down:</strong> when only a few outputs fail, chance agreement is already high, so the judge has to be very good at spotting failures to earn a high kappa. This is the prevalence effect, and it is the point, not a flaw: catching rare failures is the judge's job.</li>
+          <li><strong>Interval:</strong> an approximate standard error is \(\sqrt{p_o(1-p_o)/N}\,/\,(1-p_e)\). With 200 labeled items, expect intervals around ±0.1 to ±0.2.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Describe the judge by how many real failures it catches and how often it fails good work, and set how common failures are. The table, agreement and kappa follow.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-s">Real failures the judge catches <output data-out="s" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-s" type="range" min="0" max="100" step="1" data-key="s" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-f">Good outputs the judge wrongly fails <output data-out="f" data-fmt="pct" data-dp="1"></output></label>
+                <input id="c-f" type="range" min="0" max="30" step="0.5" data-key="f" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-pi">Outputs that truly fail <output data-out="pi" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-pi" type="range" min="1" max="50" step="1" data-key="pi" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-N">Items labeled by experts <output data-out="N" data-fmt="int"></output></label>
+                <input id="c-N" type="range" min="50" max="1000" step="10" data-key="N">
+                <div class="note">Sets the width of the kappa interval.</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout"><div class="v" id="o-po">–</div><div class="k">Agreement with experts</div></div>
+                <div class="readout"><div class="v" id="o-pe">–</div><div class="k">Agreement expected by chance</div></div>
+                <div class="readout" id="r-k"><div class="v" id="o-k">–</div><div class="k" id="o-k-k">Cohen's kappa</div></div>
+                <div class="readout"><div class="v" id="o-ci">–</div><div class="k">Kappa, approximate 95% interval</div></div>
+                <div class="readout"><div class="v" id="o-prec">–</div><div class="k">Judge's fails that are real failures</div></div>
+                <div class="readout"><div class="v" id="o-ff">–</div><div class="k" id="o-ff-k">Pass rate the judge reports</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-table" id="tab-table">Agreement table</button>
+                <button role="tab" aria-selected="false" aria-controls="view-prev" id="tab-prev">Effect of failure rate</button>
+              </div>
+
+              <div id="view-table" role="tabpanel" aria-labelledby="tab-table">
+                <div class="chart-wrap">
+                  <svg class="chart" id="table" role="img" aria-label="Two by two table of expert and judge verdicts"></svg>
+                </div>
+              </div>
+              <div id="view-prev" role="tabpanel" aria-labelledby="tab-prev" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="prev" role="img" aria-label="Agreement and kappa as the failure rate changes"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>Agreement</span>
+                    <span><i style="background:var(--fault)"></i>Kappa</span>
+                    <span><i style="background:var(--ink)"></i>Your failure rate</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: validating a support-quality judge</h2>
+        <p>A team built an LLM judge to grade customer-support transcripts as pass or fail, and asked two senior agents to label 200 transcripts independently of the judge.</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th></th><th class="num">Judge v1</th><th class="num">Judge v2</th></tr></thead>
+            <tbody>
+              <tr><td>Both pass / expert pass, judge fail</td><td class="num">168 / 6</td><td class="num">170 / 4</td></tr>
+              <tr><td>Expert fail, judge pass / both fail</td><td class="num">14 / 12</td><td class="num">4 / 22</td></tr>
+              <tr><td>Agreement</td><td class="num">90.0%</td><td class="num">96.0%</td></tr>
+              <tr><td>Chance agreement</td><td class="num">80.3%</td><td class="num">77.4%</td></tr>
+              <tr class="weak"><td>Kappa (approx. 95% interval)</td><td class="num">0.49 (0.28–0.70)</td><td class="num">0.82 (0.70–0.94)</td></tr>
+              <tr><td>Real failures caught</td><td class="num">12 of 26 (46%)</td><td class="num">22 of 26 (85%)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Judge v1's 90% agreement looked fine in the status update. Its kappa of 0.49 showed the problem, and the table showed where: it missed more than half of the transcripts the experts failed, mostly polite replies that gave the wrong refund policy. The team added the policy to the judge's rubric with three failing examples. Judge v2 reached 96% agreement and kappa 0.82, and the eval's reported pass rate dropped from 91% to 87%, which matched the experts. The earlier eval had been overstating quality by four points.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>The experts are not ground truth.</strong> Two humans also disagree. Measure human–human kappa on the same items; no judge can be expected to beat that ceiling.</li>
+          <li><strong>Kappa alone hides the direction of errors.</strong> A judge that misses failures and one that fails good work can have the same kappa. Always read the table, especially the catch rate on real failures.</li>
+          <li><strong>Prevalence changes kappa.</strong> The same judge scores differently on a sample with 5% failures than on one with 30%. Label a sample whose failure rate matches production, or oversample failures and report the catch rate separately.</li>
+          <li><strong>Beyond pass or fail.</strong> For 1–5 scores, use weighted kappa, which gives partial credit for near misses. For more than two raters, use Fleiss' kappa or Krippendorff's alpha.</li>
+          <li><strong>Judges drift.</strong> A model update or a rubric edit can change behavior. Re-run the check on a fixed labeled set whenever the judge changes.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Label 200 or more items with experts</strong>, blind to the judge's verdicts, sampled like production traffic.</li>
+          <li><strong>Build the 2×2 table and compute kappa</strong> with its interval, plus the judge's catch rate on real failures.</li>
+          <li><strong>Read the disagreements.</strong> The \(b\) and \(c\) cells show which rubric items the judge misreads.</li>
+          <li><strong>Fix the rubric with failing examples</strong>, then re-check on a fresh labeled sample, not the one you tuned on.</li>
+          <li><strong>Gate on a threshold.</strong> Use the judge for decisions only once kappa clears your bar, such as 0.7, and its catch rate covers the failures that matter.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"A judge that said 'pass' to everything would agree with our experts 87% of the time, because most work is good. So 90% agreement isn't impressive. Kappa measures how much better than that the judge does, and we need it above 0.7 before we trust its scores."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../confidence-intervals/">M06 Confidence intervals</a><span class="why">The same uncertainty reasoning, for the eval scores the judge produces.</span></li>
+              <li><a href="../bradley-terry-elo/">M07 Bradley–Terry and Elo</a><span class="why">Validate a pairwise judge the same way before ranking with it.</span></li>
+              <li><a href="../pass-at-k/">M05 pass@k vs pass^k</a><span class="why">Every pass the judge awards feeds these metrics.</span></li>
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">A judge used as a retry checker: its catch rate is the detection rate.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/llm-as-judge/">No. 30 Rubric LLM-as-Judge</a><span class="why">The judge this page validates.</span></li>
+              <li><a href="/agentic/patterns/human-in-the-loop/">No. 18 Human-in-the-Loop</a><span class="why">Where the expert labels come from, and where they keep coming from.</span></li>
+              <li><a href="/agentic/patterns/guardrails/">No. 19 Guardrails</a><span class="why">Classifier guardrails need the same agreement check.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: cohens-kappa
+number: M08
+name: Cohen's kappa for judge validation
+family: evaluation
+answers: "Does an LLM judge agree with human experts beyond chance?"
+formula:
+  observed_agreement: "po = (a + d) / N"
+  chance_agreement: "pe = pH*pJ + (1 - pH)*(1 - pJ)"
+  kappa: "(po - pe) / (1 - pe)"
+  kappa_se_approx: "sqrt(po*(1 - po)/N) / (1 - pe)"
+  catch_rate: "d / (c + d)"
+  false_fail_rate: "b / (a + b)"
+inputs:
+  a: {type: int, meaning: both pass}
+  b: {type: int, meaning: expert pass, judge fail}
+  c: {type: int, meaning: expert fail, judge pass}
+  d: {type: int, meaning: both fail}
+assumptions:
+  - expert labels treated as reference, not ground truth
+  - binary verdicts (weighted kappa for ordinal scores)
+  - labeled sample matches production failure rate
+use_when:
+  - validating an LLM judge or classifier guardrail before relying on it
+  - re-checking a judge after a model or rubric change
+related_patterns: [llm-as-judge, human-in-the-loop, guardrails]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>import math
+
+def kappa(a, b, c, d):
+    """a both pass, b expert pass/judge fail, c expert fail/judge pass, d both fail."""
+    n = a + b + c + d
+    po = (a + d) / n
+    p_h, p_j = (a + b) / n, (a + c) / n
+    pe = p_h * p_j + (1 - p_h) * (1 - p_j)
+    k = (po - pe) / (1 - pe)
+    se = math.sqrt(po * (1 - po) / n) / (1 - pe)
+    return {"agreement": po, "chance": pe, "kappa": k,
+            "ci": (k - 1.96 * se, k + 1.96 * se),
+            "catch_rate": d / (c + d) if c + d else None}
+
+if __name__ == "__main__":
+    print(kappa(168, 6, 14, 12))   # agreement 0.90, chance 0.803, kappa 0.49, catch 0.46
+    print(kappa(170, 4, 4, 22))    # agreement 0.96, chance 0.774, kappa 0.82, catch 0.85
+    print(kappa(174, 0, 26, 0))    # always-pass judge: agreement 0.87, kappa 0.0</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>Chance agreement</summary>
+          <div class="body">
+            <p>Suppose the expert passes items at rate \(p_H\) and the judge at rate \(p_J\), but they decide independently, as if the judge never looked at the expert's reasoning. They agree on "pass" with probability \(p_Hp_J\) and on "fail" with \((1-p_H)(1-p_J)\). The sum is \(p_e\). With \(p_H = 0.87\) and \(p_J = 0.91\), \(p_e = 0.792 + 0.012 = 0.803\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why kappa rescales between chance and perfect</summary>
+          <div class="body">
+            <p>Agreement can range from \(p_e\) (no better than chance) to 1 (perfect). Kappa measures where the observed agreement sits on that range: \(\kappa = (p_o - p_e)/(1 - p_e)\). It is 0 at chance, 1 at perfect, and negative when the raters agree less than chance would predict, which usually means a label is flipped.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Kappa from the judge's catch rate and false-fail rate</summary>
+          <div class="body">
+            <p>Let a share \(\pi\) of outputs truly fail, let the judge catch a share \(s\) of them, and let it wrongly fail a share \(f\) of good ones. As shares of all items, the four cells are \(a = (1-\pi)(1-f)\), \(b = (1-\pi)f\), \(c = \pi(1-s)\), \(d = \pi s\). A standard identity gives \(p_o - p_e = 2(ad - bc)\) and \(1 - p_e = p_H(1-p_J) + (1-p_H)p_J\). Here \(ad - bc = \pi(1-\pi)(s-f)\) and \(p_H = 1-\pi\), so</p>
+            $$\kappa = \frac{2\,\pi(1-\pi)\,(s - f)}{(1-\pi)(1-p_J) + \pi\,p_J}.$$
+            <p>The numerator shows that kappa grows with how much better than chance the judge separates failures (\(s - f\)), weighted by \(\pi(1-\pi)\), which is small when failures are rare. That is the prevalence effect: when \(\pi\) is small, only a judge with \(s\) close to 1 and \(f\) close to 0 reaches a high kappa.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The approximate interval</summary>
+          <div class="body">
+            <p>Treat \(p_e\) as fixed. Then \(\kappa\) is a linear function of \(p_o\), whose standard error as a proportion is \(\sqrt{p_o(1-p_o)/N}\). Dividing by \(1-p_e\) gives Cohen's original approximation. It is good enough for planning; for reporting, a bootstrap over the labeled items accounts for the uncertainty in \(p_e\) as well.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Cohen, J. (1960). A coefficient of agreement for nominal scales. <em>Educational and Psychological Measurement</em> 20(1), 37–46.</li>
+          <li>Landis, J. R. and Koch, G. G. (1977). The measurement of observer agreement for categorical data. <em>Biometrics</em> 33(1), 159–174. Source of the commonly used interpretation scale.</li>
+          <li>Feinstein, A. R. and Cicchetti, D. V. (1990). High agreement but low kappa: I. The problems of two paradoxes. <em>Journal of Clinical Epidemiology</em> 43(6), 543–549.</li>
+          <li>Zheng, L. et al. (2023). <a href="https://arxiv.org/abs/2306.05685">Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena</a>. Measures LLM-judge agreement with humans, and judge biases.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"cohens-kappa","number":"M08","family":"evaluation",
+ "formula":{"po":"(a+d)/N","pe":"pH*pJ+(1-pH)*(1-pJ)","kappa":"(po-pe)/(1-pe)","se_approx":"sqrt(po(1-po)/N)/(1-pe)","catch_rate":"d/(c+d)","false_fail_rate":"b/(a+b)"},
+ "inputs":["a","b","c","d"],
+ "cells":{"a":"both pass","b":"expert pass, judge fail","c":"expert fail, judge pass","d":"both fail"},
+ "assumptions":["expert labels as reference","binary verdicts","sample matches production failure rate"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Model ---------- */
+  function cells(s, f, pi) {
+    return { a: (1 - pi) * (1 - f), b: (1 - pi) * f, c: pi * (1 - s), d: pi * s };
+  }
+  function stats(s, f, pi, N) {
+    const x = cells(s, f, pi), po = x.a + x.d, pH = x.a + x.b, pJ = x.a + x.c;
+    const pe = pH * pJ + (1 - pH) * (1 - pJ), k = (po - pe) / (1 - pe);
+    const se = Math.sqrt((po * (1 - po)) / N) / (1 - pe);
+    const prec = x.d + x.b > 0 ? x.d / (x.d + x.b) : 0;
+    return { x, po, pe, k, lo: k - 1.96 * se, hi: k + 1.96 * se, pJ, pH, prec };
+  }
+  const band = (k) => k < 0 ? "worse than chance" : k < 0.2 ? "slight" : k < 0.4 ? "fair" : k < 0.6 ? "moderate" : k < 0.8 ? "substantial" : "almost perfect";
+
+  /* ---------- 2x2 table and kappa scale ---------- */
+  function drawTable(svg, r, N) {
+    const W = 640, H = 330, l = 150, t = 44, cw = 200, ch = 78;
+    const cell = (col, row, v, agree, label) => {
+      const x = l + col * cw, y = t + row * ch, n = Math.round(v * N);
+      return `<rect x="${x}" y="${y}" width="${cw - 6}" height="${ch - 6}" rx="6" style="fill:${agree ? "var(--ok-soft)" : "var(--fault-soft)"};stroke:${agree ? "var(--ok)" : "var(--fault)"}"/>` +
+        `<text x="${x + 14}" y="${y + 30}" style="font-size:22px;font-weight:650;fill:var(--ink)">${n}</text>` +
+        `<text x="${x + 14}" y="${y + 52}" style="font-size:12px;fill:var(--ink-2)">${label}</text>`;
+    };
+    let s = `<text x="${l + cw - 3}" y="${t - 22}" text-anchor="middle" style="font-size:13px;font-weight:600;fill:var(--ink-2)">Judge</text>`;
+    s += `<text x="${l + cw / 2}" y="${t - 6}" text-anchor="middle" style="font-size:12px;fill:var(--ink-2)">pass</text>`;
+    s += `<text x="${l + cw * 1.5}" y="${t - 6}" text-anchor="middle" style="font-size:12px;fill:var(--ink-2)">fail</text>`;
+    s += `<text x="${l - 70}" y="${t + ch}" text-anchor="middle" style="font-size:13px;font-weight:600;fill:var(--ink-2)" transform="rotate(-90 ${l - 70} ${t + ch})">Expert</text>`;
+    s += `<text x="${l - 14}" y="${t + ch / 2}" text-anchor="end" style="font-size:12px;fill:var(--ink-2)">pass</text>`;
+    s += `<text x="${l - 14}" y="${t + ch * 1.5}" text-anchor="end" style="font-size:12px;fill:var(--ink-2)">fail</text>`;
+    s += cell(0, 0, r.x.a, true, "both pass");
+    s += cell(1, 0, r.x.b, false, "good work failed");
+    s += cell(0, 1, r.x.c, false, "failure missed");
+    s += cell(1, 1, r.x.d, true, "failure caught");
+    // kappa scale
+    const sy = t + 2 * ch + 40, sl = 40, sw = W - 80, sx = (k) => sl + Math.max(0, Math.min(1, k)) * sw;
+    const bands = [[0, 0.2, "slight"], [0.2, 0.4, "fair"], [0.4, 0.6, "moderate"], [0.6, 0.8, "substantial"], [0.8, 1, "almost perfect"]];
+    bands.forEach(([a, b, name], i) => {
+      s += `<rect x="${sx(a)}" y="${sy}" width="${sx(b) - sx(a) - 2}" height="14" style="fill:${i < 2 ? "var(--fault-soft)" : i < 3 ? "var(--retry-soft)" : "var(--ok-soft)"}"/>`;
+      s += `<text x="${(sx(a) + sx(b)) / 2}" y="${sy + 32}" text-anchor="middle" style="font-size:11px;fill:var(--ink-3)">${name}</text>`;
+    });
+    s += `<text x="${sx(0)}" y="${sy - 6}" style="font-size:11px;fill:var(--ink-3)">0 = chance</text>`;
+    s += `<text x="${sx(1)}" y="${sy - 6}" text-anchor="end" style="font-size:11px;fill:var(--ink-3)">1 = perfect</text>`;
+    s += `<line x1="${sx(r.lo)}" x2="${sx(r.hi)}" y1="${sy + 7}" y2="${sy + 7}" style="stroke:var(--ink);stroke-width:2"/>`;
+    s += `<circle cx="${sx(r.k)}" cy="${sy + 7}" r="7" style="fill:var(--ink)"/>`;
+    s += `<text x="${sx(r.k)}" y="${sy - 6}" text-anchor="middle" style="font-size:12px;font-weight:650;fill:var(--ink)">κ ${r.k.toFixed(2)}</text>`;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.innerHTML = s;
+  }
+
+  MM.tabs(document.getElementById("lab-tabs"));
+
+  function render(p) {
+    const N = Math.round(p.N), r = stats(p.s, p.f, p.pi, N);
+    document.getElementById("hero-po").textContent = MM.pct(r.po, 0);
+    const hk = document.getElementById("hero-k");
+    hk.textContent = r.k.toFixed(2);
+    hk.classList.toggle("good", r.k >= 0.7);
+    document.getElementById("o-po").textContent = MM.pct(r.po, 1);
+    document.getElementById("o-pe").textContent = MM.pct(r.pe, 1);
+    document.getElementById("o-k").textContent = r.k.toFixed(2);
+    document.getElementById("o-k-k").textContent = `Cohen's kappa: ${band(r.k)}`;
+    const box = document.getElementById("r-k");
+    box.classList.toggle("primary", r.k >= 0.7); box.classList.toggle("alarm", r.k < 0.6);
+    document.getElementById("o-ci").textContent = `${r.lo.toFixed(2)} to ${Math.min(1, r.hi).toFixed(2)}`;
+    document.getElementById("o-prec").textContent = MM.pct(r.prec, 0);
+    document.getElementById("o-ff").textContent = MM.pct(r.pJ, 1);
+    document.getElementById("o-ff-k").textContent = `Pass rate the judge reports (experts: ${MM.pct(r.pH, 1)})`;
+    drawTable(document.getElementById("table"), r, N);
+
+    const xs = [], agree = [], kap = [];
+    for (let q = 0.01; q <= 0.5001; q += 0.01) {
+      const t = stats(p.s, p.f, q, N); agree.push([q * 100, t.po]); kap.push([q * 100, Math.max(-0.2, t.k)]);
+    }
+    MM.lineChart(document.getElementById("prev"), {
+      x: { min: 0, max: 50, label: "Outputs that truly fail (%)" },
+      y: { min: Math.min(0, ...kap.map((v) => v[1])), max: 1, label: "Agreement or kappa" },
+      series: [{ cls: "s-accent", points: agree }, { cls: "s-fault", points: kap }],
+      markerX: p.pi * 100,
+      dots: [{ x: p.pi * 100, y: r.po, cls: "dot-ok" }, { x: p.pi * 100, y: r.k, cls: "dot-fault" }]
+    });
+  }
+
+  MM.state({ s: 0.46, f: 0.035, pi: 0.13, N: 200 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

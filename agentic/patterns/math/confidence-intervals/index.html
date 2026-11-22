@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confidence Intervals for Evals | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="How sure can you be of an AI eval score, and is version B really better than A? Wilson intervals, sample sizes and paired comparisons with McNemar's test. Math, derivations, calculator and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/confidence-intervals/">
+<meta property="og:title" content="Confidence intervals for evals: is 94% really better than 88%?">
+<meta property="og:description" content="On 50 test cases, a 6-point gap is noise. On 300 paired cases, it is real. The math and a calculator.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/confidence-intervals/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Confidence Intervals for Evals",
+  "about": "Statistical uncertainty in AI evaluation results",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/confidence-intervals/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Confidence intervals</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M06</span>
+          <span class="tag">Evaluation</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Confidence intervals for evals</h1>
+        <p class="formula-name">Wilson intervals, sample sizes and paired comparisons</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          An eval of
+          <input class="inline-num wide" type="number" min="10" max="2000" step="10" data-key="n" aria-label="Number of test cases">
+          test cases scoring
+          <span class="nowrap"><input class="inline-num wide" type="number" min="1" max="100" step="1" data-key="r" data-scale="100" aria-label="Observed score, percent">%</span>
+          only tells you the true rate is somewhere between <span class="result-num" id="hero-lo">83.8%</span> and <span class="result-num" id="hero-hi">97.9%</span>.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Every eval score is an estimate, and small eval sets give wide ones.</p>
+        <p>Teams change a prompt, rerun 50 test cases, see the score move from 88% to 94% and ship. On 50 cases, a six-point move is well within what chance alone produces. A confidence interval puts honest error bars on a score, a sample-size calculation tells you how many cases you need before a difference can show up, and a paired comparison, which scores both versions on the same cases, gets there with far fewer cases than comparing two separate scores.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>An eval set is a sample from all the requests your agent will ever see, like a poll is a sample of voters. A poll of 50 people saying 94% is far less certain than a poll of 1,000 saying the same. The uncertainty shrinks with the square root of the sample: four times the cases halves the error bar.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">50 cases at 94%</span><div class="track" style="position:relative"><div class="fill" style="position:absolute;left:83.8%;width:14.1%"></div></div><span class="pct">±7</span></div>
+          <div class="row"><span class="lbl">200 cases at 94%</span><div class="track" style="position:relative"><div class="fill" style="position:absolute;left:89.8%;width:6.7%"></div></div><span class="pct">±3.4</span></div>
+          <div class="row"><span class="lbl">1,000 cases at 94%</span><div class="track" style="position:relative"><div class="fill" style="position:absolute;left:92.4%;width:2.9%"></div></div><span class="pct">±1.5</span></div>
+        </div>
+        <p class="small muted">Bars show the 95% interval on a 0–100% scale.</p>
+        <p>Comparing two versions on the same cases is even better than doubling the sample, because most cases are passed or failed by both versions alike. Only the cases where they disagree carry information about which is better, and the comparison can focus on exactly those.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>For \(x\) successes out of \(n\) cases, observed rate \(\hat p = x/n\), the Wilson score interval is</p>
+        <div class="math-block">$$\frac{\hat p + \frac{z^2}{2n}}{1+\frac{z^2}{n}} \;\pm\; \frac{z}{1+\frac{z^2}{n}}\sqrt{\frac{\hat p(1-\hat p)}{n} + \frac{z^2}{4n^2}}$$</div>
+        <p>To compare versions A and B on the same \(n\) cases, count only where they disagree: \(b\) cases A passes and B fails, \(c\) cases B passes and A fails. Then</p>
+        <div class="math-block">$$\hat d = \frac{b-c}{n}, \qquad \text{SE}(\hat d) = \frac{1}{n}\sqrt{b+c-\frac{(b-c)^2}{n}}, \qquad p\text{-value} = \Pr\big(\text{Bin}(b+c, \tfrac12) \text{ as extreme as } b\big)$$</div>
+        <dl class="symbols">
+          <dt>\(n,\ x,\ \hat p\)</dt><dd>number of test cases, successes, and observed rate</dd>
+          <dt>\(z\)</dt><dd>1.96 for 95% confidence (1.28 for 80%, 1.64 for 90%, 2.58 for 99%)</dd>
+          <dt>\(b,\ c\)</dt><dd>discordant cases: only A passes, only B passes</dd>
+          <dt>\(\hat d\)</dt><dd>observed difference in score, A minus B</dd>
+          <dt>\(p_{\text{disc}}\)</dt><dd>share of cases where the versions disagree, \((b+c)/n\)</dd>
+        </dl>
+        <p>Two sample-size rules cover most planning:</p>
+        <div class="math-block">$$n_{\pm m} \approx \frac{z^2\,\hat p(1-\hat p)}{m^2} \qquad\qquad n_{\text{paired}} \approx \frac{\big(z_{\alpha}\sqrt{p_{\text{disc}}} + z_{\beta}\sqrt{p_{\text{disc}}-d^2}\big)^2}{d^2}$$</div>
+        <ul>
+          <li><strong>Margin:</strong> to pin a score near 90% to within ±3 points takes about 385 cases; ±2 points takes about 865.</li>
+          <li><strong>Detecting a gap:</strong> the second formula gives the number of paired cases needed to detect a difference \(d\) with 80% power (\(z_\beta = 0.84\)) at 95% confidence (\(z_\alpha = 1.96\)).</li>
+          <li><strong>Why Wilson:</strong> the textbook \(\hat p \pm z\sqrt{\hat p(1-\hat p)/n}\) collapses to zero width at 0% or 100% and is too narrow near the edges, which is exactly where good agents score.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Put error bars on one score, or compare two versions scored on the same test set.</p>
+        <div class="lab">
+          <div class="lab-tabs" role="tablist" aria-label="Calculator mode" id="lab-tabs">
+            <button role="tab" aria-selected="true" aria-controls="view-one" id="tab-one">One score</button>
+            <button role="tab" aria-selected="false" aria-controls="view-cmp" id="tab-cmp">Compare A vs B</button>
+          </div>
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="ctrl-group" data-for="view-one">
+                <div class="control">
+                  <label for="c-n">Test cases <output data-out="n" data-fmt="int"></output></label>
+                  <input id="c-n" type="range" min="10" max="2000" step="10" data-key="n">
+                </div>
+                <div class="control">
+                  <label for="c-r">Observed score <output data-out="r" data-fmt="pct" data-dp="0"></output></label>
+                  <input id="c-r" type="range" min="1" max="100" step="1" data-key="r" data-scale="100">
+                </div>
+              </div>
+              <div class="ctrl-group" data-for="view-cmp" hidden>
+                <div class="control">
+                  <label for="c-m">Test cases, scored by both <output data-out="m" data-fmt="int"></output></label>
+                  <input id="c-m" type="range" min="20" max="2000" step="10" data-key="m">
+                </div>
+                <div class="control">
+                  <label for="c-a">Version A score <output data-out="A" data-fmt="pct" data-dp="0"></output></label>
+                  <input id="c-a" type="range" min="10" max="100" step="1" data-key="A" data-scale="100">
+                </div>
+                <div class="control">
+                  <label for="c-b">Version B score <output data-out="B" data-fmt="pct" data-dp="0"></output></label>
+                  <input id="c-b" type="range" min="10" max="100" step="1" data-key="B" data-scale="100">
+                </div>
+                <div class="control">
+                  <label for="c-d">Cases where A and B disagree <output data-out="D" data-fmt="pct" data-dp="0"></output></label>
+                  <input id="c-d" type="range" min="0" max="60" step="1" data-key="D" data-scale="100">
+                  <div class="note">Can't be smaller than the gap between the scores. Typical for two prompt versions: 5–20%.</div>
+                </div>
+              </div>
+              <div class="control">
+                <label id="conf-label">Confidence level</label>
+                <div class="seg" role="group" aria-labelledby="conf-label">
+                  <button type="button" data-conf="0.8" aria-pressed="false">80%</button>
+                  <button type="button" data-conf="0.9" aria-pressed="false">90%</button>
+                  <button type="button" data-conf="0.95" aria-pressed="true">95%</button>
+                  <button type="button" data-conf="0.99" aria-pressed="false">99%</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div id="view-one" role="tabpanel" aria-labelledby="tab-one">
+                <div class="readouts" aria-live="polite">
+                  <div class="readout primary"><div class="v" id="o-int">–</div><div class="k" id="o-int-k">95% interval for the true score</div></div>
+                  <div class="readout"><div class="v" id="o-half">–</div><div class="k">Margin of error</div></div>
+                  <div class="readout"><div class="v" id="o-n3">–</div><div class="k">Cases for ±3 points</div></div>
+                  <div class="readout"><div class="v" id="o-n2">–</div><div class="k">Cases for ±2 points</div></div>
+                </div>
+                <div class="chart-wrap">
+                  <svg class="chart" id="funnel" role="img" aria-label="Interval width shrinking as test cases increase"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>Upper and lower bound at this score</span>
+                    <span><i style="background:var(--ink)"></i>Your test set size</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="view-cmp" role="tabpanel" aria-labelledby="tab-cmp" hidden>
+                <div class="readouts" aria-live="polite">
+                  <div class="readout"><div class="v" id="o-diff">–</div><div class="k">Difference, A minus B</div></div>
+                  <div class="readout primary" id="r-ci"><div class="v" id="o-ci">–</div><div class="k" id="o-ci-k">95% interval for the difference</div></div>
+                  <div class="readout"><div class="v" id="o-p">–</div><div class="k">p-value, McNemar exact</div></div>
+                  <div class="readout"><div class="v" id="o-need">–</div><div class="k">Paired cases to detect this gap (80% power)</div></div>
+                </div>
+                <div class="chart-wrap">
+                  <svg class="chart" id="diffchart" role="img" aria-label="Interval for the difference between A and B, paired and unpaired"></svg>
+                  <p class="small muted" style="margin:4px 8px 6px" id="verdict"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a 6-point "win"</h2>
+        <p>A team tuned the system prompt of an IT-helpdesk agent and reran their 50-case eval. Version A, the new prompt, scored <strong>47/50 (94%)</strong>; version B, the old one, <strong>44/50 (88%)</strong>. The Wilson intervals were 83.8–97.9% and 76.2–94.4%, which overlap heavily.</p>
+        <p>Because both versions ran on the same 50 cases, the better test is paired. They disagreed on 7 cases: A alone passed 5, B alone passed 2.</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th></th><th class="num">50 cases</th><th class="num">300 cases, same rates</th></tr></thead>
+            <tbody>
+              <tr><td>Disagreements (only A passes / only B passes)</td><td class="num">5 / 2</td><td class="num">30 / 12</td></tr>
+              <tr><td>Difference, A minus B</td><td class="num">+6.0 pts</td><td class="num">+6.0 pts</td></tr>
+              <tr class="weak"><td>95% interval for the difference</td><td class="num">−4.2 to +16.2</td><td class="num">+1.8 to +10.2</td></tr>
+              <tr><td>McNemar exact p-value</td><td class="num">0.45</td><td class="num">0.008</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>On 50 cases, a 7-case disagreement split 5 to 2 happens by chance almost half the time, so the result says nothing yet. The paired sample-size formula, with 14% disagreement and a 6-point gap, called for about 300 cases. The team expanded the eval to 300 cases, and the same rates now gave an interval that excludes zero. One caveat: had they tried ten prompt variants and kept the best, even \(p = 0.008\) would need adjusting for the extra chances (see below).</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Test cases are assumed independent.</strong> Eval sets often contain clusters, such as ten variations of one scenario. Clustered cases carry less information than their count suggests. Use a cluster bootstrap that resamples whole scenarios.</li>
+          <li><strong>Trying many variants inflates false wins.</strong> Test 20 prompts at 95% confidence and one will likely "win" by chance. Hold out a fresh test set for the final comparison, or tighten the threshold (for example, divide 0.05 by the number of variants).</li>
+          <li><strong>The eval set is not the world.</strong> The interval covers sampling noise in the test set, not the gap between the test set and production traffic. A narrow interval on an unrepresentative set is precisely wrong.</li>
+          <li><strong>Each run is itself random.</strong> With a nonzero temperature, the same case can pass on one run and fail on the next. Run each case several times (M05) or include run-to-run variance in a bootstrap.</li>
+          <li><strong>Scores are not always pass or fail.</strong> For graded scores, use a bootstrap or a paired t-interval on per-case score differences instead.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Report every score with its interval.</strong> "94% (84–98%, n=50)" invites the right level of trust.</li>
+          <li><strong>Size the eval before running it.</strong> Decide the smallest gap worth detecting and compute the paired \(n\). If it is larger than your set, grow the set or accept that small gains will be invisible.</li>
+          <li><strong>Always compare on the same cases.</strong> Paired comparisons need far fewer cases than comparing two separate scores.</li>
+          <li><strong>Look at the disagreements.</strong> The \(b\) and \(c\) cases are both the statistical evidence and the most useful cases to read.</li>
+          <li><strong>Keep a held-out set</strong> for decisions after many rounds of tuning on the main eval.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"An eval is a poll of our future traffic. Fifty cases is a small poll: a six-point lead is inside the margin of error. We'll run the same 300 cases on both versions, and then the lead either holds or it doesn't."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../pass-at-k/">M05 pass@k vs pass^k</a><span class="why">Consistency metrics need intervals too, and repeated runs feed them.</span></li>
+              <li><a href="../cohens-kappa/">M08 Cohen’s kappa</a><span class="why">If a judge grades the cases, its errors add to the uncertainty.</span></li>
+              <li><a href="../item-response-theory/">M09 Item Response Theory</a><span class="why">Informative cases shrink intervals faster than more cases.</span></li>
+              <li><a href="../bradley-terry-elo/">M07 Bradley–Terry and Elo</a><span class="why">Intervals for pairwise rankings, by bootstrap.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/llm-as-judge/">No. 30 Rubric LLM-as-Judge</a><span class="why">The grader whose verdicts these intervals summarize.</span></li>
+              <li><a href="/agentic/patterns/learning-loop/">No. 31 Self-Improving Learning Loop</a><span class="why">Only promote changes whose gain clears the interval.</span></li>
+              <li><a href="/agentic/patterns/pr-review-gate/">No. 47 PR as Review Gate</a><span class="why">Make "significant on the paired eval" a merge condition.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: confidence-intervals
+number: M06
+name: Confidence intervals for eval scores
+family: evaluation
+answers: "How precise is this eval score, and is version A really better than B?"
+formula:
+  wilson_interval: "(p + z^2/2n)/(1 + z^2/n) +- z/(1 + z^2/n) * sqrt(p(1-p)/n + z^2/4n^2)"
+  paired_difference: "d = (b - c)/n,  se = sqrt(b + c - (b - c)^2/n)/n"
+  mcnemar_exact: "two-sided binomial test of b against Bin(b + c, 0.5)"
+  n_for_margin: "z^2 p (1-p) / m^2"
+  n_paired_for_gap: "(z_a*sqrt(pd) + z_b*sqrt(pd - d^2))^2 / d^2"
+inputs:
+  n: {type: int, meaning: test cases}
+  x: {type: int, meaning: successes}
+  b: {type: int, meaning: cases only A passes}
+  c: {type: int, meaning: cases only B passes}
+assumptions:
+  - test cases independent (use a cluster bootstrap otherwise)
+  - binary scores (bootstrap for graded scores)
+  - one planned comparison (adjust for many)
+use_when:
+  - reporting any eval score
+  - deciding whether a prompt or model change is a real improvement
+related_patterns: [llm-as-judge, learning-loop, pr-review-gate]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>import math
+from math import comb
+
+def wilson(x, n, z=1.96):
+    p = x / n
+    d = 1 + z * z / n
+    centre = (p + z * z / (2 * n)) / d
+    half = z / d * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
+    return centre - half, centre + half
+
+def paired_difference(b, c, n, z=1.96):
+    """b: only A passes, c: only B passes, n: total cases. Returns (diff, lo, hi, p)."""
+    d = (b - c) / n
+    se = math.sqrt(b + c - (b - c) ** 2 / n) / n
+    m = b + c
+    p = min(1.0, 2 * sum(comb(m, i) for i in range(min(b, c) + 1)) / 2 ** m) if m else 1.0
+    return d, d - z * se, d + z * se, p
+
+def n_paired(d, p_disc, z_a=1.96, z_b=0.8416):
+    return math.ceil((z_a * math.sqrt(p_disc) + z_b * math.sqrt(p_disc - d * d)) ** 2 / d ** 2)
+
+if __name__ == "__main__":
+    print(wilson(47, 50))                    # (0.838, 0.979)
+    print(paired_difference(5, 2, 50))       # (0.06, -0.042, 0.162, 0.453)
+    print(paired_difference(30, 12, 300))    # (0.06, 0.018, 0.102, 0.008)
+    print(n_paired(0.06, 0.14))              # 303</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>The Wilson interval, by inverting a test</summary>
+          <div class="body">
+            <p>The number of successes is binomial, with mean \(np\) and variance \(np(1-p)\). A value \(p\) is plausible if the observed \(\hat p\) lies within \(z\) standard errors of it, using the standard error at \(p\) itself:</p>
+            $$|\hat p - p| \le z\sqrt{p(1-p)/n}.$$
+            <p>Square both sides and collect terms in \(p\): \((1+z^2/n)\,p^2 - (2\hat p + z^2/n)\,p + \hat p^2 \le 0\). The roots of this quadratic are the Wilson bounds. The textbook Wald interval instead plugs \(\hat p\) into the standard error, which gives zero width when \(\hat p\) is 0 or 1 and covers the truth less often than advertised near the edges.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why paired comparisons need fewer cases</summary>
+          <div class="body">
+            <p>Score each case as \(D_i = A_i - B_i\), which is \(+1\) (only A passes), \(-1\) (only B passes) or 0. The difference in scores is the mean of the \(D_i\). Its variance is \(\operatorname{Var}(A) + \operatorname{Var}(B) - 2\operatorname{Cov}(A,B)\). Cases that are easy or hard for both versions make \(A\) and \(B\) strongly correlated, so the covariance term removes most of the noise. Computing the sample variance of \(D_i\) directly gives \(\big(b+c-(b-c)^2/n\big)/n^2\), the formula above.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>McNemar's test</summary>
+          <div class="body">
+            <p>If A and B are equally good, then each disagreement is equally likely to favor either one. So, given \(m = b+c\) disagreements, \(b\) follows a binomial with \(m\) trials and probability \(\tfrac12\). The exact two-sided p-value is twice the probability of a split at least as lopsided as the one observed: \(2\sum_{i\le\min(b,c)}\binom{m}{i}/2^m\). With 5 to 2, that is \(2(1+7+21)/128 = 0.45\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Sample-size formulas</summary>
+          <div class="body">
+            <p><strong>Margin:</strong> set the half-width \(z\sqrt{p(1-p)/n}\) equal to \(m\) and solve for \(n\). The largest \(n\) is needed at \(p = 0.5\); scores near 90% need about a third as many cases.</p>
+            <p><strong>Paired gap:</strong> under the null hypothesis, \(\hat d\) has standard deviation \(\sqrt{p_{\text{disc}}/n}\); under the alternative, \(\sqrt{(p_{\text{disc}}-d^2)/n}\). To reject with 80% power, the true gap \(d\) must exceed \(z_\alpha\) null standard deviations plus \(z_\beta\) alternative ones: \(d\sqrt n = z_\alpha\sqrt{p_{\text{disc}}} + z_\beta\sqrt{p_{\text{disc}}-d^2}\). Squaring gives the formula.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Miller, E. (2024). <a href="https://arxiv.org/abs/2411.00640">Adding Error Bars to Evals: A Statistical Approach to Language Model Evaluations</a>. Clustered standard errors, paired differences and power analysis for LLM evals.</li>
+          <li>Agresti, A. and Coull, B. A. (1998). Approximate is better than "exact" for interval estimation of binomial proportions. <em>The American Statistician</em> 52(2), 119–126. Why Wilson-style intervals beat the textbook interval.</li>
+          <li>Wilson, E. B. (1927). Probable inference, the law of succession, and statistical inference. <em>Journal of the American Statistical Association</em> 22(158), 209–212.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"confidence-intervals","number":"M06","family":"evaluation",
+ "formula":{"wilson":"(p+z^2/2n)/(1+z^2/n) +- z/(1+z^2/n)*sqrt(p(1-p)/n+z^2/4n^2)","paired_diff":"(b-c)/n","paired_se":"sqrt(b+c-(b-c)^2/n)/n","mcnemar":"binomial test b ~ Bin(b+c,0.5)","n_margin":"z^2 p(1-p)/m^2","n_paired":"(z_a sqrt(pd)+z_b sqrt(pd-d^2))^2/d^2"},
+ "inputs":["n","x","b","c"],
+ "assumptions":["independent cases","binary scores","single planned comparison"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  const Z = { 0.8: 1.2816, 0.9: 1.6449, 0.95: 1.96, 0.99: 2.5758 };
+  let conf = 0.95;
+
+  /* ---------- Model ---------- */
+  function wilson(p, n, z) {
+    const d = 1 + (z * z) / n, c = (p + (z * z) / (2 * n)) / d;
+    const h = (z / d) * Math.sqrt((p * (1 - p)) / n + (z * z) / (4 * n * n));
+    return [Math.max(0, c - h), Math.min(1, c + h)];
+  }
+  function logC(n, k) { let s = 0; for (let i = 1; i <= k; i++) s += Math.log(n - k + i) - Math.log(i); return s; }
+  function mcnemar(b, c) {
+    const m = b + c; if (m === 0) return 1;
+    const lo = Math.min(b, c); let s = 0;
+    for (let i = 0; i <= lo; i++) s += Math.exp(logC(m, i) - m * Math.LN2);
+    return Math.min(1, 2 * s);
+  }
+  const pts = (x) => (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(1);
+
+  /* ---------- Mode and confidence controls ---------- */
+  const tabs = document.getElementById("lab-tabs");
+  MM.tabs(tabs);
+  tabs.addEventListener("tabchange", (e) => {
+    document.querySelectorAll(".ctrl-group").forEach((g) => (g.hidden = g.dataset.for !== e.detail));
+  });
+  document.querySelectorAll("[data-conf]").forEach((btn) => btn.addEventListener("click", () => {
+    conf = parseFloat(btn.dataset.conf);
+    document.querySelectorAll("[data-conf]").forEach((x) => x.setAttribute("aria-pressed", x === btn));
+    if (last) render(last);
+  }));
+
+  /* ---------- Difference chart ---------- */
+  function diffChart(svg, rows, span) {
+    const W = 640, H = 200, l = 150, r = 20, iw = W - l - r;
+    const sx = (v) => l + ((v + span) / (2 * span)) * iw;
+    let s = `<line x1="${sx(0)}" x2="${sx(0)}" y1="20" y2="${H - 40}" stroke="var(--ink-3)" stroke-dasharray="4 3"/>`;
+    for (let t = -span; t <= span + 1e-9; t += span / 4) {
+      s += `<text x="${sx(t)}" y="${H - 20}" text-anchor="middle">${t > 0 ? "+" : ""}${Math.round(t * 100)}</text>`;
+    }
+    s += `<text class="axis-label" x="${l + iw / 2}" y="${H - 2}" text-anchor="middle">Difference in score, A minus B (points)</text>`;
+    rows.forEach((row, i) => {
+      const y = 50 + i * 55;
+      s += `<text x="${l - 12}" y="${y + 4}" text-anchor="end" style="fill:var(--ink-2);font-size:12px">${row.label}</text>`;
+      s += `<line x1="${sx(Math.max(-span, row.lo))}" x2="${sx(Math.min(span, row.hi))}" y1="${y}" y2="${y}" style="stroke:${row.color};stroke-width:8;stroke-linecap:round;opacity:.85"/>`;
+      s += `<circle cx="${sx(row.d)}" cy="${y}" r="6" style="fill:var(--paper);stroke:var(--ink);stroke-width:2"/>`;
+    });
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.innerHTML = s;
+  }
+
+  /* ---------- Render ---------- */
+  let last = null;
+  function render(s) {
+    last = s;
+    const z = Z[conf], lvl = Math.round(conf * 100) + "%";
+    // One score
+    const n = Math.round(s.n), x = Math.round(s.r * n), p = x / n, [lo, hi] = wilson(p, n, z);
+    const [hlo, hhi] = wilson(p, n, 1.96);
+    document.getElementById("hero-lo").textContent = MM.pctFixed(hlo, 1);
+    document.getElementById("hero-hi").textContent = MM.pctFixed(hhi, 1);
+    document.getElementById("o-int").textContent = `${(lo * 100).toFixed(1)}–${(hi * 100).toFixed(1)}%`;
+    document.getElementById("o-int-k").textContent = `${lvl} interval for the true score (${x} of ${n} passed)`;
+    document.getElementById("o-half").textContent = "±" + ((hi - lo) * 50).toFixed(1) + " pts";
+    const pv = Math.min(Math.max(p, 0.02), 0.98);
+    document.getElementById("o-n3").textContent = Math.ceil((z * z * pv * (1 - pv)) / 0.0009).toLocaleString();
+    document.getElementById("o-n2").textContent = Math.ceil((z * z * pv * (1 - pv)) / 0.0004).toLocaleString();
+    const ns = [], los = [], his = [];
+    for (let k = 10; k <= 2000; k += 10) { const w = wilson(p, k, z); ns.push(k); los.push([k, w[0]]); his.push([k, w[1]]); }
+    const ylo = Math.max(0, Math.floor((los[0][1] - 0.02) * 10) / 10), yhi = Math.min(1, Math.ceil((his[0][1] + 0.02) * 10) / 10);
+    MM.lineChart(document.getElementById("funnel"), {
+      x: { min: 0, max: 2000, label: "Test cases" },
+      y: { min: ylo, max: Math.max(yhi, ylo + 0.1), label: "True score", pct: true },
+      series: [{ cls: "s-accent", points: los }, { cls: "s-accent", points: his }],
+      markerX: n, targetY: p,
+      dots: [{ x: n, y: lo, cls: "dot-ok" }, { x: n, y: hi, cls: "dot-ok" }]
+    });
+
+    // Compare A vs B, paired
+    const m = Math.round(s.m), d = s.A - s.B, D = Math.max(s.D, Math.abs(d));
+    const b = Math.round((m * (D + d)) / 2), c = Math.round((m * (D - d)) / 2), dd = (b - c) / m;
+    const se = Math.sqrt(Math.max(0, b + c - ((b - c) * (b - c)) / m)) / m;
+    const plo = dd - z * se, phi = dd + z * se;
+    const pval = mcnemar(b, c);
+    const seU = Math.sqrt((s.A * (1 - s.A)) / m + (s.B * (1 - s.B)) / m);
+    document.getElementById("o-diff").textContent = pts(dd) + " pts";
+    document.getElementById("o-ci").textContent = `${pts(plo)} to ${pts(phi)}`;
+    document.getElementById("o-ci-k").textContent = `${lvl} interval for the difference (paired)`;
+    const sig = plo > 0 || phi < 0;
+    const box = document.getElementById("r-ci");
+    box.classList.toggle("primary", sig); box.classList.toggle("alarm", !sig);
+    document.getElementById("o-p").textContent = pval < 0.001 ? "< 0.001" : pval.toFixed(3);
+    const pd = Math.max(D, 1e-6), dn = Math.abs(dd);
+    document.getElementById("o-need").textContent = dn > 0 && pd - dn * dn > 0
+      ? Math.ceil(Math.pow(1.96 * Math.sqrt(pd) + 0.8416 * Math.sqrt(pd - dn * dn), 2) / (dn * dn)).toLocaleString() : "–";
+    const span = Math.max(0.1, Math.ceil(Math.max(Math.abs(dd - z * seU), Math.abs(dd + z * seU), 0.05) * 20) / 20);
+    diffChart(document.getElementById("diffchart"), [
+      { label: "Paired (same cases)", d: dd, lo: plo, hi: phi, color: sig ? "var(--ok)" : "var(--fault)" },
+      { label: "If scored separately", d: dd, lo: dd - z * seU, hi: dd + z * seU, color: "var(--ink-3)" }
+    ], span);
+    document.getElementById("verdict").textContent =
+      `${b} cases only A passes, ${c} only B passes. ` +
+      (sig ? `The interval excludes zero: at ${lvl} confidence, the gap is real.`
+        : `The interval includes zero: this gap could be chance. More cases, or more disagreements, would settle it.`);
+  }
+
+  MM.state({ n: 50, r: 0.94, m: 50, A: 0.94, B: 0.88, D: 0.14 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

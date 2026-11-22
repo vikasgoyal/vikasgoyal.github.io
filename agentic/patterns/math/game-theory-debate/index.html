@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Theory for Debate and Critics | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="How to set the incentives of a critic or debate agent so it challenges the right answers. Best-response thresholds, judge accuracy, sycophantic and contrarian critics. Math, derivations, calculator and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/game-theory-debate/">
+<meta property="og:title" content="Game theory for critic agents: why ‘find any issue’ and ‘be agreeable’ both fail">
+<meta property="og:description" content="A critic that objects to everything makes your system exactly as accurate as the judge. One tuned to its own evidence does better than both.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/game-theory-debate/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Game Theory for Debate and Critics",
+  "about": "Incentive design for critic and debate agents",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/game-theory-debate/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Game theory for debate and critics</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M13</span>
+          <span class="tag">Multi-model</span>
+          <span class="tag">Emerging</span>
+          <span class="tag dof">Coordination</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Game theory for debate and critics</h1>
+        <p class="formula-name">A critic's best response: challenge when \(\Pr(\text{wrong}\mid\text{evidence})\) clears a threshold set by its payoffs</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          With a judge that is right
+          <span class="nowrap"><input class="inline-num wide" type="number" min="55" max="99" step="1" data-key="j" data-scale="100" aria-label="Judge accuracy, percent">%</span>
+          of the time, a critic that objects to everything makes your system exactly <span class="result-num" id="hero-all">90%</span> accurate, however good the first answer was. Tuned to object only when its evidence is strong enough, it reaches <span class="result-num good" id="hero-best">91.9%</span>.
+        </p>
+        <p class="hint">Change the blue number. Every figure on this page updates with it.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Critic, reviewer and debate agents only help if they challenge the right answers.</p>
+        <p>A common multi-agent design pairs a proposer with a critic: the critic reviews the answer, raises objections, and a judge (tests, a stronger model, or a person) settles each dispute. How you instruct the critic is an incentive design problem. Told to "find any issue", it challenges everything, and the system becomes only as good as the judge. Told to "be constructive" or rewarded for agreement, it waves everything through, and the critic adds nothing. Game theory says where between those extremes a rational critic should sit, and how to set its incentives so that what's best for the critic is also best for the system.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Think of a code reviewer and a CI pipeline. Every comment the reviewer raises gets checked by CI. If the reviewer is praised for every comment and never blamed for a wrong one, they comment on everything, and the final result is whatever CI decides, including CI's mistakes on code that was fine. If every rejected comment costs them reputation, they stop commenting, and bugs sail through.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">No critic: the proposer alone</span><div class="track"><div class="fill" style="width:80%"></div></div><span class="pct">80.0%</span></div>
+          <div class="row"><span class="lbl">Critic challenges everything</span><div class="track"><div class="fill" style="width:90%"></div></div><span class="pct">90.0%</span></div>
+          <div class="row"><span class="lbl">Critic challenges when its evidence warrants</span><div class="track"><div class="fill" style="width:91.9%"></div></div><span class="pct">91.9%</span></div>
+          <div class="row"><span class="lbl">Critic challenges everything, weaker judge (75%)</span><div class="track"><div class="fill bad" style="width:75%"></div></div><span class="pct">75.0%</span></div>
+        </div>
+        <p class="small muted">Proposer right 80% of the time; critic's suspicion score separates right from wrong answers with AUC 0.80; judge right 90% of the time unless stated.</p>
+        <p>The last row is the trap: with an unreliable judge, an over-eager critic makes the system worse than no critic at all, because the judge overturns good answers almost as often as it fixes bad ones.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>The proposer's answer is right with probability \(p\). The critic sees evidence and forms a belief \(\pi = \Pr(\text{wrong}\mid\text{evidence})\). If it challenges, the judge rules correctly with probability \(j\). The critic gains \(R\) when its challenge is upheld and loses \(C\) when it is rejected; accepting earns 0. Challenging pays off on average when</p>
+        <div class="math-block">$$\pi\big(jR - (1-j)C\big) + (1-\pi)\big((1-j)R - jC\big) &gt; 0 \quad\Longleftrightarrow\quad \pi &gt; \tau = \frac{jC - (1-j)R}{(2j-1)(R+C)}$$</div>
+        <p>The system's accuracy, given how often the critic challenges right answers (\(q_r\)) and wrong ones (\(q_w\)), is</p>
+        <div class="math-block">$$\text{accuracy} = p\,\big(1 - q_r(1-j)\big) + (1-p)\,q_w\,j$$</div>
+        <dl class="symbols">
+          <dt>\(p\)</dt><dd>proposer accuracy before any review</dd>
+          <dt>\(j\)</dt><dd>judge accuracy on a disputed answer (above 0.5)</dd>
+          <dt>\(R,\ C\)</dt><dd>critic's reward for an upheld challenge and penalty for a rejected one; only \(C/R\) matters</dd>
+          <dt>\(\tau\)</dt><dd>the critic's challenge threshold on its belief that the answer is wrong</dd>
+          <dt>\(q_r,\ q_w\)</dt><dd>share of right and of wrong answers the critic challenges</dd>
+        </dl>
+        <ul>
+          <li><strong>Two extremes:</strong> never challenging gives accuracy \(p\). Challenging everything gives exactly \(j\): the judge decides every case.</li>
+          <li><strong>The system-optimal rule</strong> challenges when \(\pi &gt; 1-j\): when the answer is more likely wrong than the judge is likely to err.</li>
+          <li><strong>Aligned incentives:</strong> the critic's selfish threshold \(\tau\) equals \(1-j\) exactly when \(\dfrac{C}{R} = \dfrac{2j(1-j)}{j - (1-j)(2j-1)}\): about 0.22 for a 90% judge, 0.6 for a 75% judge. Weaker judges call for more caution.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Set the proposer, the critic's evidence and the judge, then the critic's penalty-to-reward ratio. The critic always plays its best response to the incentives you give it.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-lr">Penalty for a rejected challenge, vs reward <output id="ratio-out"></output></label>
+                <input id="c-lr" type="range" min="-2" max="1.5" step="0.05" data-key="lr">
+                <div class="note">Left: "flag anything". Right: "only flag if certain", or "be agreeable".</div>
+              </div>
+              <div class="control">
+                <label for="c-p">Proposer accuracy <output data-out="p" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-p" type="range" min="30" max="98" step="1" data-key="p" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-auc">Critic's evidence quality, AUC <output data-out="auc" data-fmt="num" data-dp="2"></output></label>
+                <input id="c-auc" type="range" min="0.5" max="0.99" step="0.01" data-key="auc">
+              </div>
+              <div class="control">
+                <label for="c-j">Judge accuracy <output data-out="j" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-j" type="range" min="55" max="99" step="1" data-key="j" data-scale="100">
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary" id="r-acc"><div class="v" id="o-acc">–</div><div class="k">System accuracy</div></div>
+                <div class="readout"><div class="v" id="o-rate">–</div><div class="k">Answers challenged</div></div>
+                <div class="readout"><div class="v" id="o-fixed">–</div><div class="k">Wrong answers fixed</div></div>
+                <div class="readout alarm"><div class="v" id="o-broken">–</div><div class="k">Right answers wrongly overturned</div></div>
+                <div class="readout"><div class="v" id="o-tau">–</div><div class="k">Critic challenges when it believes the answer is wrong with probability above</div></div>
+                <div class="readout"><div class="v" id="o-star">–</div><div class="k" id="o-star-k">Best ratio for this judge</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-ratio" id="tab-ratio">Accuracy vs incentives</button>
+                <button role="tab" aria-selected="false" aria-controls="view-judge" id="tab-judge">Accuracy vs judge quality</button>
+              </div>
+
+              <div id="view-ratio" role="tabpanel" aria-labelledby="tab-ratio">
+                <div class="chart-wrap">
+                  <svg class="chart" id="ratio" role="img" aria-label="System accuracy as the critic's penalty-to-reward ratio changes"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--ok)"></i>With a critic playing its best response</span>
+                    <span><i style="background:var(--ink-3)"></i>No critic (\(p\)) and challenge-everything (\(j\))</span>
+                  </div>
+                </div>
+              </div>
+              <div id="view-judge" role="tabpanel" aria-labelledby="tab-judge" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="judge" role="img" aria-label="System accuracy against judge accuracy for different critics"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--ink-3)"></i>No critic</span>
+                    <span><i style="background:var(--fault)"></i>Challenges everything</span>
+                    <span><i style="background:var(--accent)"></i>Your incentive setting</span>
+                    <span><i style="background:var(--ok)"></i>Incentives aligned for each judge</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a reviewer for database migrations</h2>
+        <p>A coding agent writes database migration scripts; 80% are correct on the first try. A reviewer agent reads each one, and its suspicion separates broken scripts from good ones with an AUC of 0.80. Disputes go to a judge. The team compared two judges: running the test suite against a staging copy (right 90% of the time), and a second LLM reading the dispute (right 75% of the time). They tried four reviewer instructions, each of which makes the reviewer behave as if it had a different penalty-to-reward ratio:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Reviewer instruction</th><th class="num">Behaves like C/R</th><th class="num">Tests as judge (90%)</th><th class="num">LLM as judge (75%)</th></tr></thead>
+            <tbody>
+              <tr><td>No reviewer</td><td class="num">–</td><td class="num">80.0%</td><td class="num">80.0%</td></tr>
+              <tr class="weak"><td>"Flag anything that might be wrong"</td><td class="num">≈ 0.05</td><td class="num">90.0%</td><td class="num">75.0%</td></tr>
+              <tr><td>"Flag it if it's more likely broken than the judge is to get it wrong"</td><td class="num">0.22 / 0.6</td><td class="num">91.9%</td><td class="num">85.5%</td></tr>
+              <tr><td>"Only flag if you are certain"</td><td class="num">≈ 2</td><td class="num">81.7%</td><td class="num">80.4%</td></tr>
+              <tr><td>"Be constructive and supportive"</td><td class="num">≈ 10</td><td class="num">80.0%</td><td class="num">80.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The "flag anything" reviewer looked productive, raising objections on every script, but with the LLM judge it made the pipeline worse than having no reviewer: the judge overturned one good script in four. The aligned instruction told the reviewer how reliable the judge is and asked it to flag only when its doubt exceeded the judge's error rate. With tests as judge that meant challenging about 60% of scripts; with the LLM judge, about 29%. Either way it beat both extremes, and the gap was largest exactly where the judge was weakest.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>LLM critics don't literally maximize payoffs.</strong> Instructions shift their behavior in the direction the model predicts, not precisely. Measure the challenge rate and its hit rate on labeled cases, and adjust the instruction until the critic's behavior matches the target threshold.</li>
+          <li><strong>The critic's beliefs may be miscalibrated.</strong> A critic that believes it is right 90% of the time when it is right 60% of the time will over-challenge. Calibrate its suspicion against labeled outcomes.</li>
+          <li><strong>Upheld challenges are assumed to fix the answer.</strong> In practice a fix can introduce new errors. Treat the repaired answer as another proposer output with its own accuracy.</li>
+          <li><strong>One round only.</strong> Multi-round debate lets the proposer defend and the critic refine, which can help when judging a single disputed step is easier than judging a whole answer. It also raises cost and can reward persuasive rather than correct arguments.</li>
+          <li><strong>Judging has a cost.</strong> Challenging 60% of answers means the judge runs on 60% of traffic. If judging is expensive, add that cost to \(C\).</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Measure the judge first.</strong> Its accuracy on disputed cases sets everything else. A judge below about 80% makes most critics risky.</li>
+          <li><strong>Tell the critic how reliable the judge is.</strong> Ask it to object only when the answer is more likely wrong than the judge is likely to err.</li>
+          <li><strong>Track two numbers per critic:</strong> the share of answers it challenges and the share of its challenges that are upheld. A high challenge rate with a low uphold rate means it is over-eager.</li>
+          <li><strong>Never reward the critic for agreement</strong>, or penalize it for every rejected challenge without weighing upheld ones. Either collapses it to an extreme.</li>
+          <li><strong>Re-tune when the judge changes.</strong> A stronger judge justifies a more aggressive critic; a weaker one demands more restraint.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"A reviewer who objects to everything just hands every decision to whoever settles the disputes. A reviewer who never objects adds nothing. We tell ours how reliable the referee is, and ask it to object only when it's more likely right than the referee is likely to be wrong."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../condorcet-voting/">M10 Condorcet jury theorem and voting</a><span class="why">Aggregating independent verdicts instead of arguing.</span></li>
+              <li><a href="../cohens-kappa/">M08 Cohen’s kappa</a><span class="why">How to measure the judge's accuracy before trusting it.</span></li>
+              <li><a href="../model-cascades/">M11 Model cascades</a><span class="why">The same threshold logic, applied to escalation instead of challenges.</span></li>
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">What happens after an upheld challenge triggers a fix.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/debate/">No. 12 Debate / Multi-Critic</a><span class="why">The pattern whose incentives this page sets.</span></li>
+              <li><a href="/agentic/patterns/reflection/">No. 04 Reflection</a><span class="why">Self-critique: proposer and critic in one model.</span></li>
+              <li><a href="/agentic/patterns/llm-as-judge/">No. 30 Rubric LLM-as-Judge</a><span class="why">The judge that settles disputes.</span></li>
+              <li><a href="/agentic/patterns/pr-review-gate/">No. 47 PR as Review Gate</a><span class="why">A critic-and-judge loop for coding agents.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: game-theory-debate
+number: M13
+name: Incentives for critic and debate agents
+family: multi-model
+answers: "How should a critic agent be incentivized so its challenges improve the system?"
+formula:
+  critic_threshold: "tau = (j*C - (1-j)*R) / ((2j - 1) * (R + C))"
+  system_optimal_threshold: "challenge when P(wrong | evidence) > 1 - j"
+  aligned_ratio: "C/R = 2j(1-j) / (j - (1-j)(2j-1))"
+  accuracy: "p*(1 - q_r*(1-j)) + (1-p)*q_w*j"
+  extremes: "never challenge -> p; always challenge -> j"
+inputs:
+  p: {type: float, meaning: proposer accuracy}
+  j: {type: float, meaning: judge accuracy on disputes, > 0.5}
+  auc: {type: float, meaning: how well the critic's suspicion separates wrong from right}
+  ratio: {type: float, meaning: critic penalty for rejected challenge / reward for upheld one}
+assumptions:
+  - critic acts on calibrated beliefs
+  - upheld challenges fix the answer; rejected ones leave it
+  - one round of challenge and judgment
+use_when:
+  - instructing reviewer, critic or debate agents
+  - deciding whether a critic helps given the judge available
+related_patterns: [debate, reflection, llm-as-judge, pr-review-gate]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, SciPy)</div>
+        <div class="code"><pre>import math
+from scipy.stats import norm
+
+def critic_outcome(p, auc, j, ratio):
+    """Accuracy when a critic with binormal evidence plays its best response to C/R = ratio."""
+    mu = math.sqrt(2) * norm.ppf(auc)          # separation of suspicion scores
+    tau = (j * ratio - (1 - j)) / ((2 * j - 1) * (1 + ratio))
+    if tau &lt;= 0:
+        q_w = q_r = 1.0                          # challenge everything
+    elif tau &gt;= 1:
+        q_w = q_r = 0.0                          # never challenge
+    else:
+        # P(wrong | x) > tau  &lt;=&gt;  x > x_star, with wrong ~ N(mu,1), right ~ N(0,1)
+        log_odds = math.log(tau / (1 - tau)) - math.log((1 - p) / p)
+        x_star = (log_odds + mu * mu / 2) / mu
+        q_w, q_r = 1 - norm.cdf(x_star - mu), 1 - norm.cdf(x_star)
+    accuracy = p * (1 - q_r * (1 - j)) + (1 - p) * q_w * j
+    return accuracy, p * q_r + (1 - p) * q_w
+
+def aligned_ratio(j):
+    return 2 * j * (1 - j) / (j - (1 - j) * (2 * j - 1))
+
+if __name__ == "__main__":
+    for j in (0.90, 0.75):
+        r = aligned_ratio(j)
+        print(j, round(r, 2), [round(v, 3) for v in critic_outcome(0.8, 0.8, j, r)])
+    # 0.9 0.22 [0.919, 0.607] | 0.75 0.6 [0.855, 0.289]</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>The critic's best response</summary>
+          <div class="body">
+            <p>If the answer is wrong (probability \(\pi\)), a challenge is upheld with probability \(j\) (gain \(R\)) and rejected otherwise (lose \(C\)). If the answer is right, the judge rejects the challenge with probability \(j\) (lose \(C\)) and wrongly upholds it otherwise (gain \(R\)). Accepting pays 0. So challenging is better when \(\pi(jR-(1-j)C) + (1-\pi)((1-j)R - jC) &gt; 0\). The left side is linear in \(\pi\) with slope \((2j-1)(R+C) &gt; 0\) when \(j &gt; \tfrac12\), so the critic challenges exactly when \(\pi\) exceeds \(\tau\). A negative \(\tau\) means it challenges everything; \(\tau \ge 1\) means it never does.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why challenging everything gives exactly \(j\)</summary>
+          <div class="body">
+            <p>If every answer is challenged, \(q_r = q_w = 1\). A right answer survives only if the judge rejects the challenge: probability \(j\). A wrong answer is fixed only if the judge upholds it: also \(j\). Accuracy is \(pj + (1-p)j = j\), whatever \(p\) was. The proposer's quality no longer matters; the judge's does.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The system-optimal rule and the aligned ratio</summary>
+          <div class="body">
+            <p>Challenging an answer the critic believes is wrong with probability \(\pi\) changes expected accuracy by \(\pi j - (1-\pi)(1-j)\): it gains when a wrong answer is fixed and loses when a right one is overturned. That is positive exactly when \(\pi &gt; 1-j\). To make the critic's own threshold match, set \(\tau = 1-j\) and solve for \(\rho = C/R\):</p>
+            $$\frac{j\rho - (1-j)}{(2j-1)(1+\rho)} = 1-j \;\Longrightarrow\; \rho = \frac{2j(1-j)}{j-(1-j)(2j-1)}.$$
+            <p>At \(j = 0.9\), \(\rho = 0.18/0.82 \approx 0.22\). As \(j \to 1\), \(\rho \to 0\): with a perfect judge, the critic should challenge anything that might be wrong. This is mechanism design in miniature: choosing payoffs so that self-interested play produces the outcome the designer wants.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>From evidence to challenge rates</summary>
+          <div class="body">
+            <p>Model the critic's suspicion score as \(N(\mu,1)\) on wrong answers and \(N(0,1)\) on right ones, with \(\mu = \sqrt2\,\Phi^{-1}(\text{AUC})\). By Bayes' rule, the log-odds that an answer is wrong given score \(x\) are \(\ln\frac{1-p}{p} + \mu x - \mu^2/2\), which increase with \(x\). So "\(\pi &gt; \tau\)" is the same as "\(x &gt; x^*\)" for a cut-off \(x^*\), and the challenge rates are \(q_w = 1-\Phi(x^*-\mu)\) and \(q_r = 1-\Phi(x^*)\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Debate as a zero-sum game</summary>
+          <div class="body">
+            <p>In AI safety via debate, two agents argue opposite answers and a judge picks the winner. It is zero-sum: one debater's gain is the other's loss. The argument for honesty is that, in equilibrium, a debater defending a false claim can be forced to commit to a specific false step, and if judging one pointed-out step is reliable (\(j\) high on single steps), the honest debater wins. The critic model on this page is the one-round version of that game, and its main lesson carries over: everything rests on how reliably the judge can settle the narrowest disputed point.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Irving, G., Christiano, P. and Amodei, D. (2018). <a href="https://arxiv.org/abs/1805.00899">AI safety via debate</a>. Debate as a zero-sum game judged by a weaker agent.</li>
+          <li>Du, Y. et al. (2023). <a href="https://arxiv.org/abs/2305.14325">Improving Factuality and Reasoning in Language Models through Multiagent Debate</a>. Empirical gains from multi-agent debate.</li>
+          <li>Khan, A. et al. (2024). <a href="https://arxiv.org/abs/2402.06782">Debating with More Persuasive LLMs Leads to More Truthful Answers</a>. Judge accuracy when weaker judges oversee stronger debaters.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"game-theory-debate","number":"M13","family":"multi-model",
+ "formula":{"critic_threshold":"(j*C-(1-j)*R)/((2j-1)*(R+C))","system_optimal":"challenge when P(wrong|evidence) > 1-j","aligned_ratio":"2j(1-j)/(j-(1-j)(2j-1))","accuracy":"p*(1-q_r*(1-j))+(1-p)*q_w*j","extremes":"never -> p, always -> j"},
+ "inputs":["p","j","auc","C/R"],
+ "assumptions":["calibrated critic beliefs","upheld challenge fixes the answer","single round"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Normal helpers ---------- */
+  function Phi(x) {
+    const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2);
+    const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x / 2);
+    return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y);
+  }
+  function PhiInv(p) {
+    const a = [-39.6968302866538, 220.946098424521, -275.928510446969, 138.357751867269, -30.6647980661472, 2.50662827745924];
+    const b = [-54.4760987982241, 161.585836858041, -155.698979859887, 66.8013118877197, -13.2806815528857];
+    const c = [-0.00778489400243029, -0.322396458041136, -2.40075827716184, -2.54973253934373, 4.37466414146497, 2.93816398269878];
+    const d = [0.00778469570904146, 0.32246712907004, 2.445134137143, 3.75440866190742];
+    if (p < 0.02425) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - 0.02425) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+
+  /* ---------- Model ---------- */
+  function outcome(p, auc, j, ratio) {
+    const mu = Math.SQRT2 * PhiInv(auc);
+    const tau = (j * ratio - (1 - j)) / ((2 * j - 1) * (1 + ratio));
+    let qw, qr;
+    if (tau <= 0) { qw = qr = 1; }
+    else if (tau >= 1 || mu <= 0) { qw = qr = 0; }
+    else {
+      const lo = Math.log(tau / (1 - tau)) - Math.log((1 - p) / p), xs = (lo + mu * mu / 2) / mu;
+      qw = 1 - Phi(xs - mu); qr = 1 - Phi(xs);
+    }
+    return { acc: p * (1 - qr * (1 - j)) + (1 - p) * qw * j, rate: p * qr + (1 - p) * qw,
+      fixed: (1 - p) * qw * j, broken: p * qr * (1 - j), tau };
+  }
+  const aligned = (j) => (2 * j * (1 - j)) / (j - (1 - j) * (2 * j - 1));
+  const fmtRatio = (r) => (r < 0.1 ? r.toFixed(2) : r < 10 ? r.toFixed(r < 1 ? 2 : 1) : Math.round(r).toString());
+
+  MM.tabs(document.getElementById("lab-tabs"));
+
+  function render(s) {
+    const ratio = Math.pow(10, s.lr), r = outcome(s.p, s.auc, s.j, ratio), star = aligned(s.j), best = outcome(s.p, s.auc, s.j, star);
+    document.getElementById("ratio-out").textContent = fmtRatio(ratio) + "×";
+    document.getElementById("hero-all").textContent = MM.pct(s.j, 0);
+    document.getElementById("hero-best").textContent = MM.pct(best.acc, 1);
+    document.getElementById("o-acc").textContent = MM.pct(r.acc, 1);
+    const box = document.getElementById("r-acc");
+    box.classList.toggle("primary", r.acc >= s.p); box.classList.toggle("alarm", r.acc < s.p);
+    document.getElementById("o-rate").textContent = MM.pct(r.rate, 0);
+    document.getElementById("o-fixed").textContent = MM.pct(r.fixed, 1);
+    document.getElementById("o-broken").textContent = MM.pct(r.broken, 1);
+    document.getElementById("o-tau").textContent = r.tau <= 0 ? "always" : r.tau >= 1 ? "never" : MM.pct(r.tau, 0);
+    document.getElementById("o-star").textContent = fmtRatio(star) + "×";
+    document.getElementById("o-star-k").textContent = `Best penalty-to-reward ratio for this judge (gives ${MM.pct(best.acc, 1)})`;
+
+    // accuracy vs incentives
+    const pts = []; for (let v = -2; v <= 1.5001; v += 0.025) pts.push([v, outcome(s.p, s.auc, s.j, Math.pow(10, v)).acc]);
+    const ys = pts.map((q) => q[1]).concat([s.p, s.j]);
+    const ylo = Math.max(0, Math.floor((Math.min(...ys) - 0.03) * 20) / 20), yhi = Math.min(1, Math.ceil((Math.max(...ys) + 0.02) * 20) / 20);
+    MM.lineChart(document.getElementById("ratio"), {
+      x: { min: -2, max: 1.5, label: "Penalty for a rejected challenge ÷ reward for an upheld one (log scale)", ticks: [-2, -1, 0, 1], fmt: (v) => Math.pow(10, v) + "×" },
+      y: { min: ylo, max: Math.max(yhi, ylo + 0.05), label: "System accuracy", pct: true },
+      series: [
+        { cls: "s-muted", points: [[-2, s.p], [1.5, s.p]] },
+        { cls: "s-muted", points: [[-2, s.j], [1.5, s.j]] },
+        { cls: "s-ok", points: pts }
+      ],
+      markerX: s.lr,
+      dots: [{ x: s.lr, y: r.acc, cls: "dot-ok" }, { x: Math.log10(star), y: best.acc, cls: "dot-fault" }]
+    });
+
+    // accuracy vs judge quality
+    const js = []; for (let j = 0.55; j <= 0.991; j += 0.01) js.push(j);
+    const ys2 = [];
+    const ser = [
+      { cls: "s-muted", points: js.map((j) => [j * 100, s.p]) },
+      { cls: "s-fault", points: js.map((j) => [j * 100, j]) },
+      { cls: "s-accent", points: js.map((j) => [j * 100, outcome(s.p, s.auc, j, ratio).acc]) },
+      { cls: "s-ok", points: js.map((j) => [j * 100, outcome(s.p, s.auc, j, aligned(j)).acc]) }
+    ];
+    ser.forEach((x) => x.points.forEach((q) => ys2.push(q[1])));
+    const lo2 = Math.max(0, Math.floor((Math.min(...ys2) - 0.02) * 10) / 10);
+    MM.lineChart(document.getElementById("judge"), {
+      x: { min: 55, max: 99, label: "Judge accuracy (%)" },
+      y: { min: lo2, max: 1, label: "System accuracy", pct: true },
+      series: ser, markerX: s.j * 100
+    });
+  }
+
+  MM.state({ lr: Math.log10(0.22), p: 0.8, auc: 0.8, j: 0.9 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

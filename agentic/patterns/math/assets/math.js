@@ -58,7 +58,7 @@
 
   /* ---------- Line chart (SVG) ----------
      MM.lineChart(svg, {
-       x: {min, max, label}, y: {min, max, label, pct: true},
+       x: {min, max, label, ticks?: [values], fmt?: v => label}, y: {min, max, label, pct: true},
        series: [{cls: "s-fault", points: [[x, y], ...]}],
        markerX: number, targetY: number, dots: [{x, y, cls}]
      }) */
@@ -87,9 +87,9 @@
       const t = el("text", { x: m.l - 8, y: sy(v) + 4, "text-anchor": "end" }, g);
       t.textContent = o.y.pct ? Math.round(v * 100) + "%" : v;
     });
-    ticks(o.x.min, o.x.max, 6).forEach((v) => {
+    (o.x.ticks || ticks(o.x.min, o.x.max, 6)).forEach((v) => {
       const t = el("text", { x: sx(v), y: H - m.b + 18, "text-anchor": "middle" }, g);
-      t.textContent = v;
+      t.textContent = o.x.fmt ? o.x.fmt(v) : v;
     });
     el("line", { x1: m.l, x2: W - m.r, y1: sy(o.y.min), y2: sy(o.y.min) }, g);
     if (o.x.label) el("text", { class: "axis-label", x: m.l + iw / 2, y: H - 8, "text-anchor": "middle" }).textContent = o.x.label;

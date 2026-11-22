@@ -46,14 +46,14 @@ gtag('config', 'G-ZBXY60BLWE');
     <aside class="family-nav" aria-label="Jump to a family">
       <h2>Families</h2>
       <ul>
-        <li><a href="#reliability"><span class="fn-name">Reliability</span><span class="fn-q">Will the agent finish, and how fast?</span><span class="fn-count">4 models, 4 live</span></a></li>
+        <li><a href="#reliability"><span class="fn-name">Reliability</span><span class="fn-q">Will the agent finish, and how fast?</span><span class="fn-count">4 models</span></a></li>
         <li><a href="#evaluation"><span class="fn-name">Evaluation</span><span class="fn-q">Can I trust the numbers my evals report?</span><span class="fn-count">5 models</span></a></li>
         <li><a href="#multi-model"><span class="fn-name">Multi-model interactions</span><span class="fn-q">How should several models vote, cascade or route?</span><span class="fn-count">4 models</span></a></li>
         <li><a href="#planning"><span class="fn-name">Planning and uncertainty</span><span class="fn-q">When should the agent act, search or abstain?</span><span class="fn-count">3 models</span></a></li>
       </ul>
       <div class="fn-progress">
-        <div class="fn-track" role="img" aria-label="4 of 16 models live"><div class="fn-fill" style="width:25.00%"></div></div>
-        <span>4 of 16 models live, more added regularly.</span>
+        <div class="fn-track" role="img" aria-label="All 16 models live"><div class="fn-fill" style="width:100%"></div></div>
+        <span>All 16 models are live.</span>
       </div>
     </aside>
   </div>
@@ -69,28 +69,28 @@ gtag('config', 'G-ZBXY60BLWE');
   <section class="family" id="evaluation">
     <div class="family-head"><h2>Evaluation</h2><p>Can you trust the numbers your evals report? Models for consistency, significance and judges.</p></div>
     <ul class="model-rows">
-      <li class="model-row"><div><span class="no">M05</span><span class="name">pass@k vs pass^k</span><span class="q">Is the agent capable, or consistently reliable?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M06</span><span class="name">Confidence intervals (Wilson and bootstrap)</span><span class="q">Is version B really better than version A?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M07</span><span class="name">Bradley–Terry and Elo</span><span class="q">How do pairwise judgments become a ranking?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M08</span><span class="name">Cohen&#x27;s kappa</span><span class="q">Does my LLM judge agree with humans beyond chance?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M09</span><span class="name">Item Response Theory</span><span class="q">Which test cases are hard, and which actually discriminate?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><a href="pass-at-k/"><span class="no">M05</span><span class="name">pass@k vs pass^k</span><span class="q">Is the agent capable, or consistently reliable?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="confidence-intervals/"><span class="no">M06</span><span class="name">Confidence intervals (Wilson and bootstrap)</span><span class="q">Is version B really better than version A?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="bradley-terry-elo/"><span class="no">M07</span><span class="name">Bradley–Terry and Elo</span><span class="q">How do pairwise judgments become a ranking?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="cohens-kappa/"><span class="no">M08</span><span class="name">Cohen&#x27;s kappa</span><span class="q">Does my LLM judge agree with humans beyond chance?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="item-response-theory/"><span class="no">M09</span><span class="name">Item Response Theory</span><span class="q">Which test cases are hard, and which actually discriminate?</span><span class="status live">Live</span></a></li>
     </ul>
   </section>
   <section class="family" id="multi-model">
     <div class="family-head"><h2>Multi-model interactions</h2><p>How should several models vote, cascade or route work between them?</p></div>
     <ul class="model-rows">
-      <li class="model-row"><div><span class="no">M10</span><span class="name">Condorcet jury theorem and voting</span><span class="q">When does majority voting across models help?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M11</span><span class="name">Model cascades</span><span class="q">When should a cheap model escalate to an expensive one?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M12</span><span class="name">Multi-armed bandits for routing</span><span class="q">Which model or prompt should get the next request?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M13</span><span class="name">Game theory for debate and critics</span><span class="q">When do debating or critiquing agents converge on the truth?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><a href="condorcet-voting/"><span class="no">M10</span><span class="name">Condorcet jury theorem and voting</span><span class="q">When does majority voting across models help?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="model-cascades/"><span class="no">M11</span><span class="name">Model cascades</span><span class="q">When should a cheap model escalate to an expensive one?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="bandits-routing/"><span class="no">M12</span><span class="name">Multi-armed bandits for routing</span><span class="q">Which model or prompt should get the next request?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="game-theory-debate/"><span class="no">M13</span><span class="name">Game theory for debate and critics</span><span class="q">When do debating or critiquing agents converge on the truth?</span><span class="status live">Live</span></a></li>
     </ul>
   </section>
   <section class="family" id="planning">
     <div class="family-head"><h2>Planning and uncertainty</h2><p>When should the agent act, search further or abstain?</p></div>
     <ul class="model-rows">
-      <li class="model-row"><div><span class="no">M14</span><span class="name">MDPs and POMDPs</span><span class="q">When should the agent gather more context instead of acting?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M15</span><span class="name">MCTS and beam search</span><span class="q">How should an agent search over possible plans?</span><span class="status">Coming</span></div></li>
-      <li class="model-row"><div><span class="no">M16</span><span class="name">Conformal prediction</span><span class="q">When should the agent abstain or hand off to a human?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><a href="mdp-pomdp/"><span class="no">M14</span><span class="name">MDPs and POMDPs</span><span class="q">When should the agent gather more context instead of acting?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="mcts-beam-search/"><span class="no">M15</span><span class="name">MCTS and beam search</span><span class="q">How should an agent search over possible plans?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><a href="conformal-prediction/"><span class="no">M16</span><span class="name">Conformal prediction</span><span class="q">When should the agent abstain or hand off to a human?</span><span class="status live">Live</span></a></li>
     </ul>
   </section>
   <aside class="agent-note">

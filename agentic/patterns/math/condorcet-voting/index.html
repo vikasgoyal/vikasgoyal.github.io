@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Condorcet Jury Theorem and Voting | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="When does majority voting across models or samples raise accuracy, and when does it stall? The Condorcet jury theorem, correlated errors and self-consistency for AI agents. Math, derivations, calculator and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/condorcet-voting/">
+<meta property="og:title" content="Condorcet jury theorem: why model diversity beats model count">
+<meta property="og:description" content="Five samples of one model barely beat three different models. Correlated errors cap what voting can do.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/condorcet-voting/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Condorcet Jury Theorem and Voting",
+  "about": "Majority voting and self-consistency across AI models",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/condorcet-voting/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Condorcet jury theorem and voting</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M10</span>
+          <span class="tag">Multi-model</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Coordination</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Condorcet jury theorem and voting</h1>
+        <p class="formula-name">Majority vote accuracy, \(\sum_{i&gt;k/2}\binom{k}{i}p^i(1-p)^{k-i}\), and the correlation ceiling</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          <input class="inline-num" type="number" min="1" max="21" step="2" data-key="k" aria-label="Number of voters">
+          independent voters at
+          <span class="nowrap"><input class="inline-num wide" type="number" min="30" max="99" step="1" data-key="p" data-scale="100" aria-label="Accuracy of each voter, percent">%</span>
+          each reach <span class="result-num good" id="hero-ind">83.7%</span> by majority vote. If
+          <span class="nowrap"><input class="inline-num wide" type="number" min="0" max="100" step="5" data-key="r" data-scale="100" aria-label="Share of errors that are shared, percent">%</span>
+          of their errors are shared, they reach <span class="result-num" id="hero-cor">79.6%</span>, and no number of voters gets past <span class="result-num" id="hero-ceil">91%</span>.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Asking several models, or one model several times, and taking the majority is one of the simplest ways to raise accuracy when no checker exists.</p>
+        <p>Self-consistency, model ensembles and multi-agent juries all rely on the same 18th-century result: if each voter is right more often than wrong, and voters err independently, the majority becomes almost certainly right as the jury grows. Both conditions fail quietly in practice. Samples from one model share its blind spots, and a voter that is worse than chance on a question type drags the majority down. This page shows how much each condition matters, and why adding a different model usually beats adding another sample of the same one.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Picture five people guessing the answer to a yes-or-no question, each right 70% of the time. For the majority to be wrong, at least three of the five must be wrong at once. If they guess independently, that is unlikely: about 16% of the time.</p>
+        <p>Now suppose they all read the same misleading article first. On questions where the article is wrong, they are all wrong together, and voting cannot help. Shared errors behave like a single voter, however many people are in the room.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">One voter at 70%</span><div class="track"><div class="fill" style="width:70%"></div></div><span class="pct">70.0%</span></div>
+          <div class="row"><span class="lbl">Five independent voters</span><div class="track"><div class="fill" style="width:83.7%"></div></div><span class="pct">83.7%</span></div>
+          <div class="row"><span class="lbl">Five voters, 30% of errors shared</span><div class="track"><div class="fill bad" style="width:79.6%"></div></div><span class="pct">79.6%</span></div>
+          <div class="row"><span class="lbl">Five voters at 45%: worse than chance</span><div class="track"><div class="fill bad" style="width:40.7%"></div></div><span class="pct">40.7%</span></div>
+        </div>
+        <p>The last row is the theorem's other half: when voters are wrong more often than right, voting makes things worse, and more voters make it worse faster.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>With \(k\) voters (odd), each independently correct with probability \(p\), the majority is correct when more than half are:</p>
+        <div class="math-block">$$P_{\text{maj}}(k,p) = \sum_{i=\lceil k/2\rceil}^{k}\binom{k}{i}\,p^i(1-p)^{k-i}$$</div>
+        <p>To allow for shared errors, assume that on a share \(\rho\) of questions every voter gives the same answer (right with probability \(p\)), and on the rest they vote independently:</p>
+        <div class="math-block">$$P_{\text{vote}} = \rho\,p + (1-\rho)\,P_{\text{maj}}(k,p), \qquad \lim_{k\to\infty} P_{\text{vote}} = \rho\,p + (1-\rho) \quad (p &gt; \tfrac12)$$</div>
+        <dl class="symbols">
+          <dt>\(k\)</dt><dd>number of voters: models, samples or agents (odd, so there are no ties)</dd>
+          <dt>\(p\)</dt><dd>accuracy of each voter on its own</dd>
+          <dt>\(\rho\)</dt><dd>share of questions on which voters err (or succeed) together</dd>
+          <dt>\(w_j\)</dt><dd>weight of voter \(j\) in a weighted vote, \(\ln\frac{p_j}{1-p_j}\)</dd>
+        </dl>
+        <ul>
+          <li><strong>The theorem:</strong> if \(p &gt; \tfrac12\) and errors are independent, \(P_{\text{maj}} \to 1\) as \(k\) grows. If \(p &lt; \tfrac12\), it goes to 0.</li>
+          <li><strong>The ceiling:</strong> shared errors cap the vote at \(1-\rho(1-p)\). At \(p = 0.7\) and \(\rho = 0.3\), that is 91%.</li>
+          <li><strong>Measuring \(\rho\):</strong> for two voters, \(\Pr(\text{both wrong}) = \rho q + (1-\rho)q^2\) with \(q = 1-p\), so \(\rho = (\Pr(\text{both wrong}) - q^2)/(q - q^2)\).</li>
+          <li><strong>Unequal voters:</strong> weight each by its log-odds \(\ln\frac{p_j}{1-p_j}\). This is the optimal rule for independent voters, and it lets one strong model outvote two weak ones.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Set each voter's accuracy, the size of the panel and how much of their error is shared. Try an accuracy below 50% to see voting backfire.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-p">Accuracy of each voter <output data-out="p" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-p" type="range" min="30" max="99" step="1" data-key="p" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-k">Voters <output data-out="k" data-fmt="int"></output></label>
+                <input id="c-k" type="range" min="1" max="21" step="2" data-key="k">
+              </div>
+              <div class="control">
+                <label for="c-r">Shared errors, \(\rho\) <output data-out="r" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-r" type="range" min="0" max="100" step="5" data-key="r" data-scale="100">
+                <div class="note">Samples of one model: often 40–70%. Different model families: often 10–30%.</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-cor">–</div><div class="k">Majority vote, with shared errors</div></div>
+                <div class="readout"><div class="v" id="o-ind">–</div><div class="k">If errors were independent</div></div>
+                <div class="readout alarm"><div class="v" id="o-ceil">–</div><div class="k">Ceiling with any number of voters</div></div>
+                <div class="readout"><div class="v" id="o-both">–</div><div class="k">Two voters both wrong (how to measure \(\rho\))</div></div>
+                <div class="readout"><div class="v" id="o-neff">–</div><div class="k">Effective number of independent voters</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-curve" id="tab-curve">Curve</button>
+                <button role="tab" aria-selected="false" aria-controls="view-sim" id="tab-sim">Simulate 40 questions</button>
+              </div>
+
+              <div id="view-curve" role="tabpanel" aria-labelledby="tab-curve">
+                <div class="chart-wrap">
+                  <svg class="chart" id="curve" role="img" aria-label="Majority vote accuracy against number of voters"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>Independent voters</span>
+                    <span><i style="background:var(--ok)"></i>With shared errors</span>
+                    <span><i class="dash"></i>Ceiling</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="view-sim" role="tabpanel" aria-labelledby="tab-sim" hidden>
+                <div class="sim">
+                  <div class="sim-head">
+                    <span><strong id="sim-count">–</strong> of 40 questions answered correctly by the majority (expected <strong id="sim-exp">–</strong>)</span>
+                    <button class="btn ghost" type="button" id="sim-again">Run 40 again</button>
+                  </div>
+                  <canvas id="sim-canvas" width="1200" height="640" aria-label="Grid of 40 simulated questions; each row is one question, each cell one voter, the last cell the majority."></canvas>
+                  <div class="sim-key">
+                    <span><i style="background:var(--ok)"></i>Voter right</span>
+                    <span><i style="background:var(--retry)"></i>Voter wrong on its own</span>
+                    <span><i style="background:var(--fault)"></i>Shared error: all wrong together</span>
+                    <span><i style="background:var(--ink)"></i>Last column: the majority's answer, right (dark) or wrong (red)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: flagging contract clauses</h2>
+        <p>A legal-review agent decides whether each clause in a supplier contract needs a lawyer's review. On 400 labeled clauses, its main model is right <strong>78%</strong> of the time. The team tried two ways to vote.</p>
+        <p>First, sampling the same model several times at temperature 0.7. Pairs of samples were both wrong on 15.1% of clauses, where independent errors would give \(0.22^2 = 4.8\%\). That gives \(\rho = (0.151 - 0.048)/(0.22 - 0.048) \approx 0.6\): most of the model's mistakes repeat on every sample. Second, asking three different model families, at 78%, 75% and 72%, whose errors overlapped far less, \(\rho \approx 0.15\).</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Approach</th><th class="num">Calls per clause</th><th class="num">Accuracy</th></tr></thead>
+            <tbody>
+              <tr><td>Main model, once</td><td class="num">1</td><td class="num">78.0%</td></tr>
+              <tr><td>Same model, 3 samples, majority</td><td class="num">3</td><td class="num">81.8%</td></tr>
+              <tr><td>Same model, 5 samples, majority</td><td class="num">5</td><td class="num">83.8%</td></tr>
+              <tr class="weak"><td>Same model, unlimited samples (ceiling)</td><td class="num">∞</td><td class="num">86.8%</td></tr>
+              <tr><td>Three different models, majority</td><td class="num">3</td><td class="num">83.0%</td></tr>
+              <tr><td>Different models, ceiling at \(\rho = 0.15\)</td><td class="num">∞</td><td class="num">96.3%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>For the same three calls, three different models beat three samples of one model by 1.2 points, and their ceiling is nearly ten points higher. The team kept the three-model panel and routed the clauses where the panel split 2–1 to a lawyer, which caught most of the remaining errors at a small fraction of the review load.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Accuracy varies by question.</strong> A voter at 70% overall may be 95% on easy questions and 30% on hard ones. On the hard ones, voting makes things worse. Check accuracy per segment before trusting a vote there.</li>
+          <li><strong>Open-ended answers need a way to match.</strong> With free-text answers, "the majority" means clustering equivalent answers first. Plurality voting over many options needs fewer votes than binary voting to win, but is also easier to win wrongly.</li>
+          <li><strong>The shared-error model is a simplification.</strong> Real correlation is partial and varies by question. Treat \(\rho\) as a summary measured on your own data, not a constant.</li>
+          <li><strong>Voters may not be independent by design.</strong> Agents that see each other's answers before voting tend to converge on the first confident answer. Collect votes blind, then share.</li>
+          <li><strong>Cost scales with voters.</strong> Each voter is a full call. Voting only on uncertain cases, or using a cascade (M11), keeps the cost in check.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Measure each voter's accuracy</strong> on a labeled sample, per segment if your traffic mixes easy and hard cases.</li>
+          <li><strong>Measure shared errors.</strong> Count how often pairs of voters are both wrong, and compute \(\rho\).</li>
+          <li><strong>Prefer diversity over repetition.</strong> Different model families, prompts or retrieved contexts lower \(\rho\) more than extra samples do.</li>
+          <li><strong>Weight unequal voters by log-odds,</strong> and drop any voter that is below 50% on a segment.</li>
+          <li><strong>Use disagreement as a signal.</strong> A split vote is a cheap, well-calibrated trigger for escalation to a stronger model or a human.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"Asking the same model five times is like asking one expert five times: you mostly get the same mistake back. Asking three different experts catches far more, and when they disagree, that's exactly the case to send to a person."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">The same shared-cause ceiling, when a checker exists instead of a vote.</span></li>
+              <li><a href="../model-cascades/">M11 Model cascades</a><span class="why">Using vote agreement as the confidence signal for escalation.</span></li>
+              <li><a href="../game-theory-debate/">M13 Game theory for debate and critics</a><span class="why">When agents argue instead of voting blind.</span></li>
+              <li><a href="../cohens-kappa/">M08 Cohen’s kappa</a><span class="why">Agreement between voters, corrected for chance.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/parallelization/">No. 07 Parallelization</a><span class="why">Running voters in parallel and aggregating.</span></li>
+              <li><a href="/agentic/patterns/debate/">No. 12 Debate / Multi-Critic</a><span class="why">Several agents reaching a verdict together.</span></li>
+              <li><a href="/agentic/patterns/human-in-the-loop/">No. 18 Human-in-the-Loop</a><span class="why">Where split votes go.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: condorcet-voting
+number: M10
+name: Condorcet jury theorem and majority voting
+family: multi-model
+answers: "When does majority voting across models or samples raise accuracy?"
+formula:
+  majority: "sum_{i > k/2} comb(k, i) p**i (1-p)**(k-i)"
+  with_shared_errors: "rho*p + (1 - rho) * majority(k, p)"
+  ceiling: "1 - rho*(1 - p)   when p > 0.5"
+  rho_from_pairs: "(P(both wrong) - q**2) / (q - q**2),  q = 1 - p"
+  weighted_vote: "weights ln(p_j / (1 - p_j))"
+inputs:
+  p: {type: float, meaning: accuracy of each voter}
+  k: {type: int, meaning: number of voters, odd}
+  rho: {type: float, meaning: share of questions where voters err together}
+assumptions:
+  - binary answers (cluster free-text answers first)
+  - same accuracy on every question (segment otherwise)
+  - votes collected blind
+use_when:
+  - choosing between more samples and more model families
+  - deciding whether a vote will help on a question type
+related_patterns: [parallelization, debate, human-in-the-loop]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>import math
+from math import comb
+from itertools import product
+
+def majority(k, p):
+    return sum(comb(k, i) * p**i * (1 - p)**(k - i) for i in range(k // 2 + 1, k + 1))
+
+def vote_accuracy(k, p, rho=0.0):
+    return rho * p + (1 - rho) * majority(k, p)
+
+def rho_from_pairs(p, both_wrong):
+    q = 1 - p
+    return (both_wrong - q * q) / (q - q * q)
+
+def weighted_majority(ps):
+    """Exact accuracy of a log-odds-weighted vote among independent voters."""
+    w = [math.log(p / (1 - p)) for p in ps]
+    acc = 0.0
+    for votes in product([1, 0], repeat=len(ps)):
+        pr = math.prod(p if v else 1 - p for p, v in zip(ps, votes))
+        if sum(wi if v else -wi for wi, v in zip(w, votes)) &gt; 0:
+            acc += pr
+    return acc
+
+if __name__ == "__main__":
+    print(majority(5, 0.7))              # 0.837
+    print(vote_accuracy(5, 0.7, 0.3))    # 0.796
+    print(rho_from_pairs(0.78, 0.151))   # 0.60
+    print(weighted_majority([0.78, 0.75, 0.72]))  # 0.844, same as plain majority here</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>The jury theorem</summary>
+          <div class="body">
+            <p>The number of correct voters is binomial with mean \(kp\) and standard deviation \(\sqrt{kp(1-p)}\). The majority is wrong only if this count falls below \(k/2\), which is \(k(p-\tfrac12)\) below the mean. Measured in standard deviations that gap is \(\sqrt k\,(p-\tfrac12)/\sqrt{p(1-p)}\), which grows like \(\sqrt k\). So for \(p &gt; \tfrac12\), the chance of a wrong majority shrinks toward zero (exponentially fast, by Hoeffding's inequality: at most \(e^{-2k(p-1/2)^2}\)). For \(p &lt; \tfrac12\) the same argument runs in reverse.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Shared errors and the ceiling</summary>
+          <div class="body">
+            <p>Condition on whether a question is one where voters act as one (probability \(\rho\)) or independently (\(1-\rho\)). In the first case the vote is right with probability \(p\), like a single voter. In the second it is right with \(P_{\text{maj}}(k,p)\). Adding the two cases gives \(P_{\text{vote}}\). As \(k\) grows with \(p &gt; \tfrac12\), \(P_{\text{maj}}\to 1\), leaving \(\rho p + 1 - \rho = 1 - \rho(1-p)\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Measuring \(\rho\) and the effective number of voters</summary>
+          <div class="body">
+            <p>Two voters are both wrong if the question is a shared one and the shared answer is wrong (\(\rho q\)), or it is not and both err independently (\((1-\rho)q^2\)). Solving \(\Pr(\text{both wrong}) = \rho q + (1-\rho)q^2\) for \(\rho\) gives the formula. Under this model, \(\rho\) is also the correlation between two voters' correctness, so \(k\) voters carry about as much information as \(k_{\text{eff}} = k/(1+(k-1)\rho)\) independent ones: at \(\rho = 0.6\), five samples are worth about 1.5 independent voters.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why log-odds weights are optimal</summary>
+          <div class="body">
+            <p>Given independent votes, the posterior odds that the answer is "yes" multiply by \(\frac{p_j}{1-p_j}\) for each voter saying yes and divide by it for each voter saying no. Taking logs, the decision "yes" is right when \(\sum_j \pm\ln\frac{p_j}{1-p_j} &gt; 0\), with the sign set by each vote (and equal priors). This is the weighted majority, and no other rule using the same votes is more accurate. When one voter's weight exceeds all the others combined, it decides alone.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Condorcet, Marquis de (1785). <em>Essai sur l'application de l'analyse à la probabilité des décisions rendues à la pluralité des voix</em>. The original jury theorem.</li>
+          <li>Wang, X. et al. (2022). <a href="https://arxiv.org/abs/2203.11171">Self-Consistency Improves Chain of Thought Reasoning in Language Models</a>. Majority voting over sampled reasoning paths.</li>
+          <li>Ladha, K. K. (1992). The Condorcet jury theorem, free speech, and correlated votes. <em>American Journal of Political Science</em> 36(3), 617–634. How correlation between voters weakens the theorem.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"condorcet-voting","number":"M10","family":"multi-model",
+ "formula":{"majority":"sum_{i>k/2} comb(k,i) p^i (1-p)^(k-i)","with_shared_errors":"rho*p+(1-rho)*majority","ceiling":"1-rho*(1-p) for p>0.5","rho_from_pairs":"(P(both wrong)-q^2)/(q-q^2)","weights":"ln(p_j/(1-p_j))"},
+ "inputs":["p","k","rho"],
+ "assumptions":["binary answers","uniform accuracy across questions","blind votes"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Model ---------- */
+  function logC(n, k) { let s = 0; for (let i = 1; i <= k; i++) s += Math.log(n - k + i) - Math.log(i); return s; }
+  function majority(k, p) {
+    let s = 0;
+    for (let i = Math.floor(k / 2) + 1; i <= k; i++) s += Math.exp(logC(k, i) + i * Math.log(p) + (k - i) * Math.log(1 - p));
+    return s;
+  }
+  const vote = (k, p, r) => r * p + (1 - r) * majority(k, p);
+  const ceiling = (p, r) => (p > 0.5 ? 1 - r * (1 - p) : p < 0.5 ? r * p : 0.5 * (1 - r) + r * p);
+
+  /* ---------- Simulation ---------- */
+  const canvas = document.getElementById("sim-canvas"), ctx = canvas.getContext("2d");
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  let last = null;
+  function simulate(s) {
+    const k = Math.round(s.k), rows = 40, cols = k + 1, W = canvas.width, H = canvas.height;
+    const cw = W / cols, ch = H / rows, gap = 4;
+    const col = { ok: css("--ok"), ind: css("--retry"), shared: css("--fault"), ink: css("--ink") };
+    ctx.clearRect(0, 0, W, H);
+    let right = 0;
+    for (let q = 0; q < rows; q++) {
+      const shared = Math.random() < s.r, sharedRight = Math.random() < s.p;
+      let yes = 0;
+      for (let v = 0; v < k; v++) {
+        const ok = shared ? sharedRight : Math.random() < s.p;
+        if (ok) yes++;
+        ctx.fillStyle = ok ? col.ok : shared ? col.shared : col.ind;
+        ctx.fillRect(v * cw + gap / 2, q * ch + 2, cw - gap, ch - 4);
+      }
+      const majOk = yes > k / 2;
+      if (majOk) right++;
+      ctx.fillStyle = majOk ? col.ink : col.shared;
+      ctx.fillRect(k * cw + gap * 2, q * ch + 2, cw - gap * 3, ch - 4);
+    }
+    document.getElementById("sim-count").textContent = right;
+    document.getElementById("sim-exp").textContent = (40 * vote(k, s.p, s.r)).toFixed(1);
+  }
+  const simView = document.getElementById("view-sim");
+  document.getElementById("sim-again").addEventListener("click", () => last && simulate(last));
+  MM.tabs(document.getElementById("lab-tabs"));
+  document.getElementById("lab-tabs").addEventListener("tabchange", (e) => { if (e.detail === "view-sim" && last) simulate(last); });
+
+  /* ---------- Render ---------- */
+  let timer;
+  function render(s) {
+    const k = Math.round(s.k) | 1;
+    const ind = majority(k, s.p), cor = vote(k, s.p, s.r), ceil = ceiling(s.p, s.r);
+    const f = (x) => MM.pct(x, 1);
+    document.getElementById("hero-ind").textContent = f(ind);
+    document.getElementById("hero-cor").textContent = f(cor);
+    document.getElementById("hero-ceil").textContent = MM.pct(ceil, ceil > 0.995 ? 1 : 0);
+    document.getElementById("hero-ind").classList.toggle("good", ind >= s.p);
+    document.getElementById("o-cor").textContent = f(cor);
+    document.getElementById("o-ind").textContent = f(ind);
+    document.getElementById("o-ceil").textContent = f(ceil);
+    const q = 1 - s.p;
+    document.getElementById("o-both").textContent = f(s.r * q + (1 - s.r) * q * q);
+    document.getElementById("o-neff").textContent = MM.num(k / (1 + (k - 1) * s.r), 1);
+
+    const ks = []; for (let x = 1; x <= 21; x += 2) ks.push(x);
+    const lo = Math.max(0, Math.min(Math.floor((Math.min(s.p, majority(21, s.p)) - 0.05) * 10) / 10, 0.5));
+    MM.lineChart(document.getElementById("curve"), {
+      x: { min: 1, max: 21, label: "Voters" },
+      y: { min: lo, max: 1, label: "Majority is right", pct: true },
+      series: [
+        { cls: "s-accent", points: ks.map((x) => [x, majority(x, s.p)]) },
+        { cls: "s-ok", points: ks.map((x) => [x, vote(x, s.p, s.r)]) }
+      ],
+      markerX: k, targetY: ceil,
+      dots: [{ x: k, y: cor, cls: "dot-ok" }]
+    });
+    last = Object.assign({}, s, { k });
+    if (!simView.hidden) { clearTimeout(timer); timer = setTimeout(() => simulate(last), 120); }
+  }
+
+  MM.state({ k: 5, p: 0.7, r: 0.3 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Cascades | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Send each request to a cheap model first and escalate only when its confidence is low. The cost-accuracy trade-off of model cascades, and why the confidence signal matters more than the models. Math, derivations, calculator and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/model-cascades/">
+<meta property="og:title" content="Model cascades: most of the accuracy at a third of the cost">
+<meta property="og:description" content="Escalating 30% of requests to the big model gets 93.7% accuracy at 37% of the cost, and the confidence signal decides how far you can push it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/model-cascades/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Model Cascades",
+  "about": "Cost-accuracy optimization by routing between cheap and expensive models",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/model-cascades/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Model cascades</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M11</span>
+          <span class="tag">Multi-model</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Decision</span>
+          <span class="tag dof">Coordination</span>
+        </div>
+        <h1>Model cascades</h1>
+        <p class="formula-name">Expected cost \(c_1 + e\,c_2\), and accuracy set by the confidence signal</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          Sending every request to the large model gets <span class="result-num" id="hero-p2">95%</span> at full cost. Escalating only the
+          <span class="nowrap"><input class="inline-num wide" type="number" min="0" max="100" step="5" data-key="e" data-scale="100" aria-label="Share of requests escalated, percent">%</span>
+          the small model is least sure of gets <span class="result-num good" id="hero-acc">93.7%</span> at <span class="result-num good" id="hero-cost">37%</span> of the cost.
+        </p>
+        <p class="hint">Change the blue number. Every figure on this page updates with it.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Most requests don't need your most expensive model.</p>
+        <p>Frontier models can cost ten to fifty times more per call than small ones, yet on routine traffic the small model is right most of the time. A cascade answers with the small model, checks how confident that answer is, and escalates only the doubtful ones. Done well, it keeps most of the large model's accuracy for a fraction of its cost. Done badly, with a confidence score that can't tell right answers from wrong ones, it pays for escalations at random. This page shows the trade-off, and why the confidence signal is the part worth engineering.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>A junior analyst handles every case and passes the ones they are unsure of to a senior colleague. If the junior is good at knowing what they don't know, the senior sees mostly the cases that need them, and the team's accuracy approaches the senior's at a fraction of the senior's time. If the junior can't tell which cases they got wrong, they pass up cases at random: the senior's time is spent, and most of the junior's mistakes still go out.</p>
+        <p>So a cascade has three ingredients, and the third is easy to overlook:</p>
+        <ul>
+          <li>how good the small model is,</li>
+          <li>how good the large model is on the cases it receives, which are the hard ones,</li>
+          <li>how well the small model's confidence separates its right answers from its wrong ones.</li>
+        </ul>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>The small model answers every request at cost \(c_1\). A confidence score \(x\) decides: accept if \(x \ge t\), escalate otherwise at extra cost \(c_2\). With \(e\) the share escalated,</p>
+        <div class="math-block">$$\text{cost} = c_1 + e\,c_2, \qquad \text{accuracy} = p_1\,\Pr(x\ge t \mid \text{right}) + e\,\big(p_2 - h\,(1-e)\big)$$</div>
+        <p>To model the confidence score, assume scores for right answers and wrong answers are normally distributed and separated by \(\mu\), set from the score's AUC, the chance a random right answer scores above a random wrong one:</p>
+        <div class="math-block">$$\mu = \sqrt2\,\Phi^{-1}(\text{AUC}), \qquad \Pr(x\ge t\mid\text{right}) = 1-\Phi(t-\mu), \qquad \Pr(x\ge t\mid\text{wrong}) = 1-\Phi(t)$$</div>
+        <dl class="symbols">
+          <dt>\(p_1,\ p_2\)</dt><dd>accuracy of the small and the large model on all traffic</dd>
+          <dt>\(h\)</dt><dd>how much worse the large model does on the hardest cases; escalated cases are harder than average, less so as \(e\) grows, and at \(e = 1\) they are simply all traffic</dd>
+          <dt>\(c_1,\ c_2\)</dt><dd>cost per request of the small and the large model</dd>
+          <dt>AUC</dt><dd>quality of the confidence score: 0.5 is a coin flip, 1.0 separates right from wrong perfectly</dd>
+          <dt>\(e\)</dt><dd>share of requests escalated, set by the threshold \(t\)</dd>
+        </dl>
+        <ul>
+          <li><strong>Random escalation is a straight line:</strong> with AUC 0.5, escalated cases are a random sample, no harder than average, and accuracy rises linearly from \(p_1\) to \(p_2\) as \(e\) grows. Every point above that line is value from the confidence signal.</li>
+          <li><strong>Escalate in order of doubt:</strong> the best rule escalates a request when its chance of being right, given its score, is below what the large model would achieve, adjusted for cost.</li>
+          <li><strong>Accepted answers get better as you escalate more:</strong> the answers you keep are the confident ones, so their accuracy can exceed \(p_1\) by a wide margin.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Describe the two models and the confidence signal, then choose how much to escalate. The first view traces every possible cascade from "small only" to "large only".</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-e">Requests escalated <output data-out="e" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-e" type="range" min="0" max="100" step="1" data-key="e" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-auc">Confidence signal quality, AUC <output data-out="auc" data-fmt="num" data-dp="2"></output></label>
+                <input id="c-auc" type="range" min="0.5" max="0.99" step="0.01" data-key="auc">
+                <div class="note">0.5 is random. Raw log-probabilities: often 0.65–0.75. Checks plus a verifier: 0.85–0.95.</div>
+              </div>
+              <div class="control">
+                <label for="c-p1">Small model accuracy <output data-out="p1" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-p1" type="range" min="40" max="99" step="1" data-key="p1" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-p2">Large model accuracy <output data-out="p2" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-p2" type="range" min="40" max="100" step="1" data-key="p2" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-h">Large model's drop on the hardest cases, \(h\) <output data-out="h" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-h" type="range" min="0" max="20" step="1" data-key="h" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-ratio">Large model cost, times small <output data-out="ratio" data-fmt="int"></output></label>
+                <input id="c-ratio" type="range" min="2" max="60" step="1" data-key="ratio">
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-acc">–</div><div class="k">Cascade accuracy</div></div>
+                <div class="readout"><div class="v" id="o-cost">–</div><div class="k">Cost, share of large-only</div></div>
+                <div class="readout"><div class="v" id="o-gap">–</div><div class="k">Versus large model alone</div></div>
+                <div class="readout"><div class="v" id="o-kept">–</div><div class="k">Accuracy of answers the small model keeps</div></div>
+                <div class="readout"><div class="v" id="o-rand">–</div><div class="k">Same escalation, chosen at random</div></div>
+                <div class="readout"><div class="v" id="o-best">–</div><div class="k" id="o-best-k">Escalation to come within 1 point of the large model</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-frontier" id="tab-frontier">Cost vs accuracy</button>
+                <button role="tab" aria-selected="false" aria-controls="view-esc" id="tab-esc">Accuracy vs escalation</button>
+              </div>
+
+              <div id="view-frontier" role="tabpanel" aria-labelledby="tab-frontier">
+                <div class="chart-wrap">
+                  <svg class="chart" id="frontier" role="img" aria-label="Accuracy against cost for every escalation share"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--ok)"></i>Cascade, escalating the least confident</span>
+                    <span><i style="background:var(--ink-3)"></i>Escalating at random</span>
+                    <span><i class="dash"></i>Large model alone</span>
+                  </div>
+                </div>
+              </div>
+              <div id="view-esc" role="tabpanel" aria-labelledby="tab-esc" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="esc" role="img" aria-label="Accuracy against share escalated for three confidence signals"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--fault)"></i>Weak signal, AUC 0.70</span>
+                    <span><i style="background:var(--ok)"></i>Your signal</span>
+                    <span><i style="background:var(--accent)"></i>Strong signal, AUC 0.95</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: invoice extraction</h2>
+        <p>An accounts-payable agent extracts fields from <strong>2 million invoices a month</strong>. A small model gets every field right on <strong>86%</strong> of invoices at $0.002 each; a frontier model gets <strong>95%</strong> at $0.03, fifteen times more, and about 90% on the messy invoices a cascade would send it. Running everything on the frontier model costs $60,000 a month.</p>
+        <p>The team escalated the 30% of invoices with the lowest confidence and compared three confidence signals:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Setup</th><th class="num">Accuracy</th><th class="num">Monthly cost</th></tr></thead>
+            <tbody>
+              <tr><td>Small model only</td><td class="num">86.0%</td><td class="num">$4,000</td></tr>
+              <tr><td>Frontier model only</td><td class="num">95.0%</td><td class="num">$60,000</td></tr>
+              <tr class="weak"><td>Cascade, confidence from token log-probabilities (AUC 0.70)</td><td class="num">90.6%</td><td class="num">$22,000</td></tr>
+              <tr><td>Cascade, plus field checks: totals add up, dates and tax IDs parse (AUC 0.85)</td><td class="num">93.7%</td><td class="num">$22,000</td></tr>
+              <tr><td>Cascade, plus a small verifier model (AUC 0.95)</td><td class="num">96.0%</td><td class="num">$22,000 + verifier</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>All three cascades cost the same, because they escalate the same share. What separated them was the confidence signal alone: from 90.6% to 96.0%, the difference between a cascade that loses to the frontier model and one that beats it. The deterministic field checks were a few dozen lines of code and recovered most of the gap; the team shipped those first and added the verifier for high-value invoices.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>The binormal confidence model is an approximation.</strong> Real scores are skewed and clumped. Measure the actual accuracy at each threshold on held-out data rather than trusting the curve's exact shape.</li>
+          <li><strong>The large model's accuracy on hard cases is a guess until measured.</strong> \(h\) can be large: escalated cases are the ambiguous ones. Run the large model on a sample of escalated cases to estimate it.</li>
+          <li><strong>Latency adds up.</strong> Escalated requests pay for both calls in sequence. For interactive paths, consider escalating in parallel when confidence is borderline.</li>
+          <li><strong>Confidence drifts.</strong> A model update or a shift in traffic changes the score distribution, and a fixed threshold then escalates a different share. Monitor the escalation rate and re-tune.</li>
+          <li><strong>Errors are not equal.</strong> A wrong invoice total costs more than a wrong vendor address. Escalate by expected cost of error, not just probability of error.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Label a few hundred requests</strong> and run both models on all of them, so you know each one's accuracy and where they differ.</li>
+          <li><strong>Build the best confidence signal you can afford.</strong> Start with cheap deterministic checks, then add agreement between samples (M10) or a small verifier.</li>
+          <li><strong>Measure the signal's AUC</strong> on the labeled set. Below 0.7, fix the signal before tuning thresholds.</li>
+          <li><strong>Pick the threshold from the frontier.</strong> Choose the escalation share where the curve flattens, or the cheapest point that meets your accuracy target.</li>
+          <li><strong>Monitor escalation rate and spot-check accepted answers</strong> weekly; both drift.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"The small model handles the routine invoices and hands the doubtful ones to the expensive model. We get almost all of the expensive model's accuracy for about a third of the bill, and the better the small model is at knowing when it's unsure, the closer we get."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../condorcet-voting/">M10 Condorcet jury theorem and voting</a><span class="why">Agreement between samples as a confidence signal.</span></li>
+              <li><a href="../bandits-routing/">M12 Multi-armed bandits for routing</a><span class="why">Learning which model to route to when you don't yet know.</span></li>
+              <li><a href="../littles-law/">M04 Little’s Law and queueing</a><span class="why">Cascades move load from the large model's pool to the small one's.</span></li>
+              <li><a href="../conformal-prediction/">M16 Conformal prediction</a><span class="why">Escalation thresholds with a guaranteed error rate.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/fast-slow-escalation/">No. 33 Fast/Slow Escalation</a><span class="why">The cascade pattern this page quantifies.</span></li>
+              <li><a href="/agentic/patterns/routing/">No. 06 Routing</a><span class="why">Choosing a model per request up front, instead of after.</span></li>
+              <li><a href="/agentic/patterns/draft-verify/">No. 34 Draft-Then-Verify</a><span class="why">A verifier is the strongest confidence signal.</span></li>
+              <li><a href="/agentic/patterns/metacognitive-monitor/">No. 37 Metacognitive Monitor</a><span class="why">An agent tracking its own confidence.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: model-cascades
+number: M11
+name: Model cascades (confidence-based escalation)
+family: multi-model
+answers: "How much accuracy can a cheap-then-expensive cascade keep, and at what cost?"
+formula:
+  cost: "c1 + e * c2"
+  accuracy: "p1 * P(accept | right) + e * (p2 - h*(1 - e))"
+  separation: "mu = sqrt(2) * PhiInv(AUC)"
+  accept_right: "1 - Phi(t - mu)"
+  accept_wrong: "1 - Phi(t)"
+inputs:
+  p1: {type: float, meaning: small model accuracy}
+  p2: {type: float, meaning: large model accuracy}
+  h: {type: float, meaning: "large model accuracy drop on the hardest cases, applied as h*(1-e)"}
+  auc: {type: float, meaning: confidence score AUC for small-model correctness}
+  c1: {type: float, meaning: small model cost per request}
+  c2: {type: float, meaning: large model cost per request}
+  e: {type: float, meaning: share escalated}
+assumptions:
+  - binormal confidence scores
+  - large-model accuracy on escalated cases is p2 - h*(1 - e)
+  - binary correctness
+use_when:
+  - deciding whether a cascade is worth building
+  - choosing an escalation threshold
+related_patterns: [fast-slow-escalation, routing, draft-verify, metacognitive-monitor]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, SciPy)</div>
+        <div class="code"><pre>import math
+from scipy.stats import norm
+from scipy.optimize import brentq
+
+def cascade(p1, p2, auc, escalate, c1=1.0, c2=15.0, h=0.0):
+    """Accuracy and cost when the least-confident share `escalate` goes to the large model."""
+    mu = math.sqrt(2) * norm.ppf(auc)
+    def esc_at(t):
+        accept = p1 * (1 - norm.cdf(t - mu)) + (1 - p1) * (1 - norm.cdf(t))
+        return 1 - accept
+    if escalate &lt;= 0:
+        return p1, c1
+    if escalate &gt;= 1:
+        return p2, c1 + c2
+    t = brentq(lambda t: esc_at(t) - escalate, -10, 10)
+    acc = p1 * (1 - norm.cdf(t - mu)) + escalate * (p2 - h * (1 - escalate))
+    return acc, c1 + escalate * c2
+
+if __name__ == "__main__":
+    for auc in (0.70, 0.85, 0.95):
+        acc, cost = cascade(0.86, 0.95, auc, escalate=0.30, h=0.07)
+        print(auc, round(acc, 3), round(cost / 15, 3))
+    # 0.70 0.906 0.367 | 0.85 0.937 0.367 | 0.95 0.960 0.367</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>Cost and accuracy of a cascade</summary>
+          <div class="body">
+            <p>Every request pays \(c_1\); the escalated share \(e\) also pays \(c_2\). A request ends up right if the small model is right and its answer is kept, which happens with probability \(p_1\Pr(x\ge t\mid\text{right})\), or if it is escalated and the large model is right on it. Escalated cases are the hardest ones, so the large model does worse on them than its overall \(p_2\). The page models that drop as \(h(1-e)\): largest when only a few cases are escalated, and zero at \(e = 1\), when the escalated set is all traffic. This also assumes the large model's success on an escalated case does not depend on whether the small model happened to be right.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>From AUC to the binormal separation</summary>
+          <div class="body">
+            <p>If right answers score \(X_1 \sim N(\mu,1)\) and wrong ones \(X_0 \sim N(0,1)\), independently, then \(X_1 - X_0 \sim N(\mu, 2)\). The AUC is \(\Pr(X_1 &gt; X_0) = \Phi(\mu/\sqrt2)\). Inverting gives \(\mu = \sqrt2\,\Phi^{-1}(\text{AUC})\). AUC 0.85 corresponds to \(\mu \approx 1.47\), AUC 0.95 to \(\mu \approx 2.33\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Random escalation is a straight line</summary>
+          <div class="body">
+            <p>With AUC 0.5, \(\mu = 0\): right and wrong answers have the same score distribution, so escalating a share \(e\) removes the same share of right answers as wrong ones. A random sample is no harder than average, so the large model scores \(p_2\) on it. The kept answers contribute \(p_1(1-e)\) and the escalated ones \(e\,p_2\): accuracy is \(p_1 + e\,(p_2 - p_1)\), linear in \(e\). Any useful confidence signal bends the curve above this line, because the answers it escalates are disproportionately wrong.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The best escalation rule</summary>
+          <div class="body">
+            <p>Escalating a request with score \(x\) changes expected accuracy by roughly \((p_2-h) - \Pr(\text{right}\mid x)\) and expected cost by \(c_2\). If each point of accuracy is worth \(\lambda\) in cost terms, escalate when \(\lambda\big((p_2-h) - \Pr(\text{right}\mid x)\big) &gt; c_2\), that is, when \(\Pr(\text{right}\mid x) &lt; p_2 - h - c_2/\lambda\). Since \(\Pr(\text{right}\mid x)\) rises with \(x\) under the binormal model, the rule is a threshold on the score, and sliding \(\lambda\) traces the frontier in the calculator.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Chen, L., Zaharia, M. and Zou, J. (2023). <a href="https://arxiv.org/abs/2305.05176">FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance</a>. LLM cascades with learned scoring functions.</li>
+          <li>Ong, I. et al. (2024). <a href="https://arxiv.org/abs/2406.18665">RouteLLM: Learning to Route LLMs with Preference Data</a>. Routers that pick between a strong and a weak model per request.</li>
+          <li>Viola, P. and Jones, M. (2001). Rapid object detection using a boosted cascade of simple features. <em>CVPR</em>. The classic cascade: cheap stages reject easy cases early.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"model-cascades","number":"M11","family":"multi-model",
+ "formula":{"cost":"c1+e*c2","accuracy":"p1*P(accept|right)+e*(p2-h*(1-e))","separation":"mu=sqrt(2)*PhiInv(AUC)","accept_right":"1-Phi(t-mu)","accept_wrong":"1-Phi(t)"},
+ "inputs":["p1","p2","h","auc","c1","c2","e"],
+ "assumptions":["binormal confidence scores","large model accuracy on escalated cases p2-h*(1-e)","binary correctness"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Normal distribution helpers ---------- */
+  function Phi(x) { // Abramowitz-Stegun 7.1.26 via erf
+    const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2);
+    const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x / 2);
+    return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y);
+  }
+  function PhiInv(p) { // Acklam
+    const a = [-39.6968302866538, 220.946098424521, -275.928510446969, 138.357751867269, -30.6647980661472, 2.50662827745924];
+    const b = [-54.4760987982241, 161.585836858041, -155.698979859887, 66.8013118877197, -13.2806815528857];
+    const c = [-0.00778489400243029, -0.322396458041136, -2.40075827716184, -2.54973253934373, 4.37466414146497, 2.93816398269878];
+    const d = [0.00778469570904146, 0.32246712907004, 2.445134137143, 3.75440866190742];
+    const pl = 0.02425;
+    if (p < pl) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - pl) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+
+  /* ---------- Model ---------- */
+  function cascade(s, e, auc) {
+    const mu = Math.SQRT2 * PhiInv(auc), p2h = Math.max(0, s.p2 - s.h * (1 - e));
+    if (e <= 0) return { acc: s.p1, cost: 1, kept: s.p1 };
+    if (e >= 1) return { acc: s.p2, cost: 1 + s.ratio, kept: NaN };
+    const escAt = (t) => 1 - (s.p1 * (1 - Phi(t - mu)) + (1 - s.p1) * (1 - Phi(t)));
+    let lo = -12, hi = 12;
+    for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; if (escAt(m) < e) lo = m; else hi = m; }
+    const t = (lo + hi) / 2, keptRight = s.p1 * (1 - Phi(t - mu));
+    return { acc: keptRight + e * p2h, cost: 1 + e * s.ratio, kept: keptRight / (1 - e) };
+  }
+
+  MM.tabs(document.getElementById("lab-tabs"));
+
+  function render(s) {
+    const big = s.ratio, r = cascade(s, s.e, s.auc);
+    const rnd = s.p1 + s.e * (s.p2 - s.p1);
+    document.getElementById("hero-p2").textContent = MM.pct(s.p2, 0);
+    document.getElementById("hero-acc").textContent = MM.pct(r.acc, 1);
+    document.getElementById("hero-cost").textContent = MM.pct(r.cost / big, 0);
+    document.getElementById("o-acc").textContent = MM.pct(r.acc, 1);
+    document.getElementById("o-cost").textContent = MM.pct(r.cost / big, 1);
+    const gap = r.acc - s.p2;
+    document.getElementById("o-gap").textContent = (gap >= 0 ? "+" : "−") + Math.abs(gap * 100).toFixed(1) + " pts";
+    document.getElementById("o-kept").textContent = isNaN(r.kept) ? "–" : MM.pct(r.kept, 1);
+    document.getElementById("o-rand").textContent = MM.pct(rnd, 1);
+
+    // sweep
+    const sweep = [], rand = [];
+    let within = null;
+    for (let i = 0; i <= 100; i++) {
+      const e = i / 100, c = cascade(s, e, s.auc);
+      sweep.push([c.cost / big * 100, c.acc]);
+      rand.push([c.cost / big * 100, s.p1 + e * (s.p2 - s.p1)]);
+      if (within === null && c.acc >= s.p2 - 0.01) within = { e, share: c.cost / big };
+    }
+    document.getElementById("o-best").textContent = within ? MM.pct(within.e, 0) : "–";
+    document.getElementById("o-best-k").textContent = within
+      ? `Escalation to come within 1 point of the large model (${MM.pct(within.share, 0)} of its cost)`
+      : "Escalation to come within 1 point of the large model";
+
+    const ys = sweep.map((v) => v[1]).concat([s.p1, s.p2]);
+    const ylo = Math.max(0, Math.floor((Math.min(...ys) - 0.02) * 20) / 20), yhi = Math.min(1, Math.ceil((Math.max(...ys) + 0.01) * 20) / 20);
+    MM.lineChart(document.getElementById("frontier"), {
+      x: { min: 0, max: 110, label: "Cost, % of sending everything to the large model" },
+      y: { min: ylo, max: Math.max(yhi, ylo + 0.05), label: "Accuracy", pct: true },
+      series: [{ cls: "s-muted", points: rand }, { cls: "s-ok", points: sweep }],
+      targetY: s.p2, markerX: r.cost / big * 100,
+      dots: [{ x: r.cost / big * 100, y: r.acc, cls: "dot-ok" }]
+    });
+
+    const curves = [0.7, s.auc, 0.95].map((A) => { const pts = []; for (let i = 0; i <= 100; i += 2) pts.push([i, cascade(s, i / 100, A).acc]); return pts; });
+    const ys2 = curves.flat().map((v) => v[1]);
+    const lo2 = Math.max(0, Math.floor((Math.min(...ys2) - 0.02) * 20) / 20), hi2 = Math.min(1, Math.ceil((Math.max(...ys2) + 0.01) * 20) / 20);
+    MM.lineChart(document.getElementById("esc"), {
+      x: { min: 0, max: 100, label: "Requests escalated (%)" },
+      y: { min: lo2, max: Math.max(hi2, lo2 + 0.05), label: "Accuracy", pct: true },
+      series: [{ cls: "s-fault", points: curves[0] }, { cls: "s-accent", points: curves[2] }, { cls: "s-ok", points: curves[1] }],
+      markerX: s.e * 100, targetY: s.p2
+    });
+  }
+
+  MM.state({ e: 0.3, auc: 0.85, p1: 0.86, p2: 0.95, h: 0.07, ratio: 15 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

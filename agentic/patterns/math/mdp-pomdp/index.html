@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MDPs and POMDPs | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="When should an AI agent act, and when should it gather more information first? Markov decision processes, belief states and the value of information, solved live by value iteration. Math, derivations, calculator and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/mdp-pomdp/">
+<meta property="og:title" content="MDPs and POMDPs: when an agent should look before it acts">
+<meta property="og:description" content="At 80% confidence, acting now costs $32 a claim; checking first costs $7.54. The math that tells an agent when to look up more.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/mdp-pomdp/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "MDPs and POMDPs",
+  "about": "Sequential decisions under uncertainty for AI agents",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/mdp-pomdp/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / MDPs and POMDPs</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M14</span>
+          <span class="tag">Planning</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Decision</span>
+          <span class="tag dof">Context</span>
+        </div>
+        <h1>MDPs and POMDPs</h1>
+        <p class="formula-name">The Bellman equation over beliefs: act now, or pay to learn more first</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          At
+          <span class="nowrap"><input class="inline-num wide" type="number" min="1" max="99" step="1" data-key="b" data-scale="100" aria-label="Belief that the claim is valid, percent">%</span>
+          sure a refund claim is valid, deciding straight away costs <span class="result-num" id="hero-now">$32.00</span> per claim in expected mistakes. Checking first, about <span class="result-num" id="hero-n">2.7</span> times on average, cuts that to <span class="result-num good" id="hero-pol">$7.54</span>.
+        </p>
+        <p class="hint">Change the blue number. Every figure on this page updates with it.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Every agent step is a choice between acting on what it knows and finding out more.</p>
+        <p>An agent can call another tool, read another document, or ask the user a clarifying question, and each of those costs time and money. Acting too early makes avoidable mistakes; checking too much wastes effort and annoys users. Markov decision processes (MDPs) are the standard model of acting step by step; partially observable MDPs (POMDPs) add the realistic twist that the agent never sees the true situation, only evidence about it. Solving one tells you exactly when evidence is worth gathering, and how many times.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>A doctor who is 99% sure of a diagnosis treats. One who is 50% sure orders a test. Somewhere in between is a confidence level where the test stops being worth its cost, and where that line sits depends on three things: how costly each kind of mistake is, how much the test costs, and how reliable it is.</p>
+        <p>The agent's confidence is its belief. Every piece of evidence moves the belief up or down by Bayes' rule. The solution of a POMDP is a map from belief to action, and for decisions like this one it has a simple shape: act one way when confident enough in one direction, act the other way when confident enough in the other, and look up more in between. The width of the middle band is what the math decides.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>An MDP picks actions to maximize value, using the Bellman equation:</p>
+        <div class="math-block">$$V(s) = \max_a \Big[R(s,a) + \gamma \sum_{s'} P(s'\mid s,a)\,V(s')\Big]$$</div>
+        <p>In a POMDP the state is hidden, so the agent works with its belief \(b\), the probability of each state, and updates it with Bayes' rule after each observation \(o\):</p>
+        <div class="math-block">$$b'(s) \propto P(o\mid s)\,b(s)$$</div>
+        <p>For a two-way decision with an evidence lookup, the minimum expected cost from belief \(b\) (probability the claim is valid) is</p>
+        <div class="math-block">$$J(b) = \min\Big\{\underbrace{(1-b)\,L_A}_{\text{approve}},\ \underbrace{b\,L_D}_{\text{deny}},\ \underbrace{c + \textstyle\sum_o P(o\mid b)\,J(b_o)}_{\text{look up}}\Big\}$$</div>
+        <dl class="symbols">
+          <dt>\(b\)</dt><dd>belief: current probability that the claim is valid</dd>
+          <dt>\(L_A,\ L_D\)</dt><dd>cost of wrongly approving a fraudulent claim, and of wrongly denying a valid one</dd>
+          <dt>\(c\)</dt><dd>cost of one lookup: a tool call, a database check, a question to the user</dd>
+          <dt>\(q\)</dt><dd>reliability of a lookup: chance it points the right way</dd>
+          <dt>\(b_o\)</dt><dd>belief after seeing lookup result \(o\)</dd>
+        </dl>
+        <ul>
+          <li><strong>Value of information:</strong> looking up is worth it when \(J_{\text{act}}(b) - J(b) &gt; 0\). The calculator shows this gap at every belief.</li>
+          <li><strong>Threshold policy:</strong> the solution is "deny below a lower threshold, approve above an upper one, look up in between", like Wald's sequential test.</li>
+          <li><strong>Value iteration solves it:</strong> start with "act now" costs and apply the equation repeatedly until it stops changing. The calculator does exactly this on 1,001 belief points.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Set the costs of each mistake, what a lookup costs and how reliable it is. The calculator solves the POMDP by value iteration and shows the best action at every belief.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-b">Current belief the claim is valid <output data-out="b" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-b" type="range" min="1" max="99" step="1" data-key="b" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-la">Cost of approving a fraudulent claim <output id="la-out"></output></label>
+                <input id="c-la" type="range" min="10" max="1000" step="10" data-key="la">
+              </div>
+              <div class="control">
+                <label for="c-ld">Cost of denying a valid claim <output id="ld-out"></output></label>
+                <input id="c-ld" type="range" min="5" max="500" step="5" data-key="ld">
+              </div>
+              <div class="control">
+                <label for="c-c">Cost of one lookup <output id="c-out"></output></label>
+                <input id="c-c" type="range" min="0.5" max="50" step="0.5" data-key="c">
+              </div>
+              <div class="control">
+                <label for="c-q">Lookup reliability <output data-out="q" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-q" type="range" min="55" max="99" step="1" data-key="q" data-scale="100">
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-act">–</div><div class="k">Best action now</div></div>
+                <div class="readout alarm"><div class="v" id="o-now">–</div><div class="k" id="o-now-k">Expected cost, deciding now</div></div>
+                <div class="readout"><div class="v" id="o-pol">–</div><div class="k">Expected cost, best policy (lookups included)</div></div>
+                <div class="readout"><div class="v" id="o-n">–</div><div class="k">Expected lookups before deciding</div></div>
+                <div class="readout"><div class="v" id="o-band">–</div><div class="k">Beliefs where looking up beats deciding</div></div>
+                <div class="readout"><div class="v" id="o-one">–</div><div class="k">Expected cost with exactly one lookup</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-cost" id="tab-cost">Cost at every belief</button>
+                <button role="tab" aria-selected="false" aria-controls="view-n" id="tab-n">Lookups at every belief</button>
+              </div>
+
+              <div id="view-cost" role="tabpanel" aria-labelledby="tab-cost">
+                <div class="chart-wrap">
+                  <svg class="chart" id="cost" role="img" aria-label="Expected cost of approving, denying and the best policy at every belief"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--fault)"></i>Approve now</span>
+                    <span><i style="background:var(--accent)"></i>Deny now</span>
+                    <span><i style="background:var(--ok)"></i>Best policy</span>
+                    <span><i style="background:var(--ok-soft)"></i>Look-up band</span>
+                  </div>
+                </div>
+              </div>
+              <div id="view-n" role="tabpanel" aria-labelledby="tab-n" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="lookups" role="img" aria-label="Expected number of lookups at every belief"></svg>
+                  <p class="small muted" style="margin:4px 8px 6px">The curve is stepped because each lookup shifts the odds by a fixed factor, so the number of results needed to leave the band jumps as the starting belief moves.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a refund agent</h2>
+        <p>A support agent decides refund claims. From history, <strong>80%</strong> of claims are valid. Wrongly approving a fraudulent claim costs about <strong>$200</strong>; wrongly denying a valid one costs about <strong>$40</strong> in goodwill and escalations. A lookup (order history, delivery scan, photo request) costs about <strong>$2</strong> in time and tokens, and points the right way <strong>85%</strong> of the time.</p>
+        <p>Deciding immediately, the agent should deny everything: at 80% valid, denying costs \(0.8 \times 40 = \$32\) a claim in expected mistakes and approving costs \(0.2 \times 200 = \$40\). Neither is good. Solving the POMDP gives a different policy: look up until the belief leaves the band from <strong>11%</strong> to <strong>98%</strong>, then decide. Because a wrong approval is five times as costly as a wrong denial, the band is lopsided: the agent needs to be very sure before approving.</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Policy</th><th class="num">Lookups per claim</th><th class="num">Expected cost per claim</th></tr></thead>
+            <tbody>
+              <tr class="weak"><td>Decide immediately (deny)</td><td class="num">0</td><td class="num">$32.00</td></tr>
+              <tr><td>Always look up once, then decide</td><td class="num">1</td><td class="num">$12.80</td></tr>
+              <tr><td>Optimal policy</td><td class="num">2.7 on average</td><td class="num">$7.54</td></tr>
+              <tr><td>Optimal, if a lookup cost $10 (human review)</td><td class="num">1</td><td class="num">$20.80</td></tr>
+              <tr><td>Optimal, if lookups were only 70% reliable</td><td class="num">4.4 on average</td><td class="num">$17.79</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The optimal policy cut expected cost per claim by more than three-quarters, and the table shows what drives it. When lookups get expensive, the band narrows to 61–91% and the agent checks at most once. When lookups get unreliable, it checks more often and still ends up worse off: improving the evidence source was worth more than any tuning of the agent itself.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Lookups are assumed independent.</strong> Checking the same source twice usually returns the same answer. Model distinct sources as distinct actions, each with its own cost and reliability.</li>
+          <li><strong>The costs must be real.</strong> The policy is only as good as \(L_A\), \(L_D\) and \(c\). Put a price on user friction, latency and errors with the business, even roughly; the thresholds follow from the ratios.</li>
+          <li><strong>The prior must match traffic.</strong> If fraud spikes, 80% valid is wrong and so is the starting point. Re-estimate it, or let earlier signals in the conversation set it per case.</li>
+          <li><strong>Real problems have many states.</strong> Exact POMDP solutions become intractable quickly. Agents use approximations: myopic value of information (look one step ahead), sampling-based planners, or an LLM prompted with the costs and its own confidence.</li>
+          <li><strong>The agent's belief must be calibrated.</strong> A model that says 90% when it is right 70% of the time will act too early. Calibrate its confidences against outcomes (see M16).</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Name the decision and its two kinds of mistake.</strong> Put a cost on each, and on each information-gathering action.</li>
+          <li><strong>Measure each evidence source</strong>: how often it points the right way, and what it costs.</li>
+          <li><strong>Solve for the thresholds</strong> with the calculator or the code below, and give them to the agent as explicit rules: "approve only above 98% confidence; deny below 11%; otherwise check".</li>
+          <li><strong>Track the belief explicitly.</strong> Have the agent state its confidence before and after each lookup, and log it, so you can check calibration.</li>
+          <li><strong>Revisit when costs change.</strong> A cheaper lookup, a new fraud pattern or a new policy moves the thresholds.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"The agent checks before it decides, but only while checking is worth it. Because approving a fraud costs five times more than wrongly denying, it needs to be 98% sure before it approves, and it will deny outright only when it's fairly sure the claim is bad. In between, it looks things up."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../markov-agent-loops/">M03 Markov chains for agent loops</a><span class="why">The same states and transitions, with the agent choosing instead of rolling dice.</span></li>
+              <li><a href="../bandits-routing/">M12 Multi-armed bandits for routing</a><span class="why">The one-step special case of an MDP, learned online.</span></li>
+              <li><a href="../conformal-prediction/">M16 Conformal prediction</a><span class="why">Calibrated confidence, which the belief needs to be.</span></li>
+              <li><a href="../model-cascades/">M11 Model cascades</a><span class="why">"Escalate" is another information-gathering action with a cost.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/react/">No. 02 ReAct</a><span class="why">The loop where each step chooses between acting and observing.</span></li>
+              <li><a href="/agentic/patterns/human-in-the-loop/">No. 18 Human-in-the-Loop</a><span class="why">Asking a person is the costliest, most reliable lookup.</span></li>
+              <li><a href="/agentic/patterns/budget-aware-planning/">No. 26 Budget-aware Planning</a><span class="why">Weighing the cost of each information-gathering step.</span></li>
+              <li><a href="/agentic/patterns/agentic-rag/">No. 14 Agentic RAG</a><span class="why">Deciding whether another retrieval is worth it.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: mdp-pomdp
+number: M14
+name: MDPs and POMDPs (act or gather information)
+family: planning
+answers: "When should an agent gather more information instead of acting?"
+formula:
+  bellman: "V(s) = max_a [R(s,a) + gamma * sum_s' P(s'|s,a) V(s')]"
+  belief_update: "b'(s) proportional to P(o|s) * b(s)"
+  act_or_look: "J(b) = min{(1-b)*L_A, b*L_D, c + sum_o P(o|b) J(b_o)}"
+  value_of_information: "J_act(b) - J(b)"
+inputs:
+  b: {type: float, meaning: belief the favorable state holds}
+  L_A: {type: float, meaning: cost of wrongly acting yes}
+  L_D: {type: float, meaning: cost of wrongly acting no}
+  c: {type: float, meaning: cost of one lookup}
+  q: {type: float, meaning: lookup reliability}
+assumptions:
+  - lookups independent given the true state
+  - costs and prior known
+  - belief calibrated
+use_when:
+  - deciding how many tool calls or clarifying questions to allow
+  - setting confidence thresholds for irreversible actions
+related_patterns: [react, human-in-the-loop, budget-aware-planning, agentic-rag]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, NumPy)</div>
+        <div class="code"><pre>import numpy as np
+
+def solve(L_A=200, L_D=40, c=2, q=0.85, grid=2001, tol=1e-10):
+    """Value iteration over belief b = P(valid). Returns beliefs, cost J, action per belief."""
+    b = np.linspace(0, 1, grid)
+    approve, deny = (1 - b) * L_A, b * L_D
+    p_yes = b * q + (1 - b) * (1 - q)                 # lookup says "valid"
+    b_yes = b * q / np.maximum(p_yes, 1e-12)
+    b_no = b * (1 - q) / np.maximum(1 - p_yes, 1e-12)
+    J = np.minimum(approve, deny)
+    while True:
+        look = c + p_yes * np.interp(b_yes, b, J) + (1 - p_yes) * np.interp(b_no, b, J)
+        J_new = np.minimum(np.minimum(approve, deny), look)
+        if np.max(np.abs(J_new - J)) &lt; tol:
+            break
+        J = J_new
+    action = np.argmin(np.vstack([approve, deny, look]), axis=0)   # 0 approve, 1 deny, 2 look
+    band = b[action == 2]
+    return b, J, action, (band.min(), band.max()) if band.size else None
+
+if __name__ == "__main__":
+    b, J, action, band = solve()
+    i = int(0.8 * 2000)
+    print(round(J[i], 2), band)    # 7.54, look up between about 0.11 and 0.98</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>The Bellman equation and value iteration</summary>
+          <div class="body">
+            <p>The value of a state is the best you can do from it: take the best action, collect its reward, and continue optimally from wherever you land. Writing that sentence as an equation gives Bellman's. Value iteration turns it into an update, \(V_{k+1} = \mathcal{T}V_k\). With discounting (\(\gamma &lt; 1\)), or as here with every look-up costing \(c &gt; 0\) so that endless looking is never optimal, the update is a contraction: each pass shrinks the distance to the true solution, so repeated passes converge to it from any starting point.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Belief updates</summary>
+          <div class="body">
+            <p>Before a lookup the agent believes the claim is valid with probability \(b\). The lookup says "valid" with probability \(q\) if the claim is valid and \(1-q\) if not, so \(P(\text{"valid"}) = bq + (1-b)(1-q)\). Bayes' rule gives the new belief \(b_{\text{yes}} = bq / P(\text{"valid"})\), and similarly \(b_{\text{no}} = b(1-q)/P(\text{"fraud"})\). In odds form each "valid" result multiplies the odds by \(q/(1-q)\), and each "fraud" result divides them by it: at \(q = 0.85\), by 5.7.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why the policy has two thresholds</summary>
+          <div class="body">
+            <p>The cost of deciding now, \(\min\{(1-b)L_A,\ bL_D\}\), is a tent: two straight lines meeting at \(b^* = L_A/(L_A+L_D)\), where the agent is most torn. The cost of looking up first is a concave function of \(b\) (an average of the best achievable costs after each result), plus a constant \(c\). It sits below the tent only in a band around \(b^*\), where deciding is most likely to be wrong; near 0 and 1 the tent is close to zero and no lookup can beat it. The band's edges are the two thresholds. This is the same structure as Wald's sequential probability ratio test.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>One lookup, or many</summary>
+          <div class="body">
+            <p>The "exactly one lookup" readout uses a single update and then the best immediate decision: \(c + \sum_o P(o\mid b)\min\{(1-b_o)L_A,\ b_oL_D\}\). Looking only one step ahead like this is called myopic value of information, and it understates the value of looking when one result alone cannot settle the decision. The full solution accounts for the option to keep looking, which is why it can justify a first lookup even when a single one would not be worth it.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998). Planning and acting in partially observable stochastic domains. <em>Artificial Intelligence</em> 101(1–2), 99–134. The standard introduction to POMDPs and belief states.</li>
+          <li>Sutton, R. S. and Barto, A. G. (2018). <a href="http://incompleteideas.net/book/the-book-2nd.html"><em>Reinforcement Learning: An Introduction</em></a>, 2nd edition. MIT Press. Chapters 3–4 cover MDPs and value iteration; free online.</li>
+          <li>Wald, A. (1945). Sequential tests of statistical hypotheses. <em>Annals of Mathematical Statistics</em> 16(2), 117–186. The two-threshold rule for deciding when to stop gathering evidence.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"mdp-pomdp","number":"M14","family":"planning",
+ "formula":{"bellman":"V(s)=max_a[R(s,a)+gamma*sum P(s'|s,a)V(s')]","belief_update":"b'(s) ~ P(o|s)b(s)","act_or_look":"J(b)=min{(1-b)L_A, b L_D, c+sum_o P(o|b)J(b_o)}","voi":"J_act(b)-J(b)"},
+ "inputs":["b","L_A","L_D","c","q"],
+ "assumptions":["independent lookups given true state","known costs and prior","calibrated belief"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  const G = 1001;
+  const B = Array.from({ length: G }, (_, i) => i / (G - 1));
+  const interp = (x, arr) => { const t = x * (G - 1), i = Math.min(G - 2, Math.max(0, Math.floor(t))), f = t - i; return arr[i] * (1 - f) + arr[i + 1] * f; };
+  const money = (x) => "$" + x.toFixed(2);
+
+  /* ---------- Value iteration over beliefs ---------- */
+  function solve(s) {
+    const { la, ld, c, q } = s;
+    const ap = B.map((b) => (1 - b) * la), de = B.map((b) => b * ld);
+    const py = B.map((b) => b * q + (1 - b) * (1 - q));
+    const by = B.map((b, i) => (py[i] > 0 ? (b * q) / py[i] : 0));
+    const bn = B.map((b, i) => (py[i] < 1 ? (b * (1 - q)) / (1 - py[i]) : 0));
+    let J = B.map((_, i) => Math.min(ap[i], de[i]));
+    let look = new Array(G);
+    for (let it = 0; it < 2000; it++) {
+      let diff = 0;
+      const Jn = new Array(G);
+      for (let i = 0; i < G; i++) {
+        look[i] = c + py[i] * interp(by[i], J) + (1 - py[i]) * interp(bn[i], J);
+        Jn[i] = Math.min(ap[i], de[i], look[i]);
+        diff = Math.max(diff, Math.abs(Jn[i] - J[i]));
+      }
+      J = Jn;
+      if (diff < 1e-9) break;
+    }
+    const act = B.map((_, i) => (look[i] < Math.min(ap[i], de[i]) - 1e-12 ? 2 : ap[i] <= de[i] ? 0 : 1));
+    // expected lookups
+    let N = new Array(G).fill(0);
+    for (let it = 0; it < 2000; it++) {
+      let diff = 0; const Nn = new Array(G);
+      for (let i = 0; i < G; i++) {
+        Nn[i] = act[i] === 2 ? 1 + py[i] * interp(by[i], N) + (1 - py[i]) * interp(bn[i], N) : 0;
+        diff = Math.max(diff, Math.abs(Nn[i] - N[i]));
+      }
+      N = Nn; if (diff < 1e-7) break;
+    }
+    let lo = null, hi = null;
+    act.forEach((a, i) => { if (a === 2) { if (lo === null) lo = B[i]; hi = B[i]; } });
+    return { ap, de, J, act, N, lo, hi, py, by, bn };
+  }
+
+  MM.tabs(document.getElementById("lab-tabs"));
+  let cache = { key: null, sol: null };
+
+  function render(s) {
+    const key = [s.la, s.ld, s.c, s.q].join("|");
+    if (cache.key !== key) cache = { key, sol: solve(s) };
+    const r = cache.sol;
+    document.getElementById("la-out").textContent = "$" + Math.round(s.la);
+    document.getElementById("ld-out").textContent = "$" + Math.round(s.ld);
+    document.getElementById("c-out").textContent = money(s.c);
+
+    const b = s.b, now = Math.min((1 - b) * s.la, b * s.ld), nowAct = (1 - b) * s.la <= b * s.ld ? "approve" : "deny";
+    const pol = interp(b, r.J), n = interp(b, r.N);
+    const i = Math.round(b * (G - 1)), a = r.act[i];
+    const py = b * s.q + (1 - b) * (1 - s.q), byes = (b * s.q) / py, bno = (b * (1 - s.q)) / (1 - py);
+    const one = s.c + py * Math.min((1 - byes) * s.la, byes * s.ld) + (1 - py) * Math.min((1 - bno) * s.la, bno * s.ld);
+
+    document.getElementById("hero-now").textContent = money(now);
+    document.getElementById("hero-pol").textContent = money(pol);
+    document.getElementById("hero-n").textContent = n.toFixed(1);
+    document.getElementById("o-act").textContent = a === 2 ? "Look up" : a === 0 ? "Approve" : "Deny";
+    document.getElementById("o-now").textContent = money(now);
+    document.getElementById("o-now-k").textContent = `Expected cost, deciding now (${nowAct})`;
+    document.getElementById("o-pol").textContent = money(pol);
+    document.getElementById("o-n").textContent = n.toFixed(1);
+    document.getElementById("o-band").textContent = r.lo === null ? "None" : `${Math.round(r.lo * 100)}–${Math.round(r.hi * 100)}%`;
+    document.getElementById("o-one").textContent = money(one);
+
+    const step = 5, pts = (arr) => B.filter((_, k) => k % step === 0).map((x) => [x, interp(x, arr)]);
+    const ymax = Math.max(1, Math.ceil(Math.max(...B.map((x, k) => Math.min(r.ap[k], r.de[k]))) * 1.15 / 5) * 5);
+    const svg = document.getElementById("cost");
+    MM.lineChart(svg, {
+      x: { min: 0, max: 1, label: "Belief the claim is valid", ticks: [0, 0.2, 0.4, 0.6, 0.8, 1], fmt: (v) => Math.round(v * 100) + "%" },
+      y: { min: 0, max: ymax, label: "Expected cost per claim ($)" },
+      series: [
+        { cls: "s-fault", points: B.filter((_, k) => k % step === 0).map((x) => [x, Math.min(ymax, (1 - x) * s.la)]) },
+        { cls: "s-accent", points: B.filter((_, k) => k % step === 0).map((x) => [x, Math.min(ymax, x * s.ld)]) },
+        { cls: "s-ok", points: pts(r.J) }
+      ],
+      markerX: b, dots: [{ x: b, y: Math.min(ymax, pol), cls: "dot-ok" }]
+    });
+    if (r.lo !== null) {
+      const sx = (x) => 52 + x * 572;
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", sx(r.lo)); rect.setAttribute("y", 14); rect.setAttribute("width", Math.max(1, sx(r.hi) - sx(r.lo))); rect.setAttribute("height", 280);
+      rect.setAttribute("style", "fill:var(--ok-soft);opacity:.7");
+      svg.insertBefore(rect, svg.firstChild);
+    }
+    const nmax = Math.max(1, Math.ceil(Math.max(...r.N) + 0.5));
+    MM.lineChart(document.getElementById("lookups"), {
+      x: { min: 0, max: 1, label: "Belief the claim is valid", ticks: [0, 0.2, 0.4, 0.6, 0.8, 1], fmt: (v) => Math.round(v * 100) + "%" },
+      y: { min: 0, max: nmax, label: "Expected lookups before deciding" },
+      series: [{ cls: "s-ok", points: pts(r.N) }],
+      markerX: b, dots: [{ x: b, y: n, cls: "dot-ok" }]
+    });
+  }
+
+  MM.state({ b: 0.8, la: 200, ld: 40, c: 2, q: 0.85 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

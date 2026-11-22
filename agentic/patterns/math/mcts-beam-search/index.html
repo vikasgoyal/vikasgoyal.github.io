@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCTS and Beam Search | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="How should an agent search over multi-step plans? Greedy decoding, beam search, best-of-N and Monte Carlo tree search compared under the same call budget, with step and outcome verifiers. Math, derivations, simulation and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/mcts-beam-search/">
+<meta property="og:title" content="MCTS and beam search: spending a call budget on planning">
+<meta property="og:description" content="A 6-step plan works 4.7% of the time by luck. With 96 calls, beam search reaches 78%; with 192, tree search reaches 91%.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/mcts-beam-search/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "MCTS and Beam Search",
+  "about": "Search strategies for multi-step agent planning",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/mcts-beam-search/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / MCTS and beam search</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M15</span>
+          <span class="tag">Planning</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Decision</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>MCTS and beam search</h1>
+        <p class="formula-name">Spending a call budget on search: greedy, beam, best-of-N and tree search</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          A
+          <input class="inline-num" type="number" min="2" max="10" step="1" data-key="d" aria-label="Steps in the plan">-step plan where each proposed step is right
+          <span class="nowrap"><input class="inline-num wide" type="number" min="20" max="95" step="5" data-key="g" data-scale="100" aria-label="Chance each proposed step is right, percent">%</span>
+          of the time works <span class="result-num" id="hero-luck">4.7%</span> of the time if you just run it. With
+          <input class="inline-num wide" type="number" min="12" max="240" step="12" data-key="B" aria-label="Model calls for search">
+          model calls of search, <span id="hero-name">beam search</span> gets it right <span class="result-num good" id="hero-best">78%</span> of the time.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Long plans fail by compounding, and search is how agents fight back.</p>
+        <p>An agent that commits to its first idea at every step multiplies its per-step error rate across the whole plan (M01). Search changes that: propose several candidates for each step, score them, keep the promising ones, and back up when something fails. Tree-of-thought, beam search over reasoning steps, best-of-N sampling and Monte Carlo tree search (MCTS) are all ways of spending extra model calls to raise the odds of a working plan. They differ in what they need, a scorer for each step or a check at the end, and in how well they use a given budget. This page compares them on the same problem and the same budget.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Picture a maze with a few exits and many dead ends. You can walk it in different ways:</p>
+        <ul>
+          <li><strong>Greedy:</strong> at each fork, take the path that looks best. Fast, but one bad look and you are lost.</li>
+          <li><strong>Beam search:</strong> keep the \(k\) best-looking paths alive at every fork, then pick the best-looking one at the end. Robust to a few bad looks, but it can only judge by looks.</li>
+          <li><strong>Best-of-N:</strong> send \(N\) people through at random and check who got out. Needs a way to check the exit, and no judgment at the forks.</li>
+          <li><strong>MCTS:</strong> explore, check whether you got out, and remember which forks led closer. It uses both looks and checks, and spends more effort where it has been promising.</li>
+        </ul>
+        <p>Which wins depends on what you have. A good step scorer favors beam search. A reliable final check (tests, a validator) favors strategies that can use it, and with enough budget, tree search that can back up and try again.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>Model a plan as \(d\) steps. At each step the model proposes \(b\) candidates; each is good with probability \(g\), and a plan works only if every step is good. A step scorer (a verifier or process reward model) rates candidates with quality AUC; a final check (tests) tells whether a whole plan works.</p>
+        <div class="math-block">$$P_{\text{luck}} = g^{d}, \qquad P_{\text{best-of-}N} = 1-\big(1-g^{d}\big)^{N}, \qquad P_{\text{greedy}} = s^{\,d}$$</div>
+        <p>where \(s\) is the chance the top-scored of \(b\) candidates is good. MCTS chooses which branch to explore with the PUCT rule, balancing what has worked so far against the scorer's prior and how little a branch has been tried:</p>
+        <div class="math-block">$$a^{*} = \arg\max_a \Big[\,Q(s,a) + c\,P(s,a)\,\frac{\sqrt{N(s)}}{1+N(s,a)}\Big]$$</div>
+        <dl class="symbols">
+          <dt>\(d,\ b\)</dt><dd>steps in the plan, and candidates proposed per step</dd>
+          <dt>\(g\)</dt><dd>chance a proposed step is good, given the steps before it were good</dd>
+          <dt>\(k,\ N\)</dt><dd>beam width, and number of full plans sampled for best-of-N</dd>
+          <dt>\(Q,\ P,\ N(\cdot)\)</dt><dd>in MCTS: a branch's observed success rate, its prior from the step scorer, and visit counts</dd>
+          <dt>\(B\)</dt><dd>budget: model calls, one per proposed step</dd>
+        </dl>
+        <ul>
+          <li><strong>Greedy costs \(d\,b\) calls,</strong> beam search \(k\,d\,b\), best-of-N \(N\,d\). MCTS spends calls one expansion at a time until the budget runs out or the check passes.</li>
+          <li><strong>Beam search has a ceiling:</strong> it never checks the final result, so it is only as good as its scorer, however wide the beam.</li>
+          <li><strong>Search with a final check keeps improving with budget,</strong> because a failed check sends it back to try elsewhere.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Each strategy is simulated 800 times per budget level on randomly generated plan trees. Greedy and beam search use only the step scorer; best-of-N uses only the final check; MCTS uses both.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-B">Model calls for search <output data-out="B" data-fmt="int"></output></label>
+                <input id="c-B" type="range" min="12" max="240" step="12" data-key="B">
+              </div>
+              <div class="control">
+                <label for="c-g">Chance a proposed step is good <output data-out="g" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-g" type="range" min="20" max="95" step="5" data-key="g" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-d">Steps in the plan <output data-out="d" data-fmt="int"></output></label>
+                <input id="c-d" type="range" min="2" max="10" step="1" data-key="d">
+              </div>
+              <div class="control">
+                <label for="c-bb">Candidates per step <output data-out="bb" data-fmt="int"></output></label>
+                <input id="c-bb" type="range" min="2" max="6" step="1" data-key="bb">
+              </div>
+              <div class="control">
+                <label for="c-auc">Step scorer quality, AUC <output data-out="auc" data-fmt="num" data-dp="2"></output></label>
+                <input id="c-auc" type="range" min="0.5" max="0.99" step="0.01" data-key="auc">
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout alarm"><div class="v" id="o-luck">–</div><div class="k">Run the plan once, no search</div></div>
+                <div class="readout"><div class="v" id="o-greedy">–</div><div class="k" id="o-greedy-k">Greedy, step scorer</div></div>
+                <div class="readout"><div class="v" id="o-beam">–</div><div class="k" id="o-beam-k">Beam search, step scorer</div></div>
+                <div class="readout"><div class="v" id="o-bon">–</div><div class="k" id="o-bon-k">Best-of-N, final check</div></div>
+                <div class="readout"><div class="v" id="o-mcts">–</div><div class="k">MCTS, step scorer and final check</div></div>
+                <div class="readout primary"><div class="v" id="o-win">–</div><div class="k">Best strategy at this budget</div></div>
+              </div>
+              <div class="chart-wrap">
+                <svg class="chart" id="curve" role="img" aria-label="Plan success against call budget for four search strategies"></svg>
+                <div class="legend">
+                  <span><i style="background:var(--ink-3)"></i>Greedy</span>
+                  <span><i style="background:var(--accent)"></i>Beam search</span>
+                  <span><i style="background:var(--fault)"></i>Best-of-N</span>
+                  <span><i style="background:var(--ok)"></i>MCTS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a six-step refactor</h2>
+        <p>A coding agent plans a six-step refactor: update a config, change a schema, migrate data access, update callers, adjust tests, update docs. At each step it can propose four alternatives; each proposed step is right about <strong>60%</strong> of the time. A reviewer model scores proposed steps with an AUC of <strong>0.80</strong>, and the test suite checks the finished change. Run once, the plan works \(0.6^6 = 4.7\%\) of the time.</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Strategy</th><th>Uses</th><th class="num">96 calls</th><th class="num">192 calls</th></tr></thead>
+            <tbody>
+              <tr class="weak"><td>Run once</td><td>–</td><td class="num">4.7%</td><td class="num">4.7%</td></tr>
+              <tr><td>Greedy (always 24 calls)</td><td>Reviewer</td><td class="num">36%</td><td class="num">36%</td></tr>
+              <tr><td>Beam search (\(k = 4\), then 8)</td><td>Reviewer</td><td class="num">78%</td><td class="num">85%</td></tr>
+              <tr><td>Best-of-N (\(N = 16\), then 32)</td><td>Tests</td><td class="num">53%</td><td class="num">78%</td></tr>
+              <tr><td>MCTS</td><td>Reviewer and tests</td><td class="num">73%</td><td class="num">91%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted">Greedy is computed exactly; the others are averages over 6,000 to 10,000 simulated runs. The calculator uses 800 runs per point, so its figures can differ by a point or two.</p>
+        <p>At 96 calls, beam search won: it spent every call on the most promising candidates. Doubling the budget barely helped it, because without running the tests it could only be as right as the reviewer. MCTS was slower to start, since it spent calls exploring and checking, but with 192 calls it overtook beam search by using the test results to abandon failing branches. The team ran beam search for routine changes and switched to tree search, with a larger budget, for refactors that touched many files.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Candidates are assumed independent.</strong> Samples from one model at one step tend to share mistakes, so four candidates can be worth fewer than four (M10). Vary prompts or temperature to keep them diverse.</li>
+          <li><strong>Steps are all-or-nothing.</strong> Real plans can recover from a weak step later, and some steps matter more than others. Treat \(g\) as an average and test on real tasks.</li>
+          <li><strong>Scorer calls are not counted.</strong> If the step scorer is itself an expensive model, add its calls to the budget; that penalizes beam search and MCTS relative to best-of-N.</li>
+          <li><strong>Calls are not latency.</strong> Beam search and best-of-N parallelize well; MCTS is sequential. Under a tight time limit, a parallel strategy can win even with lower success per call.</li>
+          <li><strong>A final check may not exist.</strong> For open-ended outputs with no tests, only scorer-based strategies apply, and the scorer's quality is the ceiling.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Identify your signals.</strong> Do you have a step scorer, a final check, or both? That narrows the choice before any tuning.</li>
+          <li><strong>Measure them.</strong> Estimate the per-step success rate from traces and the step scorer's AUC on labeled steps.</li>
+          <li><strong>Start with beam search</strong> when you have a decent scorer and a modest budget; add the final check on the beam's survivors when you have one.</li>
+          <li><strong>Move to tree search</strong> for long tasks with a reliable final check and room for a bigger budget.</li>
+          <li><strong>Set the budget where the curve flattens,</strong> and give the agent an explicit call budget so search stops (M03).</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"A plan with six steps, each a little uncertain, rarely works first time. So the agent tries a few options at each step and keeps the promising ones. If we can test the result, it can also back up and try again, which is how we turn a 5% shot into something that works most of the time."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../compounding-error/">M01 Compounding error</a><span class="why">Why a plan without search succeeds only \(g^d\) of the time.</span></li>
+              <li><a href="../bandits-routing/">M12 Multi-armed bandits for routing</a><span class="why">MCTS runs a bandit at every node of the tree.</span></li>
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">Best-of-N is retries with a check, applied to whole plans.</span></li>
+              <li><a href="../mdp-pomdp/">M14 MDPs and POMDPs</a><span class="why">The planning problem that tree search approximates.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/plan-and-execute/">No. 03 Plan-and-Execute</a><span class="why">Where the plan being searched over comes from.</span></li>
+              <li><a href="/agentic/patterns/draft-verify/">No. 34 Draft-Then-Verify</a><span class="why">The step scorer that guides beam and tree search.</span></li>
+              <li><a href="/agentic/patterns/test-first-loop/">No. 45 Test-First Agent Loop</a><span class="why">The final check that lets search back up.</span></li>
+              <li><a href="/agentic/patterns/parallel-worktrees/">No. 48 Parallel Worktrees</a><span class="why">Exploring several branches of a coding plan at once.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: mcts-beam-search
+number: M15
+name: Search over agent plans (greedy, beam, best-of-N, MCTS)
+family: planning
+answers: "How should an agent spend a call budget searching over multi-step plans?"
+formula:
+  no_search: "g**d"
+  best_of_n: "1 - (1 - g**d)**N, calls N*d"
+  greedy: "s**d, calls d*b, s = P(top-scored of b candidates is good)"
+  beam: "calls k*d*b, simulated"
+  puct: "argmax_a Q(s,a) + c * P(s,a) * sqrt(N(s)) / (1 + N(s,a))"
+inputs:
+  d: {type: int, meaning: steps in the plan}
+  b: {type: int, meaning: candidates per step}
+  g: {type: float, meaning: chance a proposed step is good}
+  auc: {type: float, meaning: step scorer quality}
+  budget: {type: int, meaning: model calls available}
+assumptions:
+  - candidates independent; a plan works only if every step is good
+  - final check is reliable when present
+  - scorer calls not counted in the budget
+use_when:
+  - choosing a search strategy for multi-step agent tasks
+  - sizing the call budget for planning
+related_patterns: [plan-and-execute, draft-verify, test-first-loop, parallel-worktrees]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, NumPy)</div>
+        <div class="code"><pre>import math
+import numpy as np
+from scipy.stats import norm
+
+def beam_search(d=6, b=4, g=0.6, auc=0.8, k=4, trials=2000, seed=1):
+    """Share of runs where beam search ends on a plan whose every step is good."""
+    rng = np.random.default_rng(seed)
+    mu = math.sqrt(2) * norm.ppf(auc)                 # scorer separation
+    wins = 0
+    for _ in range(trials):
+        beam = [True]                                  # each entry: is this partial plan still good?
+        for _ in range(d):
+            cands = []
+            for good_so_far in beam:
+                for _ in range(b):
+                    good = good_so_far and rng.random() &lt; g
+                    cands.append((rng.normal(mu if good else 0.0, 1.0), good))
+            cands.sort(key=lambda c: -c[0])
+            beam = [good for _, good in cands[:k]]
+        wins += beam[0]
+    return wins / trials
+
+def best_of_n(d=6, g=0.6, n=16):
+    return 1 - (1 - g ** d) ** n
+
+if __name__ == "__main__":
+    print(round(0.6 ** 6, 3))                    # 0.047, no search
+    print(beam_search(k=4))                      # about 0.78 with 96 calls
+    print(round(best_of_n(n=16), 3))             # 0.534 with 96 calls</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>No search and best-of-N</summary>
+          <div class="body">
+            <p>A plan sampled step by step is good only if all \(d\) steps are good: \(g^d\). Best-of-N samples \(N\) independent plans and runs the final check on each; it fails only if all \(N\) fail, so it succeeds with \(1-(1-g^d)^N\). That is the retry formula from M02, applied to whole plans, and it needs \(N \approx \ln(1-T)/\ln(1-g^d)\) plans to reach target \(T\): many, when \(g^d\) is small.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Greedy with a step scorer</summary>
+          <div class="body">
+            <p>At each step, with \(m\) of the \(b\) candidates good (binomially distributed), greedy picks a good one if the highest of the \(m\) good scores beats the highest of the \(b-m\) bad scores. With good scores \(\sim N(\mu,1)\) and bad \(\sim N(0,1)\), \(\mu = \sqrt2\,\Phi^{-1}(\text{AUC})\), the per-step success is</p>
+            $$s = \sum_{m=1}^{b}\binom{b}{m}g^m(1-g)^{b-m}\,\Pr\Big(\max_{m}X^{+} &gt; \max_{b-m}X^{-}\Big),$$
+            <p>and the plan succeeds with \(s^d\). Greedy turns the per-step rate from \(g\) into \(s\), which can be much higher, but errors still compound over \(d\) steps.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why beam search has a ceiling</summary>
+          <div class="body">
+            <p>Beam search keeps the \(k\) highest-scoring partial plans at each step. A wider beam keeps more good plans alive, but at the end it returns the plan with the best final score. Since the scorer can mistake a bad plan for a good one, the chance that the top-scored survivor is actually good stays below 1 even as \(k\) grows: the ceiling is set by the scorer's AUC. Adding the final check on all \(k\) survivors removes the ceiling, and turns beam search into a hybrid.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>MCTS is a bandit at every node</summary>
+          <div class="body">
+            <p>At each node, choosing which child to explore is a multi-armed bandit problem: exploit children whose subtrees have led to working plans, but keep exploring children that are untried. UCT applies the UCB1 bandit rule at every node (Kocsis and Szepesvári, 2006); PUCT, used in AlphaZero, adds a prior \(P(s,a)\) from a learned scorer, so promising children are tried first. Each iteration selects down the tree, expands a node, rolls out to a full plan, runs the final check, and passes the result back up. Because failed checks lower \(Q\) along the path, the search moves its budget away from branches that don't work.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Kocsis, L. and Szepesvári, C. (2006). Bandit based Monte-Carlo planning. <em>European Conference on Machine Learning</em>, 282–293. The UCT algorithm.</li>
+          <li>Yao, S. et al. (2023). <a href="https://arxiv.org/abs/2305.10601">Tree of Thoughts: Deliberate Problem Solving with Large Language Models</a>. Breadth- and depth-first search over reasoning steps.</li>
+          <li>Zhou, A. et al. (2023). <a href="https://arxiv.org/abs/2310.04406">Language Agent Tree Search Unifies Reasoning, Acting, and Planning in Language Models</a>. MCTS for LLM agents, guided by model-scored values.</li>
+          <li>Lightman, H. et al. (2023). <a href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a>. Process reward models that score individual reasoning steps.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"mcts-beam-search","number":"M15","family":"planning",
+ "formula":{"no_search":"g**d","best_of_n":"1-(1-g**d)**N","greedy":"s**d","beam":"simulated, calls k*d*b","puct":"Q+c*P*sqrt(N)/(1+n)"},
+ "inputs":["d","b","g","auc","budget"],
+ "assumptions":["independent candidates","plan works only if all steps good","reliable final check","scorer calls not counted"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- RNG and helpers ---------- */
+  let seed = 7;
+  const rnd = () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const normal = () => { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); };
+  function PhiInv(p) {
+    const a = [-39.6968302866538, 220.946098424521, -275.928510446969, 138.357751867269, -30.6647980661472, 2.50662827745924];
+    const b = [-54.4760987982241, 161.585836858041, -155.698979859887, 66.8013118877197, -13.2806815528857];
+    const c = [-0.00778489400243029, -0.322396458041136, -2.40075827716184, -2.54973253934373, 4.37466414146497, 2.93816398269878];
+    const d = [0.00778469570904146, 0.32246712907004, 2.445134137143, 3.75440866190742];
+    if (p < 0.02425) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - 0.02425) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+
+  /* ---------- Strategies ---------- */
+  const TRIALS = 800;
+  function greedy(P) {
+    let wins = 0;
+    for (let t = 0; t < TRIALS; t++) {
+      let good = true;
+      for (let l = 0; l < P.d; l++) {
+        let best = -Infinity, pick = false;
+        for (let i = 0; i < P.b; i++) { const c = good && rnd() < P.g, s = normal() + (c ? P.mu : 0); if (s > best) { best = s; pick = c; } }
+        good = pick;
+      }
+      if (good) wins++;
+    }
+    return wins / TRIALS;
+  }
+  function beam(P, k) {
+    let wins = 0;
+    for (let t = 0; t < TRIALS; t++) {
+      let bm = [true];
+      for (let l = 0; l < P.d; l++) {
+        const cands = [];
+        for (const g0 of bm) for (let i = 0; i < P.b; i++) { const c = g0 && rnd() < P.g; cands.push([normal() + (c ? P.mu : 0), c]); }
+        cands.sort((x, y) => y[0] - x[0]);
+        bm = cands.slice(0, k).map((x) => x[1]);
+      }
+      if (bm[0]) wins++;
+    }
+    return wins / TRIALS;
+  }
+  function mcts(P, budget) {
+    let wins = 0;
+    for (let t = 0; t < TRIALS; t++) {
+      let calls = 0, found = false;
+      const root = { good: true, ch: null, n: 0, w: 0, depth: 0, prior: 1 };
+      while (calls < budget && !found) {
+        let node = root; const path = [root];
+        while (node.ch && node.depth < P.d) {
+          const tot = node.n; let best = -Infinity, pick = null;
+          for (const c of node.ch) {
+            const v = (c.n ? c.w / c.n : 0.5) + c.prior * Math.sqrt(tot + 1) / (1 + c.n);
+            if (v > best) { best = v; pick = c; }
+          }
+          node = pick; path.push(node);
+        }
+        if (node.depth < P.d) {
+          if (calls + P.b > budget) break;
+          const ch = []; let mx = -Infinity;
+          for (let i = 0; i < P.b; i++) { const gd = node.good && rnd() < P.g; const sc = normal() + (gd ? P.mu : 0); ch.push({ good: gd, ch: null, n: 0, w: 0, depth: node.depth + 1, sc }); mx = Math.max(mx, sc); }
+          calls += P.b;
+          let z = 0; ch.forEach((c) => { c.prior = Math.exp(c.sc - mx); z += c.prior; }); ch.forEach((c) => (c.prior /= z));
+          node.ch = ch;
+          node = ch.reduce((a, c) => (c.sc > a.sc ? c : a)); path.push(node);
+        }
+        let good = node.good, dep = node.depth;
+        while (dep < P.d && calls + P.b <= budget) {
+          let best = -Infinity, pick = false;
+          for (let i = 0; i < P.b; i++) { const c = good && rnd() < P.g, s = normal() + (c ? P.mu : 0); if (s > best) { best = s; pick = c; } }
+          calls += P.b; good = pick; dep++;
+        }
+        const r = good && dep === P.d ? 1 : 0;
+        if (r) found = true;
+        for (const p of path) { p.n++; p.w += r; }
+      }
+      if (found) wins++;
+    }
+    return wins / TRIALS;
+  }
+  const bestOfN = (P, budget) => { const N = Math.floor(budget / P.d); return N >= 1 ? 1 - Math.pow(1 - Math.pow(P.g, P.d), N) : null; };
+
+  /* ---------- Render ---------- */
+  let timer = null, last = null;
+  function compute(s) {
+    seed = 7;
+    const P = { d: Math.round(s.d), b: Math.round(s.bb), g: s.g, mu: Math.SQRT2 * PhiInv(Math.min(0.995, Math.max(0.5, s.auc))) };
+    const B = Math.round(s.B), budgets = []; for (let x = 12; x <= 240; x += 12) budgets.push(x);
+    const greedyCost = P.d * P.b, greedyP = greedy(P);
+    const series = { greedy: [], beam: [], bon: [], mcts: [] };
+    const at = {};
+    budgets.forEach((x) => {
+      const k = Math.floor(x / (P.d * P.b));
+      const gr = x >= greedyCost ? greedyP : null, bm = k >= 1 ? beam(P, k) : null, bo = bestOfN(P, x), mc = mcts(P, x);
+      if (gr !== null) series.greedy.push([x, gr]);
+      if (bm !== null) series.beam.push([x, bm]);
+      if (bo !== null) series.bon.push([x, bo]);
+      series.mcts.push([x, mc]);
+      if (x === B) Object.assign(at, { gr, bm, bo, mc, k, N: Math.floor(x / P.d) });
+    });
+    const luck = Math.pow(P.g, P.d);
+    const fmt = (v) => (v === null || v === undefined ? "–" : MM.pct(v, 0));
+    document.getElementById("hero-luck").textContent = MM.pct(luck, luck < 0.1 ? 1 : 0);
+    document.getElementById("o-luck").textContent = MM.pct(luck, luck < 0.1 ? 1 : 0);
+    document.getElementById("o-greedy").textContent = at.gr === null ? "–" : fmt(at.gr);
+    document.getElementById("o-greedy-k").textContent = at.gr === null ? `Greedy needs ${greedyCost} calls` : `Greedy, step scorer (${greedyCost} calls)`;
+    document.getElementById("o-beam").textContent = fmt(at.bm);
+    document.getElementById("o-beam-k").textContent = at.bm === null ? `Beam search needs ${greedyCost} calls` : `Beam search, step scorer (width ${at.k})`;
+    document.getElementById("o-bon").textContent = fmt(at.bo);
+    document.getElementById("o-bon-k").textContent = `Best-of-N, final check (N = ${at.N})`;
+    document.getElementById("o-mcts").textContent = fmt(at.mc);
+    const cand = [["greedy", at.gr], ["beam search", at.bm], ["best-of-N", at.bo], ["MCTS", at.mc]].filter((c) => c[1] !== null && c[1] !== undefined);
+    const win = cand.reduce((a, c) => (c[1] > a[1] ? c : a), ["none", -1]);
+    document.getElementById("o-win").textContent = win[0] === "none" ? "–" : win[0].charAt(0).toUpperCase() + win[0].slice(1);
+    document.getElementById("hero-name").textContent = win[0];
+    document.getElementById("hero-best").textContent = fmt(win[1]);
+
+    MM.lineChart(document.getElementById("curve"), {
+      x: { min: 0, max: 240, label: "Model calls for search" },
+      y: { min: 0, max: 1, label: "Plans that work", pct: true },
+      series: [
+        { cls: "s-muted", points: series.greedy }, { cls: "s-fault", points: series.bon },
+        { cls: "s-accent", points: series.beam }, { cls: "s-ok", points: series.mcts }
+      ],
+      markerX: B, targetY: luck
+    });
+  }
+  function render(s) { last = Object.assign({}, s); clearTimeout(timer); timer = setTimeout(() => compute(last), 200); }
+
+  MM.state({ d: 6, g: 0.6, B: 96, bb: 4, auc: 0.8 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

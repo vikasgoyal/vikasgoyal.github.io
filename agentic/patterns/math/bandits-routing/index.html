@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-armed Bandits for Routing | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Learn which model or prompt to route traffic to while serving it. Thompson sampling versus A/B testing and epsilon-greedy, with regret and a live simulation. Math, derivations and a worked example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/bandits-routing/">
+<meta property="og:title" content="Bandits for routing: stop paying for your A/B test">
+<meta property="og:description" content="Over 10,000 conversations an even split loses 400 resolutions; Thompson sampling loses about 48.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/bandits-routing/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Multi-armed Bandits for Routing",
+  "about": "Adaptive routing between AI models and prompts",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/bandits-routing/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Multi-armed bandits for routing</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M12</span>
+          <span class="tag">Multi-model</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Decision</span>
+          <span class="tag dof">Coordination</span>
+        </div>
+        <h1>Multi-armed bandits for routing</h1>
+        <p class="formula-name">Thompson sampling: route each request by a draw from \(\text{Beta}(1+s_i,\ 1+f_i)\)</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          Testing three prompts with an even split over
+          <input class="inline-num wide" type="number" min="1000" max="20000" step="1000" data-key="N" aria-label="Number of conversations">
+          conversations loses <span class="result-num" id="hero-even">400</span> successes to the weaker prompts. Thompson sampling loses about <span class="result-num good" id="hero-ts">48</span>.
+        </p>
+        <p class="hint">Change the blue number. Every figure on this page updates with it.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">An A/B test pays for its answer with real users.</p>
+        <p>When you compare prompts, models or agent configurations on live traffic, every request sent to a weaker option is a worse outcome for someone. A classic A/B test splits traffic evenly until the end, then switches. A multi-armed bandit learns while it serves: as evidence builds, it shifts traffic toward whatever is working, while still sending enough to the others to notice if it was wrong. For agents, where routing between several models or prompts is routine and the options change monthly, bandits turn evaluation into a continuous, low-cost process.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Picture a row of slot machines (the "one-armed bandits") with unknown payout rates. Playing only the machine that looks best so far risks missing a better one you tried too little. Playing them all equally wastes money on machines you already know are worse. The trade-off is between exploring and exploiting.</p>
+        <p>Thompson sampling resolves it with one rule: for each request, imagine a plausible payout rate for every machine, drawn from what you have seen so far, and play the machine whose imagined rate is highest. Machines with little data have wide uncertainty, so they sometimes draw high and get tried. Machines that are clearly worse almost never win the draw. Traffic to each option ends up matching the probability that it is the best one.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>Each option \(i\) has an unknown success rate \(\theta_i\). After \(s_i\) successes and \(f_i\) failures, a uniform prior gives the posterior</p>
+        <div class="math-block">$$\theta_i \sim \text{Beta}(1+s_i,\ 1+f_i), \qquad \text{route to } \arg\max_i \tilde\theta_i \text{ where } \tilde\theta_i \text{ is one draw from each posterior}$$</div>
+        <p>Strategies are compared by regret: how many successes they lose against always picking the best option, which nobody knows in advance:</p>
+        <div class="math-block">$$\text{Regret}(N) = \sum_{t=1}^{N}\big(\theta^{*} - \theta_{a_t}\big) = \sum_i \Delta_i\,\mathbb{E}[n_i(N)], \qquad \Delta_i = \theta^* - \theta_i$$</div>
+        <dl class="symbols">
+          <dt>\(\theta_i\)</dt><dd>true success rate of option \(i\) (resolution rate, task success, thumbs-up rate)</dd>
+          <dt>\(s_i,\ f_i\)</dt><dd>successes and failures observed so far for option \(i\)</dd>
+          <dt>\(\theta^*,\ \Delta_i\)</dt><dd>the best option's rate, and option \(i\)'s gap to it</dd>
+          <dt>\(n_i(N)\)</dt><dd>number of requests sent to option \(i\) out of \(N\)</dd>
+        </dl>
+        <ul>
+          <li><strong>Even split:</strong> regret grows in a straight line, \(N\) times the average gap.</li>
+          <li><strong>A/B test then commit:</strong> regret grows linearly during the test, then stops, unless the test picked the wrong winner, in which case it grows linearly forever.</li>
+          <li><strong>Thompson sampling:</strong> regret grows only like \(\log N\), which is the best possible rate. Each weaker option gets roughly \(\ln N / \text{KL}(\theta_i\,\|\,\theta^*)\) requests, fewer the bigger its gap.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Three prompts with true success rates you set (the strategies don't know them). Each strategy is simulated 120 times; the chart shows the average.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-a">Prompt A success rate <output data-out="a" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-a" type="range" min="10" max="95" step="1" data-key="a" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-b">Prompt B success rate <output data-out="b" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-b" type="range" min="10" max="95" step="1" data-key="b" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-c">Prompt C success rate <output data-out="c" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-c" type="range" min="10" max="95" step="1" data-key="c" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-N">Requests <output data-out="N" data-fmt="int"></output></label>
+                <input id="c-N" type="range" min="1000" max="20000" step="1000" data-key="N">
+              </div>
+              <div class="control">
+                <label for="c-ab">A/B test length, share of requests <output data-out="ab" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-ab" type="range" min="5" max="60" step="5" data-key="ab" data-scale="100">
+              </div>
+              <div class="control">
+                <button class="btn" type="button" id="rerun">Run the simulations again</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout alarm"><div class="v" id="o-even">–</div><div class="k">Lost successes, even split</div></div>
+                <div class="readout"><div class="v" id="o-ab">–</div><div class="k" id="o-ab-k">Lost successes, A/B test then commit</div></div>
+                <div class="readout"><div class="v" id="o-eps">–</div><div class="k">Lost successes, epsilon-greedy (10%)</div></div>
+                <div class="readout primary"><div class="v" id="o-ts">–</div><div class="k">Lost successes, Thompson sampling</div></div>
+                <div class="readout"><div class="v" id="o-share">–</div><div class="k">Traffic Thompson sends to the best prompt</div></div>
+                <div class="readout"><div class="v" id="o-wrong">–</div><div class="k">A/B runs that committed to the wrong prompt</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-regret" id="tab-regret">Lost successes over time</button>
+                <button role="tab" aria-selected="false" aria-controls="view-share" id="tab-share">Traffic to the best prompt</button>
+              </div>
+
+              <div id="view-regret" role="tabpanel" aria-labelledby="tab-regret">
+                <div class="chart-wrap">
+                  <svg class="chart" id="regret" role="img" aria-label="Cumulative lost successes over requests for four strategies"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--fault)"></i>Even split</span>
+                    <span><i style="background:var(--ink-3)"></i>A/B test then commit</span>
+                    <span><i style="background:var(--accent)"></i>Epsilon-greedy</span>
+                    <span><i style="background:var(--ok)"></i>Thompson sampling</span>
+                  </div>
+                </div>
+              </div>
+              <div id="view-share" role="tabpanel" aria-labelledby="tab-share" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="share" role="img" aria-label="Share of traffic sent to the best prompt over time for four strategies"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--fault)"></i>Even split</span>
+                    <span><i style="background:var(--ink-3)"></i>A/B test then commit</span>
+                    <span><i style="background:var(--accent)"></i>Epsilon-greedy</span>
+                    <span><i style="background:var(--ok)"></i>Thompson sampling</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: three prompts for a support agent</h2>
+        <p>A support team had three candidate system prompts. Unknown to them, the prompts resolve <strong>62%, 66% and 70%</strong> of conversations without a human. Over the next <strong>10,000 conversations</strong> they could split traffic in one of four ways. Each strategy was simulated 300 times:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Strategy</th><th class="num">Lost resolutions, average</th><th class="num">Worst 5% of runs</th><th class="num">Traffic to the best prompt</th></tr></thead>
+            <tbody>
+              <tr class="weak"><td>Even split throughout</td><td class="num">400</td><td class="num">400</td><td class="num">33%</td></tr>
+              <tr><td>A/B test for 3,000, then commit to the leader</td><td class="num">126</td><td class="num">120+</td><td class="num">79%</td></tr>
+              <tr><td>Epsilon-greedy: best so far, 10% random</td><td class="num">87</td><td class="num">up to 319</td><td class="num">83%</td></tr>
+              <tr><td>Thompson sampling</td><td class="num">48</td><td class="num">up to 94</td><td class="num">90%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The A/B test lost 120 resolutions during its test phase in almost every run, and in 2% of runs committed to the wrong prompt, after which it kept losing. Epsilon-greedy was usually good but sometimes locked onto an early lucky leader and took thousands of conversations to recover. Thompson sampling lost about an eighth of what the even split did, with no test length to choose. The team still reported the final comparison with confidence intervals (M06), computed on the traffic each prompt actually received.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Success rates are assumed stable.</strong> Model updates and seasonal traffic change them. Discount old results, or use a sliding window, so the bandit can notice when a former loser improves.</li>
+          <li><strong>Rewards may arrive late.</strong> A ticket's resolution may only be known days later. Update in batches, and expect early decisions to lean on less data.</li>
+          <li><strong>The best option may differ by segment.</strong> One prompt may win on billing questions and lose on technical ones. Contextual bandits condition on request features to learn a per-segment route.</li>
+          <li><strong>The reward must be the outcome you want.</strong> Optimizing thumbs-up rate can reward flattery. Choose a reward close to the business outcome, and watch guardrail metrics alongside it.</li>
+          <li><strong>Bandit data is not a clean experiment.</strong> Weaker options get little traffic, so their estimates stay wide, and naive averages are biased. If you need a rigorous comparison, keep a small uniform slice or use inverse-propensity weighting.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Define one binary reward</strong> that tracks the outcome you care about, and log it per request with the option used.</li>
+          <li><strong>Gate options with offline evals first.</strong> Only options that pass safety and quality checks enter the bandit.</li>
+          <li><strong>Start with Thompson sampling on Beta posteriors.</strong> It is a few lines of code, needs no tuning, and handles any number of options.</li>
+          <li><strong>Keep a small exploration floor</strong>, such as 2–5% spread across options, so new or improved options can be discovered.</li>
+          <li><strong>Review the posteriors weekly.</strong> Retire options whose chance of being best stays near zero, and add new candidates.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"Instead of splitting customers evenly between three prompts for a month and then picking a winner, the system shifts traffic toward the prompt that's working as the evidence comes in. We learn the same thing, and far fewer customers get the weaker experience along the way."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../confidence-intervals/">M06 Confidence intervals</a><span class="why">The fixed-design comparison bandits replace, and how to report results.</span></li>
+              <li><a href="../model-cascades/">M11 Model cascades</a><span class="why">Routing by confidence within a request, rather than learning across requests.</span></li>
+              <li><a href="../bradley-terry-elo/">M07 Bradley–Terry and Elo</a><span class="why">When the reward is a pairwise preference instead of a success.</span></li>
+              <li><a href="../mdp-pomdp/">M14 MDPs and POMDPs</a><span class="why">The general framework bandits are the one-step special case of.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/routing/">No. 06 Routing</a><span class="why">The router whose choices a bandit learns.</span></li>
+              <li><a href="/agentic/patterns/learning-loop/">No. 31 Self-Improving Learning Loop</a><span class="why">Continuous improvement from live feedback.</span></li>
+              <li><a href="/agentic/patterns/guardrails/">No. 19 Guardrails</a><span class="why">The safety floor every option must clear before entering the bandit.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: bandits-routing
+number: M12
+name: Multi-armed bandits for routing (Thompson sampling)
+family: multi-model
+answers: "Which model or prompt should get the next request, while still learning?"
+formula:
+  posterior: "theta_i ~ Beta(1 + successes_i, 1 + failures_i)"
+  route: "argmax_i of one posterior draw per option"
+  regret: "sum_i (theta_best - theta_i) * n_i"
+  asymptotic_pulls: "n_i ~ ln(N) / KL(theta_i || theta_best)"
+inputs:
+  options: {type: list, meaning: candidate models, prompts or configurations}
+  reward: {type: bool, meaning: success signal logged per request}
+assumptions:
+  - stationary success rates (discount or window otherwise)
+  - rewards observed reasonably soon after each request
+  - one best option for all traffic (use contextual bandits otherwise)
+use_when:
+  - comparing options on live traffic
+  - routing among several models whose quality shifts over time
+related_patterns: [routing, learning-loop, guardrails]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>import random
+
+class ThompsonRouter:
+    def __init__(self, options, floor=0.02):
+        self.options = list(options)
+        self.s = {o: 0 for o in self.options}   # successes
+        self.f = {o: 0 for o in self.options}   # failures
+        self.floor = floor                       # small uniform exploration
+
+    def choose(self):
+        if random.random() &lt; self.floor:
+            return random.choice(self.options)
+        draws = {o: random.betavariate(1 + self.s[o], 1 + self.f[o]) for o in self.options}
+        return max(draws, key=draws.get)
+
+    def update(self, option, success):
+        if success:
+            self.s[option] += 1
+        else:
+            self.f[option] += 1
+
+    def prob_best(self, samples=4000):
+        wins = {o: 0 for o in self.options}
+        for _ in range(samples):
+            draws = {o: random.betavariate(1 + self.s[o], 1 + self.f[o]) for o in self.options}
+            wins[max(draws, key=draws.get)] += 1
+        return {o: w / samples for o, w in wins.items()}
+
+if __name__ == "__main__":
+    true_rate = {"prompt_a": 0.62, "prompt_b": 0.66, "prompt_c": 0.70}
+    router = ThompsonRouter(true_rate, floor=0.0)
+    for _ in range(10_000):
+        o = router.choose()
+        router.update(o, random.random() &lt; true_rate[o])
+    print({o: router.s[o] + router.f[o] for o in true_rate})   # most traffic on prompt_c
+    print(router.prob_best())</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>The Beta posterior</summary>
+          <div class="body">
+            <p>With a uniform prior on \(\theta\) and \(s\) successes in \(s+f\) independent trials, the posterior density is proportional to the likelihood \(\theta^{s}(1-\theta)^{f}\), which is the Beta\((1+s, 1+f)\) distribution. Its mean is \((1+s)/(2+s+f)\) and its spread shrinks like \(1/\sqrt{s+f}\). Updating is just adding one to the right count.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why Thompson sampling explores the right amount</summary>
+          <div class="body">
+            <p>Drawing one sample per option and picking the largest sends each request to option \(i\) with probability equal to the posterior probability that \(i\) is the best. An option that is clearly worse has almost no chance of drawing the highest sample, so it stops getting traffic. An option with few observations has a wide posterior, so it occasionally draws high and gets tested. Exploration therefore shrinks automatically as evidence accumulates, with no schedule to tune.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Regret of the simpler strategies</summary>
+          <div class="body">
+            <p><strong>Even split:</strong> each option gets \(N/K\) requests, so regret is \(\frac{N}{K}\sum_i \Delta_i\): with gaps of 0.08, 0.04 and 0 over 10,000 requests, \(\frac{10000}{3}\times 0.12 = 400\).</p>
+            <p><strong>A/B then commit:</strong> a test of \(T\) requests costs \(\frac{T}{K}\sum_i\Delta_i\) (120 for \(T = 3000\)), plus \((N-T)\Delta_j\) if the test wrongly picks option \(j\). The chance of that falls exponentially in \(T\Delta^2\), so short tests are cheap but risky, and long tests are safe but expensive.</p>
+            <p><strong>Epsilon-greedy:</strong> exploring a fixed share \(\varepsilon\) forever costs \(\varepsilon N \bar\Delta\), which grows linearly; with greedy choices early on, an unlucky start can also lock in a worse option for a long time.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The logarithmic lower bound</summary>
+          <div class="body">
+            <p>Lai and Robbins (1985) proved that any strategy that does well on every problem must send each weaker option at least about \(\ln N / \text{KL}(\theta_i\,\|\,\theta^*)\) requests, where \(\text{KL}(p\,\|\,q) = p\ln\frac pq + (1-p)\ln\frac{1-p}{1-q}\) measures how hard \(\theta_i\) is to tell apart from \(\theta^*\). So regret must grow at least like \(\log N\). Thompson sampling with Beta posteriors matches this bound, which is why its curve in the calculator flattens while the others keep climbing.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Russo, D. et al. (2018). <a href="https://arxiv.org/abs/1707.02038">A Tutorial on Thompson Sampling</a>. <em>Foundations and Trends in Machine Learning</em> 11(1).</li>
+          <li>Thompson, W. R. (1933). On the likelihood that one unknown probability exceeds another in view of the evidence of two samples. <em>Biometrika</em> 25(3/4), 285–294.</li>
+          <li>Lai, T. L. and Robbins, H. (1985). Asymptotically efficient adaptive allocation rules. <em>Advances in Applied Mathematics</em> 6(1), 4–22.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"bandits-routing","number":"M12","family":"multi-model",
+ "formula":{"posterior":"Beta(1+s_i,1+f_i)","route":"argmax of one draw per option","regret":"sum_i (theta_best-theta_i)*n_i","asymptotic_pulls":"ln(N)/KL(theta_i||theta_best)"},
+ "inputs":["options","reward"],
+ "assumptions":["stationary success rates","prompt reward feedback","single best option for all traffic"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Seeded RNG and Beta sampling ---------- */
+  let seed = 2026;
+  const rnd = () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  function normal() { let u = 0, v = 0; while (u === 0) u = rnd(); v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function gamma(k) { // Marsaglia-Tsang, k >= 1
+    const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
+    for (;;) {
+      let x, v; do { x = normal(); v = 1 + c * x; } while (v <= 0);
+      v = v * v * v; const u = rnd();
+      if (u < 1 - 0.0331 * x * x * x * x) return d * v;
+      if (Math.log(u) < 0.5 * x * x + d * (1 - v + Math.log(v))) return d * v;
+    }
+  }
+  const beta = (a, b) => { const x = gamma(a); return x / (x + gamma(b)); };
+
+  /* ---------- Strategies ---------- */
+  const RUNS = 120, BUCKETS = 50;
+  function simulate(P, N, abShare) {
+    const best = Math.max(...P), bestIdx = P.indexOf(best);
+    const strategies = ["even", "ab", "eps", "ts"];
+    const out = {};
+    strategies.forEach((st) => {
+      const regretCurve = new Float64Array(BUCKETS + 1), shareCurve = new Float64Array(BUCKETS);
+      let total = 0, wrong = 0, bestShare = 0;
+      const bsize = N / BUCKETS;
+      for (let r = 0; r < RUNS; r++) {
+        const s = [0, 0, 0], n = [0, 0, 0];
+        let reg = 0, committed = -1, bucketBest = 0;
+        const T = Math.round(abShare * N);
+        for (let t = 0; t < N; t++) {
+          let a;
+          if (st === "even") a = t % 3;
+          else if (st === "ab") {
+            if (t < T) a = t % 3;
+            else {
+              if (committed < 0) { const m = s.map((v, i) => v / Math.max(1, n[i])); committed = m.indexOf(Math.max(...m)); if (P[committed] < best) wrong++; }
+              a = committed;
+            }
+          } else if (st === "eps") {
+            if (t < 3 || rnd() < 0.1) a = Math.floor(rnd() * 3);
+            else { const m = s.map((v, i) => v / Math.max(1, n[i])); a = m.indexOf(Math.max(...m)); }
+          } else {
+            let bv = -1; a = 0;
+            for (let i = 0; i < 3; i++) { const d = beta(1 + s[i], 1 + n[i] - s[i]); if (d > bv) { bv = d; a = i; } }
+          }
+          if (rnd() < P[a]) s[a]++;
+          n[a]++; reg += best - P[a];
+          if (P[a] === best) bucketBest++;
+          if ((t + 1) % bsize < 1) {
+            const b = Math.round((t + 1) / bsize);
+            regretCurve[b] += reg / RUNS; shareCurve[b - 1] += bucketBest / bsize / RUNS; bucketBest = 0;
+          }
+        }
+        total += reg; bestShare += n[bestIdx] / N;
+      }
+      out[st] = { regret: total / RUNS, curve: regretCurve, share: shareCurve, wrong: wrong / RUNS, bestShare: bestShare / RUNS };
+    });
+    return out;
+  }
+
+  MM.tabs(document.getElementById("lab-tabs"));
+  let last = null, timer = null;
+  document.getElementById("rerun").addEventListener("click", () => { if (last) { seed = Math.floor(Math.random() * 1e9); compute(last); } });
+
+  function compute(s) {
+    const P = [s.a, s.b, s.c], N = Math.round(s.N / 1000) * 1000;
+    const r = simulate(P, N, s.ab);
+    const best = Math.max(...P), meanGap = P.reduce((acc, p) => acc + (best - p), 0) / 3;
+    const fmt = (x) => Math.round(x).toLocaleString();
+    document.getElementById("hero-even").textContent = fmt(N * meanGap);
+    document.getElementById("hero-ts").textContent = fmt(r.ts.regret);
+    document.getElementById("o-even").textContent = fmt(r.even.regret);
+    document.getElementById("o-ab").textContent = fmt(r.ab.regret);
+    document.getElementById("o-ab-k").textContent = `Lost successes, A/B test for ${Math.round(s.ab * N).toLocaleString()} then commit`;
+    document.getElementById("o-eps").textContent = fmt(r.eps.regret);
+    document.getElementById("o-ts").textContent = fmt(r.ts.regret);
+    document.getElementById("o-share").textContent = MM.pct(r.ts.bestShare, 0);
+    document.getElementById("o-wrong").textContent = `${Math.round(r.ab.wrong * RUNS)} of ${RUNS}`;
+
+    const xs = Array.from({ length: BUCKETS + 1 }, (_, i) => (i * N) / BUCKETS);
+    const line = (c) => xs.map((x, i) => [x, c[i]]);
+    const ymax = Math.max(10, Math.ceil(Math.max(r.even.regret, r.ab.regret, r.eps.regret) / 50) * 50);
+    MM.lineChart(document.getElementById("regret"), {
+      x: { min: 0, max: N, label: "Requests served" },
+      y: { min: 0, max: ymax, label: "Successes lost to weaker prompts" },
+      series: [
+        { cls: "s-fault", points: line(r.even.curve) }, { cls: "s-muted", points: line(r.ab.curve) },
+        { cls: "s-accent", points: line(r.eps.curve) }, { cls: "s-ok", points: line(r.ts.curve) }
+      ]
+    });
+    const sx = Array.from({ length: BUCKETS }, (_, i) => ((i + 0.5) * N) / BUCKETS);
+    const sline = (c) => sx.map((x, i) => [x, c[i]]);
+    MM.lineChart(document.getElementById("share"), {
+      x: { min: 0, max: N, label: "Requests served" },
+      y: { min: 0, max: 1, label: "Share of traffic to the best prompt", pct: true },
+      series: [
+        { cls: "s-fault", points: sline(r.even.share) }, { cls: "s-muted", points: sline(r.ab.share) },
+        { cls: "s-accent", points: sline(r.eps.share) }, { cls: "s-ok", points: sline(r.ts.share) }
+      ]
+    });
+  }
+  function render(s) { last = Object.assign({}, s); clearTimeout(timer); timer = setTimeout(() => compute(last), 150); }
+
+  MM.state({ N: 10000, a: 0.62, b: 0.66, c: 0.7, ab: 0.3 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

@@ -85,108 +85,120 @@
       "id": "pass-at-k",
       "name": "pass@k vs pass^k",
       "family": "evaluation",
-      "status": "planned",
+      "status": "live",
       "answers": "Is the agent capable, or consistently reliable?",
-      "formula": "pass@k = 1-(1-p)**k; pass^k = p**k"
+      "formula": "pass@k = 1-(1-p)**k; pass^k = p**k",
+      "url": "pass-at-k/"
     },
     {
       "number": "M06",
       "id": "confidence-intervals",
       "name": "Confidence intervals (Wilson and bootstrap)",
       "family": "evaluation",
-      "status": "planned",
+      "status": "live",
       "answers": "Is version B really better than version A?",
-      "formula": "Wilson score interval"
+      "formula": "Wilson score interval",
+      "url": "confidence-intervals/"
     },
     {
       "number": "M07",
       "id": "bradley-terry-elo",
       "name": "Bradley–Terry and Elo",
       "family": "evaluation",
-      "status": "planned",
+      "status": "live",
       "answers": "How do pairwise judgments become a ranking?",
-      "formula": "P(i beats j) = s_i/(s_i+s_j)"
+      "formula": "P(i beats j) = s_i/(s_i+s_j)",
+      "url": "bradley-terry-elo/"
     },
     {
       "number": "M08",
       "id": "cohens-kappa",
       "name": "Cohen's kappa",
       "family": "evaluation",
-      "status": "planned",
+      "status": "live",
       "answers": "Does my LLM judge agree with humans beyond chance?",
-      "formula": "kappa = (p_o - p_e)/(1 - p_e)"
+      "formula": "kappa = (p_o - p_e)/(1 - p_e)",
+      "url": "cohens-kappa/"
     },
     {
       "number": "M09",
       "id": "item-response-theory",
       "name": "Item Response Theory",
       "family": "evaluation",
-      "status": "planned",
+      "status": "live",
       "answers": "Which test cases are hard, and which actually discriminate?",
-      "formula": "2PL logistic model"
+      "formula": "2PL logistic model",
+      "url": "item-response-theory/"
     },
     {
       "number": "M10",
       "id": "condorcet-voting",
       "name": "Condorcet jury theorem and voting",
       "family": "multi-model",
-      "status": "planned",
+      "status": "live",
       "answers": "When does majority voting across models help?",
-      "formula": "sum over majorities of binomial(k, p)"
+      "formula": "sum over majorities of binomial(k, p)",
+      "url": "condorcet-voting/"
     },
     {
       "number": "M11",
       "id": "model-cascades",
       "name": "Model cascades",
       "family": "multi-model",
-      "status": "planned",
+      "status": "live",
       "answers": "When should a cheap model escalate to an expensive one?",
-      "formula": "expected cost vs accuracy at a confidence threshold"
+      "formula": "expected cost vs accuracy at a confidence threshold",
+      "url": "model-cascades/"
     },
     {
       "number": "M12",
       "id": "bandits-routing",
       "name": "Multi-armed bandits for routing",
       "family": "multi-model",
-      "status": "planned",
+      "status": "live",
       "answers": "Which model or prompt should get the next request?",
-      "formula": "Thompson sampling, UCB"
+      "formula": "Thompson sampling, UCB",
+      "url": "bandits-routing/"
     },
     {
       "number": "M13",
       "id": "game-theory-debate",
       "name": "Game theory for debate and critics",
       "family": "multi-model",
-      "status": "planned",
+      "status": "live",
       "answers": "When do debating or critiquing agents converge on the truth?",
-      "formula": "equilibria of multi-agent games"
+      "formula": "equilibria of multi-agent games",
+      "url": "game-theory-debate/"
     },
     {
       "number": "M14",
       "id": "mdp-pomdp",
       "name": "MDPs and POMDPs",
       "family": "planning",
-      "status": "planned",
+      "status": "live",
       "answers": "When should the agent gather more context instead of acting?",
-      "formula": "Bellman equation; belief-state update"
+      "formula": "Bellman equation; belief-state update",
+      "url": "mdp-pomdp/"
     },
     {
       "number": "M15",
       "id": "mcts-beam-search",
       "name": "MCTS and beam search",
       "family": "planning",
-      "status": "planned",
+      "status": "live",
       "answers": "How should an agent search over possible plans?",
-      "formula": "UCT selection rule"
+      "formula": "UCT selection rule",
+      "url": "mcts-beam-search/"
     },
     {
       "number": "M16",
       "id": "conformal-prediction",
       "name": "Conformal prediction",
       "family": "planning",
-      "status": "planned",
+      "status": "live",
       "answers": "When should the agent abstain or hand off to a human?",
-      "formula": "quantile of calibration nonconformity scores"
+      "formula": "quantile of calibration nonconformity scores",
+      "url": "conformal-prediction/"
     }
   ]
 }

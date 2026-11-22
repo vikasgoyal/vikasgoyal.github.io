@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pass@k vs pass^k | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="pass@k measures whether an AI agent can solve a task at least once in k tries; pass^k measures whether it solves it every time. Math, unbiased estimators, derivations, calculator and a worked customer-service eval.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/pass-at-k/">
+<meta property="og:title" content="pass@k vs pass^k: capability is not consistency">
+<meta property="og:description" content="An agent can solve 88% of tasks at least once and only 40% every time. Which number you report changes which version you ship.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/pass-at-k/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "pass@k vs pass^k",
+  "about": "Capability and consistency metrics for evaluating AI agents",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/pass-at-k/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / pass@k vs pass^k</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M05</span>
+          <span class="tag">Evaluation</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>pass@k vs pass^k</h1>
+        <p class="formula-name">Capability, \(1-(1-p)^k\), versus consistency, \(p^k\)</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          An agent that passes
+          <span class="nowrap"><input class="inline-num wide" type="number" min="30" max="95" step="1" data-key="p" data-scale="100" aria-label="Average single-try success, percent">%</span>
+          of tasks on one try solves <span class="result-num good" id="hero-at">94%</span> of them at least once in
+          <input class="inline-num" type="number" min="1" max="16" step="1" data-key="k" aria-label="Number of tries">
+          tries, but only <span class="result-num" id="hero-hat">41%</span> every time.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Most eval scores answer "can it?". Customers experience "does it, every time?".</p>
+        <p>pass@k, borrowed from code-generation benchmarks, counts a task as solved if any of \(k\) attempts succeeds. That suits a developer who reruns until something works. An agent in production gets one shot per customer, and the same task comes up again and again. pass^k counts a task as solved only if all \(k\) attempts succeed, which is what reliability looks like from the outside. The two numbers start equal at \(k=1\) and then move in opposite directions, and how far apart they drift tells you how consistent the agent is.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Two agents both score 75% on one try. The first is a careful specialist: it always solves three tasks in four and never solves the fourth. The second is a gifted but erratic generalist: it solves every task 75% of the time.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">Specialist, pass@8</span><div class="track"><div class="fill" style="width:75%"></div></div><span class="pct">75%</span></div>
+          <div class="row"><span class="lbl">Specialist, pass^8</span><div class="track"><div class="fill" style="width:75%"></div></div><span class="pct">75%</span></div>
+          <div class="row"><span class="lbl">Generalist, pass@8</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="pct">100%</span></div>
+          <div class="row"><span class="lbl">Generalist, pass^8</span><div class="track"><div class="fill bad" style="width:10%"></div></div><span class="pct">10%</span></div>
+        </div>
+        <p>pass@k rewards the generalist, because given enough tries it gets everything. pass^k rewards the specialist, because what it does, it does every time. Real agents sit between the two, and the gap between their pass@k and pass^k shows where.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>For one task that the agent solves with probability \(p\) on each try:</p>
+        <div class="math-block">$$\text{pass@}k = 1-(1-p)^k \qquad\qquad \text{pass}^k = p^k$$</div>
+        <p>A benchmark averages over tasks, each with its own \(p_i\). Averaging first and then raising to a power gives the wrong answer, because \(\mathbb{E}[p_i^k] \neq (\mathbb{E}[p_i])^k\):</p>
+        <div class="math-block">$$\text{pass@}k = \frac{1}{T}\sum_{i=1}^{T}\big(1-(1-p_i)^k\big) \qquad \text{pass}^k = \frac{1}{T}\sum_{i=1}^{T} p_i^{\,k}$$</div>
+        <p>From \(n\) runs per task with \(c_i\) successes, these unbiased estimators use every run rather than just the first \(k\):</p>
+        <div class="math-block">$$\widehat{\text{pass@}k} = 1-\frac{\binom{n-c_i}{k}}{\binom{n}{k}} \qquad\qquad \widehat{\text{pass}^k} = \frac{\binom{c_i}{k}}{\binom{n}{k}}$$</div>
+        <dl class="symbols">
+          <dt>\(p_i\)</dt><dd>probability the agent solves task \(i\) on a single try</dd>
+          <dt>\(k\)</dt><dd>number of tries being scored</dd>
+          <dt>\(T\)</dt><dd>number of tasks in the benchmark</dd>
+          <dt>\(n,\ c_i\)</dt><dd>runs per task, and how many of them succeeded on task \(i\); requires \(n \ge k\)</dd>
+        </dl>
+        <ul>
+          <li><strong>Same pass@1, different futures:</strong> two agents with equal pass@1 can have very different pass^k. The spread of \(p_i\) across tasks decides it.</li>
+          <li><strong>The naive shortcut is pessimistic:</strong> \((\text{pass@}1)^k\) assumes every task is equally hard. Real tasks vary, so real pass^k is higher than the shortcut, often by a lot.</li>
+          <li><strong>The gap is a consistency score:</strong> pass@k minus pass^k is the share of tasks the agent can do but does not do reliably.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Per-task success rates are modeled as a Beta distribution with your average. Slide task similarity from "all-or-nothing" to "every task alike" and watch pass@k and pass^k pull apart.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-p">Average single-try success <output data-out="p" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-p" type="range" min="30" max="95" step="1" data-key="p" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-k">Tries scored, \(k\) <output data-out="k" data-fmt="int"></output></label>
+                <input id="c-k" type="range" min="1" max="16" step="1" data-key="k">
+              </div>
+              <div class="control">
+                <label for="c-s">Task similarity <output id="s-label"></output></label>
+                <input id="c-s" type="range" min="0" max="100" step="1" data-key="s">
+                <div class="note">Left: each task is either almost always or almost never solved. Right: every task is equally hard.</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-at">–</div><div class="k" id="o-at-k">pass@k: solved at least once</div></div>
+                <div class="readout alarm"><div class="v" id="o-hat">–</div><div class="k" id="o-hat-k">pass^k: solved every time</div></div>
+                <div class="readout"><div class="v" id="o-gap">–</div><div class="k">Can do, but not reliably</div></div>
+                <div class="readout"><div class="v" id="o-naive">–</div><div class="k">Naive shortcut, (pass@1)^k</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-curve" id="tab-curve">Curves</button>
+                <button role="tab" aria-selected="false" aria-controls="view-dist" id="tab-dist">Per-task success</button>
+              </div>
+
+              <div id="view-curve" role="tabpanel" aria-labelledby="tab-curve">
+                <div class="chart-wrap">
+                  <svg class="chart" id="curve" role="img" aria-label="pass@k and pass^k against k"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--accent)"></i>pass@k</span>
+                    <span><i style="background:var(--fault)"></i>pass^k</span>
+                    <span><i class="dash"></i>Naive (pass@1)^k</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="view-dist" role="tabpanel" aria-labelledby="tab-dist" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="dist" role="img" aria-label="Share of tasks at each single-try success rate"></svg>
+                  <p class="small muted" style="margin:4px 8px 6px">Share of tasks by how often the agent solves them on one try. Same average, very different shapes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: two versions of a service agent</h2>
+        <p>A team ran two versions of a customer-service agent on the same 50 tasks, eight times each: 400 runs per version. The leaderboard showed pass@1, and version A led, 72% to 70%. Counting successes per task told a different story:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Metric</th><th class="num">Version A</th><th class="num">Version B</th></tr></thead>
+            <tbody>
+              <tr><td>pass@1</td><td class="num">72.0%</td><td class="num">70.0%</td></tr>
+              <tr><td>pass@8, solved at least once</td><td class="num">88.0%</td><td class="num">90.0%</td></tr>
+              <tr><td>pass^2</td><td class="num">62.0%</td><td class="num">65.4%</td></tr>
+              <tr><td>pass^4</td><td class="num">51.1%</td><td class="num">62.1%</td></tr>
+              <tr class="weak"><td>pass^8, solved every time</td><td class="num">40.0%</td><td class="num">60.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Version A solved 20 tasks perfectly and was shaky on 24 more. Version B solved 30 perfectly and failed outright on a small cluster of refund cases. For a customer who brings the same kind of request every week, B is right half again as often. The naive shortcut would have put A's pass^8 at \(0.72^8 = 7\%\), badly understating it, which is why the estimators above count per task.</p>
+        <p>The team shipped B, and turned B's cluster of failures into the next sprint's work, because failures concentrated in a few tasks are much easier to fix than failures spread thinly everywhere.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Runs of the same task are treated as independent.</strong> With temperature 0 and cached tools, reruns may be near-identical, which makes pass^k look better than real traffic would. Vary seeds, phrasings or user simulations between runs.</li>
+          <li><strong>You need several runs per task.</strong> The estimators require \(n \ge k\), and with small \(n\) each task's estimate is coarse. Eight runs per task is a common practical floor for pass^k up to 8.</li>
+          <li><strong>pass@k assumes you can pick the winner.</strong> It is the right metric only when something downstream (tests, a human, a verifier) chooses the successful attempt. Without a checker, see M10 on voting.</li>
+          <li><strong>Tasks are weighted equally.</strong> If some tasks are far more common in production, weight each task's term by its traffic share.</li>
+          <li><strong>Binary success hides partial credit.</strong> A run that gets 9 of 10 fields right counts as a failure. If partial results are useful, score them, and report consistency on the score instead.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Run every eval task several times.</strong> At least five, ideally eight, with varied seeds or simulated users.</li>
+          <li><strong>Report both numbers.</strong> pass@1 for headline capability, pass^k at the \(k\) that matches how often users repeat a request.</li>
+          <li><strong>Use the per-task estimators.</strong> Compute pass@k and pass^k from each task's \(n\) and \(c_i\), then average. Never raise the average to a power.</li>
+          <li><strong>Sort tasks by consistency.</strong> Tasks with \(0 &lt; c_i &lt; n\) are the flaky ones; they are where prompt, tool and guardrail fixes pay off most.</li>
+          <li><strong>Compare versions on pass^k before shipping</strong> anything customer-facing, and put a confidence interval on the gap (M06).</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"pass@k asks whether the agent can do the job. pass^k asks whether it does the job every time your customer asks. We ship on the second number."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../redundancy-retries/">M02 Redundancy and retries</a><span class="why">The same \(1-(1-p)^k\), used to design retries rather than score them.</span></li>
+              <li><a href="../compounding-error/">M01 Compounding error</a><span class="why">pass^k is \(p^n\) over repeated runs instead of chained steps.</span></li>
+              <li><a href="../confidence-intervals/">M06 Confidence intervals</a><span class="why">How sure you can be that version B's pass^k really is higher.</span></li>
+              <li><a href="../item-response-theory/">M09 Item Response Theory</a><span class="why">Which tasks carry the signal, and which are noise.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/llm-as-judge/">No. 30 Rubric LLM-as-Judge</a><span class="why">The checker that decides each run's pass or fail.</span></li>
+              <li><a href="/agentic/patterns/learning-loop/">No. 31 Self-Improving Learning Loop</a><span class="why">Feeding flaky tasks back into improvement.</span></li>
+              <li><a href="/agentic/patterns/test-first-loop/">No. 45 Test-First Agent Loop</a><span class="why">Where pass@k is the right metric: tests pick the winner.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: pass-at-k
+number: M05
+name: pass@k vs pass^k
+family: evaluation
+answers: "Is the agent capable (solves at least once) or consistent (solves every time)?"
+formula:
+  pass_at_k_task: "1 - comb(n - c, k) / comb(n, k)"
+  pass_hat_k_task: "comb(c, k) / comb(n, k)"
+  benchmark: "mean over tasks of the per-task estimate"
+inputs:
+  n: {type: int, meaning: runs per task, must be >= k}
+  c: {type: int, meaning: successful runs for a task}
+  k: {type: int, meaning: tries being scored}
+assumptions:
+  - runs of a task are independent draws
+  - tasks weighted equally unless traffic weights are applied
+  - success is binary
+use_when:
+  - comparing agent versions before shipping
+  - separating capability gaps from consistency gaps
+related_patterns: [llm-as-judge, learning-loop, test-first-loop]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>from math import comb
+
+def pass_at_k(n, c, k):
+    """Unbiased estimate that at least one of k tries succeeds (Chen et al., 2021)."""
+    if n - c &lt; k:
+        return 1.0
+    return 1 - comb(n - c, k) / comb(n, k)
+
+def pass_hat_k(n, c, k):
+    """Unbiased estimate that all k tries succeed (Yao et al., 2024)."""
+    return comb(c, k) / comb(n, k)
+
+def benchmark(successes, n, k):
+    """successes: list with one success count per task, each out of n runs."""
+    at = sum(pass_at_k(n, c, k) for c in successes) / len(successes)
+    hat = sum(pass_hat_k(n, c, k) for c in successes) / len(successes)
+    return at, hat
+
+if __name__ == "__main__":
+    version_a = [8]*20 + [7]*10 + [5]*8 + [3]*6 + [0]*6
+    version_b = [8]*30 + [6]*5 + [1]*10 + [0]*5
+    for k in (1, 8):
+        print(k, benchmark(version_a, 8, k), benchmark(version_b, 8, k))
+    # 1 (0.72, 0.72) (0.70, 0.70)
+    # 8 (0.88, 0.40) (0.90, 0.60)</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>One task: at least once versus every time</summary>
+          <div class="body">
+            <p>With independent tries, all \(k\) fail with probability \((1-p)^k\), so at least one succeeds with \(1-(1-p)^k\). All \(k\) succeed with \(p^k\). At \(k=1\) both equal \(p\). As \(k\) grows, the first rises toward 1 and the second falls toward 0, unless \(p\) is exactly 0 or 1.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why the shortcut \((\text{pass@}1)^k\) understates consistency</summary>
+          <div class="body">
+            <p>The function \(x \mapsto x^k\) is convex for \(k \ge 1\). Jensen's inequality says that for a convex function, the average of the function is at least the function of the average:</p>
+            $$\frac{1}{T}\sum_i p_i^{\,k} \;\ge\; \Big(\frac{1}{T}\sum_i p_i\Big)^k.$$
+            <p>Equality holds only when every task has the same \(p_i\). The more tasks differ, the more real pass^k exceeds the shortcut. The same argument applied to \((1-p_i)^k\) shows real pass@k is <em>below</em> \(1-(1-\text{pass@}1)^k\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The unbiased estimators</summary>
+          <div class="body">
+            <p>Suppose a task was run \(n\) times with \(c\) successes. Pick \(k\) of the \(n\) runs at random, without replacement. The chance all \(k\) picked runs are successes is \(\binom{c}{k}/\binom{n}{k}\), and the chance none are is \(\binom{n-c}{k}/\binom{n}{k}\). Averaged over the randomness in which runs succeeded, these equal \(p^k\) and \((1-p)^k\) exactly, so they are unbiased. They also use all \(n\) runs, which gives lower variance than scoring only the first \(k\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The calculator's Beta model</summary>
+          <div class="body">
+            <p>The calculator treats each task's \(p_i\) as drawn from a Beta distribution with mean \(\bar p\) and concentration \(\kappa\): \(\alpha = \bar p\kappa,\ \beta = (1-\bar p)\kappa\). Small \(\kappa\) puts most tasks near 0 or 1; large \(\kappa\) makes every task close to \(\bar p\). Beta moments have a closed form:</p>
+            $$\mathbb{E}[p^k] = \prod_{j=0}^{k-1}\frac{\alpha+j}{\kappa+j}, \qquad \mathbb{E}[(1-p)^k] = \prod_{j=0}^{k-1}\frac{\beta+j}{\kappa+j},$$
+            <p>so pass^k \(= \mathbb{E}[p^k]\) and pass@k \(= 1-\mathbb{E}[(1-p)^k]\), with no simulation needed.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Chen, M. et al. (2021). <a href="https://arxiv.org/abs/2107.03374">Evaluating Large Language Models Trained on Code</a>. Introduces pass@k and its unbiased estimator.</li>
+          <li>Yao, S. et al. (2024). <a href="https://arxiv.org/abs/2406.12045">τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains</a>. Introduces pass^k and shows agents' consistency falling far below their single-try success.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"pass-at-k","number":"M05","family":"evaluation",
+ "formula":{"pass_at_k_task":"1-comb(n-c,k)/comb(n,k)","pass_hat_k_task":"comb(c,k)/comb(n,k)","benchmark":"mean over tasks"},
+ "inputs":["n","c","k"],
+ "assumptions":["independent runs per task","equal task weights","binary success"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Model: per-task success ~ Beta(mean p, concentration kappa) ---------- */
+  const kappaOf = (s) => 0.5 * Math.pow(10, s / 40);
+  function moments(p, kap, k) {
+    const a = p * kap, b = (1 - p) * kap;
+    let hat = 1, miss = 1;
+    for (let j = 0; j < k; j++) { hat *= (a + j) / (kap + j); miss *= (b + j) / (kap + j); }
+    return { at: 1 - miss, hat };
+  }
+  function lgamma(x) { // Lanczos
+    const g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313,
+      -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - lgamma(1 - x);
+    x -= 1; let s = c[0];
+    for (let i = 1; i < g + 2; i++) s += c[i] / (x + i);
+    const t = x + g + 0.5;
+    return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(s);
+  }
+  function binMasses(p, kap, bins) {
+    const a = p * kap, b = (1 - p) * kap, lB = lgamma(a) + lgamma(b) - lgamma(a + b);
+    const sub = 200, out = [];
+    for (let i = 0; i < bins; i++) {
+      let m = 0;
+      for (let j = 0; j < sub; j++) {
+        const x = (i + (j + 0.5) / sub) / bins;
+        m += Math.exp((a - 1) * Math.log(x) + (b - 1) * Math.log(1 - x) - lB) / (bins * sub);
+      }
+      out.push(m);
+    }
+    const tot = out.reduce((s, v) => s + v, 0);
+    return out.map((v) => v / tot);
+  }
+
+  MM.tabs(document.getElementById("lab-tabs"));
+
+  function render(s) {
+    const k = Math.round(s.k), kap = kappaOf(s.s), r = moments(s.p, kap, k);
+    const label = s.s < 20 ? "all-or-nothing" : s.s < 50 ? "mixed" : s.s < 80 ? "fairly similar" : "every task alike";
+    document.getElementById("s-label").textContent = label;
+    document.getElementById("hero-at").textContent = MM.pct(r.at, 0);
+    document.getElementById("hero-hat").textContent = MM.pct(r.hat, 0);
+    document.getElementById("o-at").textContent = MM.pct(r.at, 1);
+    document.getElementById("o-hat").textContent = MM.pct(r.hat, 1);
+    document.getElementById("o-at-k").textContent = `pass@${k}: solved at least once`;
+    document.getElementById("o-hat-k").textContent = `pass^${k}: solved every time`;
+    document.getElementById("o-gap").textContent = MM.pct(r.at - r.hat, 1);
+    document.getElementById("o-naive").textContent = MM.pct(Math.pow(s.p, k), 1);
+
+    const ks = Array.from({ length: 16 }, (_, i) => i + 1);
+    MM.lineChart(document.getElementById("curve"), {
+      x: { min: 1, max: 16, label: "Tries scored, k" },
+      y: { min: 0, max: 1, label: "Share of tasks", pct: true },
+      series: [
+        { cls: "s-muted", points: ks.map((x) => [x, Math.pow(s.p, x)]) },
+        { cls: "s-accent", points: ks.map((x) => [x, moments(s.p, kap, x).at]) },
+        { cls: "s-fault", points: ks.map((x) => [x, moments(s.p, kap, x).hat]) }
+      ],
+      markerX: k,
+      dots: [{ x: k, y: r.hat, cls: "dot-fault" }]
+    });
+
+    const masses = binMasses(s.p, kap, 20);
+    const ymax = Math.min(1, Math.max(0.1, Math.ceil(Math.max(...masses) * 10) / 10));
+    MM.barChart(document.getElementById("dist"), {
+      bars: masses.map((m, i) => ({ x: i + 1, y: m, cls: i < 4 ? "b-fault" : i >= 16 ? "" : "b-accent" })),
+      x: { min: 1, max: 20, label: "Single-try success rate of the task (5% bins: 1 is 0–5%, 20 is 95–100%)", tickEvery: 5 },
+      y: { max: ymax, label: "Share of tasks", pct: true }
+    });
+  }
+
+  MM.state({ p: 0.72, k: 8, s: 15 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

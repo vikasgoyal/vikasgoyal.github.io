@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conformal Prediction | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Give an AI agent a guaranteed error rate: conformal prediction sets, calibration, and when to abstain or hand off to a human. Math, derivations, calculator and a worked ticket-routing example.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/conformal-prediction/">
+<meta property="og:title" content="Conformal prediction: a guaranteed rule for when an agent should hand off">
+<meta property="og:description" content="With 500 labeled examples, auto-route 59% of tickets at 96% accuracy and guarantee the right answer is in the set 95% of the time.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/conformal-prediction/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Conformal Prediction",
+  "about": "Distribution-free uncertainty and abstention for AI agents",
+  "author": {
+    "@type": "Person",
+    "name": "Vikas Goyal"
+  },
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Agentic Math Models",
+    "url": "https://vikasgoyal.github.io/agentic/patterns/math/"
+  },
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/conformal-prediction/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Conformal prediction</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M16</span>
+          <span class="tag">Planning</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Decision</span>
+          <span class="tag dof">Verification</span>
+        </div>
+        <h1>Conformal prediction</h1>
+        <p class="formula-name">Prediction sets with a guarantee: \(\Pr\big(Y \in C(X)\big) \ge 1-\alpha\)</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          With
+          <input class="inline-num wide" type="number" min="20" max="2000" step="10" data-key="n" aria-label="Labeled calibration examples">
+          labeled examples and a
+          <span class="nowrap"><input class="inline-num wide" type="number" min="80" max="99" step="1" data-key="cov" data-scale="100" aria-label="Target coverage, percent">%</span>
+          target, the agent auto-routes <span class="result-num good" id="hero-auto">59%</span> of tickets at <span class="result-num good" id="hero-acc">96%</span> accuracy and hands the rest to a person, while the right queue stays in its answer <span class="result-num" id="hero-cov">95%</span> of the time.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">"Hand off to a human when unsure" needs a definition of unsure that holds up.</p>
+        <p>Model confidence scores are often miscalibrated: a model can say 90% and be right 70% of the time, and the gap shifts with every model update. Thresholds picked by eye drift with them. Conformal prediction replaces the guess with a guarantee. Using a few hundred labeled examples, it turns any model's scores into a set of plausible answers that contains the right one at least, say, 95% of the time, whatever the model and however badly calibrated it is. When the set has one answer, the agent acts; when it has several, the agent is unsure in a precise sense, and hands off or asks.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Take 500 past tickets whose correct queue you know. For each, ask how surprised the model was by the right answer: one minus the probability it gave that queue. Sort the 500 surprise scores. The 95th-percentile surprise is your bar.</p>
+        <p>For a new ticket, include every queue whose surprise would be below the bar. Because the new ticket is just another draw from the same stream, its right answer clears the bar with the same 95% chance as the past ones did. Nothing about the model needs to be correct for this to hold; a better model just makes the sets smaller.</p>
+        <div class="compare">
+          <div class="row"><span class="lbl">Model confident: one queue in the set</span><div class="track"><div class="fill" style="width:59%"></div></div><span class="pct">59%</span></div>
+          <div class="row"><span class="lbl">Torn between two queues</span><div class="track"><div class="fill bad" style="width:33.5%"></div></div><span class="pct">34%</span></div>
+          <div class="row"><span class="lbl">Three or more queues</span><div class="track"><div class="fill bad" style="width:7.5%"></div></div><span class="pct">8%</span></div>
+        </div>
+        <p class="small muted">Share of tickets by set size, at a 95% target with 500 calibration tickets, for a model whose top answer is right 85.5% of the time.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>On \(n\) labeled calibration examples, compute a nonconformity score for the true label, here \(s_i = 1 - \hat p(y_i \mid x_i)\). Take the adjusted quantile and build sets:</p>
+        <div class="math-block">$$\hat q = s_{(\lceil (n+1)(1-\alpha)\rceil)}, \qquad C(x) = \{\,y : 1 - \hat p(y\mid x) \le \hat q\,\}$$</div>
+        <p>If calibration and new examples are exchangeable (drawn the same way), then for any model,</p>
+        <div class="math-block">$$1-\alpha \;\le\; \Pr\big(Y_{\text{new}} \in C(X_{\text{new}})\big) \;\le\; 1-\alpha + \frac{1}{n+1}$$</div>
+        <dl class="symbols">
+          <dt>\(\alpha\)</dt><dd>allowed miss rate: target coverage is \(1-\alpha\)</dd>
+          <dt>\(n\)</dt><dd>number of labeled calibration examples, held out from training</dd>
+          <dt>\(s_{(k)}\)</dt><dd>the \(k\)-th smallest calibration score</dd>
+          <dt>\(C(x)\)</dt><dd>prediction set: every answer plausible enough to keep</dd>
+        </dl>
+        <ul>
+          <li><strong>The abstention rule:</strong> act when \(|C(x)| = 1\); hand off or ask a clarifying question when \(|C(x)| \ge 2\). The set says which options to put in front of the person.</li>
+          <li><strong>The guarantee is on average over calibration sets.</strong> For one particular calibration set, coverage varies around the target; more calibration data narrows the spread.</li>
+          <li><strong>Validity is free; efficiency is not.</strong> Any model gets the coverage guarantee. A better model gets smaller sets, so more tickets are handled automatically.</li>
+        </ul>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">A simulated ticket classifier with 8 queues. Each setting is calibrated 200 times on fresh labeled samples, each time tested on 3,000 new tickets; the readouts are averages over those 200 calibrations.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-cov">Target coverage, \(1-\alpha\) <output data-out="cov" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-cov" type="range" min="80" max="99" step="1" data-key="cov" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-n">Labeled calibration examples <output data-out="n" data-fmt="int"></output></label>
+                <input id="c-n" type="range" min="20" max="2000" step="10" data-key="n">
+              </div>
+              <div class="control">
+                <label for="c-delta">Model strength <output id="acc-out"></output></label>
+                <input id="c-delta" type="range" min="1" max="4.5" step="0.1" data-key="delta">
+                <div class="note">Shown as the accuracy of the model's top answer.</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout primary"><div class="v" id="o-cov">–</div><div class="k">Right answer in the set (average)</div></div>
+                <div class="readout"><div class="v" id="o-low">–</div><div class="k">Coverage in the worst 5% of calibrations</div></div>
+                <div class="readout"><div class="v" id="o-auto">–</div><div class="k">Handled automatically: one answer in the set</div></div>
+                <div class="readout"><div class="v" id="o-acc">–</div><div class="k">Accuracy on those</div></div>
+                <div class="readout alarm"><div class="v" id="o-hand">–</div><div class="k">Handed to a person: two or more answers</div></div>
+                <div class="readout"><div class="v" id="o-size">–</div><div class="k">Average set size</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-size" id="tab-size">Set sizes</button>
+                <button role="tab" aria-selected="false" aria-controls="view-cov" id="tab-cov">Coverage across calibrations</button>
+              </div>
+
+              <div id="view-size" role="tabpanel" aria-labelledby="tab-size">
+                <div class="chart-wrap">
+                  <svg class="chart" id="sizes" role="img" aria-label="Share of tickets by prediction set size"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--ok)"></i>One answer: act</span>
+                    <span><i style="background:var(--fault)"></i>Two or more: hand off</span>
+                    <span><i style="background:var(--rule)"></i>Empty set</span>
+                  </div>
+                </div>
+              </div>
+              <div id="view-cov" role="tabpanel" aria-labelledby="tab-cov" hidden>
+                <div class="chart-wrap">
+                  <svg class="chart" id="covhist" role="img" aria-label="Histogram of coverage achieved across 100 calibration draws"></svg>
+                  <p class="small muted" style="margin:4px 8px 6px">Each bar counts calibrations whose test coverage fell in that 1-point band. The dashed line is the target. More calibration data narrows the spread.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: routing support tickets</h2>
+        <p>An intake agent assigns support tickets to one of 8 queues. Its classifier's top answer is right <strong>85.5%</strong> of the time, so routing every ticket automatically sends one in seven to the wrong team. The team labeled <strong>500</strong> recent tickets for calibration and compared three targets. Figures are averages over 300 calibration draws, tested on 20,000 tickets:</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>Target coverage</th><th class="num">Achieved</th><th class="num">Auto-routed</th><th class="num">Accuracy when auto-routed</th><th class="num">Two queues</th><th class="num">Three or more</th></tr></thead>
+            <tbody>
+              <tr><td>No conformal: route every ticket</td><td class="num">–</td><td class="num">100%</td><td class="num">85.5%</td><td class="num">–</td><td class="num">–</td></tr>
+              <tr><td>90%</td><td class="num">90.3%</td><td class="num">81%</td><td class="num">91.4%</td><td class="num">17%</td><td class="num">0.4%</td></tr>
+              <tr class="weak"><td>95%</td><td class="num">95.2%</td><td class="num">59%</td><td class="num">96.4%</td><td class="num">34%</td><td class="num">8%</td></tr>
+              <tr><td>98%</td><td class="num">98.0%</td><td class="num">36%</td><td class="num">99.3%</td><td class="num">34%</td><td class="num">30%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The team chose 95%. Tickets with one queue in the set were routed automatically and were right 96% of the time. Tickets with two queues went to a triage agent who only had to choose between the two shown, which took seconds. Only 8% needed a full manual look. Calibrating on 100 tickets instead of 500 gave the same average coverage, but in the worst 5% of draws coverage fell to 91.5% instead of 93.5%, so the extra labeling bought a steadier guarantee.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>New data must look like calibration data.</strong> The guarantee assumes exchangeability. After a product launch or a model update, recalibrate on fresh labeled examples; under gradual drift, recalibrate on a rolling window.</li>
+          <li><strong>Coverage is on average, not per group.</strong> 95% overall can hide 80% on one queue and 99% on another. Mondrian (class-conditional) conformal calibrates each group separately when per-group guarantees matter.</li>
+          <li><strong>It guarantees coverage, not small sets.</strong> A weak model gets valid but large sets, and most traffic is handed off. Improving the model is still how you raise automation.</li>
+          <li><strong>Calibration labels must be right.</strong> Mislabeled calibration examples shift the threshold. Use carefully labeled data, and check agreement between labelers (M08).</li>
+          <li><strong>Free-text answers need more work.</strong> For generated text, sets are built from sampled candidates and a scoring function; conformal methods for language generation exist but are more involved than classification.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply it -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Hold out labeled examples</strong> that the model was not trained or tuned on, sampled like production traffic: 200 to 1,000 is typical.</li>
+          <li><strong>Pick the target</strong> from the cost of a miss. Higher coverage means more handoffs; the calculator shows the trade-off.</li>
+          <li><strong>Compute the threshold</strong> with the adjusted quantile, and build sets at inference time: every answer whose score clears it.</li>
+          <li><strong>Act on singletons, route the rest.</strong> Show the person only the answers in the set; empty sets are a signal of out-of-distribution input.</li>
+          <li><strong>Monitor coverage on labeled samples</strong> of live traffic, and recalibrate whenever it drifts below target or the model changes.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"Instead of trusting the model's confidence, we tested it against 500 tickets we know the answers to. Now, when the agent is sure, it routes the ticket itself and is right 96% of the time. When it isn't, it hands the ticket over with the two or three likely queues, and we can guarantee the right one is in its answer 95% of the time."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><a href="../model-cascades/">M11 Model cascades</a><span class="why">Conformal sets give a principled escalation trigger.</span></li>
+              <li><a href="../mdp-pomdp/">M14 MDPs and POMDPs</a><span class="why">Deciding whether to act or gather more information, given calibrated confidence.</span></li>
+              <li><a href="../confidence-intervals/">M06 Confidence intervals</a><span class="why">Guarantees on an aggregate score, rather than on each answer.</span></li>
+              <li><a href="../condorcet-voting/">M10 Condorcet jury theorem and voting</a><span class="why">Vote agreement as a nonconformity score.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/human-in-the-loop/">No. 18 Human-in-the-Loop</a><span class="why">Where the non-singleton sets go.</span></li>
+              <li><a href="/agentic/patterns/metacognitive-monitor/">No. 37 Metacognitive Monitor</a><span class="why">An agent that knows when it doesn't know.</span></li>
+              <li><a href="/agentic/patterns/fast-slow-escalation/">No. 33 Fast/Slow Escalation</a><span class="why">Escalating uncertain cases to a stronger model instead of a person.</span></li>
+              <li><a href="/agentic/patterns/guardrails/">No. 19 Guardrails</a><span class="why">Blocking actions when the set is empty or large.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: conformal-prediction
+number: M16
+name: Conformal prediction for abstention and handoff
+family: planning
+answers: "When should the agent act on its own, and when should it hand off?"
+formula:
+  score: "s_i = 1 - p_hat(y_i | x_i) on calibration data"
+  threshold: "q_hat = s_(ceil((n+1)(1-alpha)))"
+  prediction_set: "C(x) = {y : 1 - p_hat(y|x) <= q_hat}"
+  guarantee: "1 - alpha <= P(Y in C(X)) <= 1 - alpha + 1/(n+1)"
+  decision: "act if |C(x)| == 1, otherwise hand off with C(x)"
+inputs:
+  calibration: {type: list, meaning: held-out labeled examples with model probabilities}
+  alpha: {type: float, meaning: allowed miss rate}
+assumptions:
+  - calibration and live data exchangeable
+  - marginal (not per-group) coverage
+  - correct calibration labels
+use_when:
+  - deciding when an agent should act alone versus escalate
+  - giving a guaranteed error rate for an automated step
+related_patterns: [human-in-the-loop, metacognitive-monitor, fast-slow-escalation, guardrails]</pre></div>
+
+        <div class="code-label">Reference implementation (Python, NumPy)</div>
+        <div class="code"><pre>import math
+import numpy as np
+
+def calibrate(probs_cal, labels_cal, alpha=0.05):
+    """probs_cal: n x K model probabilities; labels_cal: n true labels."""
+    n = len(labels_cal)
+    scores = 1 - probs_cal[np.arange(n), labels_cal]
+    k = math.ceil((n + 1) * (1 - alpha))
+    return 1.0 if k &gt; n else float(np.sort(scores)[k - 1])
+
+def prediction_sets(probs, q_hat):
+    return (1 - probs) &lt;= q_hat            # boolean mask: n x K
+
+def decide(probs, q_hat):
+    sets = prediction_sets(probs, q_hat)
+    size = sets.sum(axis=1)
+    return np.where(size == 1, "act", np.where(size == 0, "out_of_distribution", "hand_off")), sets
+
+if __name__ == "__main__":
+    rng = np.random.default_rng(0)
+    def simulate(n, k=8, delta=2.6):
+        y = rng.integers(k, size=n)
+        logits = rng.normal(size=(n, k))
+        logits[np.arange(n), y] += delta
+        p = np.exp(logits); p /= p.sum(axis=1, keepdims=True)
+        return p, y
+    q = calibrate(*simulate(500), alpha=0.05)
+    p, y = simulate(5000)
+    actions, sets = decide(p, q)
+    print("coverage", sets[np.arange(5000), y].mean())          # about 0.95
+    print("auto-handled", (actions == "act").mean())            # about 0.6</pre></div>
+      </section>
+
+      <!-- 12. Derivations -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>Why the coverage guarantee holds</summary>
+          <div class="body">
+            <p>Put the new example's score \(s_{n+1}\) alongside the \(n\) calibration scores. If all \(n+1\) examples are exchangeable, every ordering of their scores is equally likely, so \(s_{n+1}\) is equally likely to land in any of the \(n+1\) ranks. The new true label is in the set exactly when \(s_{n+1} \le \hat q\), the \(k\)-th smallest calibration score with \(k = \lceil(n+1)(1-\alpha)\rceil\). That happens when \(s_{n+1}\) ranks at most \(k\)-th among the \(n+1\), which has probability \(k/(n+1) \ge 1-\alpha\). With no ties, the probability is also at most \(1-\alpha + 1/(n+1)\).</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why the quantile is adjusted</summary>
+          <div class="body">
+            <p>Using the plain \((1-\alpha)\) quantile of the \(n\) calibration scores would undercover slightly, because the new example adds one more score to the ranking. The \(\lceil (n+1)(1-\alpha)\rceil\) index corrects for that. If \((n+1)(1-\alpha) &gt; n\), for example \(n = 15\) with \(\alpha = 0.05\), there are too few calibration examples for the target, and the only valid set is every possible answer.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>How much coverage varies between calibration sets</summary>
+          <div class="body">
+            <p>Given one particular calibration set, the coverage on future data is a random quantity. For continuous scores it follows a Beta distribution, \(\text{Beta}(k,\ n+1-k)\), with mean \(k/(n+1)\) and standard deviation about \(\sqrt{\alpha(1-\alpha)/n}\). At \(n = 500\) and \(\alpha = 0.05\) that is about 1 point; at \(n = 100\), about 2 points. This is what the second calculator view shows, and why larger calibration sets give a steadier guarantee.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Sets as an abstention rule</summary>
+          <div class="body">
+            <p>A set of size one means every alternative was too surprising to keep: the model is confident in a way validated against labeled data. A larger set means at least two answers remain plausible at the chosen coverage. Acting only on singletons gives an error rate on acted-on cases that is typically below \(\alpha\). When you need a guarantee on that error rate directly, conformal risk control extends the same calibration idea to other losses, such as the error rate among accepted cases.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Angelopoulos, A. N. and Bates, S. (2021). <a href="https://arxiv.org/abs/2107.07511">A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification</a>. The practical starting point, with code.</li>
+          <li>Ren, A. Z. et al. (2023). <a href="https://arxiv.org/abs/2307.01928">Robots That Ask For Help: Uncertainty Alignment for Large Language Model Planners</a>. Conformal prediction deciding when an LLM agent should ask a person.</li>
+          <li>Vovk, V., Gammerman, A. and Shafer, G. (2005). <em>Algorithmic Learning in a Random World</em>. Springer. The foundational treatment of conformal prediction.</li>
+          <li>Angelopoulos, A. N. et al. (2022). <a href="https://arxiv.org/abs/2208.02814">Conformal Risk Control</a>. Extending the guarantee to losses beyond coverage.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"conformal-prediction","number":"M16","family":"planning",
+ "formula":{"score":"1-p_hat(y|x)","threshold":"q_hat = s_(ceil((n+1)(1-alpha)))","set":"C(x)={y: 1-p_hat(y|x) <= q_hat}","guarantee":"1-alpha <= P(Y in C(X)) <= 1-alpha+1/(n+1)","decision":"act if |C|==1 else hand off"},
+ "inputs":["calibration","alpha"],
+ "assumptions":["exchangeable data","marginal coverage","correct calibration labels"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  const K = 8, TEST = 3000, DRAWS = 200;
+  let seed = 11;
+  const rnd = () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const normal = () => { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); };
+
+  /* Simulated classifier: logits N(0,1), true class boosted by delta, softmax */
+  function sample(n, delta) {
+    const P = new Float64Array(n * K), Y = new Int32Array(n);
+    for (let i = 0; i < n; i++) {
+      const y = Math.floor(rnd() * K); Y[i] = y;
+      let mx = -Infinity; const l = new Array(K);
+      for (let k = 0; k < K; k++) { l[k] = normal() + (k === y ? delta : 0); if (l[k] > mx) mx = l[k]; }
+      let z = 0; for (let k = 0; k < K; k++) { l[k] = Math.exp(l[k] - mx); z += l[k]; }
+      for (let k = 0; k < K; k++) P[i * K + k] = l[k] / z;
+    }
+    return { P, Y, n };
+  }
+  function qhat(cal, alpha) {
+    const s = new Float64Array(cal.n);
+    for (let i = 0; i < cal.n; i++) s[i] = 1 - cal.P[i * K + cal.Y[i]];
+    const k = Math.ceil((cal.n + 1) * (1 - alpha));
+    if (k > cal.n) return 1;
+    s.sort(); return s[k - 1];
+  }
+
+  /* Exact top-1 accuracy: P(true logit + delta beats the other K-1), by numerical integration */
+  function Phi(x) {
+    const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2);
+    const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x / 2);
+    return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y);
+  }
+  function top1(delta) {
+    const a = -8, b = 8, m = 800, h = (b - a) / m;
+    let sum = 0;
+    for (let i = 0; i <= m; i++) {
+      const x = a + i * h, f = Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI) * Math.pow(Phi(x + delta), K - 1);
+      sum += f * (i === 0 || i === m ? 1 : i % 2 ? 4 : 2);
+    }
+    return (sum * h) / 3;
+  }
+  function testPool(delta) { return { top1: top1(delta) }; }
+
+  function evaluate(s) {
+    const alpha = 1 - s.cov, n = Math.round(s.n), pool = testPool(s.delta);
+    seed = 2024;
+    const covs = [], sizeCounts = new Float64Array(K + 1);
+    let single = 0, singleRight = 0, totalSize = 0;
+    for (let d = 0; d < DRAWS; d++) {
+      const q = qhat(sample(n, s.delta), alpha);
+      const T = sample(TEST, s.delta);   // fresh tickets for every calibration: the guarantee is about new data
+      let covered = 0;
+      for (let i = 0; i < TEST; i++) {
+        let size = 0, only = -1;
+        for (let k = 0; k < K; k++) if (1 - T.P[i * K + k] <= q) { size++; only = k; }
+        if (1 - T.P[i * K + T.Y[i]] <= q) covered++;
+        sizeCounts[size]++; totalSize += size;
+        if (size === 1) { single++; if (only === T.Y[i]) singleRight++; }
+      }
+      covs.push(covered / TEST);
+    }
+    const N = DRAWS * TEST;
+    covs.sort((a, b) => a - b);
+    return {
+      cov: covs.reduce((a, b) => a + b, 0) / DRAWS, low: covs[Math.floor(0.05 * DRAWS)], covs,
+      auto: single / N, acc: single ? singleRight / single : NaN, hand: 1 - single / N - sizeCounts[0] / N,
+      size: totalSize / N, sizes: Array.from(sizeCounts, (c) => c / N), top1: pool.top1
+    };
+  }
+
+  MM.tabs(document.getElementById("lab-tabs"));
+  let timer = null, last = null;
+  function compute(s) {
+    const r = evaluate(s);
+    document.getElementById("acc-out").textContent = MM.pctFixed(r.top1, 1) + " top-1";
+    document.getElementById("hero-auto").textContent = MM.pct(r.auto, 0);
+    document.getElementById("hero-acc").textContent = MM.pct(r.acc, 0);
+    document.getElementById("hero-cov").textContent = MM.pct(r.cov, 0);
+    document.getElementById("o-cov").textContent = MM.pct(r.cov, 1);
+    document.getElementById("o-low").textContent = MM.pct(r.low, 1);
+    document.getElementById("o-auto").textContent = MM.pct(r.auto, 0);
+    document.getElementById("o-acc").textContent = isNaN(r.acc) ? "–" : MM.pct(r.acc, 1);
+    document.getElementById("o-hand").textContent = MM.pct(r.hand, 0);
+    document.getElementById("o-size").textContent = r.size.toFixed(2);
+
+    MM.barChart(document.getElementById("sizes"), {
+      bars: r.sizes.map((v, i) => ({ x: i, y: v, cls: i === 0 ? "b-muted" : i === 1 ? "" : "b-fault" })),
+      x: { min: 0, max: K, label: "Answers in the prediction set", tickEvery: 1 },
+      y: { max: Math.min(1, Math.max(0.2, Math.ceil(Math.max(...r.sizes) * 10) / 10)), label: "Share of tickets", pct: true }
+    });
+
+    const lo = Math.max(50, Math.floor(Math.min(r.covs[0], s.cov) * 100) - 1), hi = Math.min(100, Math.ceil(Math.max(r.covs[DRAWS - 1], s.cov) * 100) + 1);
+    const bins = []; for (let x = lo; x <= hi; x++) bins.push({ x, y: 0 });
+    r.covs.forEach((c) => { const b = Math.min(hi, Math.max(lo, Math.floor(c * 100))); bins[b - lo].y++; });
+    MM.barChart(document.getElementById("covhist"), {
+      bars: bins.map((b) => ({ x: b.x, y: b.y, cls: b.x < Math.round(s.cov * 100) ? "b-fault" : "" })),
+      x: { min: lo, max: hi, label: "Coverage achieved on new tickets (%)", tickEvery: hi - lo > 12 ? 2 : 1 },
+      y: { max: Math.max(10, Math.ceil(Math.max(...bins.map((b) => b.y)) / 5) * 5), label: "Calibration draws (of 200)" },
+      markerX: Math.round(s.cov * 100) - 1
+    });
+  }
+  function render(s) { last = Object.assign({}, s); clearTimeout(timer); timer = setTimeout(() => compute(last), 150); }
+
+  MM.state({ n: 500, cov: 0.95, delta: 2.6 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>
