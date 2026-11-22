@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="The mathematical models behind reliable agentic AI: compounding error, retries, eval statistics, voting, cascades, routing and abstention. One practical page per model, with derivations and calculators.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/">
+<meta property="og:title" content="Agentic Math Models">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="assets/math.css">
+<link rel="alternate" type="application/json" href="models.json" title="Machine-readable list of models">
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="./" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+<main class="page">
+  <div class="index-top">
+    <section class="index-hero">
+      <h1>The math under agentic AI</h1>
+      <p>Patterns tell you what to build. These models tell you how well it will work: how reliable a chain is, whether an eval result is real, when voting helps and when an agent should stop and ask.</p>
+      <p>Each page has the same parts: a one-line takeaway, the intuition, the math with derivations, a calculator or simulation, a worked agent example, where it breaks, and a spec for coding agents.</p>
+    </section>
+    <aside class="family-nav" aria-label="Jump to a family">
+      <h2>Families</h2>
+      <ul>
+        <li><a href="#reliability"><span class="fn-name">Reliability</span><span class="fn-q">Will the agent finish, and how fast?</span><span class="fn-count">4 models, 1 live</span></a></li>
+        <li><a href="#evaluation"><span class="fn-name">Evaluation</span><span class="fn-q">Can I trust the numbers my evals report?</span><span class="fn-count">5 models</span></a></li>
+        <li><a href="#multi-model"><span class="fn-name">Multi-model interactions</span><span class="fn-q">How should several models vote, cascade or route?</span><span class="fn-count">4 models</span></a></li>
+        <li><a href="#planning"><span class="fn-name">Planning and uncertainty</span><span class="fn-q">When should the agent act, search or abstain?</span><span class="fn-count">3 models</span></a></li>
+      </ul>
+      <div class="fn-progress">
+        <div class="fn-track" role="img" aria-label="1 of 16 models live"><div class="fn-fill" style="width:6.25%"></div></div>
+        <span>1 of 16 models live, more added regularly.</span>
+      </div>
+    </aside>
+  </div>
+  <section class="family" id="reliability">
+    <div class="family-head"><h2>Reliability</h2><p>Will the agent finish, and how fast? Models for chains, loops and capacity.</p></div>
+    <ul class="model-rows">
+      <li class="model-row"><a href="compounding-error/"><span class="no">M01</span><span class="name">Compounding error</span><span class="q">What end-to-end success should a multi-step agent expect?</span><span class="status live">Live</span></a></li>
+      <li class="model-row"><div><span class="no">M02</span><span class="name">Redundancy and retries</span><span class="q">How much do k retries or verifiers raise success?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M03</span><span class="name">Markov chains for agent loops</span><span class="q">How many steps will a looping agent take, and how often does it get stuck?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M04</span><span class="name">Little&#x27;s Law and queueing</span><span class="q">How many agents, tool slots or GPUs keep latency acceptable?</span><span class="status">Coming</span></div></li>
+    </ul>
+  </section>
+  <section class="family" id="evaluation">
+    <div class="family-head"><h2>Evaluation</h2><p>Can you trust the numbers your evals report? Models for consistency, significance and judges.</p></div>
+    <ul class="model-rows">
+      <li class="model-row"><div><span class="no">M05</span><span class="name">pass@k vs pass^k</span><span class="q">Is the agent capable, or consistently reliable?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M06</span><span class="name">Confidence intervals (Wilson and bootstrap)</span><span class="q">Is version B really better than version A?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M07</span><span class="name">Bradley–Terry and Elo</span><span class="q">How do pairwise judgments become a ranking?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M08</span><span class="name">Cohen&#x27;s kappa</span><span class="q">Does my LLM judge agree with humans beyond chance?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M09</span><span class="name">Item Response Theory</span><span class="q">Which test cases are hard, and which actually discriminate?</span><span class="status">Coming</span></div></li>
+    </ul>
+  </section>
+  <section class="family" id="multi-model">
+    <div class="family-head"><h2>Multi-model interactions</h2><p>How should several models vote, cascade or route work between them?</p></div>
+    <ul class="model-rows">
+      <li class="model-row"><div><span class="no">M10</span><span class="name">Condorcet jury theorem and voting</span><span class="q">When does majority voting across models help?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M11</span><span class="name">Model cascades</span><span class="q">When should a cheap model escalate to an expensive one?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M12</span><span class="name">Multi-armed bandits for routing</span><span class="q">Which model or prompt should get the next request?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M13</span><span class="name">Game theory for debate and critics</span><span class="q">When do debating or critiquing agents converge on the truth?</span><span class="status">Coming</span></div></li>
+    </ul>
+  </section>
+  <section class="family" id="planning">
+    <div class="family-head"><h2>Planning and uncertainty</h2><p>When should the agent act, search further or abstain?</p></div>
+    <ul class="model-rows">
+      <li class="model-row"><div><span class="no">M14</span><span class="name">MDPs and POMDPs</span><span class="q">When should the agent gather more context instead of acting?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M15</span><span class="name">MCTS and beam search</span><span class="q">How should an agent search over possible plans?</span><span class="status">Coming</span></div></li>
+      <li class="model-row"><div><span class="no">M16</span><span class="name">Conformal prediction</span><span class="q">When should the agent abstain or hand off to a human?</span><span class="status">Coming</span></div></li>
+    </ul>
+  </section>
+  <aside class="agent-note">
+    <strong>For AI agents</strong>
+    The full list, with formulas, inputs and status, is at <a href="models.json">models.json</a>. Each live page also embeds its own spec as <code>script#model-spec</code>.
+  </aside>
+  <footer class="site-foot">
+    <span>Part of the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+    <span>Vikas Goyal</span>
+  </footer>
+</main>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>

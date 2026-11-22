@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBXY60BLWE"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZBXY60BLWE');
+</script>
+<meta name="google-adsense-account" content="ca-pub-8607681845167073">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compounding Error (pⁿ) | Agentic Math Models | Vikas Goyal</title>
+<meta name="description" content="Why per-step accuracy compounds in multi-step AI agents, with the math, derivations, an interactive calculator, a worked claims-agent example and a reference implementation.">
+<link rel="canonical" href="https://vikasgoyal.github.io/agentic/patterns/math/compounding-error/">
+<meta property="og:title" content="Compounding Error (pⁿ): why long agent chains fail">
+<meta property="og:description" content="A 20-step agent at 95% per step finishes about 36% of the time. The math, the fixes, and a live calculator.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vikasgoyal.github.io/agentic/patterns/math/compounding-error/">
+<meta name="author" content="Vikas Goyal">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../assets/math.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Compounding Error (pⁿ)",
+  "about": "End-to-end reliability of multi-step AI agents",
+  "author": {"@type": "Person", "name": "Vikas Goyal"},
+  "isPartOf": {"@type": "CreativeWorkSeries", "name": "Agentic Math Models", "url": "https://vikasgoyal.github.io/agentic/patterns/math/"},
+  "url": "https://vikasgoyal.github.io/agentic/patterns/math/compounding-error/",
+  "proficiencyLevel": "Practitioner"
+}
+</script>
+</head>
+<body class="mm-body">
+<div class="mm-shell mm-shell-top"><div id="header"></div></div>
+
+<header class="site-bar">
+  <a class="brand" href="/agentic/patterns/">Agentic Pattern Library<span>by Vikas Goyal</span></a>
+  <nav aria-label="Library">
+    <a href="/agentic/patterns/">Catalog</a>
+    <a href="../" aria-current="page">Math models</a>
+    <a href="/agentic/patterns/for-agents/">For AI agents</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><ol></ol></aside>
+
+    <main>
+      <div class="crumbs"><a href="/agentic/patterns/">Patterns</a> / <a href="../">Math models</a> / Compounding error</div>
+
+      <header class="model-head">
+        <div class="model-meta">
+          <span class="model-no">No. M01</span>
+          <span class="tag">Reliability</span>
+          <span class="tag">Established</span>
+          <span class="tag dof">Verification</span>
+          <span class="tag dof">Decision</span>
+        </div>
+        <h1>Compounding error</h1>
+        <p class="formula-name">Series reliability, the \(p^n\) rule</p>
+      </header>
+
+      <!-- 1. Takeaway -->
+      <section class="takeaway" aria-labelledby="takeaway-label">
+        <h2 id="takeaway-label" class="visually-hidden" style="position:absolute;left:-9999px">Takeaway</h2>
+        <p class="live">
+          An agent that takes
+          <input class="inline-num" type="number" min="1" max="100" step="1" data-key="n" aria-label="Number of steps">
+          steps at
+          <span class="nowrap"><input class="inline-num wide" type="number" min="80" max="99.9" step="0.1" data-key="p" data-scale="100" aria-label="Per-step accuracy, percent">%</span>
+          per step finishes correctly only
+          <span class="result-num" id="hero-result">36%</span>
+          of the time.
+        </p>
+        <p class="hint">Change the blue numbers. Every figure on this page updates with them.</p>
+      </section>
+
+      <!-- 2. Why care -->
+      <section class="section">
+        <h2 id="why">Why care</h2>
+        <p class="lede">Demos show one good run. Production runs thousands, and every tool call, extraction and reasoning step is another chance to fail.</p>
+        <p>Teams usually measure accuracy per step ("the extractor is 97% accurate") and then are surprised when the whole workflow lands far lower. The gap is not bad luck. It is multiplication. This one formula explains why long autonomous chains disappoint, why checkpoints and verifiers pay for themselves, and why fixing the weakest step beats polishing the strong ones.</p>
+      </section>
+
+      <!-- 3. Intuition -->
+      <section class="section">
+        <h2 id="intuition">The intuition</h2>
+        <p>Think of a relay race where each runner drops the baton 5% of the time. One runner is fine. Six runners in a row is a different story, because the baton has to survive every handoff. Each step only ever keeps or loses what survived the step before it.</p>
+        <figure style="margin: 18px 0 8px;">
+          <svg viewBox="0 0 640 150" role="img" aria-label="Six steps in a chain, each 95% reliable. Cumulative chance of a correct run falls from 95% after step one to 74% after step six." style="width:100%;height:auto;font-family:var(--sans)">
+            <g id="beads"></g>
+          </svg>
+          <figcaption class="small muted">Six steps at 95% each. The lower number is the chance the run is still correct after that step.</figcaption>
+        </figure>
+        <p>The loss is quiet at first and then steep: the run is still 90% healthy after two steps, but below 40% by step twenty. Because the losses multiply rather than add, a small per-step improvement buys a large end-to-end gain on long chains.</p>
+      </section>
+
+      <!-- 4. The math -->
+      <section class="section">
+        <h2 id="math">The math</h2>
+        <p>If a run has \(n\) steps and step \(i\) succeeds with probability \(p_i\), independently of the others, the run succeeds only when every step does:</p>
+        <div class="math-block">$$P_{\text{run}} \;=\; \prod_{i=1}^{n} p_i \qquad\text{and, when every step has the same } p,\qquad P_{\text{run}} = p^{\,n}$$</div>
+        <dl class="symbols">
+          <dt>\(n\)</dt><dd>number of steps that must all go right (tool calls, extractions, decisions)</dd>
+          <dt>\(p_i\)</dt><dd>probability step \(i\) produces a correct result</dd>
+          <dt>\(\varepsilon = 1-p\)</dt><dd>per-step error rate</dd>
+          <dt>\(d\)</dt><dd>share of failures your checks catch (schema validation, tests, a verifier)</dd>
+          <dt>\(r\)</dt><dd>retries allowed after a caught failure</dd>
+        </dl>
+        <p>Three results follow and are worth memorising:</p>
+        <div class="math-block">$$P_{\text{run}} \approx e^{-n\varepsilon} \qquad n_{1/2} = \frac{\ln 2}{-\ln p} \approx \frac{0.69}{\varepsilon} \qquad p^{*} = T^{1/n}$$</div>
+        <ul>
+          <li><strong>Exponential decay:</strong> success falls like \(e^{-n\varepsilon}\), so what matters is the product of steps and error rate. Doubling steps hurts as much as doubling errors.</li>
+          <li><strong>Half-life:</strong> the number of steps after which half your runs have failed. At 5% error that is about 14 steps.</li>
+          <li><strong>Required accuracy:</strong> to hit target success \(T\) over \(n\) steps, each step needs \(p^{*}=T^{1/n}\). For 90% over 20 steps, that is 99.5% per step.</li>
+        </ul>
+        <p>Checks and retries change the per-step number. If a failure is caught with probability \(d\) and retried up to \(r\) times, the effective step accuracy is:</p>
+        <div class="math-block">$$p_{\text{eff}} = p\,\frac{1-q^{\,r+1}}{1-q}, \qquad q = (1-p)\,d$$</div>
+        <p class="muted small">Where each of these comes from is worked through in <a href="#derivations">Derivations</a> at the end of the page.</p>
+
+      </section>
+
+      <!-- 5. Calculator -->
+      <section class="section wide">
+        <h2 id="calculator" data-toc="Calculator">Interactive calculator</h2>
+        <p class="muted" style="max-width:var(--measure)">Set your chain and your safety net. The curve shows end-to-end success at every chain length; the simulation runs 40 agents step by step.</p>
+        <div class="lab">
+          <div class="lab-grid">
+            <div class="controls">
+              <div class="control">
+                <label for="c-n">Steps in the chain <output data-out="n" data-fmt="int"></output></label>
+                <input id="c-n" type="range" min="1" max="100" step="1" data-key="n">
+              </div>
+              <div class="control">
+                <label for="c-p">Per-step accuracy <output data-out="p" data-fmt="pct"></output></label>
+                <input id="c-p" type="range" min="80" max="99.9" step="0.1" data-key="p" data-scale="100">
+              </div>
+              <div class="control">
+                <label for="c-d">Failures your checks catch <output data-out="d" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-d" type="range" min="0" max="100" step="5" data-key="d" data-scale="100">
+                <div class="note">Schema validation, tests, a verifier model. Uncaught failures pass silently.</div>
+              </div>
+              <div class="control">
+                <label for="c-r">Retries after a caught failure <output data-out="r" data-fmt="int"></output></label>
+                <input id="c-r" type="range" min="0" max="3" step="1" data-key="r">
+              </div>
+              <div class="control">
+                <label for="c-t">Target end-to-end success <output data-out="T" data-fmt="pct" data-dp="0"></output></label>
+                <input id="c-t" type="range" min="50" max="99" step="1" data-key="T" data-scale="100">
+              </div>
+            </div>
+
+            <div>
+              <div class="readouts" aria-live="polite">
+                <div class="readout alarm"><div class="v" id="o-raw">–</div><div class="k">Success, no checks</div></div>
+                <div class="readout primary"><div class="v" id="o-eff">–</div><div class="k">Success with checks and retries</div></div>
+                <div class="readout"><div class="v" id="o-half">–</div><div class="k">Half-life, in steps</div></div>
+                <div class="readout"><div class="v" id="o-need">–</div><div class="k" id="o-need-k">Per-step accuracy needed</div></div>
+                <div class="readout"><div class="v" id="o-att">–</div><div class="k">Average attempts per step (cost)</div></div>
+                <div class="readout"><div class="v" id="o-fail">–</div><div class="k">Failed runs per 1,000, with checks</div></div>
+              </div>
+
+              <div class="lab-tabs" role="tablist" aria-label="Calculator view" id="lab-tabs">
+                <button role="tab" aria-selected="true" aria-controls="view-curve" id="tab-curve">Curve</button>
+                <button role="tab" aria-selected="false" aria-controls="view-sim" id="tab-sim">Simulate 40 runs</button>
+              </div>
+
+              <div id="view-curve" role="tabpanel" aria-labelledby="tab-curve">
+                <div class="chart-wrap">
+                  <svg class="chart" id="curve" role="img" aria-label="End-to-end success versus number of steps"></svg>
+                  <div class="legend">
+                    <span><i style="background:var(--fault)"></i>No checks, \(p^n\)</span>
+                    <span><i style="background:var(--ok)"></i>With checks and retries, \(p_{\text{eff}}^{\,n}\)</span>
+                    <span><i class="dash"></i>Target</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="view-sim" role="tabpanel" aria-labelledby="tab-sim" hidden>
+                <div class="sim">
+                  <div class="sim-head">
+                    <span><strong id="sim-count">–</strong> of 40 runs finished correctly (expected <strong id="sim-exp">–</strong>)</span>
+                    <button class="btn ghost" type="button" id="sim-again">Run 40 again</button>
+                  </div>
+                  <canvas id="sim-canvas" width="1200" height="640" aria-label="Grid of 40 simulated runs; each row is one run, each cell one step."></canvas>
+                  <div class="sim-key">
+                    <span><i style="background:var(--ok)"></i>Step correct</span>
+                    <span><i style="background:var(--retry)"></i>Caught and retried, then correct</span>
+                    <span><i style="background:var(--fault)"></i>Run failed here</span>
+                    <span><i style="background:var(--grid)"></i>Never reached</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Worked example -->
+      <section class="section">
+        <h2 id="example">Worked example: a claims agent</h2>
+        <p>An insurer's claims agent handles a home-damage claim in 12 steps. Per-step accuracy was measured from 500 traced runs, not guessed.</p>
+        <div class="table-scroll">
+          <table class="steps-table">
+            <thead><tr><th>#</th><th>Step</th><th class="num">Accuracy</th><th aria-hidden="true"></th></tr></thead>
+            <tbody id="claims-rows"></tbody>
+          </table>
+        </div>
+        <p>Every step looks healthy on its own; the average is 97%. Multiplied together, the agent completes a claim correctly <strong>69.7%</strong> of the time, so roughly three claims in ten need a human to fix them.</p>
+        <h3>Three fixes, compared</h3>
+        <div class="compare">
+          <div class="row"><span class="lbl">As built</span><div class="track"><div class="fill bad" style="width:69.7%"></div></div><span class="pct">69.7%</span></div>
+          <div class="row"><span class="lbl">Fix the weakest step only (adjudication 88% → 96%, via a rubric and examples)</span><div class="track"><div class="fill" style="width:76.0%"></div></div><span class="pct">76.0%</span></div>
+          <div class="row"><span class="lbl">Checks catching 80% of failures, one retry per step</span><div class="track"><div class="fill" style="width:91.7%"></div></div><span class="pct">91.7%</span></div>
+          <div class="row"><span class="lbl">Both</span><div class="track"><div class="fill" style="width:94.2%"></div></div><span class="pct">94.2%</span></div>
+        </div>
+        <p>The lesson for the design review: one targeted fix plus a verification layer moves the agent from "needs a human on every third claim" to "needs a human on one claim in seventeen". The reverse also holds: adding one more step "for completeness", such as an extra enrichment call at 97%, quietly takes the as-built figure from 69.7% to 67.6%.</p>
+      </section>
+
+      <!-- 7. Assumptions -->
+      <section class="section">
+        <h2 id="breaks">Assumptions and where it breaks</h2>
+        <ul class="breaks">
+          <li><strong>Failures are not independent.</strong> Steps share a model, a prompt and a context window, so one bad document can derail several steps at once. Positive correlation means real success is often a little <em>higher</em> than \(p^n\) (failures cluster in the same runs), but retries help <em>less</em>, because a retry with the same model and context tends to fail the same way.</li>
+          <li><strong>Steps can repair earlier mistakes.</strong> An agent that re-reads its work or a later validation step can fix an upstream error, which the pure chain ignores. Treat \(p^n\) as a pessimistic baseline for self-correcting agents.</li>
+          <li><strong>The step count is not fixed.</strong> Agents loop and branch, so \(n\) is a random variable \(N\). Success is then \(\mathbb{E}[p^N]\), and long-tail runs drag it down; see the Markov chain model.</li>
+          <li><strong>Success is not binary.</strong> A run with a slightly wrong field may still be useful. When partial credit matters, model the cost of each failure type instead of a single success rate.</li>
+          <li><strong>Accuracy drifts.</strong> \(p\) measured last month is not \(p\) today after a model upgrade or a shift in inputs. Re-measure per step on fresh traces.</li>
+          <li><strong>Checks have their own errors.</strong> A verifier can reject good output (wasted retries) or approve bad output (that is \(1-d\)). Measure its catch rate rather than assuming one.</li>
+        </ul>
+      </section>
+
+      <!-- 8. How to apply -->
+      <section class="section">
+        <h2 id="apply">How to apply it</h2>
+        <ol class="checklist">
+          <li><strong>Measure per-step accuracy from traces.</strong> Label 100–500 runs at the step level. A single end-to-end number hides which step is failing.</li>
+          <li><strong>Compute the chain before you build it.</strong> Count the steps in the design and multiply. If the projected success misses the target, change the design now, not after launch.</li>
+          <li><strong>Fix the weakest step first.</strong> Sort steps by accuracy; the bottom one or two usually account for most of the loss.</li>
+          <li><strong>Add checks where failures are detectable.</strong> Schema validation, unit tests, reference lookups and verifier models raise \(d\). Retries without detection buy nothing.</li>
+          <li><strong>Cut steps that do not earn their place.</strong> Merge deterministic steps into code, and checkpoint long chains so a failure restarts from the last good state.</li>
+        </ol>
+      </section>
+
+      <!-- 9. Customer conversation -->
+      <section class="section">
+        <h2 id="say" data-toc="Explaining it">How to explain it to a stakeholder</h2>
+        <blockquote class="say">"Each step is a coin weighted 95 to 5 in our favour. Flip it twenty times and expect a miss in two runs out of three. So we either flip fewer coins, or we check each flip and re-flip the bad ones."</blockquote>
+      </section>
+
+      <!-- 10. Related -->
+      <section class="section">
+        <h2 id="related">Related models and patterns</h2>
+        <div class="related-grid">
+          <div>
+            <h3>Math models</h3>
+            <ul class="link-list">
+              <li><span class="planned">M02 Redundancy and retries</span><span class="why">The parallel counterpart: \(1-(1-p)^k\) and why correlated errors cap it.</span></li>
+              <li><span class="planned">M03 Markov chains for agent loops</span><span class="why">When the step count is random, and loops can trap a run.</span></li>
+              <li><span class="planned">M05 pass@k vs pass^k</span><span class="why">The evaluation version of the same multiplication.</span></li>
+              <li><span class="planned">M06 Confidence intervals</span><span class="why">How sure you can be of a measured per-step \(p\).</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Design patterns</h3>
+            <ul class="link-list">
+              <li><a href="/agentic/patterns/prompt-chaining/">No. 05 Prompt Chaining</a><span class="why">The chain this model describes, with gates between steps.</span></li>
+              <li><a href="/agentic/patterns/guardrails/">No. 19 Guardrails</a><span class="why">Validation that raises the catch rate \(d\).</span></li>
+              <li><a href="/agentic/patterns/evaluator-optimizer/">No. 09 Evaluator–Optimizer</a><span class="why">A verifier plus retry loop, applied to a whole output.</span></li>
+              <li><a href="/agentic/patterns/plan-and-execute/">No. 03 Plan-and-Execute</a><span class="why">Replanning on failure, a form of recovery.</span></li>
+              <li><a href="/agentic/patterns/test-first-loop/">No. 45 Test-First Agent Loop</a><span class="why">Tests as near-perfect detection for coding agents.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. For coding agents -->
+      <section class="section">
+        <h2 id="agents">For coding agents</h2>
+        <p>A machine-readable summary and a reference implementation. The same spec is embedded in this page as <code>&lt;script type="application/json" id="model-spec"&gt;</code>, and the whole series is listed in <a href="../models.json">models.json</a>.</p>
+        <div class="code-label">Model spec (YAML)</div>
+        <div class="code"><pre>id: compounding-error
+number: M01
+name: Compounding error (series reliability)
+family: reliability
+answers: "What end-to-end success should a multi-step agent expect?"
+formula:
+  run_success: "prod_i p_i  (equal steps: p**n)"
+  approx: "exp(-n * (1 - p))"
+  half_life_steps: "ln(2) / -ln(p)"
+  required_step_accuracy: "T ** (1/n)"
+  effective_step_accuracy: "p * (1 - q**(r+1)) / (1 - q),  q = (1 - p) * d"
+inputs:
+  n: {type: int, meaning: steps that must all succeed}
+  p: {type: float, range: [0, 1], meaning: per-step accuracy}
+  d: {type: float, range: [0, 1], meaning: share of failures detected}
+  r: {type: int, meaning: retries after a detected failure}
+  T: {type: float, range: [0, 1], meaning: target run success}
+assumptions:
+  - step outcomes independent
+  - fixed step count
+  - binary success per step
+  - undetected failures are fatal; no downstream repair
+use_when:
+  - sizing a workflow before building it
+  - deciding between fewer steps, better steps, or verification
+related_patterns: [prompt-chaining, guardrails, evaluator-optimizer, plan-and-execute, test-first-loop]</pre></div>
+
+        <div class="code-label">Reference implementation (Python)</div>
+        <div class="code"><pre>import math
+from functools import reduce
+
+def run_success(step_accuracies):
+    """End-to-end success for independent steps."""
+    return reduce(lambda acc, p: acc * p, step_accuracies, 1.0)
+
+def effective_step_accuracy(p, d=0.0, r=0):
+    """Step accuracy when a share d of failures is caught and retried up to r times."""
+    q = (1 - p) * d
+    return p * (1 - q ** (r + 1)) / (1 - q)
+
+def expected_attempts(p, d=0.0, r=0):
+    q = (1 - p) * d
+    return (1 - q ** (r + 1)) / (1 - q)
+
+def half_life_steps(p):
+    return math.log(2) / -math.log(p)
+
+def required_step_accuracy(target, n):
+    return target ** (1 / n)
+
+if __name__ == "__main__":
+    print(run_success([0.95] * 20))                   # 0.358
+    print(effective_step_accuracy(0.97, d=0.8, r=1))  # 0.9933
+    print(required_step_accuracy(0.90, 20))           # 0.9947</pre></div>
+      </section>
+
+      <!-- 12. Derivations (for the math-curious) -->
+      <section class="section">
+        <h2 id="derivations">Derivations</h2>
+        <p class="muted">For the math-curious: where each result in <a href="#math">The math</a> comes from. Nothing above depends on reading this.</p>
+        <details class="derivation">
+          <summary>Why the probabilities multiply</summary>
+          <div class="body">
+            <p>Let \(S_i\) be the event "step \(i\) is correct". The run is correct when all of them happen: \(S_1 \cap S_2 \cap \dots \cap S_n\). By the chain rule of probability,</p>
+            $$\Pr\Big(\bigcap_i S_i\Big) = \Pr(S_1)\,\Pr(S_2\mid S_1)\cdots\Pr(S_n \mid S_1,\dots,S_{n-1}).$$
+            <p>If each step's success does not depend on how earlier steps went, every conditional term collapses to \(\Pr(S_i) = p_i\), giving \(\prod p_i\). The independence assumption is doing real work here; see where it breaks below.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>The exponential approximation and the half-life</summary>
+          <div class="body">
+            <p>Take logs: \(\ln P = n \ln p = n\ln(1-\varepsilon)\). For small \(\varepsilon\), \(\ln(1-\varepsilon) \approx -\varepsilon\), so \(\ln P \approx -n\varepsilon\) and \(P \approx e^{-n\varepsilon}\).</p>
+            <p>Setting \(P = \tfrac12\) gives \(n_{1/2} = \ln 2 / (-\ln p)\). With the same small-\(\varepsilon\) approximation, \(n_{1/2} \approx 0.693/\varepsilon\). At \(\varepsilon = 0.05\): exact 13.5, approximate 13.9.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Per-step accuracy needed for a target</summary>
+          <div class="body">
+            <p>Solve \(p^n = T\) for \(p\): \(p^{*} = T^{1/n} = e^{\ln T / n}\). Expanding for large \(n\), \(p^{*} \approx 1 + \ln T / n\), so the allowed error per step is roughly \(-\ln T / n\). It shrinks in proportion to chain length: twice the steps, half the error budget per step.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Effective accuracy with checks and retries</summary>
+          <div class="body">
+            <p>Each attempt succeeds with probability \(p\). A failed attempt is caught with probability \(d\), and a caught failure gets another attempt if retries remain. An uncaught failure is silent: it passes downstream and the run fails.</p>
+            <p>The step succeeds on attempt \(k+1\) (for \(k = 0,\dots,r\)) if the first \(k\) attempts all failed <em>and were caught</em>, then attempt \(k+1\) succeeded. That has probability \(q^k p\) with \(q = (1-p)d\). Summing the geometric series:</p>
+            $$p_{\text{eff}} = \sum_{k=0}^{r} q^{k} p = p\,\frac{1-q^{\,r+1}}{1-q}.$$
+            <p>The same sum without the final \(p\) gives the expected number of attempts per step, \(\mathbb{E}[\text{attempts}] = \frac{1-q^{\,r+1}}{1-q}\). So \(p_{\text{eff}} = p\cdot\mathbb{E}[\text{attempts}]\): every extra attempt you pay for converts into accuracy at rate \(p\). As \(r\to\infty\), \(p_{\text{eff}} \to p/(1-q)\), which is capped below 1 whenever \(d<1\). Retries cannot rescue failures you do not detect.</p>
+          </div>
+        </details>
+        <details class="derivation">
+          <summary>Why fixing the weakest step wins</summary>
+          <div class="body">
+            <p>Raising one step from \(p_i\) to \(p_i'\) multiplies the whole run by \(p_i'/p_i\). Lifting a 0.88 step to 0.96 multiplies success by 1.09. Lifting a 0.98 step to 0.99 multiplies it by 1.01. In log terms, \(\partial \ln P/\partial p_i = 1/p_i\): the lower a step's accuracy, the more each point of improvement is worth.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 13. References -->
+      <section class="section">
+        <h2 id="refs">References</h2>
+        <ol class="refs">
+          <li>Series systems in reliability engineering: the classic result that a chain of components is as reliable as the product of its parts. <a href="https://en.wikipedia.org/wiki/Reliability_block_diagram">Reliability block diagram</a>, Wikipedia.</li>
+          <li>Yao, S. et al. (2024). <a href="https://arxiv.org/abs/2406.12045">τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains</a>. Shows how consistency across repeated trials falls well below single-trial success for tool-using agents.</li>
+          <li>Yann LeCun's widely discussed argument (2023 talks) that errors compound in long autoregressive generation, the token-level version of the same \((1-\varepsilon)^n\) reasoning.</li>
+        </ol>
+      </section>
+
+      <footer class="site-foot">
+        <span>Part of <a href="../">Agentic Math Models</a> in the <a href="/agentic/patterns/">Agentic Pattern Library</a>.</span>
+        <span>Vikas Goyal</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="model-spec">
+{"id":"compounding-error","number":"M01","family":"reliability",
+ "formula":{"run_success":"prod(p_i)","equal_steps":"p**n","effective_step_accuracy":"p*(1-q**(r+1))/(1-q); q=(1-p)*d","required_step_accuracy":"T**(1/n)","half_life_steps":"ln2/-ln(p)"},
+ "inputs":["n","p","d","r","T"],
+ "assumptions":["independent steps","fixed step count","binary success","undetected failures are fatal"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="../assets/math.js"></script>
+<script>
+MM.ready(function () {
+  /* ---------- Model ---------- */
+  const effP = (p, d, r) => { const q = (1 - p) * d; return p * (1 - Math.pow(q, r + 1)) / (1 - q); };
+  const attempts = (p, d, r) => { const q = (1 - p) * d; return (1 - Math.pow(q, r + 1)) / (1 - q); };
+
+  /* ---------- Intuition beads (static) ---------- */
+  (function beads() {
+    const g = document.getElementById("beads");
+    const NS = "http://www.w3.org/2000/svg";
+    let out = "";
+    for (let i = 0; i < 6; i++) {
+      const cx = 55 + i * 106, surv = Math.pow(0.95, i + 1);
+      if (i > 0) out += `<line x1="${cx - 76}" y1="52" x2="${cx - 30}" y2="52" stroke="var(--rule)" stroke-width="2"/>`;
+      out += `<circle cx="${cx}" cy="52" r="30" fill="var(--ok-soft)" stroke="var(--ok)" stroke-width="2"/>`;
+      out += `<text x="${cx}" y="57" text-anchor="middle" font-size="15" font-weight="600" fill="var(--ink)">95%</text>`;
+      out += `<text x="${cx}" y="112" text-anchor="middle" font-size="12" fill="var(--ink-3)">after step ${i + 1}</text>`;
+      out += `<text x="${cx}" y="134" text-anchor="middle" font-size="17" font-weight="650" fill="${i === 5 ? "var(--fault)" : "var(--ink)"}">${(surv * 100).toFixed(0)}%</text>`;
+    }
+    g.innerHTML = out;
+  })();
+
+  /* ---------- Worked example table (static data) ---------- */
+  const claims = [
+    ["Read the claim email", .99], ["Extract claim fields", .97], ["Look up the policy", .99],
+    ["Check coverage dates", .98], ["Match the claimant", .98], ["Pull prior claims", .99],
+    ["Classify the damage", .96], ["Adjudicate eligibility", .88], ["Calculate the payout", .97],
+    ["Check fraud signals", .97], ["Draft the decision letter", .98], ["Write back to the claims system", .99]
+  ];
+  document.getElementById("claims-rows").innerHTML = claims.map(([s, p], i) =>
+    `<tr class="${p < .9 ? "weak" : ""}"><td>${i + 1}</td><td>${s}</td><td class="num">${Math.round(p * 100)}%</td>` +
+    `<td aria-hidden="true"><span class="bar" style="width:${Math.max(4, (p - .8) * 500)}px"></span></td></tr>`).join("");
+
+  /* ---------- Simulation ---------- */
+  const canvas = document.getElementById("sim-canvas");
+  const ctx = canvas.getContext("2d");
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  let lastState = null;
+  function simulate(s) {
+    const runs = 40, n = Math.round(s.n), W = canvas.width, H = canvas.height;
+    const gap = n > 60 ? 0 : 2, cw = W / n, ch = H / runs;
+    const col = { ok: css("--ok"), retry: css("--retry"), fault: css("--fault"), none: css("--grid") };
+    ctx.clearRect(0, 0, W, H);
+    let finished = 0;
+    for (let run = 0; run < runs; run++) {
+      let alive = true;
+      for (let i = 0; i < n; i++) {
+        let state = "none";
+        if (alive) {
+          let retried = false, tries = 0;
+          while (true) {
+            if (Math.random() < s.p) { state = retried ? "retry" : "ok"; break; }
+            if (tries < s.r && Math.random() < s.d) { retried = true; tries++; continue; }
+            state = "fault"; alive = false; break;
+          }
+        }
+        ctx.fillStyle = col[state];
+        ctx.fillRect(i * cw + gap / 2, run * ch + 2, Math.max(1, cw - gap), ch - 4);
+      }
+      if (alive) finished++;
+    }
+    document.getElementById("sim-count").textContent = finished;
+    document.getElementById("sim-exp").textContent = (40 * Math.pow(effP(s.p, s.d, Math.round(s.r)), n)).toFixed(1);
+  }
+  const simView = document.getElementById("view-sim");
+  document.getElementById("sim-again").addEventListener("click", () => lastState && simulate(lastState));
+  MM.tabs(document.getElementById("lab-tabs"));
+  document.getElementById("lab-tabs").addEventListener("tabchange", (e) => {
+    if (e.detail === "view-sim" && lastState) simulate(lastState);
+  });
+
+  /* ---------- Render ---------- */
+  let simTimer;
+  function render(s) {
+    const n = Math.round(s.n), r = Math.round(s.r);
+    const raw = Math.pow(s.p, n);
+    const pe = effP(s.p, s.d, r);
+    const eff = Math.pow(pe, n);
+
+    const hero = document.getElementById("hero-result");
+    hero.textContent = MM.pct(raw, raw < 0.1 ? 1 : 0);
+    hero.classList.toggle("good", raw >= s.T);
+
+    document.getElementById("o-raw").textContent = MM.pct(raw, 1);
+    document.getElementById("o-eff").textContent = MM.pct(eff, 1);
+    document.getElementById("o-half").textContent = s.p >= 0.9995 ? "1000+" : MM.num(Math.log(2) / -Math.log(s.p), 1);
+    document.getElementById("o-need").textContent = MM.pctFixed(Math.pow(s.T, 1 / n), 2);
+    document.getElementById("o-need-k").textContent = `Per-step accuracy needed for ${MM.pct(s.T, 0)} over ${n} steps`;
+    document.getElementById("o-att").textContent = attempts(s.p, s.d, r).toFixed(2);
+    document.getElementById("o-fail").textContent = Math.round((1 - eff) * 1000).toLocaleString();
+
+    const xs = Array.from({ length: 100 }, (_, i) => i + 1);
+    MM.lineChart(document.getElementById("curve"), {
+      x: { min: 0, max: 100, label: "Steps in the chain" },
+      y: { min: 0, max: 1, label: "End-to-end success", pct: true },
+      series: [
+        { cls: "s-fault", points: [[0, 1], ...xs.map((x) => [x, Math.pow(s.p, x)])] },
+        { cls: "s-ok", points: [[0, 1], ...xs.map((x) => [x, Math.pow(pe, x)])] }
+      ],
+      markerX: n, targetY: s.T,
+      dots: [{ x: n, y: raw, cls: "dot-fault" }, { x: n, y: eff, cls: "dot-ok" }]
+    });
+
+    lastState = Object.assign({}, s, { r });
+    if (!simView.hidden) { clearTimeout(simTimer); simTimer = setTimeout(() => simulate(lastState), 120); }
+  }
+
+  MM.state({ n: 20, p: 0.95, d: 0.8, r: 1, T: 0.9 }, render);
+});
+</script>
+<div class="mm-shell mm-shell-bottom"><div id="footer"></div></div>
+<script src="/headerfooter.js"></script>
+</body>
+</html>
