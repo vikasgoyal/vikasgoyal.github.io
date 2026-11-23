@@ -1,0 +1,49 @@
+# Vikas Goyal
+
+> Practical writing by Vikas Goyal, a customer-facing agentic AI solutions architect with 26 years in industry, on agentic AI systems, architectures, design patterns, evaluation and governance, plus generative AI, industry AI reports, startups and engineering careers.
+
+Pages are static HTML. Where a page has a Markdown twin or machine-readable files, they are listed below; prefer those.
+
+## Machine-readable resources
+
+- [Agentic Pattern Library index](https://vikasgoyal.github.io/agentic/patterns/llms.txt): every agentic design pattern with its intent and link
+- [Agentic Pattern Library full text](https://vikasgoyal.github.io/agentic/patterns/llms-full.txt): every pattern card as Markdown
+- [Agentic Pattern Library JSON](https://vikasgoyal.github.io/agentic/patterns/patterns.json): structured fields per pattern
+- [Agentic Pattern Library agent skill](https://vikasgoyal.github.io/agentic/patterns/skill/SKILL.md): drop-in SKILL.md for coding agents
+- [Rego primer (Markdown)](https://vikasgoyal.github.io/agentic/rego-primer.md): Rego and OPA policy as code, with agent tool-call guardrails and Microsoft Foundry Agent Controls
+
+## Agentic AI
+
+- [Agentic AI hub](https://vikasgoyal.github.io/agentic/): entry point, organized by practice area
+- [Agentic AI Design Patterns](https://vikasgoyal.github.io/agentic/patterns/): pattern library with diagrams, trade-offs and worked examples
+- [Use the Pattern Library from your coding agent](https://vikasgoyal.github.io/agentic/patterns/for-agents/)
+- [Rego, Explained by Example](https://vikasgoyal.github.io/agentic/rego-primer.html): policy as code for APIs, Kubernetes, Terraform and AI agents
+- [Reference Architecture for Agentic AI](https://vikasgoyal.github.io/agentic/refarchagentic.html)
+- [A Practical Taxonomy for Agentic AI Systems](https://vikasgoyal.github.io/agentic/agenticai-types.html)
+- [MCP as a foundational layer of the AI-native internet](https://vikasgoyal.github.io/agentic/mcpfoundation.html)
+- [Open Responses: a primer on the open LLM API specification](https://vikasgoyal.github.io/agentic/openresponses.html)
+- [From LLMs to Action Models](https://vikasgoyal.github.io/agentic/actionmodels.html)
+- [System 1 Models: a practical guide to decision models](https://vikasgoyal.github.io/agentic/design/system-1-models.html)
+- [Multi-Agent Systems (MAS) Reference Architecture](https://vikasgoyal.github.io/agentic/refarchmas.html)
+- [Agentic AI: a strategic overview for CXOs](https://vikasgoyal.github.io/agentic/agenticai.html)
+
+## Evaluation and governance
+
+- [What Are Evals?](https://vikasgoyal.github.io/agentic/observe/whatareevals.html)
+- [Testing vs Evals](https://vikasgoyal.github.io/agentic/observe/evalstesting.html)
+- [Pre-Build Evals for AI Agents](https://vikasgoyal.github.io/agentic/prebuildevals.html)
+- [Eval content map](https://vikasgoyal.github.io/agentic/observe/eval-content-map.html)
+- [Runtime Governance: 10 policies no agent should reach production without](https://vikasgoyal.github.io/agentic/observe/runtime-governance.html)
+- [Safety evals and red teaming](https://vikasgoyal.github.io/agentic/observe/safety-evals-red-teaming.html)
+
+## Other sections
+
+- [Generative AI](https://vikasgoyal.github.io/genai/)
+- [Industries AI intelligence reports](https://vikasgoyal.github.io/industries/index.html): legal, retail, healthcare, accounting and tax, agentic AI, AI startups
+- [Startups](https://vikasgoyal.github.io/startups/)
+- [Career guidance](https://vikasgoyal.github.io/ecp/)
+- [Blog](https://vikasgoyal.github.io/blog/)
+
+## Optional
+
+- [Sitemap](https://vikasgoyal.github.io/sitemap.txt): every page URL

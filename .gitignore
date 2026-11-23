@@ -26,3 +26,5 @@ md/
 # Pattern library cards
 !_patterns/*.md
 *copy.html
+# Agent-readable Markdown twins of pages
+!agentic/*.md

@@ -28,6 +28,8 @@ https://vikasgoyal.github.io/agentic/refarchagentic.html
 https://vikasgoyal.github.io/agentic/refarchmas.html
 https://vikasgoyal.github.io/agentic/teachableagents.html
 https://vikasgoyal.github.io/agentic/whynowagentic.html
+https://vikasgoyal.github.io/agentic/rego-primer.html
+https://vikasgoyal.github.io/llms.txt
 https://vikasgoyal.github.io/agentic/design/system-1-models.html
 https://vikasgoyal.github.io/agentic/observe/build-time-evals.html
 https://vikasgoyal.github.io/agentic/observe/business-metrics-evals.html
