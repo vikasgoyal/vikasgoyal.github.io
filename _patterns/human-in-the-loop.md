@@ -81,6 +81,9 @@ failures:
   - failure: Agent decides its own risk
     symptom: Risky action classified as routine by the model
     fix: Risk tiers set by policy and code, not by the agent
+  - failure: Everything gated alike
+    symptom: Easy-to-undo changes wait as long as irreversible ones
+    fix: Gate by reversibility; hard-to-undo changes come to a person as options with a recommendation
 
 related:
   - { type: Combines with, pattern: bounded-autonomy }
@@ -88,4 +91,5 @@ related:
   - { type: Combines with, pattern: plan-and-execute }
   - { type: Combines with, pattern: delegated-identity }
   - { type: Combines with, pattern: metacognitive-monitor }
+  - { type: Used by, pattern: chaos-hardening-loop }
 ---

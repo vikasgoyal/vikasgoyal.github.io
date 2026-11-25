@@ -83,6 +83,9 @@ failures:
   - failure: One number wins
     symptom: Faster delivery hides a rising failure rate
     fix: Read the five measures as a set; flag any that worsen
+  - failure: Runaway loop spend
+    symptom: Long agent loops burn budget on low-value rounds
+    fix: Track spend per loop and per scenario; pause loops that stop improving
 
 related:
   - { type: Measures, pattern: review-capacity-limits }

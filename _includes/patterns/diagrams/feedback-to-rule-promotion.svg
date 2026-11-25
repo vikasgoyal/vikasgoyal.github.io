@@ -1,0 +1,26 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Review comments on several pull requests are checked for repetition. A pattern seen on at least two pull requests becomes a rule in a small pull request that a person approves. Each rule goes into the file its tool reads: conventions in the project memory file, review rules in the review rules file, how to run the app in a verification skill, and pull request upkeep in a steward skill. Stale rules are deleted.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="40" width="110" height="34" rx="6"/><text class="ts" x="65" y="62" text-anchor="middle">PR 101 comment</text>
+ <rect class="nd" x="10" y="84" width="110" height="34" rx="6"/><text class="ts" x="65" y="106" text-anchor="middle">PR 117 comment</text>
+ <rect class="nd" x="10" y="128" width="110" height="34" rx="6"/><text class="ts" x="65" y="150" text-anchor="middle">PR 124 comment</text>
+ <rect class="nd-a" x="160" y="70" width="130" height="68" rx="8"/><text class="t" x="225" y="99" text-anchor="middle">Repeats?</text><text class="ts" x="225" y="118" text-anchor="middle">seen on ≥ 2 PRs</text>
+ <rect class="nd-a" x="330" y="70" width="130" height="68" rx="8"/><text class="t" x="395" y="99" text-anchor="middle">Rule PR</text><text class="ts" x="395" y="118" text-anchor="middle">person approves</text>
+ <rect class="nd" x="510" y="14" width="240" height="44" rx="6"/><text class="t" x="630" y="34" text-anchor="middle">Project memory</text><text class="ts" x="630" y="50" text-anchor="middle">coding conventions</text>
+ <rect class="nd" x="510" y="66" width="240" height="44" rx="6"/><text class="t" x="630" y="86" text-anchor="middle">Review rules</text><text class="ts" x="630" y="102" text-anchor="middle">what reviewers check</text>
+ <rect class="nd" x="510" y="118" width="240" height="44" rx="6"/><text class="t" x="630" y="138" text-anchor="middle">Verify skill</text><text class="ts" x="630" y="154" text-anchor="middle">how to run the app</text>
+ <rect class="nd" x="510" y="170" width="240" height="44" rx="6"/><text class="t" x="630" y="190" text-anchor="middle">PR upkeep skill</text><text class="ts" x="630" y="206" text-anchor="middle">how PRs are maintained</text>
+ <rect class="nd-g" x="330" y="200" width="130" height="50" rx="8"/><text class="t" x="395" y="222" text-anchor="middle">Prune</text><text class="ts" x="395" y="239" text-anchor="middle">delete stale rules</text>
+ <line class="ln" x1="120" y1="57" x2="158" y2="88" marker-end="url(#a)"/>
+ <line class="ln" x1="120" y1="101" x2="158" y2="104" marker-end="url(#a)"/>
+ <line class="ln" x1="120" y1="145" x2="158" y2="120" marker-end="url(#a)"/>
+ <line class="ln" x1="290" y1="104" x2="328" y2="104" marker-end="url(#a)"/>
+ <path class="ln-a" d="M460 94 C 485 94, 485 36, 508 36" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M460 100 C 480 100, 485 88, 508 88" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M460 108 C 480 108, 485 140, 508 140" marker-end="url(#aa)"/>
+ <path class="ln-a" d="M460 114 C 485 114, 485 192, 508 192" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M510 236 L462 236" marker-end="url(#ah)"/><text class="ts" x="560" y="240">rules that stop helping</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="A coding agent can commit changes to application code, which then goes through the checks and review. Its commits to protected rule files such as agent instructions, review rules, approval policy, CI workflows, code owners and hooks are blocked. Rule changes take a separate human path with stricter approval.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd-a" x="10" y="90" width="120" height="68" rx="8"/><text class="t" x="70" y="119" text-anchor="middle">Agent</text><text class="ts" x="70" y="138" text-anchor="middle">unattended</text>
+ <rect class="nd" x="200" y="24" width="160" height="56" rx="8"/><text class="t" x="280" y="48" text-anchor="middle">App code</text><text class="ts" x="280" y="66" text-anchor="middle">src · tests</text>
+ <rect class="nd-g" x="200" y="120" width="160" height="128" rx="10"/><text class="t" x="280" y="144" text-anchor="middle">Protected</text>
+ <text class="ts" x="280" y="166" text-anchor="middle">agent instructions</text>
+ <text class="ts" x="280" y="184" text-anchor="middle">review rules · policy</text>
+ <text class="ts" x="280" y="202" text-anchor="middle">CI workflows</text>
+ <text class="ts" x="280" y="220" text-anchor="middle">code owners · hooks</text>
+ <rect class="nd-a" x="420" y="24" width="150" height="56" rx="8"/><text class="t" x="495" y="48" text-anchor="middle">Checks + review</text><text class="ts" x="495" y="66" text-anchor="middle">enforced in CI</text>
+ <rect class="nd" x="420" y="156" width="150" height="56" rx="8"/><text class="t" x="495" y="180" text-anchor="middle">Person commits</text><text class="ts" x="495" y="198" text-anchor="middle">own PR</text>
+ <rect class="nd-a" x="620" y="156" width="130" height="56" rx="8"/><text class="t" x="685" y="180" text-anchor="middle">Strict approval</text><text class="ts" x="685" y="198" text-anchor="middle">2 people</text>
+ <path class="ln-a" d="M130 110 C 165 110, 165 52, 198 52" marker-end="url(#aa)"/>
+ <line class="ln" x1="360" y1="52" x2="418" y2="52" marker-end="url(#a)"/>
+ <path class="ln-h" d="M130 140 C 160 140, 165 184, 196 184"/><text class="ts" x="150" y="196" text-anchor="middle">✕ blocked</text>
+ <line class="ln-h" x1="360" y1="184" x2="418" y2="184" marker-end="url(#ah)"/>
+ <line class="ln" x1="570" y1="184" x2="618" y2="184" marker-end="url(#a)"/>
+ <path class="ln" d="M362 134 L495 134 L495 82" marker-end="url(#a)"/><text class="ts" x="502" y="112">rules judge the code</text>
+</svg>

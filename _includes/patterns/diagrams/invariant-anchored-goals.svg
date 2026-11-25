@@ -1,0 +1,25 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="A goal file holds the outcome and a short list of checkable invariants. Only a person can change it. At the start of every round the goal file is reloaded into the agent's context. The agent proposes a change, which is checked against the invariants. Changes that hold all invariants are kept; changes that break one are rejected and the agent tries another approach.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="20" width="110" height="50" rx="8"/><text class="t" x="65" y="42" text-anchor="middle">Person</text><text class="ts" x="65" y="60" text-anchor="middle">owns the list</text>
+ <rect class="nd-a" x="10" y="100" width="210" height="140" rx="10"/><text class="t" x="115" y="124" text-anchor="middle">Goal file</text>
+ <text class="ts" x="115" y="146" text-anchor="middle">outcome: 20× peak</text>
+ <rect class="nd-g" x="24" y="158" width="182" height="22" rx="4"/><text class="ts" x="115" y="173" text-anchor="middle">p95 load &lt; 300 ms</text>
+ <rect class="nd-g" x="24" y="184" width="182" height="22" rx="4"/><text class="ts" x="115" y="199" text-anchor="middle">zero lost saves</text>
+ <rect class="nd-g" x="24" y="210" width="182" height="22" rx="4"/><text class="ts" x="115" y="225" text-anchor="middle">restart &lt; 30 s</text>
+ <rect class="nd" x="280" y="120" width="130" height="68" rx="8"/><text class="t" x="345" y="149" text-anchor="middle">Round start</text><text class="ts" x="345" y="168" text-anchor="middle">reload goal</text>
+ <rect class="nd-a" x="450" y="120" width="120" height="68" rx="8"/><text class="t" x="510" y="149" text-anchor="middle">Agent</text><text class="ts" x="510" y="168" text-anchor="middle">proposes change</text>
+ <rect class="nd" x="610" y="120" width="140" height="68" rx="8"/><text class="t" x="680" y="149" text-anchor="middle">Check</text><text class="ts" x="680" y="168" text-anchor="middle">all invariants</text>
+ <rect class="nd-a" x="610" y="20" width="140" height="50" rx="8"/><text class="t" x="680" y="42" text-anchor="middle">Keep</text><text class="ts" x="680" y="60" text-anchor="middle">all hold</text>
+ <rect class="nd-g" x="450" y="214" width="300" height="40" rx="8"/><text class="t" x="600" y="239" text-anchor="middle">Reject · try another approach</text>
+ <line class="ln" x1="65" y1="70" x2="65" y2="98" marker-end="url(#a)"/><text class="ts" x="74" y="89">logged edits</text>
+ <line class="ln-a" x1="220" y1="154" x2="278" y2="154" marker-end="url(#aa)"/>
+ <line class="ln" x1="410" y1="154" x2="448" y2="154" marker-end="url(#a)"/>
+ <line class="ln" x1="570" y1="154" x2="608" y2="154" marker-end="url(#a)"/>
+ <line class="ln-a" x1="680" y1="120" x2="680" y2="72" marker-end="url(#aa)"/>
+ <line class="ln-h" x1="680" y1="188" x2="680" y2="212" marker-end="url(#ah)"/>
+ <path class="ln-h" d="M610 45 L345 45 L345 118" marker-end="url(#ah)"/><text class="ts" x="478" y="39" text-anchor="middle">next round</text>
+</svg>

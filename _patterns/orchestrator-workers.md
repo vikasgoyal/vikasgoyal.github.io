@@ -81,6 +81,9 @@ failures:
   - failure: Bad synthesis
     symptom: Final answer contradicts or ignores worker findings
     fix: Require every claim to cite a worker result; check with Reflection
+  - failure: Coordination overhead
+    symptom: Token spend per hour outgrows the value of parallel work
+    fix: Start with one agent; add workers only for truly parallel rounds; keep code review in a separate session
 
 related:
   - { type: Generalizes, pattern: parallelization }
@@ -88,4 +91,5 @@ related:
   - { type: Scales into, pattern: hierarchical-supervisor }
   - { type: Grows from, pattern: plan-and-execute }
   - { type: Combines with, pattern: budget-aware-planning }
+  - { type: Used by, pattern: chaos-hardening-loop }
 ---

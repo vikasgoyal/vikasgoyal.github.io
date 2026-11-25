@@ -89,4 +89,5 @@ related:
   - { type: Combines with, pattern: parallel-worktrees }
   - { type: Measured by, pattern: delivery-dividend-metrics }
   - { type: Analog of, pattern: budget-aware-planning }
+  - { type: Fed by, pattern: observe-then-enforce-approvals }
 ---

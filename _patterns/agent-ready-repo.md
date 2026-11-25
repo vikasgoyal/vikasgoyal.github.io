@@ -82,6 +82,9 @@ failures:
   - failure: Local and CI disagree
     symptom: Passes locally, fails in CI
     fix: Same commands and versions in both, ideally the same container
+  - failure: No verify recipe
+    symptom: Agent says the feature works but never ran the app
+    fix: "Keep a verify recipe: start the stack, wait for the health check, sign in with a test account, exercise the flow, report the steps"
 
 related:
   - { type: Enables, pattern: test-first-loop }
@@ -89,4 +92,5 @@ related:
   - { type: Analog of, pattern: sandboxed-execution }
   - { type: Enables, pattern: parallel-worktrees }
   - { type: Combines with, pattern: pr-review-gate }
+  - { type: Analog of, pattern: agent-legible-systems }
 ---

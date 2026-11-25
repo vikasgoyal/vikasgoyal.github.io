@@ -1,0 +1,22 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="An approval policy file with risk-tiered rules runs in observe mode on real pull requests, logging what it would decide. Its decisions are compared with what reviewers actually did. Where they disagree, rules are tightened or narrowed. Once the comparison is clean, the policy switches to enforce and its check becomes required.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="40" width="170" height="150" rx="10"/><text class="t" x="95" y="64" text-anchor="middle">Policy file</text>
+ <rect class="nd-g" x="22" y="76" width="146" height="30" rx="5"/><text class="ts" x="95" y="95" text-anchor="middle">all paths · 2 seats</text>
+ <rect class="nd-g" x="22" y="112" width="146" height="30" rx="5"/><text class="ts" x="95" y="131" text-anchor="middle">rule files · 2 seats</text>
+ <rect class="nd-a" x="22" y="148" width="146" height="30" rx="5"/><text class="ts" x="95" y="167" text-anchor="middle">auth · billing · CI</text>
+ <rect class="nd" x="230" y="80" width="140" height="70" rx="8"/><text class="t" x="300" y="108" text-anchor="middle">Observe mode</text><text class="ts" x="300" y="128" text-anchor="middle">log "would decide"</text>
+ <rect class="nd" x="230" y="190" width="140" height="56" rx="8"/><text class="t" x="300" y="214" text-anchor="middle">Real reviews</text><text class="ts" x="300" y="232" text-anchor="middle">what people did</text>
+ <rect class="nd-a" x="420" y="80" width="150" height="70" rx="8"/><text class="t" x="495" y="108" text-anchor="middle">Compare</text><text class="ts" x="495" y="128" text-anchor="middle">1–2 weeks of PRs</text>
+ <rect class="nd-a" x="610" y="80" width="140" height="70" rx="8"/><text class="t" x="680" y="108" text-anchor="middle">Enforce</text><text class="ts" x="680" y="128" text-anchor="middle">required check</text>
+ <rect class="nd-g" x="420" y="14" width="150" height="44" rx="8"/><text class="t" x="495" y="34" text-anchor="middle">Adjust rules</text><text class="ts" x="495" y="50" text-anchor="middle">tighten · narrow</text>
+ <line class="ln" x1="180" y1="115" x2="228" y2="115" marker-end="url(#a)"/>
+ <line class="ln" x1="370" y1="115" x2="418" y2="115" marker-end="url(#a)"/>
+ <path class="ln" d="M370 218 C 400 218, 400 140, 418 138" marker-end="url(#a)"/>
+ <line class="ln-a" x1="570" y1="115" x2="608" y2="115" marker-end="url(#aa)"/><text class="ts" x="589" y="106" text-anchor="middle">clean</text>
+ <line class="ln-h" x1="495" y1="80" x2="495" y2="60" marker-end="url(#ah)"/><text class="ts" x="502" y="74">mismatch</text>
+ <path class="ln-h" d="M420 36 L95 36 L95 38" marker-end="url(#ah)"/>
+</svg>

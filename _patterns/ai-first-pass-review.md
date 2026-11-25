@@ -75,7 +75,7 @@ example:
 failures:
   - failure: Noise
     symptom: Dozens of low-value findings; people stop reading them
-    fix: Severity levels; tune the checklist from accept and dismiss rates
+    fix: Severity levels and an effort setting (low shows only high-confidence findings); tune the checklist from accept and dismiss rates
   - failure: Rubber-stamping
     symptom: Humans approve whatever the AI passed
     fix: The human reviews the risk summary's hot spots, not just the AI's verdict
@@ -85,11 +85,15 @@ failures:
   - failure: Same blind spots as the author
     symptom: AI reviewer misses what the coding agent got wrong
     fix: Use a different model or prompt for review than for writing code
+  - failure: Bot comments obeyed
+    symptom: Agent changes code because another bot claimed a problem
+    fix: Treat bot comments as claims to verify against the code, citing file and line
 
 related:
   - { type: Combines with, pattern: pr-review-gate }
   - { type: Combines with, pattern: small-change-budget }
   - { type: Combines with, pattern: review-capacity-limits }
   - { type: Analog of, pattern: cross-model-critique }
-  - { type: Analog of, pattern: llm-as-judge }
+  - { type: Combines with, pattern: observe-then-enforce-approvals }
+  - { type: Combines with, pattern: pr-steward-loop }
 ---

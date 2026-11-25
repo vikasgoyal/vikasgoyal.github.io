@@ -1,0 +1,19 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="A harness drives load and injects failures against staging. The agent reads the telemetry and proposes options with a recommendation. Easy-to-undo fixes are written by the agent, checked by a reviewer agent, and shipped to staging behind a flag, then the harness reruns. Hard-to-undo changes go to a person. Written invariants apply to every round.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd-g" x="10" y="10" width="740" height="30" rx="6"/><text class="ts" x="380" y="30" text-anchor="middle">invariants · fixed for every round</text>
+ <rect class="nd" x="10" y="80" width="130" height="76" rx="8"/><text class="t" x="75" y="106" text-anchor="middle">Harness</text><text class="ts" x="75" y="126" text-anchor="middle">~10× load</text><text class="ts" x="75" y="142" text-anchor="middle">+ kill · stall</text>
+ <rect class="nd" x="180" y="80" width="120" height="76" rx="8"/><text class="t" x="240" y="112" text-anchor="middle">Staging</text><text class="ts" x="240" y="132" text-anchor="middle">mirrors prod</text>
+ <rect class="nd-a" x="340" y="80" width="130" height="76" rx="8"/><text class="t" x="405" y="106" text-anchor="middle">Agent</text><text class="ts" x="405" y="126" text-anchor="middle">reads telemetry</text><text class="ts" x="405" y="142" text-anchor="middle">options + pick</text>
+ <rect class="nd-a" x="520" y="60" width="230" height="56" rx="8"/><text class="t" x="635" y="84" text-anchor="middle">Easy to undo</text><text class="ts" x="635" y="102" text-anchor="middle">fix → reviewer → flag</text>
+ <rect class="nd-g" x="520" y="134" width="230" height="56" rx="8"/><text class="t" x="635" y="158" text-anchor="middle">Hard to undo</text><text class="ts" x="635" y="176" text-anchor="middle">person decides</text>
+ <line class="ln" x1="140" y1="118" x2="178" y2="118" marker-end="url(#a)"/>
+ <line class="ln" x1="300" y1="118" x2="338" y2="118" marker-end="url(#a)"/>
+ <path class="ln-a" d="M470 108 C 495 108, 495 88, 518 88" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M470 128 C 495 128, 495 162, 518 162" marker-end="url(#ah)"/>
+ <path class="ln-a" d="M635 116 L635 124 L756 124 L756 236 L75 236 L75 158" marker-end="url(#aa)"/><text class="ts" x="400" y="230" text-anchor="middle">deploy to staging · rerun the scenario</text>
+ <path class="ln-h" d="M635 190 L635 210 L240 210 L240 158" marker-end="url(#ah)"/><text class="ts" x="440" y="204" text-anchor="middle">after approval</text>
+</svg>

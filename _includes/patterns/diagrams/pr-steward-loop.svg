@@ -1,0 +1,25 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="An open pull request produces events: failing checks, conflicts with the base branch, and review comments. A steward agent handles each event. Small fixes are tested and pushed back to the pull request. Larger issues such as redesigns, new APIs or security concerns are escalated to the author. After three failed attempts the steward reports instead of retrying. Approval and merge stay with humans.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="90" width="110" height="60" rx="8"/><text class="t" x="65" y="116" text-anchor="middle">Open PR</text><text class="ts" x="65" y="134" text-anchor="middle">watch ≤ 7 days</text>
+ <rect class="nd" x="160" y="30" width="140" height="36" rx="6"/><text class="ts" x="230" y="53" text-anchor="middle">failing check</text>
+ <rect class="nd" x="160" y="102" width="140" height="36" rx="6"/><text class="ts" x="230" y="125" text-anchor="middle">base conflict</text>
+ <rect class="nd" x="160" y="174" width="140" height="36" rx="6"/><text class="ts" x="230" y="197" text-anchor="middle">review comment</text>
+ <rect class="nd-a" x="340" y="80" width="130" height="80" rx="8"/><text class="t" x="405" y="108" text-anchor="middle">Steward</text><text class="ts" x="405" y="128" text-anchor="middle">small or large?</text><text class="ts" x="405" y="144" text-anchor="middle">≤ 3 tries</text>
+ <rect class="nd" x="520" y="30" width="230" height="56" rx="8"/><text class="t" x="635" y="54" text-anchor="middle">Fix + test + push</text><text class="ts" x="635" y="72" text-anchor="middle">lint · conflicts · small fixes</text>
+ <rect class="nd-g" x="520" y="104" width="230" height="56" rx="8"/><text class="t" x="635" y="128" text-anchor="middle">Escalate to author</text><text class="ts" x="635" y="146" text-anchor="middle">redesign · new API · security</text>
+ <rect class="nd-a" x="520" y="186" width="230" height="56" rx="8"/><text class="t" x="635" y="210" text-anchor="middle">Human approves</text><text class="ts" x="635" y="228" text-anchor="middle">steward never merges</text>
+ <path class="ln" d="M120 110 C 140 110, 140 48, 158 48" marker-end="url(#a)"/>
+ <line class="ln" x1="120" y1="120" x2="158" y2="120" marker-end="url(#a)"/>
+ <path class="ln" d="M120 130 C 140 130, 140 192, 158 192" marker-end="url(#a)"/>
+ <path class="ln" d="M300 48 C 320 48, 320 100, 338 104" marker-end="url(#a)"/>
+ <line class="ln" x1="300" y1="120" x2="338" y2="120" marker-end="url(#a)"/>
+ <path class="ln" d="M300 192 C 320 192, 320 140, 338 136" marker-end="url(#a)"/>
+ <path class="ln-a" d="M470 100 C 495 100, 495 58, 518 58" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M470 132 L518 132" marker-end="url(#ah)"/>
+ <path class="ln-h" d="M635 30 L635 16 L65 16 L65 88" marker-end="url(#ah)"/><text class="ts" x="350" y="11" text-anchor="middle">push updates the PR</text>
+ <line class="ln" x1="635" y1="160" x2="635" y2="184" marker-end="url(#a)"/>
+</svg>

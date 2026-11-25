@@ -1,0 +1,20 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Two paths compared. With coarse signals such as total memory and average latency, the agent guesses and cannot confirm its fix. With attributed signals such as per-query rows scanned versus returned and per-cache sizes, the agent finds the cause, fixes it and confirms the fix on the next run. When a signal is missing, the agent adds the telemetry.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="95" width="120" height="68" rx="8"/><text class="t" x="70" y="124" text-anchor="middle">Service</text><text class="ts" x="70" y="143" text-anchor="middle">under load</text>
+ <rect class="nd-g" x="180" y="20" width="200" height="60" rx="8"/><text class="t" x="280" y="44" text-anchor="middle">Coarse signals</text><text class="ts" x="280" y="64" text-anchor="middle">total memory · avg latency</text>
+ <rect class="nd-g" x="430" y="20" width="150" height="60" rx="8"/><text class="t" x="505" y="44" text-anchor="middle">Agent guesses</text><text class="ts" x="505" y="64" text-anchor="middle">can't confirm</text>
+ <rect class="nd-a" x="180" y="150" width="200" height="76" rx="8"/><text class="t" x="280" y="174" text-anchor="middle">Attributed signals</text><text class="ts" x="280" y="194" text-anchor="middle">per query: scanned/returned</text><text class="ts" x="280" y="210" text-anchor="middle">per cache: size + owner</text>
+ <rect class="nd-a" x="430" y="158" width="150" height="60" rx="8"/><text class="t" x="505" y="182" text-anchor="middle">Agent finds cause</text><text class="ts" x="505" y="202" text-anchor="middle">fix one thing</text>
+ <rect class="nd" x="620" y="158" width="130" height="60" rx="8"/><text class="t" x="685" y="182" text-anchor="middle">Rerun</text><text class="ts" x="685" y="202" text-anchor="middle">confirm or drop</text>
+ <path class="ln" d="M130 115 C 155 115, 155 50, 178 50" marker-end="url(#a)"/>
+ <path class="ln-a" d="M130 145 C 155 145, 155 188, 178 188" marker-end="url(#aa)"/>
+ <line class="ln" x1="380" y1="50" x2="428" y2="50" marker-end="url(#a)"/>
+ <line class="ln-a" x1="380" y1="188" x2="428" y2="188" marker-end="url(#aa)"/>
+ <line class="ln-a" x1="580" y1="188" x2="618" y2="188" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M505 158 L505 120 L340 120 L340 148" marker-end="url(#ah)"/><text class="ts" x="422" y="114" text-anchor="middle">signal missing → add telemetry</text>
+ <path class="ln-h" d="M685 218 L685 250 L70 250 L70 165" marker-end="url(#ah)"/><text class="ts" x="380" y="244" text-anchor="middle">next round</text>
+</svg>

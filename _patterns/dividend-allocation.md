@@ -89,4 +89,5 @@ related:
   - { type: Analog of, pattern: budget-aware-planning }
   - { type: Combines with, pattern: review-capacity-limits }
   - { type: Combines with, pattern: thin-slice-mvps }
+  - { type: Combines with, pattern: observe-then-enforce-approvals }
 ---
