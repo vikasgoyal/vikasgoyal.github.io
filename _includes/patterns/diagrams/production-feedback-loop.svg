@@ -1,0 +1,25 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Production signals such as errors, failed deploys and incident reviews go to a triage step that groups them and creates tasks with evidence. A coding agent reproduces each issue with a failing test and opens a fix pull request, which goes through normal review and deploys. Incident lessons update the project memory and knowledge layer.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="20" width="130" height="36" rx="6"/><text class="ts" x="75" y="43" text-anchor="middle">error spikes</text>
+ <rect class="nd" x="10" y="64" width="130" height="36" rx="6"/><text class="ts" x="75" y="87" text-anchor="middle">failed deploys</text>
+ <rect class="nd" x="10" y="108" width="130" height="36" rx="6"/><text class="ts" x="75" y="131" text-anchor="middle">incident reviews</text>
+ <rect class="nd" x="10" y="152" width="130" height="36" rx="6"/><text class="ts" x="75" y="175" text-anchor="middle">slow endpoints</text>
+ <rect class="nd-a" x="180" y="70" width="140" height="68" rx="8"/><text class="t" x="250" y="99" text-anchor="middle">Triage</text><text class="ts" x="250" y="118" text-anchor="middle">group · dedupe</text>
+ <rect class="nd" x="360" y="70" width="130" height="68" rx="8"/><text class="t" x="425" y="99" text-anchor="middle">Task</text><text class="ts" x="425" y="118" text-anchor="middle">+ evidence</text>
+ <rect class="nd-a" x="530" y="70" width="100" height="68" rx="8"/><text class="t" x="580" y="99" text-anchor="middle">Agent</text><text class="ts" x="580" y="118" text-anchor="middle">test + fix</text>
+ <rect class="nd" x="660" y="70" width="90" height="68" rx="8"/><text class="t" x="705" y="99" text-anchor="middle">Review</text><text class="ts" x="705" y="118" text-anchor="middle">+ deploy</text>
+ <rect class="nd-g" x="180" y="200" width="310" height="48" rx="8"/><text class="t" x="335" y="221" text-anchor="middle">Memory + knowledge layer</text><text class="ts" x="335" y="238" text-anchor="middle">lessons from incident reviews</text>
+ <path class="ln" d="M140 38 C 160 38, 160 96, 178 98" marker-end="url(#a)"/>
+ <line class="ln" x1="140" y1="82" x2="178" y2="100" marker-end="url(#a)"/>
+ <line class="ln" x1="140" y1="126" x2="178" y2="110" marker-end="url(#a)"/>
+ <path class="ln" d="M140 170 C 160 170, 160 116, 178 114" marker-end="url(#a)"/>
+ <line class="ln" x1="320" y1="104" x2="358" y2="104" marker-end="url(#a)"/>
+ <line class="ln" x1="490" y1="104" x2="528" y2="104" marker-end="url(#a)"/>
+ <line class="ln-a" x1="630" y1="104" x2="658" y2="104" marker-end="url(#aa)"/>
+ <path class="ln-h" d="M140 126 L160 126 L160 224 L178 224" marker-end="url(#ah)"/>
+ <path class="ln-h" d="M705 70 L705 50 L250 50 L250 68" marker-end="url(#ah)"/><text class="ts" x="478" y="43" text-anchor="middle">new telemetry after deploy</text>
+</svg>

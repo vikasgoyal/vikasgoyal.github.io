@@ -1,7 +1,7 @@
 ---
 title: Thin-Slice MVPs
 n: 46
-family: buildloop
+family: plan
 maturity: emg
 axes: [decision]
 intent: Each session ships one small, working vertical slice (MVP1 → MVP2 → MVP3).

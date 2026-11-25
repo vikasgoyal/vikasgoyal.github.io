@@ -1,7 +1,7 @@
 ---
 title: Spec-Driven Development
 n: 40
-family: setup
+family: plan
 maturity: emg
 axes: [context, decision]
 intent: A short spec is the source of truth; the agent builds from it, not from chat history.

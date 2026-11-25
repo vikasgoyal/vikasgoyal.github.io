@@ -1,7 +1,7 @@
 ---
 title: Project Memory File
 n: 41
-family: setup
+family: knowledge
 maturity: est
 axes: [context]
 intent: A CLAUDE.md or AGENTS.md file holds conventions, commands and decisions that build up over time.
@@ -87,6 +87,6 @@ related:
   - { type: Combines with, pattern: spec-driven-development }
   - { type: Specializes, pattern: tiered-memory }
   - { type: Combines with, pattern: agent-ready-repo }
-  - { type: Analog of, pattern: skills }
+  - { type: Scales into, pattern: shared-knowledge-layer }
   - { type: Combines with, pattern: artifact-ownership }
 ---

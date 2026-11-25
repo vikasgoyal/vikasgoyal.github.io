@@ -1,7 +1,7 @@
 ---
 title: Parallel Agents in Worktrees
 n: 48
-family: review
+family: build
 maturity: emg
 axes: [coordination]
 intent: Several agents work on isolated branches at once, then merge through review.
@@ -88,5 +88,5 @@ related:
   - { type: Requires, pattern: agent-ready-repo }
   - { type: Requires, pattern: pr-review-gate }
   - { type: Analog of, pattern: orchestrator-workers }
-  - { type: Analog of, pattern: sandboxed-execution }
+  - { type: Combines with, pattern: review-capacity-limits }
 ---

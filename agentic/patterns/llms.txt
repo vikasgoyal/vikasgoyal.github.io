@@ -6,7 +6,7 @@ permalink: /agentic/patterns/llms.txt
 {%- assign all = site.patterns | sort: "n" -%}
 # Agentic Pattern Library
 
-> {{ all.size }} design patterns by Vikas Goyal in two tracks: designing agentic AI systems, and building software with AI coding agents. Each pattern has a problem, forces, solution, when to use and avoid, trade-offs, failure modes, related patterns and a worked example.
+> {{ all.size }} design patterns by Vikas Goyal in two tracks: designing agentic AI systems, and AI-native software delivery with coding agents. Each pattern has a problem, forces, solution, when to use and avoid, trade-offs, failure modes, related patterns and a worked example.
 
 Numbers in worked examples are illustrative, not recommendations. Choose real values from your requirements and make them configurable.
 

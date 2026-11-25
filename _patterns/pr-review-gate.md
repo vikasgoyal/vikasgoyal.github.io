@@ -1,7 +1,7 @@
 ---
 title: PR as Review Gate
 n: 47
-family: review
+family: verify
 maturity: est
 axes: [verification]
 intent: Agents work on branches, and every change lands through a reviewed pull request.
@@ -87,5 +87,5 @@ related:
   - { type: Combines with, pattern: thin-slice-mvps }
   - { type: Combines with, pattern: plan-then-code }
   - { type: Enables, pattern: parallel-worktrees }
-  - { type: Analog of, pattern: sandboxed-execution }
+  - { type: Combines with, pattern: ai-first-pass-review }
 ---

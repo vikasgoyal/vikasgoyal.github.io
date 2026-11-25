@@ -8,8 +8,8 @@ tracks:
     name: Agentic systems
     blurb: Patterns for designing agents and multi-agent systems.
   - id: coding
-    name: Building with coding agents
-    blurb: Patterns for developing software with AI coding agents.
+    name: AI-native software delivery
+    blurb: Patterns for delivering software with AI coding agents, from planning to production and the operating model around it.
 
 families:
   - id: core
@@ -40,18 +40,30 @@ families:
     track: systems
     name: Fast & slow
     blurb: Pairing System 1 (fast, intuitive) and System 2 (deliberate) models.
-  - id: setup
+  - id: plan
     track: coding
-    name: Working agreements
-    blurb: What the repo and the team give the agent before work starts.
-  - id: buildloop
+    name: Plan & Design
+    blurb: Deciding what to build and how, before an agent writes code.
+  - id: build
     track: coding
-    name: Build loop
-    blurb: How a coding agent moves from task to working code.
-  - id: review
+    name: Build
+    blurb: How coding agents produce working, tested code.
+  - id: verify
     track: coding
-    name: Review & scale
-    blurb: How agent changes land safely, and how to run several agents at once.
+    name: Verify
+    blurb: Checking agent changes at the pace agents produce them.
+  - id: observe
+    track: coding
+    name: Observe
+    blurb: Learning from production and measuring what AI changed.
+  - id: knowledge
+    track: coding
+    name: Knowledge layer
+    blurb: What agents and people need to know, and who decides it.
+  - id: operating
+    track: coding
+    name: Operating model
+    blurb: Leadership decisions about where AI-freed capacity goes.
 
 
 maturity:

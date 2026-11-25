@@ -1,0 +1,20 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Coding agents work from a task backlog. Open pull requests go into a capped review queue ordered by priority, with a fast lane for urgent fixes. Reviewers take changes from the queue at their measured capacity. When the queue is full, agents do review-free work instead.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="80" width="120" height="68" rx="8"/><text class="t" x="70" y="109" text-anchor="middle">Backlog</text><text class="ts" x="70" y="128" text-anchor="middle">waiting is free</text>
+ <rect class="nd-a" x="170" y="80" width="130" height="68" rx="8"/><text class="t" x="235" y="109" text-anchor="middle">Agents</text><text class="ts" x="235" y="128" text-anchor="middle">open PRs</text>
+ <rect class="nd" x="350" y="40" width="200" height="148" rx="10"/><text class="t" x="450" y="64" text-anchor="middle">Review queue</text><text class="ts" x="450" y="82" text-anchor="middle">cap: 10 open</text>
+ <rect class="nd-a" x="366" y="94" width="40" height="80" rx="4"/><rect class="nd-a" x="412" y="94" width="40" height="80" rx="4"/><rect class="nd-a" x="458" y="94" width="40" height="80" rx="4"/><rect class="nd-g" x="504" y="94" width="30" height="80" rx="4"/>
+ <rect class="nd-a" x="600" y="80" width="150" height="68" rx="8"/><text class="t" x="675" y="109" text-anchor="middle">Reviewers</text><text class="ts" x="675" y="128" text-anchor="middle">~8 a day</text>
+ <rect class="nd-g" x="350" y="10" width="200" height="22" rx="4"/><text class="ts" x="450" y="25" text-anchor="middle">fast lane · production fixes</text>
+ <rect class="nd-g" x="170" y="200" width="200" height="52" rx="8"/><text class="t" x="270" y="222" text-anchor="middle">Review-free work</text><text class="ts" x="270" y="240" text-anchor="middle">tests · plans · comment fixes</text>
+ <line class="ln" x1="130" y1="114" x2="168" y2="114" marker-end="url(#a)"/>
+ <line class="ln" x1="300" y1="114" x2="348" y2="114" marker-end="url(#a)"/>
+ <line class="ln-a" x1="550" y1="114" x2="598" y2="114" marker-end="url(#aa)"/>
+ <path class="ln" d="M550 21 L675 21 L675 78" marker-end="url(#a)"/>
+ <path class="ln-h" d="M235 148 L235 198" marker-end="url(#ah)"/><text class="ts" x="243" y="178">queue full</text>
+ <text class="ts" x="560" y="230">raise the cap only</text><text class="ts" x="560" y="244">when capacity grows</text>
+</svg>

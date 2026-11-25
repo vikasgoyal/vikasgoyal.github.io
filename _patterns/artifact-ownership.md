@@ -1,7 +1,7 @@
 ---
 title: Artifact Ownership
 n: 43
-family: setup
+family: knowledge
 maturity: hor
 axes: [decision, coordination]
 intent: Each artifact is marked developer-owned, AI-drafted or joint, so everyone knows who decides what.

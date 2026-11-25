@@ -1,7 +1,7 @@
 ---
 title: Agent-Ready Repo
 n: 42
-family: setup
+family: build
 maturity: emg
 axes: [tool, verification]
 intent: One-command setup, scripted checks and clear docs, so an agent can run and verify its own work.

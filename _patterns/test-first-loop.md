@@ -1,7 +1,7 @@
 ---
 title: Test-First Agent Loop
 n: 45
-family: buildloop
+family: build
 maturity: est
 axes: [verification]
 intent: Tests define "done"; the agent iterates until they pass.

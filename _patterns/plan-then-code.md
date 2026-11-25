@@ -1,7 +1,7 @@
 ---
 title: Plan-then-Code
 n: 44
-family: buildloop
+family: plan
 maturity: est
 axes: [decision, verification]
 intent: The agent proposes a plan; a human approves it before any files change.

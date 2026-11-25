@@ -6,12 +6,12 @@ permalink: /agentic/patterns/skill/SKILL.md
 {%- assign all = site.patterns | sort: "n" -%}
 ---
 name: agentic-patterns
-description: Choose and apply proven design patterns when designing or reviewing an AI agent, a multi-agent system or an agentic feature (agent loops, routing, memory, safety, runtime, evaluation, fast/slow models), or when setting up a repo and workflow for AI coding agents (specs, CLAUDE.md, plan mode, tests, PRs, worktrees).
+description: Choose and apply proven design patterns when designing or reviewing an AI agent, a multi-agent system or an agentic feature (agent loops, routing, memory, safety, runtime, evaluation, fast/slow models), or when shaping how software is delivered with AI coding agents (specs, plan mode, tests, review, worktrees, CLAUDE.md and knowledge, production feedback, delivery metrics).
 ---
 
 # Agentic Pattern Library
 
-{{ all.size }} patterns by Vikas Goyal, in two tracks: designing agentic systems, and building software with coding agents. Source: {{ D.base | absolute_url }}
+{{ all.size }} patterns by Vikas Goyal, in two tracks: designing agentic systems, and AI-native software delivery. Source: {{ D.base | absolute_url }}
 
 ## How to use this skill
 
