@@ -1,0 +1,20 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="The author agent writes a change from the spec. A verifier in a fresh session receives only the spec and the diff, never the author session. It writes tests from the spec and tries to break the change. If it passes, the pull request goes ahead with the verifier report attached. If it fails, findings go back to the author, who fixes them, and the verifier checks again.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="100" width="130" height="60" rx="8"/><text class="t" x="75" y="126" text-anchor="middle">Spec</text><text class="ts" x="75" y="144" text-anchor="middle">criteria</text>
+ <rect class="nd" x="170" y="30" width="150" height="60" rx="8"/><text class="t" x="245" y="56" text-anchor="middle">Author agent</text><text class="ts" x="245" y="74" text-anchor="middle">writes the change</text>
+ <rect class="nd" x="170" y="170" width="150" height="60" rx="8"/><text class="t" x="245" y="196" text-anchor="middle">Diff</text><text class="ts" x="245" y="214" text-anchor="middle">code + its tests</text>
+ <rect class="nd-a" x="380" y="100" width="160" height="60" rx="8"/><text class="t" x="460" y="126" text-anchor="middle">Verifier</text><text class="ts" x="460" y="144" text-anchor="middle">fresh session</text>
+ <rect class="nd-a" x="600" y="30" width="150" height="60" rx="8"/><text class="t" x="675" y="56" text-anchor="middle">Pull request</text><text class="ts" x="675" y="74" text-anchor="middle">report attached</text>
+ <rect class="nd-g" x="600" y="170" width="150" height="60" rx="8"/><text class="t" x="675" y="196" text-anchor="middle">Findings</text><text class="ts" x="675" y="214" text-anchor="middle">back to author</text>
+ <path class="ln" d="M140 120 L150 120 L150 55 L168 55" marker-end="url(#a)"/>
+ <path class="ln" d="M245 90 L245 168" marker-end="url(#a)"/>
+ <path class="ln" d="M75 100 L75 14 L360 14 L360 120 L378 120" marker-end="url(#a)"/><text class="ts" x="215" y="10" text-anchor="middle">spec only</text>
+ <path class="ln" d="M320 200 L350 200 L350 145 L378 145" marker-end="url(#a)"/><text class="ts" x="326" y="222" text-anchor="start">diff only</text>
+ <path class="ln-a" d="M540 120 L570 120 L570 60 L598 60" marker-end="url(#aa)"/><text class="ts" x="548" y="100" text-anchor="start">passes</text>
+ <path class="ln-h" d="M540 140 L570 140 L570 200 L598 200" marker-end="url(#ah)"/><text class="ts" x="548" y="165" text-anchor="start">fails</text>
+ <path class="ln-h" d="M675 230 L675 254 L160 254 L160 75 L168 75" marker-end="url(#ah)"/><text class="ts" x="420" y="248" text-anchor="middle">fix and re-check</text>
+</svg>

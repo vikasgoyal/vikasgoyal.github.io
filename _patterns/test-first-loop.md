@@ -25,7 +25,9 @@ solution: >-
   reviewed. Confirm they fail. Then let the agent loop: change code, run the tests, read the
   failures, fix, repeat, until they pass. The full existing suite runs too, so nothing else
   breaks. The agent may not change the new tests or acceptance tests without approval; if it
-  believes a test is wrong, it says so instead of editing it.
+  believes a test is wrong, it says so instead of editing it. For bug fixes, make the rule
+  mechanical: every fix PR must include a test that fails on the unpatched code and passes with
+  the fix, and CI rejects fix PRs that don't.
 
 diagram: test-first-loop
 diagram_caption: Tests are fixed before the loop starts. The agent can iterate as many times as it needs, but it can't move the finish line.
@@ -33,7 +35,7 @@ diagram_caption: Tests are fixed before the loop starts. The agent can iterate a
 use_when:
   - Behavior can be expressed as automated tests
   - The agent can run the test suite quickly (see Agent-Ready Repo)
-  - Bug fixes, where a failing test reproduces the bug first
+  - Bug fixes, where a test that fails before the fix and passes after it is required
   - Refactors, where existing tests must keep passing
 avoid_when:
   - Visual or UX work that tests can't capture well; review manually
@@ -86,6 +88,6 @@ related:
   - { type: Analog of, pattern: evaluator-optimizer }
   - { type: Requires, pattern: agent-ready-repo }
   - { type: Combines with, pattern: plan-then-code }
-  - { type: Combines with, pattern: artifact-ownership }
+  - { type: Combines with, pattern: independent-verifier }
   - { type: Combines with, pattern: spec-driven-development }
 ---

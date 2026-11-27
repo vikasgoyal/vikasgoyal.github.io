@@ -1,0 +1,20 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="Real inputs go to both the current process, a person or existing system whose result takes effect, and to the agent running in shadow, whose result is only logged. A comparator records the match rate per class of input. When the match rate holds above the threshold, a promotion gate lets the agent act on that class. A model change or a drop in match rate sends the agent back to shadow.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="100" width="110" height="60" rx="8"/><text class="t" x="65" y="126" text-anchor="middle">Real inputs</text><text class="ts" x="65" y="144" text-anchor="middle">pages · tickets</text>
+ <rect class="nd" x="170" y="30" width="160" height="60" rx="8"/><text class="t" x="250" y="56" text-anchor="middle">Current process</text><text class="ts" x="250" y="74" text-anchor="middle">result takes effect</text>
+ <rect class="nd-g" x="170" y="170" width="160" height="60" rx="8"/><text class="t" x="250" y="196" text-anchor="middle">Agent in shadow</text><text class="ts" x="250" y="214" text-anchor="middle">result only logged</text>
+ <rect class="nd-a" x="380" y="100" width="150" height="60" rx="8"/><text class="t" x="455" y="126" text-anchor="middle">Compare</text><text class="ts" x="455" y="144" text-anchor="middle">match rate per class</text>
+ <rect class="nd-a" x="580" y="30" width="170" height="60" rx="8"/><text class="t" x="665" y="56" text-anchor="middle">Agent acts</text><text class="ts" x="665" y="74" text-anchor="middle">on promoted class</text>
+ <rect class="nd-g" x="580" y="170" width="170" height="60" rx="8"/><text class="t" x="665" y="196" text-anchor="middle">Keep in shadow</text><text class="ts" x="665" y="214" text-anchor="middle">review disagreements</text>
+ <path class="ln" d="M120 120 L150 120 L150 60 L168 60" marker-end="url(#a)"/>
+ <path class="ln" d="M120 140 L150 140 L150 200 L168 200" marker-end="url(#a)"/>
+ <path class="ln" d="M330 60 L355 60 L355 120 L378 120" marker-end="url(#a)"/>
+ <path class="ln" d="M330 200 L355 200 L355 140 L378 140" marker-end="url(#a)"/>
+ <path class="ln-a" d="M530 120 L555 120 L555 60 L578 60" marker-end="url(#aa)"/><text class="ts" x="560" y="100">above bar</text>
+ <path class="ln" d="M530 140 L555 140 L555 200 L578 200" marker-end="url(#a)"/><text class="ts" x="560" y="165">below bar</text>
+ <path class="ln-h" d="M750 60 L756 60 L756 258 L250 258 L250 232" marker-end="url(#ah)"/><text class="ts" x="455" y="252" text-anchor="middle">model change or drop → back to shadow</text>
+</svg>

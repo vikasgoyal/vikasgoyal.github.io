@@ -29,7 +29,9 @@ solution: >-
   Where it would have approved but reviewers asked for changes, add a human-required rule or fix
   the review checklist. Where a rule demanded two people who always approved at a glance,
   consider narrowing it. Only then switch to enforce, rerun the policy on open PRs, and make its
-  check required.
+  check required. Teams further along let a classifier sort every change: mechanical, low
+  blast-radius changes merge after automated checks, and everything else goes to a person. The
+  classifier earns that right the same way, by running in observe mode first.
 
 diagram: observe-then-enforce-approvals
 diagram_caption: The policy runs in the shadow of real reviews first. Its mistakes are found and fixed before it can block or approve anything.
@@ -90,6 +92,6 @@ related:
   - { type: Combines with, pattern: ai-first-pass-review }
   - { type: Combines with, pattern: protected-rule-files }
   - { type: Combines with, pattern: pr-review-gate }
-  - { type: Analog of, pattern: human-in-the-loop }
+  - { type: Specializes, pattern: shadow-mode-autonomy }
   - { type: Feeds, pattern: review-capacity-limits }
 ---

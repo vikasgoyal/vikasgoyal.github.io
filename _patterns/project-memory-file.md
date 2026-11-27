@@ -26,7 +26,9 @@ solution: >-
   must not change; and decisions with a one-line reason. When the agent makes a mistake worth
   preventing, add a rule. Keep it short and specific, review changes to it like code, and
   link out to longer docs instead of pasting them in. Subfolders can have their own smaller
-  memory files for local rules.
+  memory files for local rules. Prune as well as add: when the model or agent is upgraded,
+  review the file and remove rules the new model no longer needs, since stale guidance can
+  hold a stronger model back. Teams have cut most of an instruction file this way.
 
 diagram: project-memory-file
 diagram_caption: The memory file is loaded into every session. Lessons from each session flow back into it as short, reviewed rules.
@@ -75,7 +77,7 @@ failures:
     fix: Keep only what applies broadly; link to detailed docs
   - failure: Stale rules
     symptom: File describes commands or structure that changed
-    fix: Update it in the same PR as the change; prune every milestone
+    fix: Update it in the same PR as the change; prune every milestone and after model upgrades
   - failure: Vague rules
     symptom: "\"Write clean code\" changes nothing"
     fix: Write specific, checkable rules with the command or path

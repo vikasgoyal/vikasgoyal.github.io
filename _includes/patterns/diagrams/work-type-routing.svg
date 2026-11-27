@@ -1,0 +1,20 @@
+<svg viewBox="0 0 760 270" role="img" aria-label="An agent reads each new ticket and proposes its work type and risk. Path rules for risky areas such as billing and auth override the label and force the strict shape. A person confirms with one click, and the work then runs through the agreed shape: a feature shape, a gated defect shape, or a light defect shape.">
+ <defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+  <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-a"/></marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah-h"/></marker>
+ </defs>
+ <rect class="nd" x="10" y="100" width="110" height="60" rx="8"/><text class="t" x="65" y="126" text-anchor="middle">Ticket</text><text class="ts" x="65" y="144" text-anchor="middle">new work</text>
+ <rect class="nd-a" x="160" y="100" width="160" height="60" rx="8"/><text class="t" x="240" y="126" text-anchor="middle">Agent proposes</text><text class="ts" x="240" y="144" text-anchor="middle">type + risk</text>
+ <rect class="nd" x="160" y="190" width="160" height="56" rx="8"/><text class="t" x="240" y="214" text-anchor="middle">Path rules</text><text class="ts" x="240" y="232" text-anchor="middle">/billing · /auth → strict</text>
+ <rect class="nd" x="360" y="100" width="110" height="60" rx="8"/><text class="t" x="415" y="126" text-anchor="middle">Person</text><text class="ts" x="415" y="144" text-anchor="middle">one-click confirm</text>
+ <rect class="nd-a" x="520" y="20" width="230" height="56" rx="8"/><text class="t" x="635" y="44" text-anchor="middle">Feature shape</text><text class="ts" x="635" y="62" text-anchor="middle">spec · plan approval · AI review</text>
+ <rect class="nd-a" x="520" y="107" width="230" height="56" rx="8"/><text class="t" x="635" y="131" text-anchor="middle">Gated defect shape</text><text class="ts" x="635" y="149" text-anchor="middle">failing test · human merge</text>
+ <rect class="nd-g" x="520" y="194" width="230" height="56" rx="8"/><text class="t" x="635" y="218" text-anchor="middle">Light defect shape</text><text class="ts" x="635" y="236" text-anchor="middle">agent-led · auto checks</text>
+ <path class="ln" d="M120 130 L158 130" marker-end="url(#a)"/>
+ <path class="ln-h" d="M240 190 L240 162" marker-end="url(#ah)"/><text class="ts" x="248" y="180" text-anchor="start">overrides</text>
+ <path class="ln" d="M320 130 L358 130" marker-end="url(#a)"/>
+ <path class="ln" d="M470 120 L495 120 L495 48 L518 48" marker-end="url(#a)"/>
+ <path class="ln-a" d="M470 135 L518 135" marker-end="url(#aa)"/>
+ <path class="ln" d="M470 145 L495 145 L495 222 L518 222" marker-end="url(#a)"/>
+</svg>
