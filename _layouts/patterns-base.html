@@ -32,6 +32,19 @@
   <meta name="twitter:title" content="{{ _title | escape }}">
   <meta name="twitter:description" content="{{ _desc | escape }}">
   <meta name="twitter:image" content="{{ _img }}">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "{% if page.collection == 'patterns' %}TechArticle{% else %}CollectionPage{% endif %}",
+    "headline": {{ _title | jsonify }},
+    "description": {{ _desc | jsonify }},
+    "url": "{{ page.url | absolute_url }}",
+    "image": "{{ _img }}",
+    "author": { "@type": "Person", "name": "Vikas Goyal", "url": "https://vikasgoyal.github.io/", "jobTitle": "Agentic AI Solutions Architect" },
+    "isPartOf": { "@type": "CollectionPage", "name": "Agentic Pattern Library", "url": "{{ site.data.patterns.base | absolute_url }}" },
+    "about": "Agentic AI design patterns"
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">

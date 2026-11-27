@@ -3,16 +3,31 @@ layout: null
 # Jekyll fills in every pattern page below; the rest of this file is plain URLs.
 ---
 https://vikasgoyal.github.io/
-https://vikasgoyal.github.io/index.html
 https://vikasgoyal.github.io/showcase/
 https://vikasgoyal.github.io/agentic/agenticailatest.html
 https://vikasgoyal.github.io/cocreating.html
 https://vikasgoyal.github.io/privacy.html
-https://vikasgoyal.github.io/test-page-llm.html
 https://vikasgoyal.github.io/agentic/
-https://vikasgoyal.github.io/agentic/index.html
 https://vikasgoyal.github.io/agentic/patterns/
 https://vikasgoyal.github.io/agentic/patterns/template/
+https://vikasgoyal.github.io/agentic/patterns/for-agents/
+https://vikasgoyal.github.io/agentic/patterns/math/
+https://vikasgoyal.github.io/agentic/patterns/math/bandits-routing/
+https://vikasgoyal.github.io/agentic/patterns/math/bradley-terry-elo/
+https://vikasgoyal.github.io/agentic/patterns/math/cohens-kappa/
+https://vikasgoyal.github.io/agentic/patterns/math/compounding-error/
+https://vikasgoyal.github.io/agentic/patterns/math/condorcet-voting/
+https://vikasgoyal.github.io/agentic/patterns/math/confidence-intervals/
+https://vikasgoyal.github.io/agentic/patterns/math/conformal-prediction/
+https://vikasgoyal.github.io/agentic/patterns/math/game-theory-debate/
+https://vikasgoyal.github.io/agentic/patterns/math/item-response-theory/
+https://vikasgoyal.github.io/agentic/patterns/math/littles-law/
+https://vikasgoyal.github.io/agentic/patterns/math/markov-agent-loops/
+https://vikasgoyal.github.io/agentic/patterns/math/mcts-beam-search/
+https://vikasgoyal.github.io/agentic/patterns/math/mdp-pomdp/
+https://vikasgoyal.github.io/agentic/patterns/math/model-cascades/
+https://vikasgoyal.github.io/agentic/patterns/math/pass-at-k/
+https://vikasgoyal.github.io/agentic/patterns/math/redundancy-retries/
 {% assign _apl = site.patterns | sort: "n" %}{% for p in _apl %}https://vikasgoyal.github.io{{ p.url }}
 {% endfor %}https://vikasgoyal.github.io/agentic/actionmodels.html
 https://vikasgoyal.github.io/agentic/agenticai.html
@@ -29,7 +44,6 @@ https://vikasgoyal.github.io/agentic/refarchmas.html
 https://vikasgoyal.github.io/agentic/teachableagents.html
 https://vikasgoyal.github.io/agentic/whynowagentic.html
 https://vikasgoyal.github.io/agentic/rego-primer.html
-https://vikasgoyal.github.io/llms.txt
 https://vikasgoyal.github.io/agentic/design/system-1-models.html
 https://vikasgoyal.github.io/agentic/observe/build-time-evals.html
 https://vikasgoyal.github.io/agentic/observe/business-metrics-evals.html
@@ -45,15 +59,9 @@ https://vikasgoyal.github.io/agentic/observe/runtime-evals-observability.html
 https://vikasgoyal.github.io/agentic/observe/safety-evals-red-teaming.html
 https://vikasgoyal.github.io/agentic/observe/whatareevals.html
 https://vikasgoyal.github.io/blog/
-https://vikasgoyal.github.io/blog/index.html
 https://vikasgoyal.github.io/blog/2025/12/cofounder-intention-intuition-intelligence.html
 https://vikasgoyal.github.io/books/
-https://vikasgoyal.github.io/books/index.html
-https://vikasgoyal.github.io/books/tempbook/index.html
-https://vikasgoyal.github.io/books/tempbook/chapter1.html
-https://vikasgoyal.github.io/books/tempbook/chapter2.html
 https://vikasgoyal.github.io/ecp/
-https://vikasgoyal.github.io/ecp/index.html
 https://vikasgoyal.github.io/ecp/avengers.html
 https://vikasgoyal.github.io/ecp/closeoutreport.html
 https://vikasgoyal.github.io/ecp/inspiring.html
@@ -61,7 +69,6 @@ https://vikasgoyal.github.io/ecp/sdlc.html
 https://vikasgoyal.github.io/ecp/trust.html
 https://vikasgoyal.github.io/ecp/unexpectedlesson.html
 https://vikasgoyal.github.io/genai/
-https://vikasgoyal.github.io/genai/index.html
 https://vikasgoyal.github.io/genai/AdoptionMaturityModel.html
 https://vikasgoyal.github.io/genai/agenticness.html
 https://vikasgoyal.github.io/genai/agenticsystems.html
@@ -80,9 +87,7 @@ https://vikasgoyal.github.io/general/hownottochange.html
 https://vikasgoyal.github.io/general/modelsandcreativity.html
 https://vikasgoyal.github.io/general/smarthumans.html
 https://vikasgoyal.github.io/lol/
-https://vikasgoyal.github.io/lol/index.html
 https://vikasgoyal.github.io/startups/
-https://vikasgoyal.github.io/startups/index.html
 https://vikasgoyal.github.io/startups/firstmeetingstartups.html
 https://vikasgoyal.github.io/industries/index.html
 https://vikasgoyal.github.io/industries/legal/index.html
@@ -121,3 +126,18 @@ https://vikasgoyal.github.io/blog/2026/03/award-winning-failures-projects-that-s
 https://vikasgoyal.github.io/startups/startupfundingstages.html
 https://vikasgoyal.github.io/startups/venture-capital-economics.html
 https://vikasgoyal.github.io/startups/youngfounders.html
+https://vikasgoyal.github.io/agentic/agenticai-types.html
+https://vikasgoyal.github.io/agentic/openresponses.html
+https://vikasgoyal.github.io/agentic/prebuildevals.html
+https://vikasgoyal.github.io/agentic/training-plan.html
+https://vikasgoyal.github.io/agentic/design/understanding-a2ui.html
+https://vikasgoyal.github.io/agentic/design/conversational_interfaces.html
+https://vikasgoyal.github.io/agentic/design/content-moderation-at-scale.html
+https://vikasgoyal.github.io/agentic/context/memory-reasoning-learning.html
+https://vikasgoyal.github.io/agentic/events/github-2026.html
+https://vikasgoyal.github.io/agentic/events/ignite-2026-agentic-ai-sessions.html
+https://vikasgoyal.github.io/showcase/dawn-line.html
+https://vikasgoyal.github.io/showcase/route-66.html
+https://vikasgoyal.github.io/showcase/folded-year.html
+https://vikasgoyal.github.io/showcase/history/
+https://vikasgoyal.github.io/showcase/dot-art/

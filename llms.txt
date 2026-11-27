@@ -16,6 +16,7 @@ Pages are static HTML. Where a page has a Markdown twin or machine-readable file
 
 - [Agentic AI hub](https://vikasgoyal.github.io/agentic/): entry point, organized by practice area
 - [Agentic AI Design Patterns](https://vikasgoyal.github.io/agentic/patterns/): pattern library with diagrams, trade-offs and worked examples
+- [Agentic Math Models](https://vikasgoyal.github.io/agentic/patterns/math/): interactive pages on the math behind agent reliability, evals and multi-model routing (compounding error, pass@k, conformal prediction, bandits, Elo and more)
 - [Use the Pattern Library from your coding agent](https://vikasgoyal.github.io/agentic/patterns/for-agents/)
 - [Rego, Explained by Example](https://vikasgoyal.github.io/agentic/rego-primer.html): policy as code for APIs, Kubernetes, Terraform and AI agents
 - [Reference Architecture for Agentic AI](https://vikasgoyal.github.io/agentic/refarchagentic.html)
